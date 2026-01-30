@@ -1,0 +1,55 @@
+services:
+  redis:
+    image: redis:7
+    ports: ["6379:6379"]
+
+  minio:
+    image: minio/minio:latest
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: minio
+      MINIO_ROOT_PASSWORD: minio123
+    ports: ["9000:9000","9001:9001"]
+    volumes: [minio_data:/data]
+
+  backend:
+    build: ./backend
+    env_file: .env
+    ports: ["3000:3000"]
+    depends_on: [redis, minio]
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+
+  worker:
+    image: python:3.11-slim
+    working_dir: /app
+    environment:
+      PYTHONUNBUFFERED: "1"
+    command: >
+      bash -lc "apt-get update && apt-get install -y --no-install-recommends qpdf fonts-dejavu-core
+      && rm -rf /var/lib/apt/lists/*
+      && pip install --no-cache-dir -r requirements.txt
+      && exec python -u main.py"
+    restart: always
+    env_file: .env
+    depends_on: [redis, minio]
+    volumes:
+      - ./worker_py:/app     # <-- esta ruta debe existir en tu host y contener main.py actualizado
+        # Asegúrate: aquí dentro debe existir main.py y requirements.txt
+
+
+  frontend:
+    image: node:20-alpine
+    working_dir: /app
+    environment:
+      VITE_API_BASE: "http://localhost:3000"
+    command: sh -c "npm ci || npm i && npm run dev -- --host 0.0.0.0 --port 5173"
+    ports: ["5173:5173"]
+    depends_on: [backend]
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+
+volumes:
+  minio_data:

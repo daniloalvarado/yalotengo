@@ -1,0 +1,168 @@
+import React, { useState } from 'react';
+import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+
+export default function AdminManagement({ 
+    stats, realVisitors, reservations, filterDate, setFilterDate, 
+    filterStatus, setFilterStatus, handleValidate, handleCancel,
+    formatTime, statusLabels, theme, styles 
+}) {
+    const [searchTerm, setSearchTerm] = useState('');
+
+    const filteredReservations = reservations.filter(r => {
+        const term = searchTerm.toLowerCase();
+        const name = (r.user?.name || '').toLowerCase();
+        const lastname = (r.user?.lastname || '').toLowerCase();
+        const email = (r.user?.email || '').toLowerCase();
+        return name.includes(term) || lastname.includes(term) || email.includes(term);
+    });
+
+    // 👇 CSS RESPONSIVE PARA GESTIÓN
+    const responsiveCss = `
+        /* 1. CONTENEDOR DE FILTROS */
+        .management-filters {
+            display: grid;
+            grid-template-columns: 1fr; /* Móvil: 1 columna, todo al 100% de ancho */
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            align-items: center;
+        }
+
+        /* PC: Fecha y Estado automáticos, Buscador ocupa todo el resto */
+        @media (min-width: 768px) {
+            .management-filters {
+                grid-template-columns: auto auto 1fr; 
+            }
+        }
+
+        /* 2. INPUTS AL 100% DEL ANCHO DE SU CELDA */
+        .management-input {
+            width: 100%;
+            padding: 0.75rem;
+            font-size: 0.95rem;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            outline: none;
+        }
+        
+        /* 3. TABLA FULL WIDTH */
+        .management-table-container {
+            width: 100%;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            overflow: hidden; /* Para redondear bordes */
+            display: flex;
+            flex-direction: column;
+        }
+
+        .scroll-wrapper {
+            max-height: 500px; /* Scroll Vertical */
+            overflow-y: auto;
+            overflow-x: auto; /* Scroll Horizontal si es necesario en móvil */
+            width: 100%;
+        }
+
+        table.full-width-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px; /* Evita que la tabla se aplaste en móvil (activa scroll horizontal) */
+        }
+    `;
+
+    return (
+        <>
+            <style>{responsiveCss}</style>
+
+            {/* ESTADÍSTICAS */}
+            {stats && (
+                <div style={styles.statsGrid}>
+                    <div style={styles.statCard}><div style={styles.statValue}>{stats.total}</div><div style={styles.statLabel}>Total Reservas</div></div>
+                    <div style={styles.statCard}><div style={styles.statValue}>{realVisitors}</div><div style={styles.statLabel}>Visitantes (Entraron)</div></div>
+                    <div style={styles.statCard}><div style={styles.statValue}>{stats.totalGuests}</div><div style={styles.statLabel}>Aforo Esperado</div></div>
+                    <div style={styles.statCard}><div style={{ ...styles.statValue, color: theme.primary }}>S/ {stats.revenue?.toFixed(2) || '0.00'}</div><div style={styles.statLabel}>Ingresos</div></div>
+                </div>
+            )}
+
+            <div style={styles.section}>
+                <h2 style={{ margin: '0 0 1.5rem 0' }}>Listado de Reservas</h2>
+                
+                {/* 👇 FILTROS Y BUSCADOR (GRID RESPONSIVE) */}
+                <div className="management-filters">
+                    
+                    {/* FECHA */}
+                    <input 
+                        type="date" 
+                        value={filterDate} 
+                        onChange={e => setFilterDate(e.target.value)} 
+                        className="management-input"
+                    />
+                    
+                    {/* ESTADO */}
+                    <select 
+                        value={filterStatus} 
+                        onChange={e => setFilterStatus(e.target.value)} 
+                        className="management-input"
+                    >
+                        <option value="">Estado: Todos</option>
+                        <option value="PENDING">Pendiente</option>
+                        <option value="PAID">Pagado</option>
+                        <option value="USED">Usado</option>
+                        <option value="EXPIRED">Expirado</option>
+                        <option value="CANCELLED">Cancelado</option>
+                    </select>
+
+                    {/* BUSCADOR (Se estira para llenar el espacio) */}
+                    <div style={{ position: 'relative', width: '100%' }}>
+                        <MagnifyingGlassIcon style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', width: '20px', color: '#9ca3af' }} />
+                        <input 
+                            type="text" 
+                            placeholder="Buscar por cliente o correo..." 
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className="management-input"
+                            style={{ paddingLeft: '2.5rem' }} 
+                        />
+                    </div>
+                </div>
+
+                {/* 👇 TABLA EN CONTENEDOR FLEXIBLE */}
+                <div className="management-table-container">
+                    <div className="scroll-wrapper custom-scroll">
+                        <table className="full-width-table">
+                            <thead style={{ position: 'sticky', top: 0, zIndex: 10 }}>
+                                <tr>
+                                    <th style={styles.th}>ID</th><th style={styles.th}>Hora</th><th style={styles.th}>Pers.</th><th style={styles.th}>Estado</th><th style={styles.th}>Cliente</th><th style={styles.th}>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {filteredReservations.length === 0 ? (
+                                    <tr><td colSpan={6} style={{ ...styles.td, textAlign: 'center', color: '#999', padding: '3rem' }}>
+                                        {reservations.length === 0 ? 'No hay reservas en esta fecha' : 'No se encontraron resultados'}
+                                    </td></tr>
+                                ) : (
+                                    filteredReservations.map(r => (
+                                        <tr key={r.id}>
+                                            <td style={styles.td}>#{r.id}</td>
+                                            <td style={styles.td}>{formatTime(r.timeslot)}</td>
+                                            <td style={styles.td}>{r.guests}</td>
+                                            <td style={styles.td}>
+                                                <span style={styles.badge(r.status)}>{statusLabels[r.status] || r.status}</span>
+                                            </td>
+                                            <td style={styles.td}>
+                                                <div style={{fontWeight: 'bold', textTransform: 'capitalize'}}>{r.user?.name || 'Cliente'} {r.user?.lastname || ''}</div>
+                                                <div style={{fontSize: '0.75rem', color: '#666'}}>{r.user?.email || '-'}</div>
+                                            </td>
+                                            <td style={styles.td}>
+                                                {r.status === 'PAID' && <button style={styles.actionBtn('success')} onClick={() => handleValidate(r.id)}>✓ Validar</button>}
+                                                {['PENDING', 'PAID'].includes(r.status) && <button style={styles.actionBtn('danger')} onClick={() => handleCancel(r.id)}>✕ Cancelar</button>}
+                                            </td>
+                                        </tr>
+                                    ))
+                                )}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </>
+    );
+}

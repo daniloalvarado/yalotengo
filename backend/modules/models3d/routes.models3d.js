@@ -1,0 +1,270 @@
+import { Router } from 'express'
+import { Model3D, Model3DPurchase } from './model.model3d.js'
+import { auth } from '../../utils/jwt.js'
+import { MercadoPagoConfig, Payment } from 'mercadopago'
+import crypto from 'crypto'
+import path from 'path'
+import fs from 'fs'
+import { fileURLToPath } from 'url'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+
+const r = Router()
+
+// Inicializar MercadoPago
+const mp = new MercadoPagoConfig({ accessToken: process.env.MP_ACCESS_TOKEN })
+const paymentClient = new Payment(mp)
+
+// GET /models3d - Lista todos los modelos activos
+r.get('/', async (req, res) => {
+    try {
+        const models = await Model3D.findAll({
+            where: { mod_bool_active: true },
+            order: [['mod_dt_created', 'DESC']]
+        })
+        res.json(models)
+    } catch (e) {
+        console.error('[Models3D] Error listing:', e)
+        res.status(500).json({ error: 'Error al obtener modelos' })
+    }
+})
+
+// ========== CARRITO (PENDING) ==========
+// IMPORTANTE: Estas rutas deben estar ANTES de /:id para evitar que Express capture 'cart' como id
+
+// POST /models3d/cart - Añadir al carrito (crear PENDING sin pago)
+r.post('/cart', auth, async (req, res) => {
+    const { modelId } = req.body
+
+    try {
+        const model = await Model3D.findByPk(modelId)
+        if (!model || !model.mod_bool_active) {
+            return res.status(404).json({ error: 'Modelo no encontrado' })
+        }
+
+        // Verificar si ya existe en el carrito (PENDING)
+        const existing = await Model3DPurchase.findOne({
+            where: {
+                use_int_id: req.user.use_int_id,
+                mod_int_id: modelId,
+                pur_txt_status: 'PENDING'
+            }
+        })
+
+        if (existing) {
+            return res.status(400).json({ error: 'Este modelo ya está en tu carrito' })
+        }
+
+        // Crear registro PENDING
+        const purchase = await Model3DPurchase.create({
+            use_int_id: req.user.use_int_id,
+            mod_int_id: modelId,
+            pur_txt_status: 'PENDING',
+            pur_dec_amount: model.mod_dec_price
+        })
+
+        res.json({
+            success: true,
+            message: 'Modelo añadido al carrito',
+            cartItem: {
+                id: purchase.pur_int_id,
+                modelId: modelId,
+                name: model.mod_txt_name,
+                price: model.mod_dec_price
+            }
+        })
+    } catch (e) {
+        console.error('[Models3D] Cart add error:', e)
+        res.status(500).json({ error: 'Error al añadir al carrito' })
+    }
+})
+
+// GET /models3d/cart - Listar productos PENDING del usuario
+r.get('/cart', auth, async (req, res) => {
+    try {
+        const cartItems = await Model3DPurchase.findAll({
+            where: {
+                use_int_id: req.user.use_int_id,
+                pur_txt_status: 'PENDING'
+            },
+            include: [{ model: Model3D, as: 'model' }],
+            order: [['pur_dt_created', 'DESC']]
+        })
+        res.json(cartItems)
+    } catch (e) {
+        console.error('[Models3D] Cart list error:', e)
+        res.status(500).json({ error: 'Error al obtener carrito' })
+    }
+})
+
+// DELETE /models3d/cart/:id - Eliminar del carrito
+r.delete('/cart/:id', auth, async (req, res) => {
+    try {
+        const purchase = await Model3DPurchase.findOne({
+            where: {
+                pur_int_id: req.params.id,
+                use_int_id: req.user.use_int_id,
+                pur_txt_status: 'PENDING'
+            }
+        })
+
+        if (!purchase) {
+            return res.status(404).json({ error: 'Item no encontrado en el carrito' })
+        }
+
+        await purchase.destroy()
+        res.json({ success: true, message: 'Eliminado del carrito' })
+    } catch (e) {
+        console.error('[Models3D] Cart delete error:', e)
+        res.status(500).json({ error: 'Error al eliminar del carrito' })
+    }
+})
+
+// ========== FIN CARRITO ==========
+
+// GET /models3d/:id - Detalle de un modelo
+r.get('/:id', async (req, res) => {
+    try {
+        const model = await Model3D.findByPk(req.params.id)
+        if (!model || !model.mod_bool_active) {
+            return res.status(404).json({ error: 'Modelo no encontrado' })
+        }
+        res.json(model)
+    } catch (e) {
+        res.status(500).json({ error: 'Error al obtener modelo' })
+    }
+})
+
+
+// POST /models3d/purchase - Iniciar compra con MercadoPago
+r.post('/purchase', auth, async (req, res) => {
+    const { modelId, token, payment_method_id, issuer_id, installments = 1, payer } = req.body
+
+    try {
+        const model = await Model3D.findByPk(modelId)
+        if (!model || !model.mod_bool_active) {
+            return res.status(404).json({ error: 'Modelo no encontrado' })
+        }
+
+        const price = Number(model.mod_dec_price)
+
+        // Crear registro de compra pendiente
+        const purchase = await Model3DPurchase.create({
+            use_int_id: req.user.use_int_id,
+            mod_int_id: modelId,
+            pur_txt_status: 'PENDING',
+            pur_dec_amount: price
+        })
+
+        // Email del comprador (desde el Brick de pago)
+        const payerEmail = payer?.email || req.user.use_txt_email || 'comprador@ejemplo.com'
+
+        // Datos del pago (igual que en reservaciones)
+        const paymentData = {
+            transaction_amount: price,
+            token: token,
+            description: `Modelo 3D: ${model.mod_txt_name}`,
+            installments: parseInt(installments, 10),
+            payment_method_id: payment_method_id,
+            issuer_id: issuer_id ? parseInt(issuer_id, 10) : undefined,
+            payer: {
+                email: payerEmail,
+                identification: payer?.identification
+            },
+            metadata: {
+                purchaseId: purchase.pur_int_id,
+                modelId: modelId
+            }
+        }
+
+        console.log('[Models3D] Processing payment:', payment_method_id, price)
+
+        // Procesar pago
+        const result = await paymentClient.create({ body: paymentData })
+
+        console.log('[Models3D] Payment response:', result.status, result.id)
+
+        if (result.status === 'approved') {
+            purchase.pur_txt_status = 'PAID'
+            purchase.pur_txt_payment_id = String(result.id)
+            await purchase.save()
+
+            return res.json({
+                success: true,
+                purchaseId: purchase.pur_int_id,
+                paymentId: result.id,
+                status: 'approved'
+            })
+        } else {
+            purchase.pur_txt_status = 'FAILED'
+            await purchase.save()
+            return res.status(400).json({
+                success: false,
+                status: result.status,
+                statusDetail: result.status_detail
+            })
+        }
+    } catch (e) {
+        console.error('[Models3D] Payment error:', e)
+        return res.status(500).json({
+            error: 'Error procesando pago',
+            detail: e.message
+        })
+    }
+})
+
+// GET /models3d/download/:purchaseId - Descargar modelo (solo si pagó)
+r.get('/download/:purchaseId', auth, async (req, res) => {
+    try {
+        const purchase = await Model3DPurchase.findByPk(req.params.purchaseId, {
+            include: [{ model: Model3D, as: 'model' }]
+        })
+
+        if (!purchase) {
+            return res.status(404).json({ error: 'Compra no encontrada' })
+        }
+
+        if (purchase.use_int_id !== req.user.use_int_id) {
+            return res.status(403).json({ error: 'No autorizado' })
+        }
+
+        if (purchase.pur_txt_status !== 'PAID') {
+            return res.status(402).json({ error: 'Pago no completado' })
+        }
+
+        const filename = purchase.model.mod_txt_glb_filename
+        const modelsPath = path.resolve(__dirname, '../../uploads/models')
+        const filePath = path.join(modelsPath, filename)
+
+        if (!fs.existsSync(filePath)) {
+            return res.status(404).json({ error: 'Archivo no encontrado' })
+        }
+
+        res.setHeader('Content-Disposition', `attachment; filename="${filename}"`)
+        res.setHeader('Content-Type', 'model/gltf-binary')
+        fs.createReadStream(filePath).pipe(res)
+    } catch (e) {
+        console.error('[Models3D] Download error:', e)
+        res.status(500).json({ error: 'Error al descargar' })
+    }
+})
+
+// GET /models3d/my-purchases - Mis compras
+r.get('/my/purchases', auth, async (req, res) => {
+    try {
+        const purchases = await Model3DPurchase.findAll({
+            where: {
+                use_int_id: req.user.use_int_id,
+                pur_txt_status: 'PAID'
+            },
+            include: [{ model: Model3D, as: 'model' }],
+            order: [['pur_dt_created', 'DESC']]
+        })
+        res.json(purchases)
+    } catch (e) {
+        res.status(500).json({ error: 'Error al obtener compras' })
+    }
+})
+
+export default r

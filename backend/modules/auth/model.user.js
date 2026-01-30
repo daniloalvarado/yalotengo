@@ -1,0 +1,20 @@
+import { DataTypes } from 'sequelize'
+import { sequelize } from '../../config/db.js' // Asegúrate que esta ruta sea correcta en tu proyecto
+
+export const User = sequelize.define('core_user', {
+  use_int_id: { type: DataTypes.INTEGER, autoIncrement:true, primaryKey:true },
+  use_txt_nombres: DataTypes.STRING(120),
+  use_txt_apellidos: DataTypes.STRING(120),
+  use_txt_documento: DataTypes.STRING(20),
+  use_txt_email: { type: DataTypes.STRING(160), unique:true },
+  use_txt_passwordhash: DataTypes.STRING(120),
+  use_txt_role: { type: DataTypes.STRING(20), defaultValue:'cliente' },
+  
+  use_txt_fb_id: DataTypes.STRING(64),
+  
+  // --- AGREGA ESTAS DOS LÍNEAS ---
+  use_txt_google_id: DataTypes.STRING(64), // Para guardar el ID de Google
+  use_txt_avatar: DataTypes.TEXT           // Para guardar la URL de la foto (TEXT por si es muy larga)
+  // -------------------------------
+
+},{ tableName:'core_user', timestamps:false })
