@@ -109,7 +109,7 @@ export default function Models3D() {
                             {/* Visor 3D */}
                             <div className="relative rounded-t-2xl overflow-hidden">
                                 <Model3DViewer
-                                    glbUrl={`http://localhost:3000/uploads/models/${model.mod_txt_glb_filename}`}
+                                    glbUrl={`${import.meta.env.VITE_API_BASE || 'http://localhost:3000'}/uploads/models/${model.mod_txt_glb_filename}`}
                                     height="220px"
                                 />
                                 <div className="absolute top-3 right-3 bg-emerald-500 text-white text-xs font-bold px-2 py-1 rounded-full">

@@ -182,7 +182,7 @@ export default function Models3DCheckout() {
                 {/* Modelo preview */}
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden self-start">
                     <Model3DViewer
-                        glbUrl={`http://localhost:3000/uploads/models/${model.mod_txt_glb_filename}`}
+                        glbUrl={`${api.defaults.baseURL || 'http://localhost:3000'}/uploads/models/${model.mod_txt_glb_filename}`}
                         height="300px"
                     />
                     <div className="p-5">

@@ -119,17 +119,15 @@ export default function Auth() {
             <div className="grid grid-cols-2 rounded-lg bg-zinc-100 p-1 mb-6">
               <button
                 onClick={() => setTab("login")}
-                className={`py-2 rounded-md text-sm font-medium transition ${
-                  tab === "login" ? "bg-white shadow text-zinc-900" : "text-zinc-500 hover:text-zinc-700"
-                }`}
+                className={`py-2 rounded-md text-sm font-medium transition ${tab === "login" ? "bg-white shadow text-zinc-900" : "text-zinc-500 hover:text-zinc-700"
+                  }`}
               >
                 Iniciar sesión
               </button>
               <button
                 onClick={() => setTab("register")}
-                className={`py-2 rounded-md text-sm font-medium transition ${
-                  tab === "register" ? "bg-white shadow text-zinc-900" : "text-zinc-500 hover:text-zinc-700"
-                }`}
+                className={`py-2 rounded-md text-sm font-medium transition ${tab === "register" ? "bg-white shadow text-zinc-900" : "text-zinc-500 hover:text-zinc-700"
+                  }`}
               >
                 Crear cuenta
               </button>
