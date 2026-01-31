@@ -23,7 +23,7 @@ export default function Models3dTab({ models3d, loading }) {
                         const base = (api.defaults.baseURL || '').replace(/\/$/, '')
                         const token = localStorage.getItem('token')
                         const url = `${base}/models3d/download/${purchase.pur_int_id}?token=${encodeURIComponent(token)}`
-                        window.open(url, '_blank')
+                        window.location.href = url
                     }
 
                     return (

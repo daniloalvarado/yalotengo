@@ -94,9 +94,11 @@ export default function Purchases() {
 
     setLoadingQr(true)
     try {
-      const { data } = await api.get(`/reservations/${reservation.id}/qr`, { responseType: 'blob' })
-      const url = URL.createObjectURL(data)
-      setQrImage(url)
+      const { data } = await api.get(`/reservations/${reservation.id}/qr`)
+      // La API ahora retorna { qrImage: "data:image/png;base64,..." }
+      if (data.qrImage) {
+        setQrImage(data.qrImage)
+      }
     } catch (e) {
       console.error('Error cargando QR:', e)
     } finally {

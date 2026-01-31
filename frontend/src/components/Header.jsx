@@ -166,7 +166,10 @@ export default function Header() {
           {/* Reservas */}
           <NavLink
             to={reservationsLink}
-            className={({ isActive }) => `${linkBase} ${isActive ? linkActive : linkIdle}`}
+            className={({ isActive }) => {
+              if (reservationsLink === "/auth") return `${linkBase} ${linkIdle}`;
+              return `${linkBase} ${isActive ? linkActive : linkIdle}`;
+            }}
             onClick={(e) => handleSamePageClick(e, reservationsLink)}
           >
             {reservationsLabel}

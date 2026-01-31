@@ -77,6 +77,15 @@ export default function Auth() {
 
   async function handleRegister(e) {
     e.preventDefault();
+    if (password.length < 8) {
+      setMsg("La contraseña debe tener al menos 8 caracteres.");
+      return;
+    }
+    if (documento && documento.length !== 8) {
+      setMsg("El DNI debe tener 8 números.");
+      return;
+    }
+
     try {
       const { data } = await api.post("/auth/register", { nombres, apellidos, documento, email, password });
       setToken(data.token);
@@ -165,16 +174,23 @@ export default function Auth() {
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div>
                     <Label htmlFor="nombres">Nombres</Label>
-                    <Input value={nombres} onChange={(e) => setNombres(e.target.value)} />
+                    <Input value={nombres} onChange={(e) => setNombres(e.target.value)} required />
                   </div>
                   <div>
                     <Label htmlFor="apellidos">Apellidos</Label>
-                    <Input value={apellidos} onChange={(e) => setApellidos(e.target.value)} />
+                    <Input value={apellidos} onChange={(e) => setApellidos(e.target.value)} required />
                   </div>
                 </div>
                 <div>
-                  <Label htmlFor="documento">DNI</Label>
-                  <Input value={documento} onChange={(e) => setDocumento(e.target.value)} />
+                  <Label htmlFor="documento">DNI (Opcional)</Label>
+                  <Input
+                    value={documento}
+                    onChange={(e) => {
+                      const val = e.target.value.replace(/\D/g, '').slice(0, 8);
+                      setDocumento(val);
+                    }}
+                    maxLength={8}
+                  />
                 </div>
                 <div>
                   <Label htmlFor="email">Correo</Label>
@@ -182,7 +198,7 @@ export default function Auth() {
                 </div>
                 <div>
                   <Label htmlFor="password">Contraseña</Label>
-                  <Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                  <Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={8} />
                 </div>
                 <button type="submit" className="w-full rounded-lg bg-emerald-500 py-2.5 font-medium text-white hover:bg-emerald-400">
                   Registrarme

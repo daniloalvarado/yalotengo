@@ -107,11 +107,11 @@ export default function Books() {
                                         </p>
                                     </div>
 
-                                    <div className="mt-auto w-full">
-                                        <p className="text-lg font-bold text-emerald-600 mb-2">
+                                    <div className="mt-auto w-full flex items-center justify-between px-1">
+                                        <p className="text-lg font-bold text-emerald-600">
                                             {PEN.format(book.boo_dec_price)}
                                         </p>
-                                        <div className="flex items-center justify-between w-full gap-2">
+                                        <div className="flex items-center gap-2">
                                             <Tooltip text="Añadir al carrito" position="top">
                                                 <button
                                                     onClick={() => handleAddToCart(book)}

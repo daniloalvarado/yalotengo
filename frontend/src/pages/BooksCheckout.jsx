@@ -182,7 +182,7 @@ export default function BooksCheckout() {
                     <div className="aspect-[3/4] bg-gradient-to-br from-gray-100 to-gray-200 relative overflow-hidden">
                         {book.boo_txt_cover_image ? (
                             <img
-                                src={`/${book.boo_txt_cover_image}`}
+                                src={book.boo_txt_cover_image.startsWith('libros/') ? `/${book.boo_txt_cover_image}` : `/libros/${book.boo_txt_cover_image}`}
                                 alt={book.boo_txt_title}
                                 className="w-full h-full object-cover"
                             />

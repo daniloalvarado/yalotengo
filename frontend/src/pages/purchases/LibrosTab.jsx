@@ -24,7 +24,7 @@ export default function LibrosTab({ books, loading }) {
                         const base = (api.defaults.baseURL || '').replace(/\/$/, '')
                         const token = localStorage.getItem('token')
                         const url = `${base}/books/download/${purchase.bpu_int_id}?token=${encodeURIComponent(token)}`
-                        window.open(url, '_blank')
+                        window.location.href = url
                     }
 
                     return (
