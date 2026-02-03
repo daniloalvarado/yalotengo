@@ -25,7 +25,11 @@ export default function UserMenu({ user, onLogout }) {
   const surname = user?.use_txt_apellidos || user?.apellidos || user?.last || ''
 
   // Busca la foto en cualquier formato
-  const avatarUrl = user?.use_txt_avatar || user?.avatar || null
+  // Busca la foto en cualquier formato y ajusta la URL
+  let avatarUrl = user?.use_txt_avatar || user?.avatar || null
+  if (avatarUrl && !avatarUrl.startsWith('http')) {
+    avatarUrl = `/avatars/${avatarUrl}`
+  }
 
   // Si no hay foto, usa la inicial
   const initial = name ? name[0].toUpperCase() : 'U'
@@ -74,6 +78,17 @@ export default function UserMenu({ user, onLogout }) {
           {/* Opciones */}
           <div className="py-1">
             <button
+              onClick={() => { setIsOpen(false); navigate('/profile'); }}
+              className="group flex w-full items-center px-4 py-2 text-sm text-zinc-300 hover:bg-zinc-800 hover:text-white"
+            >
+              <UserCircleIcon
+                className="mr-3 h-5 w-5 text-zinc-400 group-hover:text-emerald-400"
+                aria-hidden="true"
+              />
+              Mi Perfil
+            </button>
+
+            <button
               onClick={() => { setIsOpen(false); navigate('/help'); }}
               className="group flex w-full items-center px-4 py-2 text-sm text-zinc-300 hover:bg-zinc-800 hover:text-white"
             >
@@ -86,10 +101,10 @@ export default function UserMenu({ user, onLogout }) {
 
             {user?.role === 'admin' && (
               <button
-                onClick={() => { setIsOpen(false); navigate('/admin'); }}
+                onClick={() => { setIsOpen(false); navigate('/admin-dashboard'); }}
                 className="group flex w-full items-center px-4 py-2 text-sm text-zinc-300 hover:bg-zinc-800 hover:text-white"
               >
-                <UserCircleIcon className="mr-3 h-5 w-5 text-zinc-400 group-hover:text-indigo-400" aria-hidden="true" />
+                <TicketIcon className="mr-3 h-5 w-5 text-zinc-400 group-hover:text-indigo-400" aria-hidden="true" />
                 Panel Admin
               </button>
             )}

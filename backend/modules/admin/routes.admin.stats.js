@@ -99,6 +99,10 @@ r.get('/purchases/models3d', adminAuth, async (req, res) => {
             userName: userMap[p.use_int_id] ?
                 `${userMap[p.use_int_id].use_txt_nombres} ${userMap[p.use_int_id].use_txt_apellidos}` : 'N/A',
             userEmail: userMap[p.use_int_id]?.use_txt_email || 'N/A',
+            userPhone: userMap[p.use_int_id]?.use_txt_phone || '',
+            userAddress: userMap[p.use_int_id]?.use_txt_address || '',
+            userDni: userMap[p.use_int_id]?.use_txt_documento || '',
+            userAvatar: userMap[p.use_int_id]?.use_txt_avatar || null,
             modelId: p.mod_int_id,
             modelName: p.model?.mod_txt_name || 'N/A',
             amount: p.pur_dec_amount,
@@ -130,6 +134,10 @@ r.get('/purchases/books', adminAuth, async (req, res) => {
             userName: userMap[p.use_int_id] ?
                 `${userMap[p.use_int_id].use_txt_nombres} ${userMap[p.use_int_id].use_txt_apellidos}` : 'N/A',
             userEmail: userMap[p.use_int_id]?.use_txt_email || 'N/A',
+            userPhone: userMap[p.use_int_id]?.use_txt_phone || '',
+            userAddress: userMap[p.use_int_id]?.use_txt_address || '',
+            userDni: userMap[p.use_int_id]?.use_txt_documento || '',
+            userAvatar: userMap[p.use_int_id]?.use_txt_avatar || null,
             bookId: p.boo_int_id,
             bookTitle: p.book?.boo_txt_title || 'N/A',
             bookAuthor: p.book?.boo_txt_author || '',
@@ -162,6 +170,10 @@ r.get('/purchases/courses', adminAuth, async (req, res) => {
             userName: userMap[p.use_int_id] ?
                 `${userMap[p.use_int_id].use_txt_nombres} ${userMap[p.use_int_id].use_txt_apellidos}` : 'N/A',
             userEmail: userMap[p.use_int_id]?.use_txt_email || 'N/A',
+            userPhone: userMap[p.use_int_id]?.use_txt_phone || '',
+            userAddress: userMap[p.use_int_id]?.use_txt_address || '',
+            userDni: userMap[p.use_int_id]?.use_txt_documento || '',
+            userAvatar: userMap[p.use_int_id]?.use_txt_avatar || null,
             courseId: p.cou_int_id,
             courseTitle: p.course?.cou_txt_title || 'N/A',
             amount: p.cpu_dec_amount,

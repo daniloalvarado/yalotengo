@@ -11,6 +11,8 @@ import { StatusTag, formatDateTime, PEN } from './admin/adminUtils'
 import Swal from 'sweetalert2'
 
 
+import PurchaseDetailModal from './admin/PurchaseDetailModal'
+
 const THEME = { primary: '#059669' }
 
 export default function AdminModels3D() {
@@ -25,6 +27,7 @@ export default function AdminModels3D() {
 
     const [showModal, setShowModal] = useState(false)
     const [editItem, setEditItem] = useState(null)
+    const [detailItem, setDetailItem] = useState(null) // State for detail modal
     const [formData, setFormData] = useState({})
     const [attemptedSubmit, setAttemptedSubmit] = useState(false)
     const [uploading, setUploading] = useState(false)
@@ -285,7 +288,7 @@ export default function AdminModels3D() {
                         </thead>
                         <tbody className="divide-y divide-gray-100">
                             {filteredPurchases.map((p, i) => (
-                                <tr key={i} className="hover:bg-gray-50">
+                                <tr key={i} onClick={() => setDetailItem(p)} className="hover:bg-emerald-50 cursor-pointer transition-colors group">
                                     <td className="px-4 py-3">
                                         <div className="font-medium text-gray-900">{p.userName}</div>
                                         <div className="text-xs text-gray-500">{p.userEmail}</div>
@@ -308,6 +311,15 @@ export default function AdminModels3D() {
 
             {subTab === 'products' && !loading && models.length === 0 && (
                 <div className="text-center py-12 text-gray-500">No hay modelos. Haz clic en "Agregar" para crear uno.</div>
+            )}
+
+            {/* DETAIL MODAL */}
+            {detailItem && (
+                <PurchaseDetailModal
+                    purchase={detailItem}
+                    onClose={() => setDetailItem(null)}
+                    type="Modelo 3D"
+                />
             )}
 
             {showModal && (

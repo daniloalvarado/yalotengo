@@ -4,7 +4,10 @@ import passport from 'passport'
 import { Strategy as FacebookStrategy } from 'passport-facebook'
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20'
 import { User } from './model.user.js'
-import { sign, verify } from '../../utils/jwt.js' // 👈 IMPORTANTE: Asegúrate de exportar 'verify' en tu jwt.js
+import { sign, verify } from '../../utils/jwt.js'
+import { uploadAvatar } from '../../utils/upload.js'
+import fs from 'fs'
+import path from 'path'
 
 const r = Router()
 
@@ -156,6 +159,102 @@ r.get('/me', async (req, res) => {
     res.json({ user })
   } catch (error) {
     res.status(401).json({ error: 'Invalid token' })
+  }
+})
+
+// --- PUT /me: UPDATE PROFILE ---
+r.put('/me', async (req, res) => {
+  try {
+    const authHeader = req.headers.authorization
+    if (!authHeader) return res.status(401).json({ error: 'No token' })
+    const token = authHeader.split(' ')[1]
+    const decoded = verify(token)
+
+    const u = await User.findByPk(decoded.use_int_id)
+    if (!u) return res.status(404).json({ error: 'User not found' })
+
+    const { nombres, apellidos, documento, address, phone } = req.body
+
+    // Update fields
+    if (nombres !== undefined) u.use_txt_nombres = nombres
+    if (apellidos !== undefined) u.use_txt_apellidos = apellidos
+    if (documento !== undefined) u.use_txt_documento = documento
+    if (address !== undefined) u.use_txt_address = address
+    if (phone !== undefined) u.use_txt_phone = phone
+
+    await u.save()
+    res.json({ ok: true, user: u })
+  } catch (e) {
+    console.error(e)
+    res.status(500).json({ error: 'Error updating profile' })
+  }
+})
+
+// --- POST /avatar: UPLOAD PROFILE PICTURE ---
+r.post('/avatar', async (req, res) => {
+  const authHeader = req.headers.authorization
+  if (!authHeader) return res.status(401).json({ error: 'No token' })
+
+  // Wrapper for multer to handle errors
+  uploadAvatar(req, res, async (err) => {
+    if (err) return res.status(400).json({ error: err.message })
+
+    try {
+      const token = authHeader.split(' ')[1]
+      const decoded = verify(token)
+      const u = await User.findByPk(decoded.use_int_id)
+      if (!u) return res.status(404).json({ error: 'User not found' })
+
+      if (!req.file) return res.status(400).json({ error: 'No file uploaded' })
+
+      // OPTIONAL: Delete old avatar if not external (starts with http)
+      if (u.use_txt_avatar && !u.use_txt_avatar.startsWith('http')) {
+        const oldPath = path.join(process.cwd(), 'frontend/public/avatars', u.use_txt_avatar)
+        if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath)
+      }
+
+      u.use_txt_avatar = req.file.filename
+      await u.save()
+
+      res.json({ ok: true, avatar: u.use_txt_avatar })
+    } catch (e) {
+      console.error(e)
+      res.status(500).json({ error: 'Error processing avatar' })
+    }
+  })
+})
+
+// --- PUT /change-password: CHANGE PASSWORD ---
+r.put('/change-password', async (req, res) => {
+  try {
+    const { currentPassword, newPassword } = req.body
+    const authHeader = req.headers.authorization
+    if (!authHeader) return res.status(401).json({ error: 'No token' })
+    const token = authHeader.split(' ')[1]
+    const decoded = verify(token)
+
+    const u = await User.findByPk(decoded.use_int_id)
+    if (!u) return res.status(404).json({ error: 'User not found' })
+
+    // 1. Check if user has a password (local user)
+    if (!u.use_txt_passwordhash) {
+      return res.status(400).json({ error: 'Google users cannot change password here.' })
+    }
+
+    // 2. Verify current password
+    const ok = await bcrypt.compare(currentPassword, u.use_txt_passwordhash)
+    if (!ok) return res.status(401).json({ error: 'Contraseña actual incorrecta' })
+
+    // 3. Update password
+    if (newPassword.length < 8) return res.status(400).json({ error: 'Min 8 chars' })
+
+    u.use_txt_passwordhash = await bcrypt.hash(newPassword, 10)
+    await u.save()
+
+    res.json({ ok: true, message: 'Password updated' })
+  } catch (e) {
+    console.error(e)
+    res.status(500).json({ error: 'Server error' })
   }
 })
 

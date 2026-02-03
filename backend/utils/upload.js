@@ -135,3 +135,17 @@ export const uploadBookFiles = multer({
     { name: 'pdfFile', maxCount: 1 },
     { name: 'coverImage', maxCount: 1 }
 ])
+
+export const uploadAvatar = multer({
+    storage: multer.diskStorage({
+        destination: (req, file, cb) => {
+            cb(null, ensureDir(publicPath, 'avatars'))
+        },
+        filename: (req, file, cb) => {
+            const uniqueName = `avatar_${Date.now()}_${file.originalname.replace(/\s+/g, '_')}`
+            cb(null, uniqueName)
+        }
+    }),
+    fileFilter: imageFilter,
+    limits: { fileSize: 5 * 1024 * 1024 } // 5MB max
+}).single('avatar')
