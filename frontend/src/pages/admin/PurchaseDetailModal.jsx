@@ -1,6 +1,7 @@
 import React from 'react'
 import { XMarkIcon, UserCircleIcon, CalendarIcon, CreditCardIcon, MapPinIcon, PhoneIcon, IdentificationIcon } from '@heroicons/react/24/outline'
 import { StatusTag, formatDateTime, PEN } from './adminUtils'
+import api from '../../api/client'
 
 export default function PurchaseDetailModal({ purchase, onClose, type = 'Producto' }) {
     if (!purchase) return null
@@ -9,10 +10,15 @@ export default function PurchaseDetailModal({ purchase, onClose, type = 'Product
     const productName = purchase.modelName || purchase.bookTitle || purchase.courseTitle || 'Producto desconocido'
     const productType = purchase.modelId ? 'Modelo 3D' : purchase.bookId ? 'Libro' : purchase.courseId ? 'Curso' : type
 
-    // Avatar logic
+    // Avatar URL logic
     let avatarUrl = null
     if (purchase.userAvatar) {
-        avatarUrl = purchase.userAvatar.startsWith('http') ? purchase.userAvatar : `/avatars/${purchase.userAvatar}`
+        if (purchase.userAvatar.startsWith('http')) {
+            avatarUrl = purchase.userAvatar
+        } else {
+            const base = (api.defaults.baseURL || '').replace(/\/api\/?$/, '')
+            avatarUrl = `${base}/uploads/avatars/${purchase.userAvatar}`
+        }
     }
 
     return (

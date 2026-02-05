@@ -139,7 +139,8 @@ export const uploadBookFiles = multer({
 export const uploadAvatar = multer({
     storage: multer.diskStorage({
         destination: (req, file, cb) => {
-            cb(null, ensureDir(publicPath, 'avatars'))
+            // Save to backend/uploads/avatars (accessible via /uploads/avatars)
+            cb(null, ensureDir(path.join(__dirname, '../uploads'), 'avatars'))
         },
         filename: (req, file, cb) => {
             const uniqueName = `avatar_${Date.now()}_${file.originalname.replace(/\s+/g, '_')}`

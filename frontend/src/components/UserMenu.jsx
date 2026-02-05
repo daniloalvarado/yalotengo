@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ArrowRightOnRectangleIcon, TicketIcon, UserCircleIcon } from '@heroicons/react/24/outline'
 import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
+import api from '../api/client'
 
 export default function UserMenu({ user, onLogout }) {
   const [isOpen, setIsOpen] = useState(false)
@@ -28,7 +29,8 @@ export default function UserMenu({ user, onLogout }) {
   // Busca la foto en cualquier formato y ajusta la URL
   let avatarUrl = user?.use_txt_avatar || user?.avatar || null
   if (avatarUrl && !avatarUrl.startsWith('http')) {
-    avatarUrl = `/avatars/${avatarUrl}`
+    const base = (api.defaults.baseURL || '').replace(/\/api\/?$/, '')
+    avatarUrl = `${base}/uploads/avatars/${avatarUrl}`
   }
 
   // Si no hay foto, usa la inicial

@@ -144,7 +144,9 @@ export default function Profile() {
         if (user.use_txt_avatar.startsWith('http')) {
             avatarUrl = user.use_txt_avatar
         } else {
-            avatarUrl = `/avatars/${user.use_txt_avatar}`
+            // Construct backend URL
+            const base = (api.defaults.baseURL || '').replace(/\/api\/?$/, '')
+            avatarUrl = `${base}/uploads/avatars/${user.use_txt_avatar}`
         }
     }
 
@@ -241,7 +243,7 @@ export default function Profile() {
 
                             {/* EMAIL */}
                             <div>
-                                <label className="block text-sm font-medium text-zinc-700 mb-1">Email (No editable)</label>
+                                <label className="block text-sm font-medium text-zinc-700 mb-1">Email</label>
                                 <input
                                     type="email"
                                     disabled
