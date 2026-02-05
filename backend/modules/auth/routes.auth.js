@@ -83,7 +83,7 @@ passport.use(new GoogleStrategy({
       // FORZAMOS LA ACTUALIZACIÓN:
       // Si Google nos da foto, la guardamos en la BD sí o sí
       u.use_txt_google_id = profile.id;
-      if (avatar) {
+      if (avatar && !u.use_txt_avatar) {
         u.use_txt_avatar = avatar;
       }
       await u.save();
