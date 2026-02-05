@@ -10,6 +10,7 @@ export default function Header() {
 
   const [count, setCount] = useState(0);
   const [token, setTokenState] = useState(() => localStorage.getItem("token"));
+  const [authVersion, setAuthVersion] = useState(0); // Para forzar recarga de usuario
   const [loadingCart, setLoadingCart] = useState(false);
   const [user, setUser] = useState(null);
 
@@ -29,9 +30,12 @@ export default function Header() {
     }
   };
 
-  // Sincronizar token
+  // Sincronizar token y detectar cambios de perfil
   useEffect(() => {
-    const refresh = () => setTokenState(localStorage.getItem("token"));
+    const refresh = () => {
+      setTokenState(localStorage.getItem("token"));
+      setAuthVersion(v => v + 1);
+    };
     window.addEventListener("auth:changed", refresh);
     const onStorage = (e) => { if (e.key === "token") refresh(); };
     window.addEventListener("storage", onStorage);
@@ -53,7 +57,7 @@ export default function Header() {
     } else {
       setUser(null);
     }
-  }, [isAuthed]);
+  }, [isAuthed, authVersion]); // Dependemos de authVersion para recargar
 
   // Carga de contadores (reservaciones + productos PENDING)
   const loadCounts = useCallback(async () => {

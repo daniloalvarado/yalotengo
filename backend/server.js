@@ -25,7 +25,9 @@ app.use(cors({
 app.options('*', cors())
 
 app.use(express.json())
-app.use(helmet())
+app.use(helmet({
+  crossOriginResourcePolicy: false,
+}))
 app.use(morgan('dev'))
 app.use(passport.initialize())
 
