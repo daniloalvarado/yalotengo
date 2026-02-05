@@ -209,8 +209,16 @@ r.post('/avatar', async (req, res) => {
 
       // OPTIONAL: Delete old avatar if not external (starts with http)
       if (u.use_txt_avatar && !u.use_txt_avatar.startsWith('http')) {
-        const oldPath = path.join(process.cwd(), 'frontend/public/avatars', u.use_txt_avatar)
-        if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath)
+        // Since we are in backend/modules/auth/routes.auth.js, and process.cwd() is backend root
+        const oldPath = path.join(process.cwd(), 'uploads/avatars', u.use_txt_avatar)
+        try {
+          if (fs.existsSync(oldPath)) {
+            fs.unlinkSync(oldPath)
+            console.log('🗑️ Old avatar deleted:', oldPath)
+          }
+        } catch (err) {
+          console.error('Error deleting old avatar:', err)
+        }
       }
 
       u.use_txt_avatar = req.file.filename
