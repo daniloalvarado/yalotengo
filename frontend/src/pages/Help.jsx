@@ -33,7 +33,7 @@ const USER_FAQS = [
     {
         icon: CreditCardIcon,
         question: '¿Qué métodos de pago aceptan?',
-        answer: 'Aceptamos pagos por Yape, Plin y transferencia bancaria. Una vez realizado el pago, recibirás acceso inmediato a tu compra digital.'
+        answer: 'Aceptamos pagos por Yape y transferencia bancaria. Una vez realizado el pago, recibirás acceso inmediato a tu compra digital.'
     },
     {
         icon: CubeIcon,

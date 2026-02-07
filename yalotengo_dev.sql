@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 29-01-2026 a las 05:26:32
+-- Tiempo de generación: 06-02-2026 a las 22:39:24
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -45,9 +45,9 @@ CREATE TABLE `boo_book` (
 --
 
 INSERT INTO `boo_book` (`boo_int_id`, `boo_txt_title`, `boo_txt_author`, `boo_txt_desc`, `boo_txt_pdf_filename`, `boo_txt_cover_image`, `boo_dec_price`, `boo_bool_active`, `created_at`, `updated_at`) VALUES
-(1, 'El Infierno Amazónico', 'Isaac Ocampo', 'Una aventura épica en la selva amazónica', 'El Infierno Amazónico - Isaac Ocampo.pdf', 'libros/El Infierno Amazónico.jpg', 19.90, 1, '2026-01-28 16:36:33', '2026-01-28 18:42:51'),
-(2, 'El Miedo a la Libertad', 'Erich Fromm', 'Análisis psicológico sobre la libertad humana', 'El Miedo a la Libertad - Erich Fromm.pdf', 'libros/El Miedo a la Libertad.jpg', 19.90, 1, '2026-01-28 16:36:33', '2026-01-28 18:42:51'),
-(3, 'La Dama de las Camelias', 'Alejandro Dumas (hijo)', 'Clásico de la literatura francesa', 'La Dama de las Camelias - Alejandro Dumas (hijo).pdf', 'libros/La Dama de la Camelias.jpg', 19.90, 1, '2026-01-28 16:36:33', '2026-01-28 18:42:51');
+(1, 'El Infierno Amazónico', 'Isaac Ocampo', 'Una aventura épica en la selva amazónica', 'El Infierno Amazónico - Isaac Ocampo.pdf', 'El Infierno Amazónico.jpg', 19.90, 1, '2026-01-28 16:36:33', '2026-01-29 21:51:18'),
+(2, 'El Miedo a la Libertad', 'Erich Fromm', 'Análisis psicológico sobre la libertad humana', 'El Miedo a la Libertad - Erich Fromm.pdf', 'El Miedo a la Libertad.jpg', 19.90, 1, '2026-01-28 16:36:33', '2026-01-29 22:03:33'),
+(3, 'La Dama de las Camelias', 'Alejandro Dumas (hijo)', 'Clásico de la literatura francesa', 'La Dama de las Camelias - Alejandro Dumas (hijo).pdf', 'La Dama de la Camelias.jpg', 19.90, 1, '2026-01-28 16:36:33', '2026-01-29 21:52:01');
 
 -- --------------------------------------------------------
 
@@ -71,7 +71,8 @@ CREATE TABLE `bpu_book_purchase` (
 --
 
 INSERT INTO `bpu_book_purchase` (`bpu_int_id`, `use_int_id`, `boo_int_id`, `bpu_txt_status`, `bpu_txt_payment_id`, `bpu_dec_amount`, `bpu_dt_created`, `bpu_dt_updated`) VALUES
-(1, 7, 1, 'PAID', '1326044736', 19.90, '2026-01-28 16:51:43', '2026-01-28 16:51:46');
+(1, 7, 1, 'PAID', '1326044736', 19.90, '2026-01-28 16:51:43', '2026-01-28 16:51:46'),
+(8, 7, 2, 'PAID', '1326073816', 19.90, '2026-01-31 15:27:42', '2026-01-31 15:27:44');
 
 -- --------------------------------------------------------
 
@@ -129,16 +130,18 @@ CREATE TABLE `core_user` (
   `use_txt_role` varchar(20) DEFAULT 'cliente',
   `use_txt_fb_id` varchar(64) DEFAULT NULL,
   `use_txt_avatar` text DEFAULT NULL,
-  `use_txt_google_id` varchar(64) DEFAULT NULL
+  `use_txt_google_id` varchar(64) DEFAULT NULL,
+  `use_txt_address` varchar(255) DEFAULT NULL,
+  `use_txt_phone` varchar(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `core_user`
 --
 
-INSERT INTO `core_user` (`use_int_id`, `use_txt_nombres`, `use_txt_apellidos`, `use_txt_documento`, `use_txt_email`, `use_txt_passwordhash`, `use_txt_role`, `use_txt_fb_id`, `use_txt_avatar`, `use_txt_google_id`) VALUES
-(6, 'Danilo', 'Alvarado', NULL, 'daniloalvarado2002@gmail.com', NULL, 'admin', NULL, 'https://lh3.googleusercontent.com/a/ACg8ocIXE_67oxaxc4_1gxHQJM-aSlIodxkGaEQMpiFOatkUTHY8066Z9w=s96-c', '100016188293704955189'),
-(7, 'Leo', 'Alvarado', NULL, 'leoalvarado1203@gmail.com', NULL, 'cliente', NULL, 'https://lh3.googleusercontent.com/a/ACg8ocIFC225JxESSkVKPGkGAc5H22t7T14P8dA93_kswOg1_LCl6Q=s96-c', '113717031116314250808');
+INSERT INTO `core_user` (`use_int_id`, `use_txt_nombres`, `use_txt_apellidos`, `use_txt_documento`, `use_txt_email`, `use_txt_passwordhash`, `use_txt_role`, `use_txt_fb_id`, `use_txt_avatar`, `use_txt_google_id`, `use_txt_address`, `use_txt_phone`) VALUES
+(6, 'Danilo', 'Alvarado', NULL, 'daniloalvarado2002@gmail.com', NULL, 'admin', NULL, 'https://lh3.googleusercontent.com/a/ACg8ocIXE_67oxaxc4_1gxHQJM-aSlIodxkGaEQMpiFOatkUTHY8066Z9w=s96-c', '100016188293704955189', NULL, NULL),
+(7, 'Leo', 'Alvarado', NULL, 'leoalvarado1203@gmail.com', NULL, 'cliente', NULL, 'avatar_1770252784512_favicon.png', '113717031116314250808', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -191,7 +194,8 @@ CREATE TABLE `cpu_course_purchase` (
 --
 
 INSERT INTO `cpu_course_purchase` (`cpu_int_id`, `use_int_id`, `cou_int_id`, `cpu_txt_status`, `cpu_txt_payment_id`, `cpu_dec_amount`, `cpu_dt_created`, `cpu_dt_updated`) VALUES
-(1, 7, 1, 'PAID', '1326045092', 99.90, '2026-01-28 19:01:49', '2026-01-28 19:01:51');
+(1, 7, 1, 'PAID', '1326045092', 99.90, '2026-01-28 19:01:49', '2026-01-28 19:01:51'),
+(2, 7, 2, 'PENDING', NULL, 99.90, '2026-01-30 19:34:11', '2026-01-30 19:34:11');
 
 -- --------------------------------------------------------
 
@@ -251,7 +255,7 @@ CREATE TABLE `mod_model3d` (
 --
 
 INSERT INTO `mod_model3d` (`mod_int_id`, `mod_txt_name`, `mod_txt_desc`, `mod_txt_glb_filename`, `mod_dec_price`, `mod_txt_category`, `mod_bool_active`, `mod_dt_created`, `mod_dt_updated`) VALUES
-(1, 'Mosquito', 'Modelo 3D de un mosquito detallado', 'mosquito.glb', 19.90, 'DIGITALIZADO', 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(1, 'Mosquito', 'Modelo 3D de un mosquito detallado', 'mosquito.glb', 19.90, 'DIGITALIZADO', 1, '0000-00-00 00:00:00', '2026-01-29 06:31:21'),
 (2, 'Mosca', 'Modelo 3D detallado de una mosca ', 'mosca.glb', 19.90, 'DIGITALIZADO', 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (3, 'Pulga', 'Modelo 3D detallado de una pulga', 'pulga.glb', 19.90, 'DIGITALIZADO', 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00');
 
@@ -277,10 +281,8 @@ CREATE TABLE `mod_purchase` (
 --
 
 INSERT INTO `mod_purchase` (`pur_int_id`, `use_int_id`, `mod_int_id`, `pur_txt_status`, `pur_txt_payment_id`, `pur_dec_amount`, `pur_dt_created`, `pur_dt_updated`) VALUES
-(1, 7, 1, 'PENDING', NULL, 19.90, '2026-01-28 05:12:41', '2026-01-28 05:12:41'),
-(2, 7, 1, 'PENDING', NULL, 19.90, '2026-01-28 05:13:54', '2026-01-28 05:13:54'),
-(3, 7, 2, 'PENDING', NULL, 19.90, '2026-01-28 05:18:15', '2026-01-28 05:18:15'),
-(4, 7, 2, 'PAID', '1344262367', 19.90, '2026-01-28 05:22:03', '2026-01-28 05:22:05');
+(4, 7, 2, 'PAID', '1344262367', 19.90, '2026-01-28 05:22:03', '2026-01-28 05:22:05'),
+(10, 7, 1, 'PAID', '1344334231', 19.90, '2026-01-30 22:55:43', '2026-01-30 22:55:45');
 
 -- --------------------------------------------------------
 
@@ -358,7 +360,12 @@ INSERT INTO `res_reservation` (`res_int_id`, `use_int_id`, `res_dt_date`, `res_t
 (170, 7, '2026-01-28', '09:00', 'PAID', '19c5706068d2464d64f7033c3229e4e93e557ede7dd67ee5', 'qr-tickets/170.png', 2.00, 1, '2026-01-28 05:06:25', NULL, '1344261719', 'USD'),
 (171, 7, '2026-01-29', '11:00', 'EXPIRED', 'a03f1b4b084b57515efd21db16060e91144d55c79a9a3397', NULL, 2.00, 1, '2026-01-28 19:27:31', NULL, NULL, 'PEN'),
 (172, 7, '2026-01-29', '11:00', 'EXPIRED', 'e21b5639248097342716a605add109259079cc6bb1b10744', NULL, 2.00, 1, '2026-01-28 19:59:40', NULL, NULL, 'PEN'),
-(173, 7, '2026-01-28', '16:00', 'PAID', 'fc4f393327b7bee10d3a29e1bd38eabfde16ddfd0340d10d', 'qr-tickets/173.png', 2.00, 1, '2026-01-28 20:48:34', NULL, '1344275151', 'USD');
+(173, 7, '2026-01-28', '16:00', 'PAID', 'fc4f393327b7bee10d3a29e1bd38eabfde16ddfd0340d10d', 'qr-tickets/173.png', 2.00, 1, '2026-01-28 20:48:34', NULL, '1344275151', 'USD'),
+(175, 7, '2026-01-29', '19:30', 'EXPIRED', '747329b2e2f43dd58a6557d826a278bb79997376f1145e60', NULL, 2.00, 1, '2026-01-30 00:08:01', NULL, NULL, 'PEN'),
+(176, 7, '2026-01-30', '09:30', 'EXPIRED', '4fd74c1e32294c7cacb4cb24920b2bb746b08b1ba62f0fda', NULL, 2.00, 1, '2026-01-30 01:21:15', NULL, NULL, 'PEN'),
+(178, 7, '2026-01-31', '10:00', 'EXPIRED', 'fc44f7a3fe4165ce19423bfb4aae56213ac16241fa101758', NULL, 2.00, 1, '2026-01-30 19:34:18', NULL, NULL, 'PEN'),
+(179, 8, '2026-02-01', '09:00', 'EXPIRED', '62c164081e79b99416c1af0d67af7e6587d03df12d76024b', NULL, 2.00, 1, '2026-01-31 15:46:49', NULL, NULL, 'PEN'),
+(180, 7, '2026-01-31', '13:00', 'PAID', '908287863bb407e3cf8c068ee1edec61e7ba233724f9122f', 'qr-tickets/180.png', 2.00, 1, '2026-01-31 16:09:55', NULL, '1326072562', 'USD');
 
 -- --------------------------------------------------------
 
@@ -487,13 +494,13 @@ ALTER TABLE `sequelizemeta`
 -- AUTO_INCREMENT de la tabla `boo_book`
 --
 ALTER TABLE `boo_book`
-  MODIFY `boo_int_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `boo_int_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de la tabla `bpu_book_purchase`
 --
 ALTER TABLE `bpu_book_purchase`
-  MODIFY `bpu_int_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `bpu_int_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT de la tabla `cart_cart`
@@ -511,19 +518,19 @@ ALTER TABLE `cart_item`
 -- AUTO_INCREMENT de la tabla `core_user`
 --
 ALTER TABLE `core_user`
-  MODIFY `use_int_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `use_int_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT de la tabla `cou_course`
 --
 ALTER TABLE `cou_course`
-  MODIFY `cou_int_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `cou_int_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `cpu_course_purchase`
 --
 ALTER TABLE `cpu_course_purchase`
-  MODIFY `cpu_int_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `cpu_int_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `inv_category`
@@ -541,13 +548,13 @@ ALTER TABLE `inv_product`
 -- AUTO_INCREMENT de la tabla `mod_model3d`
 --
 ALTER TABLE `mod_model3d`
-  MODIFY `mod_int_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `mod_int_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `mod_purchase`
 --
 ALTER TABLE `mod_purchase`
-  MODIFY `pur_int_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `pur_int_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT de la tabla `ord_item`
@@ -565,7 +572,7 @@ ALTER TABLE `ord_order`
 -- AUTO_INCREMENT de la tabla `res_reservation`
 --
 ALTER TABLE `res_reservation`
-  MODIFY `res_int_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=174;
+  MODIFY `res_int_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=181;
 
 --
 -- Restricciones para tablas volcadas

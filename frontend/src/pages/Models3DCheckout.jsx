@@ -130,6 +130,8 @@ export default function Models3DCheckout() {
 
     // Paso: Éxito
     if (step === 'success') {
+        const isPrinted = model.mod_txt_category === 'IMPRESO' || model.mod_txt_glb_filename?.match(/\.(jpg|jpeg|png|webp)$/i)
+
         return (
             <div className="max-w-2xl mx-auto px-4 py-12">
                 <div className="bg-white rounded-2xl shadow-lg p-8 text-center">
@@ -138,21 +140,35 @@ export default function Models3DCheckout() {
                     </div>
 
                     <h1 className="text-2xl font-bold text-gray-900 mb-2">¡Compra Exitosa!</h1>
-                    <p className="text-gray-600 mb-6">
-                        Ya puedes descargar tu modelo 3D: <strong>{model.mod_txt_name}</strong>
-                    </p>
 
-                    <button
-                        onClick={handleDownload}
-                        className="inline-flex items-center gap-3 px-8 py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl transition-colors text-lg"
-                    >
-                        <ArrowDownTrayIcon className="w-6 h-6" />
-                        Descargar {model.mod_txt_glb_filename}
-                    </button>
+                    {isPrinted ? (
+                        <>
+                            <p className="text-gray-600 mb-6">
+                                Gracias por adquirir: <strong>{model.mod_txt_name}</strong>
+                            </p>
+                            <div className="bg-emerald-50 border border-emerald-100 rounded-xl p-4 mb-6 text-emerald-800 text-sm">
+                                <p className="font-semibold mb-1">📦 Producto Físico</p>
+                                <p>Tu pedido ha sido registrado. Nos pondremos en contacto contigo para coordinar la entrega o recojo del modelo impreso.</p>
+                            </div>
+                        </>
+                    ) : (
+                        <>
+                            <p className="text-gray-600 mb-6">
+                                Ya puedes descargar tu modelo 3D: <strong>{model.mod_txt_name}</strong>
+                            </p>
+                            <button
+                                onClick={handleDownload}
+                                className="inline-flex items-center gap-3 px-8 py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl transition-colors text-lg"
+                            >
+                                <ArrowDownTrayIcon className="w-6 h-6" />
+                                Descargar GLB
+                            </button>
+                        </>
+                    )}
 
                     <div className="mt-8 pt-6 border-t border-gray-100">
                         <p className="text-sm text-gray-500 mb-3">
-                            También puedes descargar tus compras desde tu perfil.
+                            Puedes ver el detalle de tus compras en tu perfil.
                         </p>
                         <button
                             onClick={() => navigate('/models3d')}
@@ -181,10 +197,21 @@ export default function Models3DCheckout() {
             <div className="grid md:grid-cols-2 gap-8 items-start">
                 {/* Modelo preview */}
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden self-start">
-                    <Model3DViewer
-                        glbUrl={`${api.defaults.baseURL || 'http://localhost:3000'}/uploads/models/${model.mod_txt_glb_filename}`}
-                        height="300px"
-                    />
+                    {model.mod_txt_category === 'IMPRESO' || model.mod_txt_glb_filename?.match(/\.(jpg|jpeg|png|webp)$/i) ? (
+                        <div className="aspect-[4/3] bg-gray-100">
+                            <img
+                                src={`${api.defaults.baseURL || 'http://localhost:3000'}/uploads/impresos/${model.mod_txt_glb_filename}`}
+                                alt={model.mod_txt_name}
+                                className="w-full h-full object-cover"
+                                onError={(e) => e.target.src = 'https://placehold.co/400?text=No+Image'}
+                            />
+                        </div>
+                    ) : (
+                        <Model3DViewer
+                            glbUrl={`${api.defaults.baseURL || 'http://localhost:3000'}/uploads/models/${model.mod_txt_glb_filename}`}
+                            height="300px"
+                        />
+                    )}
                     <div className="p-5">
                         <h2 className="text-xl font-bold text-gray-900">{model.mod_txt_name}</h2>
                         {model.mod_txt_desc && (

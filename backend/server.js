@@ -71,6 +71,45 @@ async function ensureSchema() {
       })
     }
   } catch (e) { /* tabla puede no existir */ }
+
+  // mod_purchase campos para Impresiones 3D
+  try {
+    const desc = await qi.describeTable('mod_purchase')
+
+    // Columna de estado (update definition)
+    // Note: Changing ENUM in existing column via Sequelize is tricky/not supported directly in sync.
+    // We rely on the user running the SQL or catch the mismatch. 
+    // Ideally we check if column exists, if so we assume user ran SQL or we try to alter.
+    // For simplicity/safety, we just check existence to not crash.
+    if (!('pur_txt_delivery_status' in desc)) {
+      await qi.addColumn('mod_purchase', 'pur_txt_delivery_status', {
+        type: DataTypes.ENUM('ACCEPTED', 'IN_PROGRESS', 'DELIVERED'),
+        allowNull: false,
+        defaultValue: 'ACCEPTED'
+      })
+    }
+
+    // Columna de estimación
+    if (!('pur_txt_delivery_estimate' in desc)) {
+      await qi.addColumn('mod_purchase', 'pur_txt_delivery_estimate', {
+        type: DataTypes.STRING(50),
+        allowNull: false,
+        defaultValue: '1 día'
+      })
+    }
+  } catch (e) { /* tabla puede no existir */ }
+
+  // mod_model3d para Soft Delete
+  try {
+    const qi = sequelize.getQueryInterface()
+    const desc = await qi.describeTable('mod_model3d')
+    if (!('mod_dt_deleted' in desc)) {
+      await qi.addColumn('mod_model3d', 'mod_dt_deleted', {
+        type: DataTypes.DATE,
+        allowNull: true
+      })
+    }
+  } catch (e) { /* tabla puede no existir */ }
 }
 
 async function start() {

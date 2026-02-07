@@ -28,11 +28,18 @@ export async function generateAndUploadQR(qrCode, reservationId) {
         errorCorrectionLevel: 'H' // Alta corrección de errores
     })
 
-    // Subir a MinIO
-    const key = `qr-tickets/${reservationId}.png`
-    await s3.putObject(BUCKET, key, qrBuffer, {
-        'Content-Type': 'image/png'
-    })
+    // Subir a MinIO / S3
+    // Envolvemos en try/catch para que si falla (ej: localmente sin minio) no rompa la compra
+    let key = null
+    try {
+        key = `qr-tickets/${reservationId}.png`
+        await s3.putObject(BUCKET, key, qrBuffer, {
+            'Content-Type': 'image/png'
+        })
+    } catch (e) {
+        // Solo advertimos, no bloqueamos el flujo
+        console.warn('[QR] No se pudo subir el QR a MinIO/S3 (esto es normal en local sin MinIO corriendo):', e.message)
+    }
 
     return key
 }

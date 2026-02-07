@@ -154,7 +154,9 @@ r.post('/purchase', auth, async (req, res) => {
             use_int_id: req.user.use_int_id,
             mod_int_id: modelId,
             pur_txt_status: 'PENDING',
-            pur_dec_amount: price
+            pur_dec_amount: price,
+            pur_txt_delivery_status: model.mod_txt_category === 'IMPRESO' ? 'ACCEPTED' : undefined,
+            pur_txt_delivery_estimate: model.mod_txt_category === 'IMPRESO' ? '1 día' : undefined
         })
 
         // Email del comprador (desde el Brick de pago)
@@ -266,5 +268,7 @@ r.get('/my/purchases', auth, async (req, res) => {
         res.status(500).json({ error: 'Error al obtener compras' })
     }
 })
+
+// Route removed - moved to admin routes
 
 export default r

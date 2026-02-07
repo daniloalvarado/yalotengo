@@ -176,7 +176,7 @@ r.get('/pricing', (req, res) => {
         card: { amount: 2.00, currency: 'USD', label: '$ 2.00' },
         methods: {
             offline: OFFLINE_METHODS,
-            description: 'Yape, Plin, PagoEfectivo usan PEN. Tarjetas usan USD.'
+            description: 'Yape, PagoEfectivo usan PEN. Tarjetas usan USD.'
         }
     })
 })

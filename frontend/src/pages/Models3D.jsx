@@ -15,6 +15,8 @@ export default function Models3D() {
     const [addingToCart, setAddingToCart] = useState({})
     const navigate = useNavigate()
 
+    const [activeTab, setActiveTab] = useState('DIGITALIZADO') // DIGITALIZADO, IMPRESO
+
     useEffect(() => {
         loadModels()
     }, [])
@@ -31,7 +33,35 @@ export default function Models3D() {
         }
     }
 
-    const handleBuy = (model) => {
+    const handleBuy = async (model) => {
+        const token = localStorage.getItem('token')
+        if (!token) {
+            navigate('/auth', { state: { from: '/models3d' } })
+            return
+        }
+
+        // Validación de Perfil para Impresiones
+        const isPrinted = (model.mod_txt_category || 'DIGITALIZADO') === 'IMPRESO'
+        if (isPrinted) {
+            try {
+                const { data } = await api.get('/auth/me')
+                const u = data.user
+                const missing = []
+                if (!u.use_txt_documento) missing.push('DNI')
+                if (!u.use_txt_phone) missing.push('Teléfono')
+                if (!u.use_txt_address) missing.push('Dirección')
+
+                if (missing.length > 0) {
+                    toast.error(`Para comprar impresiones debes completar: ${missing.join(', ')}`, { duration: 5000 })
+                    navigate('/profile', { state: { missing } })
+                    return
+                }
+            } catch (e) {
+                console.error('Validation error', e)
+                return
+            }
+        }
+
         navigate('/models3d/checkout', { state: { model } })
     }
 
@@ -55,6 +85,8 @@ export default function Models3D() {
         }
     }
 
+    const filteredModels = models.filter(m => (m.mod_txt_category || 'DIGITALIZADO') === activeTab)
+
     if (loading) {
         return (
             <div className="flex items-center justify-center min-h-[400px]">
@@ -72,49 +104,66 @@ export default function Models3D() {
                     <h1 className="text-3xl font-bold text-gray-900">Modelos 3D</h1>
                 </div>
                 <p className="text-gray-600">
-                    Explora nuestra colección de modelos 3D digitalizados. Descarga en formato GLB para usar en tus proyectos.
+                    {activeTab === 'DIGITALIZADO'
+                        ? 'Explora nuestra colección de modelos 3D digitalizados. Descarga en formato GLB para usar en tus proyectos.'
+                        : 'Adquiere modelos ya impresos en 3D con acabados de alta calidad.'}
                 </p>
             </div>
 
             {/* Tabs */}
             <div className="flex gap-2 mb-6">
-                {/* SIN HOVER */}
-                <button className="px-4 py-2 bg-emerald-600 text-white rounded-lg font-medium flex items-center gap-2">
+                <button
+                    onClick={() => setActiveTab('DIGITALIZADO')}
+                    className={`px-4 py-2 rounded-lg font-medium flex items-center gap-2 transition-colors ${activeTab === 'DIGITALIZADO' ? 'bg-emerald-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+                >
                     <SparklesIcon className="w-4 h-4" />
                     Digitalizados
                 </button>
-                {/* SIN HOVER */}
                 <button
-                    className="px-4 py-2 border border-gray-200 text-gray-600 rounded-lg font-medium"
-                    onClick={() => toast('Próximamente: Servicio de impresión 3D', { icon: '🖨️' })}
+                    onClick={() => setActiveTab('IMPRESO')}
+                    className={`px-4 py-2 rounded-lg font-medium flex items-center gap-2 transition-colors ${activeTab === 'IMPRESO' ? 'bg-emerald-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
                 >
+                    <CubeIcon className="w-4 h-4" />
                     Impresos
                 </button>
             </div>
 
             {/* Grid de modelos */}
-            {models.length === 0 ? (
+            {filteredModels.length === 0 ? (
                 <div className="text-center py-16 bg-gray-50 rounded-2xl">
                     <CubeIcon className="w-16 h-16 mx-auto text-gray-300 mb-4" />
-                    <h3 className="text-lg font-medium text-gray-700">No hay modelos disponibles</h3>
+                    <h3 className="text-lg font-medium text-gray-700">No hay modelos {activeTab === 'IMPRESO' ? 'impresos' : 'digitales'} disponibles</h3>
                     <p className="text-gray-500">Pronto agregaremos más modelos a la tienda.</p>
                 </div>
             ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-                    {models.map((model) => (
+                    {filteredModels.map((model) => (
                         <div
                             key={model.mod_int_id}
                             className="bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-lg transition-all group relative z-0 hover:z-10 w-full max-w-[320px] mx-auto sm:max-w-none"
                         >
-                            {/* Visor 3D */}
-                            <div className="relative rounded-t-2xl overflow-hidden">
-                                <Model3DViewer
-                                    glbUrl={`${import.meta.env.VITE_API_BASE || 'http://localhost:3000'}/uploads/models/${model.mod_txt_glb_filename}`}
-                                    height="220px"
-                                />
-                                <div className="absolute top-3 right-3 bg-emerald-500 text-white text-xs font-bold px-2 py-1 rounded-full">
-                                    GLB
-                                </div>
+                            {/* Visor / Imagen */}
+                            <div className="relative rounded-t-2xl overflow-hidden bg-gray-100 aspect-[4/3]">
+                                {activeTab === 'DIGITALIZADO' ? (
+                                    <>
+                                        <Model3DViewer
+                                            glbUrl={`${import.meta.env.VITE_API_BASE || 'http://localhost:3000'}/uploads/models/${model.mod_txt_glb_filename}`}
+                                            height="100%"
+                                        />
+                                        <div className="absolute top-3 right-3 bg-emerald-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+                                            GLB
+                                        </div>
+                                    </>
+                                ) : (
+                                    <div className="w-full h-full">
+                                        <img
+                                            src={`${import.meta.env.VITE_API_BASE || 'http://localhost:3000'}/uploads/impresos/${model.mod_txt_glb_filename}`}
+                                            alt={model.mod_txt_name}
+                                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                            onError={(e) => e.target.src = 'https://placehold.co/400?text=No+Image'}
+                                        />
+                                    </div>
+                                )}
                             </div>
 
                             {/* Info */}

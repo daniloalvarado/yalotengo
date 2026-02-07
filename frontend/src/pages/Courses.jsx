@@ -29,12 +29,32 @@ export default function Courses() {
         fetchCourses()
     }, [])
 
-    const handleBuy = (course) => {
+    const handleBuy = async (course) => {
         const token = localStorage.getItem('token')
         if (!token) {
             navigate('/auth', { state: { from: '/courses' } })
             return
         }
+
+        // Validación de Perfil
+        try {
+            const { data } = await api.get('/auth/me')
+            const u = data.user
+            const missing = []
+            if (!u.use_txt_documento) missing.push('DNI')
+            if (!u.use_txt_phone) missing.push('Teléfono')
+            if (!u.use_txt_address) missing.push('Dirección')
+
+            if (missing.length > 0) {
+                toast.error(`Para comprar cursos debes completar: ${missing.join(', ')}`, { duration: 5000 })
+                navigate('/profile', { state: { missing } })
+                return
+            }
+        } catch (e) {
+            console.error('Validation error', e)
+            return
+        }
+
         navigate('/courses/checkout', { state: { course } })
     }
 

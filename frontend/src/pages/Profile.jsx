@@ -1,12 +1,16 @@
 import { useState, useEffect, useRef } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import api from '../api/client'
 import toast from 'react-hot-toast'
 import { UserCircleIcon, CameraIcon, LockClosedIcon, IdentificationIcon, MapPinIcon, PhoneIcon } from '@heroicons/react/24/outline'
 
 export default function Profile() {
     const navigate = useNavigate()
+    const location = useLocation()
     const fileInputRef = useRef(null)
+
+    const missingFields = location.state?.missing || []
+    const isMissing = (field) => missingFields.includes(field)
 
     const [user, setUser] = useState(null)
     const [loading, setLoading] = useState(true)
@@ -222,10 +226,11 @@ export default function Profile() {
                                     <input
                                         type="text"
                                         maxLength={8}
-                                        className="w-full px-4 py-2 rounded-lg border-zinc-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent focus:ring-offset-1 transition-shadow"
+                                        className={`w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent focus:ring-offset-1 transition-shadow ${isMissing('DNI') ? 'border-red-500 ring-1 ring-red-500 bg-red-50' : 'border-zinc-300'}`}
                                         value={documento}
                                         onChange={e => setDocumento(e.target.value.replace(/\D/g, ''))}
                                     />
+                                    {isMissing('DNI') && <span className="text-xs text-red-500">Requerido para compras</span>}
                                 </div>
                                 <div>
                                     <label className="block text-sm font-medium text-zinc-700 mb-1 flex items-center gap-1">
@@ -233,11 +238,12 @@ export default function Profile() {
                                     </label>
                                     <input
                                         type="tel"
-                                        className="w-full px-4 py-2 rounded-lg border-zinc-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent focus:ring-offset-1 transition-shadow"
+                                        className={`w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent focus:ring-offset-1 transition-shadow ${isMissing('Teléfono') ? 'border-red-500 ring-1 ring-red-500 bg-red-50' : 'border-zinc-300'}`}
                                         placeholder="9xx xxx xxx"
                                         value={phone}
                                         onChange={e => setPhone(e.target.value)}
                                     />
+                                    {isMissing('Teléfono') && <span className="text-xs text-red-500">Requerido para compras</span>}
                                 </div>
                             </div>
 
@@ -258,12 +264,13 @@ export default function Profile() {
                                     <MapPinIcon className="w-4 h-4" /> Dirección
                                 </label>
                                 <textarea
-                                    className="w-full px-4 py-2 rounded-lg border-zinc-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent focus:ring-offset-1 transition-shadow resize-y"
+                                    className={`w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent focus:ring-offset-1 transition-shadow resize-y ${isMissing('Dirección') ? 'border-red-500 ring-1 ring-red-500 bg-red-50' : 'border-zinc-300'}`}
                                     rows={3}
                                     placeholder="Av. Principal 123, Distrito, Provincia..."
                                     value={address}
                                     onChange={e => setAddress(e.target.value)}
                                 />
+                                {isMissing('Dirección') && <span className="text-xs text-red-500">Requerido para compras</span>}
                             </div>
 
                             <div className="pt-2 flex justify-end">

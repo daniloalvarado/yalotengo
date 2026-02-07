@@ -124,7 +124,7 @@ export default function ReservationSelection({
                             </div>
                             <div style={priceBadgeStyle}>
                                 <span>📱</span>
-                                <span>Yape/Plin: <strong>S/ {(guests * 5).toFixed(2)}</strong></span>
+                                <span>Yape: <strong>S/ {(guests * 5).toFixed(2)}</strong></span>
                             </div>
                         </div>
                     </div>

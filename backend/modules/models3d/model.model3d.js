@@ -39,7 +39,9 @@ export const Model3D = sequelize.define('mod_model3d', {
     tableName: 'mod_model3d',
     timestamps: true,
     createdAt: 'mod_dt_created',
-    updatedAt: 'mod_dt_updated'
+    updatedAt: 'mod_dt_updated',
+    paranoid: true, // Soft delete
+    deletedAt: 'mod_dt_deleted'
 })
 
 // Modelo para compras de modelos 3D
@@ -69,6 +71,16 @@ export const Model3DPurchase = sequelize.define('mod_purchase', {
     pur_dec_amount: {
         type: DataTypes.DECIMAL(10, 2),
         allowNull: false
+    },
+    pur_txt_delivery_status: {
+        type: DataTypes.ENUM('ACCEPTED', 'IN_PROGRESS', 'DELIVERED'),
+        allowNull: false,
+        defaultValue: 'ACCEPTED'
+    },
+    pur_txt_delivery_estimate: {
+        type: DataTypes.STRING(50),
+        allowNull: false,
+        defaultValue: '1 día'
     }
 }, {
     tableName: 'mod_purchase',

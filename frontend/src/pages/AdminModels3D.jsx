@@ -5,19 +5,19 @@ import api from '../api/client'
 import toast from 'react-hot-toast'
 import {
     PlusIcon, PencilIcon, TrashIcon, EyeIcon, EyeSlashIcon,
-    XMarkIcon, MagnifyingGlassIcon, ArrowUpTrayIcon, CheckCircleIcon
+    XMarkIcon, MagnifyingGlassIcon, ArrowUpTrayIcon, CheckCircleIcon,
+    PhotoIcon
 } from '@heroicons/react/24/outline'
 import { StatusTag, formatDateTime, PEN } from './admin/adminUtils'
 import Swal from 'sweetalert2'
-
-
 import PurchaseDetailModal from './admin/PurchaseDetailModal'
 
 const THEME = { primary: '#059669' }
 
 export default function AdminModels3D() {
     const navigate = useNavigate()
-    const [subTab, setSubTab] = useState('products')
+    const [mainTab, setMainTab] = useState('products') // products, purchases
+    const [modelCategory, setModelCategory] = useState('DIGITALIZADO') // DIGITALIZADO, IMPRESO
     const [loading, setLoading] = useState(true)
     const [isAdmin, setIsAdmin] = useState(false)
     const [searchTerm, setSearchTerm] = useState('')
@@ -27,11 +27,12 @@ export default function AdminModels3D() {
 
     const [showModal, setShowModal] = useState(false)
     const [editItem, setEditItem] = useState(null)
-    const [detailItem, setDetailItem] = useState(null) // State for detail modal
+    const [detailItem, setDetailItem] = useState(null)
     const [formData, setFormData] = useState({})
     const [attemptedSubmit, setAttemptedSubmit] = useState(false)
     const [uploading, setUploading] = useState(false)
     const fileInputRef = useRef(null)
+    const imageInputRef = useRef(null)
 
     useEffect(() => {
         const checkAdmin = async () => {
@@ -82,9 +83,6 @@ export default function AdminModels3D() {
         }
     }
 
-
-    // ... inside component
-
     const handleDelete = async (id) => {
         const result = await Swal.fire({
             title: '¿Estás seguro?',
@@ -116,14 +114,60 @@ export default function AdminModels3D() {
         }
     }
 
+    const handleStatusChange = async (purchaseId, newStatus) => {
+        try {
+            await api.put(`/admin/models3d/purchase/${purchaseId}/status`, { status: newStatus })
+            toast.success('Estado actualizado')
+            fetchPurchases()
+        } catch (e) {
+            toast.error('Error al actualizar estado')
+        }
+    }
+
+    const [showStatusModal, setShowStatusModal] = useState(false)
+    const [statusEditItem, setStatusEditItem] = useState(null)
+    const [statusForm, setStatusForm] = useState({ status: '', estimate: '' })
+
+    const openStatusModal = (item) => {
+        setStatusEditItem(item)
+        setStatusForm({
+            status: item.deliveryStatus || 'ACCEPTED',
+            estimate: item.deliveryEstimate || '1 día'
+        })
+        setShowStatusModal(true)
+    }
+
+    const handleStatusSubmit = async (e) => {
+        e.preventDefault()
+        try {
+            await api.put(`/admin/models3d/purchase/${statusEditItem.id}/status`, {
+                status: statusForm.status,
+                estimate: statusForm.estimate
+            })
+            toast.success('Estado actualizado')
+            setShowStatusModal(false)
+            fetchPurchases()
+        } catch (e) {
+            toast.error('Error al actualizar estado')
+        }
+    }
+
     const openModal = (item = null) => {
         setEditItem(item)
         setFormData(item ? {
             name: item.mod_txt_name,
             desc: item.mod_txt_desc || '',
             glbFilename: item.mod_txt_glb_filename,
-            price: item.mod_dec_price
-        } : { name: '', desc: '', glbFilename: '', price: 19.90 })
+            price: item.mod_dec_price,
+            category: item.mod_txt_category,
+            currentCategory: item.mod_txt_category
+        } : {
+            name: '',
+            desc: '',
+            glbFilename: '',
+            price: 19.90,
+            category: modelCategory
+        })
         setAttemptedSubmit(false)
         setShowModal(true)
     }
@@ -154,28 +198,60 @@ export default function AdminModels3D() {
         }
     }
 
+    const handleImageUpload = async (e) => {
+        const file = e.target.files?.[0]
+        if (!file) return
+
+        if (!file.type.startsWith('image/')) {
+            toast.error('Solo se permiten imágenes')
+            return
+        }
+
+        setUploading(true)
+        const formDataUpload = new FormData()
+        formDataUpload.append('printedImage', file)
+
+        try {
+            const { data } = await api.post('/admin/models3d/upload-image', formDataUpload, {
+                headers: { 'Content-Type': 'multipart/form-data' }
+            })
+            setFormData(prev => ({ ...prev, printedImage: data.filename, glbFilename: data.filename }))
+            toast.success('Imagen subida correctamente')
+        } catch (err) {
+            toast.error(err.response?.data?.error || 'Error al subir imagen')
+        } finally {
+            setUploading(false)
+        }
+    }
+
     const handleSubmit = async (e) => {
         e.preventDefault()
         setAttemptedSubmit(true)
 
-        // Validation fields
+        const currentCat = formData.category || modelCategory
+
         if (!formData.name || !formData.desc) {
             toast.error('Por favor completa los campos obligatorios')
             return
         }
 
-        // Validation file
         if (!formData.glbFilename) {
-            toast.error('Debes subir el archivo .glb del modelo')
+            if (currentCat === 'DIGITALIZADO') toast.error('Debes subir el archivo .glb del modelo')
+            else toast.error('Debes subir la imagen del modelo impreso')
             return
+        }
+
+        const payload = { ...formData, category: currentCat }
+        if (currentCat === 'IMPRESO') {
+            payload.printedImage = formData.glbFilename
         }
 
         try {
             if (editItem) {
-                await api.put(`/admin/models3d/${editItem.mod_int_id}`, formData)
+                await api.put(`/admin/models3d/${editItem.mod_int_id}`, payload)
                 toast.success('Actualizado correctamente')
             } else {
-                await api.post('/admin/models3d', formData)
+                await api.post('/admin/models3d', payload)
                 toast.success('Creado correctamente')
             }
             setShowModal(false)
@@ -184,6 +260,11 @@ export default function AdminModels3D() {
             toast.error(e.response?.data?.error || 'Error al guardar')
         }
     }
+
+    const filteredModels = models.filter(m => {
+        const cat = m.mod_txt_category || 'DIGITALIZADO'
+        return cat === modelCategory
+    })
 
     const filteredPurchases = searchTerm
         ? purchases.filter(p =>
@@ -202,34 +283,51 @@ export default function AdminModels3D() {
                     <h1 className="text-2xl font-bold text-gray-900">Gestión Modelos 3D</h1>
                     <p className="text-gray-500 text-sm">Productos y ventas de modelos 3D</p>
                 </div>
-                {subTab === 'products' && (
+                {mainTab === 'products' && (
                     <button
                         onClick={() => openModal()}
                         className="flex items-center justify-center gap-2 px-4 py-2 text-white rounded-lg shadow-md hover:opacity-90 transition-all"
                         style={{ backgroundColor: THEME.primary }}
                     >
                         <PlusIcon className="w-5 h-5" />
-                        <span>Agregar Modelo</span>
+                        <span>Agregar {modelCategory === 'IMPRESO' ? 'Impreso' : 'Digital'}</span>
                     </button>
                 )}
             </div>
 
             <div className="flex gap-2 border-b border-gray-200">
                 <button
-                    onClick={() => { setSubTab('products'); setSearchTerm(''); }}
-                    className={`px-4 py-2 text-sm font-medium border-b-2 transition-all ${subTab === 'products' ? 'border-emerald-500 text-emerald-600' : 'border-transparent text-gray-500 hover:text-gray-700'}`}
+                    onClick={() => { setMainTab('products'); setSearchTerm(''); }}
+                    className={`px-4 py-2 text-sm font-medium border-b-2 transition-all ${mainTab === 'products' ? 'border-emerald-500 text-emerald-600' : 'border-transparent text-gray-500 hover:text-gray-700'}`}
                 >
                     Productos ({models.length})
                 </button>
                 <button
-                    onClick={() => setSubTab('purchases')}
-                    className={`px-4 py-2 text-sm font-medium border-b-2 transition-all ${subTab === 'purchases' ? 'border-emerald-500 text-emerald-600' : 'border-transparent text-gray-500 hover:text-gray-700'}`}
+                    onClick={() => setMainTab('purchases')}
+                    className={`px-4 py-2 text-sm font-medium border-b-2 transition-all ${mainTab === 'purchases' ? 'border-emerald-500 text-emerald-600' : 'border-transparent text-gray-500 hover:text-gray-700'}`}
                 >
                     Compras ({purchases.length})
                 </button>
             </div>
 
-            {subTab === 'purchases' && (
+            {mainTab === 'products' && (
+                <div className="flex gap-2">
+                    <button
+                        onClick={() => setModelCategory('DIGITALIZADO')}
+                        className={`px-3 py-1 text-sm rounded-full transition-colors ${modelCategory === 'DIGITALIZADO' ? 'bg-emerald-100 text-emerald-700 font-medium' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+                    >
+                        Digitales (GLB)
+                    </button>
+                    <button
+                        onClick={() => setModelCategory('IMPRESO')}
+                        className={`px-3 py-1 text-sm rounded-full transition-colors ${modelCategory === 'IMPRESO' ? 'bg-emerald-100 text-emerald-700 font-medium' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+                    >
+                        Impresos (Físicos)
+                    </button>
+                </div>
+            )}
+
+            {mainTab === 'purchases' && (
                 <div className="relative">
                     <MagnifyingGlassIcon className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                     <input
@@ -244,14 +342,34 @@ export default function AdminModels3D() {
 
             {loading && <div className="text-gray-500">Cargando...</div>}
 
-            {subTab === 'products' && (
+            {mainTab === 'products' && (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {models.map(m => (
+                    {filteredModels.map(m => (
                         <div key={m.mod_int_id} className={`bg-white rounded-xl border p-4 shadow-sm transition-all ${!m.mod_bool_active ? 'opacity-60' : ''}`}>
+                            {m.mod_txt_category === 'IMPRESO' ? (
+                                <div className="aspect-square bg-gray-100 rounded-lg mb-3 overflow-hidden grid place-items-center">
+                                    {m.mod_txt_glb_filename ? (
+                                        <img
+                                            src={`${api.defaults.baseURL?.replace(/\/api\/?$/, '')}/uploads/impresos/${m.mod_txt_glb_filename}`}
+                                            alt={m.mod_txt_name}
+                                            className="w-full h-full object-cover"
+                                            onError={(e) => e.target.src = 'https://placehold.co/400?text=No+Image'}
+                                        />
+                                    ) : (
+                                        <PhotoIcon className="w-12 h-12 text-gray-300" />
+                                    )}
+                                </div>
+                            ) : (
+                                <div className="aspect-video bg-gray-900 rounded-lg mb-3 grid place-items-center relative overflow-hidden group">
+                                    <div className="absolute inset-0 flex items-center justify-center opacity-30 text-white font-black text-4xl">3D</div>
+                                    <p className="z-10 text-xs text-gray-300 font-mono bg-black/50 px-2 py-1 rounded line-clamp-1 max-w-[90%]">{m.mod_txt_glb_filename}</p>
+                                </div>
+                            )}
+
                             <div className="flex items-start justify-between gap-2 mb-2">
                                 <div className="flex-1 min-w-0">
                                     <h3 className="font-semibold text-gray-900 truncate">{m.mod_txt_name}</h3>
-                                    <p className="text-xs text-gray-400 truncate">{m.mod_txt_glb_filename}</p>
+                                    <p className="text-xs text-gray-400 line-clamp-2">{m.mod_txt_desc}</p>
                                 </div>
                                 <span className={`shrink-0 px-2 py-1 text-xs font-medium rounded-full ${m.mod_bool_active ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-100 text-gray-500'}`}>
                                     {m.mod_bool_active ? 'Activo' : 'Inactivo'}
@@ -271,10 +389,15 @@ export default function AdminModels3D() {
                             </div>
                         </div>
                     ))}
+                    {filteredModels.length === 0 && (
+                        <div className="col-span-full py-12 text-center text-gray-400 border-2 border-dashed border-gray-200 rounded-xl">
+                            <p>No hay modelos {modelCategory === 'IMPRESO' ? 'impresos' : 'digitales'} registrados.</p>
+                        </div>
+                    )}
                 </div>
             )}
 
-            {subTab === 'purchases' && (
+            {mainTab === 'purchases' && (
                 <div className="overflow-x-auto rounded-lg border border-gray-200">
                     <table className="w-full text-sm">
                         <thead className="bg-gray-50">
@@ -295,7 +418,27 @@ export default function AdminModels3D() {
                                     </td>
                                     <td className="px-4 py-3 text-gray-700">{p.modelName}</td>
                                     <td className="px-4 py-3 font-medium text-emerald-600">{PEN.format(Number(p.amount || 0))}</td>
-                                    <td className="px-4 py-3"><StatusTag status={p.status} /></td>
+                                    <td className="px-4 py-3">
+                                        {p.modelCategory === 'IMPRESO' ? (
+                                            <div className="flex flex-col items-start gap-1">
+                                                <span className={`text-xs font-bold px-2 py-0.5 rounded
+                                                    ${p.deliveryStatus === 'DELIVERED' ? 'bg-emerald-100 text-emerald-800' :
+                                                        p.deliveryStatus === 'IN_PROGRESS' || p.deliveryStatus === 'PREPARING' ? 'bg-blue-100 text-blue-800' :
+                                                            'bg-gray-100 text-gray-800'}`}>
+                                                    {p.deliveryStatus === 'DELIVERED' ? 'Entregado' :
+                                                        p.deliveryStatus === 'IN_PROGRESS' || p.deliveryStatus === 'PREPARING' ? 'En curso' : 'Aceptado'}
+                                                </span>
+                                                <button
+                                                    onClick={(e) => { e.stopPropagation(); openStatusModal(p); }}
+                                                    className="text-[10px] text-emerald-600 hover:text-emerald-800 font-medium underline"
+                                                >
+                                                    Gestionar
+                                                </button>
+                                            </div>
+                                        ) : (
+                                            <StatusTag status={p.status} />
+                                        )}
+                                    </td>
                                     <td className="px-4 py-3 text-gray-500">{formatDateTime(p.createdAt)}</td>
                                 </tr>
                             ))}
@@ -309,11 +452,6 @@ export default function AdminModels3D() {
                 </div>
             )}
 
-            {subTab === 'products' && !loading && models.length === 0 && (
-                <div className="text-center py-12 text-gray-500">No hay modelos. Haz clic en "Agregar" para crear uno.</div>
-            )}
-
-            {/* DETAIL MODAL */}
             {detailItem && (
                 <PurchaseDetailModal
                     purchase={detailItem}
@@ -326,7 +464,7 @@ export default function AdminModels3D() {
                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={() => setShowModal(false)}>
                     <div className="bg-white rounded-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
                         <div className="flex items-center justify-between p-4 border-b">
-                            <h2 className="text-lg font-semibold">{editItem ? 'Editar' : 'Nuevo'} Modelo 3D</h2>
+                            <h2 className="text-lg font-semibold">{editItem ? 'Editar' : 'Nuevo'} {modelCategory === 'IMPRESO' ? 'Modelo Impreso' : 'Modelo Digital'}</h2>
                             <button onClick={() => setShowModal(false)} className="p-1 hover:bg-gray-100 rounded-lg"><XMarkIcon className="w-5 h-5" /></button>
                         </div>
                         <form onSubmit={handleSubmit} className="p-4 space-y-4">
@@ -350,34 +488,73 @@ export default function AdminModels3D() {
                                 />
                             </label>
 
-                            {/* File Upload */}
-                            <div className="block">
-                                <span className="text-sm font-medium text-gray-700 mb-2 block">Archivo GLB *</span>
-                                <input
-                                    type="file"
-                                    ref={fileInputRef}
-                                    accept=".glb"
-                                    onChange={handleFileUpload}
-                                    className="hidden"
-                                />
-                                <div className="flex items-center gap-3">
-                                    <button
-                                        type="button"
-                                        onClick={() => fileInputRef.current?.click()}
-                                        disabled={uploading}
-                                        className={`flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm disabled:opacity-50 transition-colors ${attemptedSubmit && !formData.glbFilename ? 'border border-red-300 text-red-600 bg-red-50 hover:bg-red-100' : ''}`}
-                                    >
-                                        <ArrowUpTrayIcon className="w-4 h-4" />
-                                        {uploading ? 'Subiendo...' : 'Subir archivo .glb'}
-                                    </button>
+                            {(formData.category || modelCategory) === 'DIGITALIZADO' ? (
+                                <div className="block">
+                                    <span className="text-sm font-medium text-gray-700 mb-2 block">Archivo GLB *</span>
+                                    <input
+                                        type="file"
+                                        ref={fileInputRef}
+                                        accept=".glb"
+                                        onChange={handleFileUpload}
+                                        className="hidden"
+                                    />
+                                    <div className="flex items-center gap-3">
+                                        <button
+                                            type="button"
+                                            onClick={() => fileInputRef.current?.click()}
+                                            disabled={uploading}
+                                            className={`flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm disabled:opacity-50 transition-colors ${attemptedSubmit && !formData.glbFilename ? 'border border-red-300 text-red-600 bg-red-50 hover:bg-red-100' : ''}`}
+                                        >
+                                            <ArrowUpTrayIcon className="w-4 h-4" />
+                                            {uploading ? 'Subiendo...' : 'Subir archivo .glb'}
+                                        </button>
+                                        {formData.glbFilename && (
+                                            <div className="flex items-center gap-1 text-sm text-emerald-600">
+                                                <CheckCircleIcon className="w-4 h-4" />
+                                                <span className="truncate max-w-[200px]">{formData.glbFilename}</span>
+                                            </div>
+                                        )}
+                                    </div>
+                                    <p className="text-xs text-gray-400 mt-1">El archivo 3D que el usuario podrá visualizar y descargar.</p>
+                                </div>
+                            ) : (
+                                <div className="block">
+                                    <span className="text-sm font-medium text-gray-700 mb-2 block">Imagen del Modelo *</span>
+                                    <input
+                                        type="file"
+                                        ref={imageInputRef}
+                                        accept="image/*"
+                                        onChange={handleImageUpload}
+                                        className="hidden"
+                                    />
+                                    <div className="flex items-center gap-3">
+                                        <button
+                                            type="button"
+                                            onClick={() => imageInputRef.current?.click()}
+                                            disabled={uploading}
+                                            className={`flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm disabled:opacity-50 transition-colors ${attemptedSubmit && !formData.glbFilename ? 'border border-red-300 text-red-600 bg-red-50 hover:bg-red-100' : ''}`}
+                                        >
+                                            <PhotoIcon className="w-4 h-4" />
+                                            {uploading ? 'Subiendo...' : 'Subir Imagen'}
+                                        </button>
+                                        {formData.glbFilename && (
+                                            <div className="flex items-center gap-1 text-sm text-emerald-600">
+                                                <CheckCircleIcon className="w-4 h-4" />
+                                                <span className="truncate max-w-[200px]">{formData.glbFilename}</span>
+                                            </div>
+                                        )}
+                                    </div>
+                                    <p className="text-xs text-gray-400 mt-1">Foto real del objeto impreso para mostrar en el catálogo.</p>
                                     {formData.glbFilename && (
-                                        <div className="flex items-center gap-1 text-sm text-emerald-600">
-                                            <CheckCircleIcon className="w-4 h-4" />
-                                            <span className="truncate max-w-[200px]">{formData.glbFilename}</span>
+                                        <div className="mt-2 w-20 h-20 rounded-lg overflow-hidden bg-gray-100 border p-1">
+                                            <img
+                                                src={`${api.defaults.baseURL?.replace(/\/api\/?$/, '')}/uploads/impresos/${formData.glbFilename}`}
+                                                className="w-full h-full object-cover rounded"
+                                            />
                                         </div>
                                     )}
                                 </div>
-                            </div>
+                            )}
 
                             <label className="block">
                                 <span className="text-sm font-medium text-gray-700 mb-1 block">Precio (S/)</span>
@@ -393,6 +570,50 @@ export default function AdminModels3D() {
                                     style={{ backgroundColor: THEME.primary }}
                                 >
                                     {editItem ? 'Guardar' : 'Crear'}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+
+            {/* Status Management Modal */}
+            {showStatusModal && (
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={() => setShowStatusModal(false)}>
+                    <div className="bg-white rounded-2xl w-full max-w-sm" onClick={e => e.stopPropagation()}>
+                        <div className="p-4 border-b flex justify-between items-center bg-gray-50 rounded-t-2xl">
+                            <h3 className="font-semibold text-gray-900">Gestionar Pedido</h3>
+                            <button onClick={() => setShowStatusModal(false)}><XMarkIcon className="w-5 h-5 text-gray-500 hover:text-gray-700" /></button>
+                        </div>
+                        <form onSubmit={handleStatusSubmit} className="p-5 space-y-4">
+                            <label className="block">
+                                <span className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 block">Estado de Entrega</span>
+                                <select
+                                    value={statusForm.status}
+                                    onChange={(e) => setStatusForm(prev => ({ ...prev, status: e.target.value }))}
+                                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none bg-white"
+                                >
+                                    <option value="ACCEPTED">Aceptado (Recibido)</option>
+                                    <option value="IN_PROGRESS">En curso (Imprimiendo)</option>
+                                    <option value="DELIVERED">Entregado (Finalizado)</option>
+                                </select>
+                            </label>
+
+                            <label className="block">
+                                <span className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 block">Estimación de Tiempo</span>
+                                <input
+                                    type="text"
+                                    value={statusForm.estimate}
+                                    onChange={(e) => setStatusForm(prev => ({ ...prev, estimate: e.target.value }))}
+                                    placeholder="Ej: 2 días, 5 horas..."
+                                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none"
+                                />
+                                <p className="text-[10px] text-gray-400 mt-1">Este texto lo verá el cliente en su línea de tiempo.</p>
+                            </label>
+
+                            <div className="pt-2">
+                                <button type="submit" className="w-full py-2 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 transition-colors shadow">
+                                    Actualizar Estado
                                 </button>
                             </div>
                         </form>

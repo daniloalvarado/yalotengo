@@ -107,6 +107,9 @@ r.get('/purchases/models3d', adminAuth, async (req, res) => {
             modelName: p.model?.mod_txt_name || 'N/A',
             amount: p.pur_dec_amount,
             status: p.pur_txt_status,
+            deliveryStatus: p.pur_txt_delivery_status,
+            deliveryEstimate: p.pur_txt_delivery_estimate,
+            modelCategory: p.model?.mod_txt_category,
             paymentId: p.pur_txt_payment_id,
             createdAt: p.pur_dt_created
         })))

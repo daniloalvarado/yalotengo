@@ -150,3 +150,19 @@ export const uploadAvatar = multer({
     fileFilter: imageFilter,
     limits: { fileSize: 5 * 1024 * 1024 } // 5MB max
 }).single('avatar')
+
+// Storage for Printed Models (images)
+export const uploadPrintedImage = multer({
+    storage: multer.diskStorage({
+        destination: (req, file, cb) => {
+            // backend/uploads/impresos
+            cb(null, ensureDir(path.join(__dirname, '../uploads'), 'impresos'))
+        },
+        filename: (req, file, cb) => {
+            const uniqueName = `printed_${Date.now()}_${file.originalname.replace(/\s+/g, '_')}`
+            cb(null, uniqueName)
+        }
+    }),
+    fileFilter: imageFilter,
+    limits: { fileSize: 10 * 1024 * 1024 }
+}).single('printedImage')

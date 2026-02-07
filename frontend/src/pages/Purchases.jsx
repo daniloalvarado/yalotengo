@@ -1,4 +1,3 @@
-// src/pages/Purchases.jsx
 import { useEffect, useMemo, useState, useCallback } from 'react'
 import api from '../api/client'
 
@@ -6,19 +5,20 @@ import api from '../api/client'
 import { THEME, Tag, STATUS_LABELS, fmtReservation, formatDate, formatTime, getReservationTone } from './purchases/purchasesUtils'
 import ReservasTab from './purchases/ReservasTab'
 import Models3dTab from './purchases/Models3dTab'
+import PrintedModelsTab from './purchases/PrintedModelsTab'
 import LibrosTab from './purchases/LibrosTab'
 import CursosTab from './purchases/CursosTab'
-import FisicoTab from './purchases/FisicoTab'
+import FisicoTab from './purchases/FisicoTab' // Renombrar o mantener para items físicos legacy?
 import { ShoppingBagIcon } from '@heroicons/react/24/outline'
 
 export default function Purchases() {
   const [items, setItems] = useState([])
   const [reservations, setReservations] = useState([])
-  const [models3d, setModels3d] = useState([])
+  const [allModels, setAllModels] = useState([]) // Raw data
   const [books, setBooks] = useState([])
   const [courses, setCourses] = useState([])
   const [loading, setLoading] = useState(true)
-  const [tab, setTab] = useState('RESERVAS')
+  const [tab, setTab] = useState('DIGITAL') // Default
 
   // Modal para ver QR
   const [selectedReservation, setSelectedReservation] = useState(null)
@@ -32,16 +32,13 @@ export default function Purchases() {
       setItems(Array.isArray(data) ? data : [])
     } catch (e) {
       console.error('Error cargando items:', e)
-      // No establecer error global, solo log
     }
   }, [])
 
   const fetchMyReservations = useCallback(async () => {
     try {
       const { data } = await api.get('/reservations/my')
-      // La API devuelve { reservations: [...] }
       const allReservations = Array.isArray(data.reservations) ? data.reservations : []
-      // Filtrar solo PAID y USED (no mostrar PENDING, EXPIRED, CANCELLED)
       const paidReservations = allReservations.filter(r => r.status === 'PAID' || r.status === 'USED')
       setReservations(paidReservations)
     } catch (e) {
@@ -52,7 +49,7 @@ export default function Purchases() {
   const fetchMyModels3d = useCallback(async () => {
     try {
       const { data } = await api.get('/models3d/my/purchases')
-      setModels3d(Array.isArray(data) ? data : [])
+      setAllModels(Array.isArray(data) ? data : [])
     } catch (e) {
       console.error('Error cargando modelos 3D:', e)
     }
@@ -83,6 +80,11 @@ export default function Purchases() {
 
   const physical = useMemo(() => items.filter(i => !i.ori_bol_virtual), [items])
 
+  // Split models
+  const digitalModels = useMemo(() => allModels.filter(p => !p.model?.mod_txt_category || p.model?.mod_txt_category === 'DIGITALIZADO'), [allModels])
+  const printedModels = useMemo(() => allModels.filter(p => p.model?.mod_txt_category === 'IMPRESO'), [allModels])
+
+
   // Cargar QR al seleccionar reserva
   const handleViewQr = async (reservation) => {
     setSelectedReservation(reservation)
@@ -95,7 +97,6 @@ export default function Purchases() {
     setLoadingQr(true)
     try {
       const { data } = await api.get(`/reservations/${reservation.id}/qr`)
-      // La API ahora retorna { qrImage: "data:image/png;base64,..." }
       if (data.qrImage) {
         setQrImage(data.qrImage)
       }
@@ -128,22 +129,22 @@ export default function Purchases() {
 
       {/* Tabs */}
       <div className="flex gap-2 flex-wrap">
-        <TabButton id="RESERVAS" label="Reservas" count={reservations.length} />
-        <TabButton id="DIGITAL" label="Modelos 3D" count={models3d.length} />
+        <TabButton id="DIGITAL" label="Modelos 3D" count={digitalModels.length} />
+        <TabButton id="PRINTED" label="Impresiones 3D" count={printedModels.length} />
         <TabButton id="LIBROS" label="Libros" count={books.length} />
         <TabButton id="CURSOS" label="Cursos" count={courses.length} />
-        <TabButton id="FISICO" label="Impresiones 3D" count={physical.length} />
+        <TabButton id="RESERVAS" label="Reservas" count={reservations.length} />
       </div>
 
       {loading && <div className="opacity-70 text-sm">Cargando…</div>}
 
       {/* Tab Content */}
-      {tab === 'RESERVAS' && (
-        <ReservasTab reservations={reservations} loading={loading} onViewQr={handleViewQr} />
+      {tab === 'DIGITAL' && (
+        <Models3dTab models3d={digitalModels} loading={loading} />
       )}
 
-      {tab === 'DIGITAL' && (
-        <Models3dTab models3d={models3d} loading={loading} />
+      {tab === 'PRINTED' && (
+        <PrintedModelsTab printedModels={printedModels} loading={loading} />
       )}
 
       {tab === 'LIBROS' && (
@@ -154,8 +155,8 @@ export default function Purchases() {
         <CursosTab courses={courses} loading={loading} />
       )}
 
-      {tab === 'FISICO' && (
-        <FisicoTab physical={physical} loading={loading} />
+      {tab === 'RESERVAS' && (
+        <ReservasTab reservations={reservations} loading={loading} onViewQr={handleViewQr} />
       )}
 
       {/* Modal QR */}
