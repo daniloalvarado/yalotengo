@@ -295,6 +295,9 @@ r.post('/verify', async (req, res) => {
         reservation.res_dt_used_at = new Date()
         await reservation.save()
 
+        // Obtener datos del usuario
+        const user = await User.findByPk(reservation.use_int_id)
+
         res.json({
             valid: true,
             message: '¡Bienvenido al museo!',
@@ -302,7 +305,12 @@ r.post('/verify', async (req, res) => {
                 id: reservation.res_int_id,
                 date: reservation.res_dt_date,
                 timeslot: reservation.res_txt_timeslot,
-                guests: reservation.res_int_guests
+                guests: reservation.res_int_guests,
+                // Add user info
+                user: {
+                    name: user?.use_txt_nombres || 'Cliente',
+                    lastname: user?.use_txt_apellidos || ''
+                }
             }
         })
     } catch (err) {

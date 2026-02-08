@@ -82,7 +82,7 @@ export default function AdminReservations() {
         if (activeTab === 'sales' && date) {
             api.get(`/reservations/slots?date=${date}`)
                 .then(res => setSlots(res.data.slots || []))
-                .catch(() => toast.error('Error al cargar horarios'))
+                .catch(err => toast.error(err.response?.data?.error || 'No hay horarios disponibles'))
         }
     }, [date, activeTab])
 
@@ -182,26 +182,26 @@ export default function AdminReservations() {
         container: { maxWidth: '1200px', margin: '1rem auto', padding: '1rem', fontFamily: 'system-ui, -apple-system, sans-serif' },
         header: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' },
         title: { fontSize: '1.75rem', fontWeight: 'bold', color: THEME.textDark },
-        
+
         tabs: { display: 'flex', gap: '0.8rem', marginBottom: '2rem', flexWrap: 'wrap', justifyContent: 'flex-start' },
-        tab: (active) => ({ 
+        tab: (active) => ({
             display: 'flex', alignItems: 'center', gap: '8px',
-            padding: '0.75rem 1.25rem', fontSize: '0.95rem', fontWeight: '600', 
+            padding: '0.75rem 1.25rem', fontSize: '0.95rem', fontWeight: '600',
             border: active ? `2px solid ${THEME.primary}` : '2px solid transparent',
-            borderRadius: '10px', cursor: 'pointer', 
-            backgroundColor: active ? THEME.primaryLight : '#fff', 
-            color: active ? THEME.primary : '#6b7280', 
+            borderRadius: '10px', cursor: 'pointer',
+            backgroundColor: active ? THEME.primaryLight : '#fff',
+            color: active ? THEME.primary : '#6b7280',
             transition: 'all 0.2s', boxShadow: '0 1px 2px rgba(0,0,0,0.05)'
         }),
 
         section: { backgroundColor: '#fff', borderRadius: '12px', padding: '1.5rem', marginBottom: '1.5rem', border: '1px solid #e5e7eb', boxShadow: '0 4px 6px -5px rgba(0,0,0,0.05)' },
-        
+
         // Estilo base de botón para reusar
-        slotBtn: (slot, isSelected, isPast) => ({ 
-            borderRadius: '8px', cursor: (slot.isFull || isPast) ? 'not-allowed' : 'pointer', 
-            backgroundColor: (slot.isFull || isPast) ? '#f3f4f6' : isSelected ? THEME.primary : '#fff', 
-            color: (slot.isFull || isPast) ? '#9ca3af' : isSelected ? '#fff' : '#374151', 
-            boxShadow: isSelected ? `0 4px 6px -1px ${THEME.primary}50` : '0 1px 2px rgba(0,0,0,0.05)', 
+        slotBtn: (slot, isSelected, isPast) => ({
+            borderRadius: '8px', cursor: (slot.isFull || isPast) ? 'not-allowed' : 'pointer',
+            backgroundColor: (slot.isFull || isPast) ? '#f3f4f6' : isSelected ? THEME.primary : '#fff',
+            color: (slot.isFull || isPast) ? '#9ca3af' : isSelected ? '#fff' : '#374151',
+            boxShadow: isSelected ? `0 4px 6px -1px ${THEME.primary}50` : '0 1px 2px rgba(0,0,0,0.05)',
             border: isSelected ? 'none' : '1px solid #e5e7eb', transition: 'all 0.2s'
         }),
 
@@ -215,16 +215,16 @@ export default function AdminReservations() {
         actionBtn: (variant) => ({ padding: '0.35rem 0.75rem', fontSize: '0.75rem', border: 'none', borderRadius: '6px', cursor: 'pointer', marginRight: '0.25rem', fontWeight: '600', backgroundColor: variant === 'success' ? THEME.primary : variant === 'danger' ? THEME.danger : '#6b7280', color: '#fff' }),
         scannerBox: { maxWidth: '400px', margin: '0 auto', borderRadius: '12px', overflow: 'hidden', border: `4px solid ${THEME.primary}` },
         scanResult: (valid) => ({ padding: '1rem', marginTop: '1rem', borderRadius: '8px', backgroundColor: valid ? THEME.primaryLight : '#fee2e2', color: valid ? THEME.primary : '#991b1b', textAlign: 'center', fontWeight: '600', border: `1px solid ${valid ? THEME.primary : '#ef4444'}` }),
-        
+
         // 👇 ESTADÍSTICAS CORREGIDAS: Ocupan todo el ancho uniformemente
-        statsGrid: { 
-            display: 'grid', 
+        statsGrid: {
+            display: 'grid',
             // Esto crea columnas de mínimo 200px que se estiran para llenar el espacio
-            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', 
-            gap: '1.5rem', 
-            marginBottom: '1.5rem' 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+            gap: '1.5rem',
+            marginBottom: '1.5rem'
         },
-        statCard: { backgroundColor: '#fff', padding: '1.5rem', borderRadius: '12px', boxShadow: '0 2px 4px rgba(0,0,0,0.05)', textAlign: 'center', border: '1px solid #e5e7eb'},
+        statCard: { backgroundColor: '#fff', padding: '1.5rem', borderRadius: '12px', boxShadow: '0 2px 4px rgba(0,0,0,0.05)', textAlign: 'center', border: '1px solid #e5e7eb' },
         statValue: { fontSize: '2rem', fontWeight: 'bold', color: '#1a1a2e', lineHeight: 1 },
         statLabel: { fontSize: '0.9rem', color: '#6b7280', marginTop: '0.5rem', fontWeight: '500' }
     }

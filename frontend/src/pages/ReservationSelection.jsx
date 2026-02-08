@@ -120,7 +120,7 @@ export default function ReservationSelection({
                         <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
                             <div style={priceBadgeStyle}>
                                 <span>💳</span>
-                                <span>Tarjeta: <strong>$ {(guests * 2).toFixed(2)} USD</strong></span>
+                                <span>Tarjeta: <strong>$ {(guests * 2).toFixed(2)}</strong></span>
                             </div>
                             <div style={priceBadgeStyle}>
                                 <span>📱</span>

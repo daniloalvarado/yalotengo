@@ -143,7 +143,7 @@ export default function Models3D() {
                             className="bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-lg transition-all group relative z-0 hover:z-10 w-full max-w-[320px] mx-auto sm:max-w-none"
                         >
                             {/* Visor / Imagen */}
-                            <div className="relative rounded-t-2xl overflow-hidden bg-gray-100 aspect-[4/3]">
+                            <div className={`relative rounded-t-2xl overflow-hidden bg-gray-100 ${activeTab === 'IMPRESO' ? 'aspect-square' : 'aspect-[4/3]'}`}>
                                 {activeTab === 'DIGITALIZADO' ? (
                                     <>
                                         <Model3DViewer

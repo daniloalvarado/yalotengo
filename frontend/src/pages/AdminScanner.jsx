@@ -1,25 +1,25 @@
 import React from 'react';
 import { Scanner } from '@yudiel/react-qr-scanner';
 // 👇 Importamos todos los iconos necesarios
-import { 
-    VideoCameraIcon, 
-    StopCircleIcon, 
-    CheckCircleIcon, 
-    XCircleIcon, 
-    UserIcon, 
-    ClockIcon, 
-    UsersIcon, 
+import {
+    VideoCameraIcon,
+    StopCircleIcon,
+    CheckCircleIcon,
+    XCircleIcon,
+    UserIcon,
+    ClockIcon,
+    UsersIcon,
     CalendarIcon,
     CheckBadgeIcon,
     TrashIcon
 } from "@heroicons/react/24/outline";
 
-export default function AdminScanner({ 
+export default function AdminScanner({
     scannerActive, setScannerActive, handleScan, lastScan, onReset,
     handleValidate, handleCancel, // Recibimos las acciones
-    formatTime, theme, styles 
+    formatTime, theme, styles
 }) {
-    
+
     // Función intermedia para validar y luego limpiar
     const onValidateClick = (id) => {
         handleValidate(id);
@@ -58,13 +58,13 @@ export default function AdminScanner({
             color: theme.textDark
         },
         icon: {
-            width: '20px', 
-            height: '20px', 
+            width: '20px',
+            height: '20px',
             color: theme.gray
         },
         actions: {
             display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
+            gridTemplateColumns: '1fr', // Stack vertically for responsiveness
             gap: '1rem',
             marginTop: '1.5rem',
             paddingTop: '1.5rem',
@@ -74,40 +74,40 @@ export default function AdminScanner({
 
     return (
         <div style={styles.section}>
-            <div style={{marginBottom: '1.5rem', borderBottom: '1px solid #eee', paddingBottom: '1rem'}}>
-                <h2 style={{margin:0, color: theme.textDark}}>Escáner de Entrada</h2>
+            <div style={{ marginBottom: '1.5rem', borderBottom: '1px solid #eee', paddingBottom: '1rem' }}>
+                <h2 style={{ margin: 0, color: theme.textDark }}>Escáner de Entrada</h2>
                 <p style={{ color: '#666', margin: '0.5rem 0 0 0', fontSize: '0.9rem' }}>
                     Escanea el QR del visitante para validar su entrada
                 </p>
             </div>
 
             {/* BOTÓN CAMARA */}
-            <button 
-                style={{ 
-                    ...styles.primaryBtn, 
-                    marginBottom: '1rem', 
+            <button
+                style={{
+                    ...styles.primaryBtn,
+                    marginBottom: '1rem',
                     backgroundColor: scannerActive ? theme.danger : theme.primary,
                     display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem'
-                }} 
+                }}
                 onClick={() => setScannerActive(!scannerActive)}
             >
                 {scannerActive ? (
-                    <><StopCircleIcon style={{width:'24px'}} /> Detener Cámara</>
+                    <><StopCircleIcon style={{ width: '24px' }} /> Detener Cámara</>
                 ) : (
-                    <><VideoCameraIcon style={{width:'24px'}} /> Iniciar Cámara</>
+                    <><VideoCameraIcon style={{ width: '24px' }} /> Iniciar Cámara</>
                 )}
             </button>
-            
+
             {/* AREA DE CÁMARA */}
             {scannerActive && (
                 <div style={styles.scannerBox}>
-                    <Scanner 
-                        onScan={handleScan} 
-                        onError={(err) => console.error(err)} 
-                        constraints={{ facingMode: 'environment' }} 
+                    <Scanner
+                        onScan={handleScan}
+                        onError={(err) => console.error(err)}
+                        constraints={{ facingMode: 'environment' }}
                         scanDelay={2000} // Retardo para no escanear múltiple veces
                     />
-                    <p style={{textAlign:'center', color: '#fff', padding: '0.5rem', backgroundColor: '#000'}}>
+                    <p style={{ textAlign: 'center', color: '#fff', padding: '0.5rem', backgroundColor: '#000' }}>
                         Enfoca el código QR
                     </p>
                 </div>
@@ -119,9 +119,9 @@ export default function AdminScanner({
                     {/* ENCABEZADO: VALIDO / INVALIDO */}
                     <div style={localStyles.header(lastScan.valid)}>
                         {lastScan.valid ? (
-                            <><CheckCircleIcon style={{width:'28px'}} /> ¡RESERVA VÁLIDA!</>
+                            <><CheckCircleIcon style={{ width: '28px' }} /> ¡RESERVA VÁLIDA!</>
                         ) : (
-                            <><XCircleIcon style={{width:'28px'}} /> {lastScan.message || 'QR INVÁLIDO'}</>
+                            <><XCircleIcon style={{ width: '28px' }} /> {lastScan.message || 'QR INVÁLIDO'}</>
                         )}
                     </div>
 
@@ -132,8 +132,8 @@ export default function AdminScanner({
                                 <div style={localStyles.infoRow}>
                                     <UserIcon style={localStyles.icon} />
                                     <div>
-                                        <div style={{fontSize:'0.8rem', color:'#666'}}>Titular:</div>
-                                        <strong style={{textTransform:'capitalize'}}>
+                                        <div style={{ fontSize: '0.8rem', color: '#666' }}>Titular:</div>
+                                        <strong style={{ textTransform: 'capitalize' }}>
                                             {lastScan.reservation.user?.name || 'Cliente'} {lastScan.reservation.user?.lastname || ''}
                                         </strong>
                                     </div>
@@ -142,7 +142,7 @@ export default function AdminScanner({
                                 <div style={localStyles.infoRow}>
                                     <CalendarIcon style={localStyles.icon} />
                                     <div>
-                                        <div style={{fontSize:'0.8rem', color:'#666'}}>Fecha:</div>
+                                        <div style={{ fontSize: '0.8rem', color: '#666' }}>Fecha:</div>
                                         <strong>{lastScan.reservation.date}</strong>
                                     </div>
                                 </div>
@@ -150,7 +150,7 @@ export default function AdminScanner({
                                 <div style={localStyles.infoRow}>
                                     <ClockIcon style={localStyles.icon} />
                                     <div>
-                                        <div style={{fontSize:'0.8rem', color:'#666'}}>Horario:</div>
+                                        <div style={{ fontSize: '0.8rem', color: '#666' }}>Horario:</div>
                                         <strong>{formatTime(lastScan.reservation.timeslot)}</strong>
                                     </div>
                                 </div>
@@ -158,13 +158,13 @@ export default function AdminScanner({
                                 <div style={localStyles.infoRow}>
                                     <UsersIcon style={localStyles.icon} />
                                     <div>
-                                        <div style={{fontSize:'0.8rem', color:'#666'}}>Personas:</div>
-                                        <strong style={{fontSize:'1.2rem'}}>{lastScan.reservation.guests}</strong>
+                                        <div style={{ fontSize: '0.8rem', color: '#666' }}>Personas:</div>
+                                        <strong style={{ fontSize: '1.2rem' }}>{lastScan.reservation.guests}</strong>
                                     </div>
                                 </div>
 
                                 {/* ESTADO ACTUAL */}
-                                <div style={{marginTop:'1rem', textAlign:'center'}}>
+                                <div style={{ marginTop: '1rem', textAlign: 'center' }}>
                                     <span style={styles.badge(lastScan.reservation.status)}>
                                         Estado: {lastScan.reservation.status}
                                     </span>
@@ -173,32 +173,32 @@ export default function AdminScanner({
                                 {/* BOTONES DE ACCIÓN (Solo si es válido o está pendiente/pagado) */}
                                 {lastScan.valid && (
                                     <div style={localStyles.actions}>
-                                        <button 
+                                        <button
                                             onClick={() => onValidateClick(lastScan.reservation.id)}
-                                            style={{...styles.primaryBtn, display:'flex', alignItems:'center', justifyContent:'center', gap:'5px', fontSize:'0.9rem'}}
+                                            style={{ ...styles.primaryBtn, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '5px', fontSize: '0.9rem' }}
                                         >
-                                            <CheckBadgeIcon style={{width:'20px'}}/> VALIDAR INGRESO
+                                            <CheckBadgeIcon style={{ width: '20px' }} /> VALIDAR INGRESO
                                         </button>
-                                        
-                                        <button 
+
+                                        <button
                                             onClick={() => handleCancel(lastScan.reservation.id)}
-                                            style={{...styles.actionBtn('danger'), padding:'0.75rem', borderRadius:'8px', display:'flex', alignItems:'center', justifyContent:'center', gap:'5px', fontSize:'0.9rem'}}
+                                            style={{ ...styles.actionBtn('danger'), padding: '0.75rem', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '5px', fontSize: '0.9rem' }}
                                         >
-                                            <TrashIcon style={{width:'20px'}}/> Cancelar
+                                            <TrashIcon style={{ width: '20px' }} /> Cancelar
                                         </button>
                                     </div>
                                 )}
                             </>
                         ) : (
-                            <p style={{textAlign:'center', color:'#666'}}>
+                            <p style={{ textAlign: 'center', color: '#666' }}>
                                 {lastScan.message || "No se encontraron datos de la reserva."}
                             </p>
                         )}
-                        
+
                         {/* Botón para limpiar y escanear otro */}
-                        <button 
+                        <button
                             onClick={onReset}
-                            style={{width:'100%', marginTop:'1rem', padding:'0.5rem', border:'1px solid #ddd', borderRadius:'8px', background:'#f9fafb', color:'#666', cursor:'pointer'}}
+                            style={{ width: '100%', marginTop: '1rem', padding: '0.5rem', border: '1px solid #ddd', borderRadius: '8px', background: '#f9fafb', color: '#666', cursor: 'pointer' }}
                         >
                             Escanear Siguiente
                         </button>

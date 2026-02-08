@@ -79,8 +79,8 @@ export default function Reservation() {
         api.get(`/reservations/slots?date=${date}`)
             .then(res => setSlots(res.data.slots || []))
             .catch(err => {
-                // Usamos el nuevo Toast de error aquí también si falla la carga
-                showErrorToast('Error al cargar horarios');
+                const msg = err.response?.data?.error || 'No hay horarios disponibles';
+                showErrorToast(msg);
                 console.error(err)
             })
             .finally(() => setLoading(false))
