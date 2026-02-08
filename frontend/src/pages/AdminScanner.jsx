@@ -170,24 +170,7 @@ export default function AdminScanner({
                                     </span>
                                 </div>
 
-                                {/* BOTONES DE ACCIÓN (Solo si es válido o está pendiente/pagado) */}
-                                {lastScan.valid && (
-                                    <div style={localStyles.actions}>
-                                        <button
-                                            onClick={() => onValidateClick(lastScan.reservation.id)}
-                                            style={{ ...styles.primaryBtn, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '5px', fontSize: '0.9rem' }}
-                                        >
-                                            <CheckBadgeIcon style={{ width: '20px' }} /> VALIDAR INGRESO
-                                        </button>
-
-                                        <button
-                                            onClick={() => handleCancel(lastScan.reservation.id)}
-                                            style={{ ...styles.actionBtn('danger'), padding: '0.75rem', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '5px', fontSize: '0.9rem' }}
-                                        >
-                                            <TrashIcon style={{ width: '20px' }} /> Cancelar
-                                        </button>
-                                    </div>
-                                )}
+                                {/* BOTONES ELIMINADOS: La validación es automática al escanear */}
                             </>
                         ) : (
                             <p style={{ textAlign: 'center', color: '#666' }}>
