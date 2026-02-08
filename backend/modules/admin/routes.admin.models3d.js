@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import { adminAuth } from '../../utils/adminAuth.js'
 import { Model3D, Model3DPurchase } from '../models3d/model.model3d.js'
-import { uploadModel } from '../../utils/upload.js'
+import { uploadModel, uploadPrintedImage } from '../../utils/upload.js'
 import path from 'path'
 import fs from 'fs'
 import { fileURLToPath } from 'url'
@@ -44,7 +44,6 @@ r.post('/upload', adminAuth, (req, res) => {
 })
 
 // POST /admin/models3d/upload-image - Subir imagen (para impresos)
-import { uploadPrintedImage } from '../../utils/upload.js'
 r.post('/upload-image', adminAuth, (req, res) => {
     uploadPrintedImage(req, res, (err) => {
         if (err) {
