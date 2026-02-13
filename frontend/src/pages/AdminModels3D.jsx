@@ -11,6 +11,7 @@ import {
 import { StatusTag, formatDateTime, PEN } from './admin/adminUtils'
 import Swal from 'sweetalert2'
 import PurchaseDetailModal from './admin/PurchaseDetailModal'
+import AnimatedModal from '../components/AnimatedModal'
 
 const THEME = { primary: '#059669' }
 
@@ -452,174 +453,169 @@ export default function AdminModels3D() {
                 </div>
             )}
 
-            {detailItem && (
-                <PurchaseDetailModal
-                    purchase={detailItem}
-                    onClose={() => setDetailItem(null)}
-                    type="Modelo 3D"
-                />
-            )}
+            <PurchaseDetailModal
+                purchase={detailItem}
+                onClose={() => setDetailItem(null)}
+                type="Modelo 3D"
+            />
 
-            {showModal && (
-                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={() => setShowModal(false)}>
-                    <div className="bg-white rounded-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
-                        <div className="flex items-center justify-between p-4 border-b">
-                            <h2 className="text-lg font-semibold">{editItem ? 'Editar' : 'Nuevo'} {modelCategory === 'IMPRESO' ? 'Modelo Impreso' : 'Modelo Digital'}</h2>
-                            <button onClick={() => setShowModal(false)} className="p-1 hover:bg-gray-100 rounded-lg"><XMarkIcon className="w-5 h-5" /></button>
+
+
+
+
+            <AnimatedModal
+                isOpen={showModal}
+                onClose={() => setShowModal(false)}
+                title={`${editItem ? 'Editar' : 'Nuevo'} ${modelCategory === 'IMPRESO' ? 'Modelo Impreso' : 'Modelo Digital'}`}
+            >
+                <form onSubmit={handleSubmit} className="space-y-4">
+                    <label className="block">
+                        <span className="text-sm font-medium text-gray-700 mb-1 block">Nombre *</span>
+                        <input
+                            value={formData.name || ''}
+                            onChange={e => setFormData(p => ({ ...p, name: e.target.value }))}
+                            required
+                            className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none ${attemptedSubmit && !formData.name ? 'border-red-300 ring-1 ring-red-100 placeholder-red-300' : 'border-gray-300'}`}
+                        />
+                    </label>
+                    <label className="block">
+                        <span className="text-sm font-medium text-gray-700 mb-1 block">Descripción *</span>
+                        <textarea
+                            value={formData.desc || ''}
+                            onChange={e => setFormData(p => ({ ...p, desc: e.target.value }))}
+                            rows={3}
+                            required
+                            className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none ${attemptedSubmit && !formData.desc ? 'border-red-300 ring-1 ring-red-100 placeholder-red-300' : 'border-gray-300'}`}
+                        />
+                    </label>
+
+                    {(formData.category || modelCategory) === 'DIGITALIZADO' ? (
+                        <div className="block">
+                            <span className="text-sm font-medium text-gray-700 mb-2 block">Archivo GLB *</span>
+                            <input
+                                type="file"
+                                ref={fileInputRef}
+                                accept=".glb"
+                                onChange={handleFileUpload}
+                                className="hidden"
+                            />
+                            <div className="flex items-center gap-3">
+                                <button
+                                    type="button"
+                                    onClick={() => fileInputRef.current?.click()}
+                                    disabled={uploading}
+                                    className={`flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm disabled:opacity-50 transition-colors ${attemptedSubmit && !formData.glbFilename ? 'border border-red-300 text-red-600 bg-red-50 hover:bg-red-100' : ''}`}
+                                >
+                                    <ArrowUpTrayIcon className="w-4 h-4" />
+                                    {uploading ? 'Subiendo...' : 'Subir archivo .glb'}
+                                </button>
+                                {formData.glbFilename && (
+                                    <div className="flex items-center gap-1 text-sm text-emerald-600">
+                                        <CheckCircleIcon className="w-4 h-4" />
+                                        <span className="truncate max-w-[200px]">{formData.glbFilename}</span>
+                                    </div>
+                                )}
+                            </div>
+                            <p className="text-xs text-gray-400 mt-1">El archivo 3D que el usuario podrá visualizar y descargar.</p>
                         </div>
-                        <form onSubmit={handleSubmit} className="p-4 space-y-4">
-                            <label className="block">
-                                <span className="text-sm font-medium text-gray-700 mb-1 block">Nombre *</span>
-                                <input
-                                    value={formData.name || ''}
-                                    onChange={e => setFormData(p => ({ ...p, name: e.target.value }))}
-                                    required
-                                    className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none ${attemptedSubmit && !formData.name ? 'border-red-300 ring-1 ring-red-100 placeholder-red-300' : 'border-gray-300'}`}
-                                />
-                            </label>
-                            <label className="block">
-                                <span className="text-sm font-medium text-gray-700 mb-1 block">Descripción *</span>
-                                <textarea
-                                    value={formData.desc || ''}
-                                    onChange={e => setFormData(p => ({ ...p, desc: e.target.value }))}
-                                    rows={3}
-                                    required
-                                    className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none ${attemptedSubmit && !formData.desc ? 'border-red-300 ring-1 ring-red-100 placeholder-red-300' : 'border-gray-300'}`}
-                                />
-                            </label>
-
-                            {(formData.category || modelCategory) === 'DIGITALIZADO' ? (
-                                <div className="block">
-                                    <span className="text-sm font-medium text-gray-700 mb-2 block">Archivo GLB *</span>
-                                    <input
-                                        type="file"
-                                        ref={fileInputRef}
-                                        accept=".glb"
-                                        onChange={handleFileUpload}
-                                        className="hidden"
-                                    />
-                                    <div className="flex items-center gap-3">
-                                        <button
-                                            type="button"
-                                            onClick={() => fileInputRef.current?.click()}
-                                            disabled={uploading}
-                                            className={`flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm disabled:opacity-50 transition-colors ${attemptedSubmit && !formData.glbFilename ? 'border border-red-300 text-red-600 bg-red-50 hover:bg-red-100' : ''}`}
-                                        >
-                                            <ArrowUpTrayIcon className="w-4 h-4" />
-                                            {uploading ? 'Subiendo...' : 'Subir archivo .glb'}
-                                        </button>
-                                        {formData.glbFilename && (
-                                            <div className="flex items-center gap-1 text-sm text-emerald-600">
-                                                <CheckCircleIcon className="w-4 h-4" />
-                                                <span className="truncate max-w-[200px]">{formData.glbFilename}</span>
-                                            </div>
-                                        )}
+                    ) : (
+                        <div className="block">
+                            <span className="text-sm font-medium text-gray-700 mb-2 block">Imagen del Modelo *</span>
+                            <input
+                                type="file"
+                                ref={imageInputRef}
+                                accept="image/*"
+                                onChange={handleImageUpload}
+                                className="hidden"
+                            />
+                            <div className="flex items-center gap-3">
+                                <button
+                                    type="button"
+                                    onClick={() => imageInputRef.current?.click()}
+                                    disabled={uploading}
+                                    className={`flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm disabled:opacity-50 transition-colors ${attemptedSubmit && !formData.glbFilename ? 'border border-red-300 text-red-600 bg-red-50 hover:bg-red-100' : ''}`}
+                                >
+                                    <PhotoIcon className="w-4 h-4" />
+                                    {uploading ? 'Subiendo...' : 'Subir Imagen'}
+                                </button>
+                                {formData.glbFilename && (
+                                    <div className="flex items-center gap-1 text-sm text-emerald-600">
+                                        <CheckCircleIcon className="w-4 h-4" />
+                                        <span className="truncate max-w-[200px]">{formData.glbFilename}</span>
                                     </div>
-                                    <p className="text-xs text-gray-400 mt-1">El archivo 3D que el usuario podrá visualizar y descargar.</p>
-                                </div>
-                            ) : (
-                                <div className="block">
-                                    <span className="text-sm font-medium text-gray-700 mb-2 block">Imagen del Modelo *</span>
-                                    <input
-                                        type="file"
-                                        ref={imageInputRef}
-                                        accept="image/*"
-                                        onChange={handleImageUpload}
-                                        className="hidden"
+                                )}
+                            </div>
+                            <p className="text-xs text-gray-400 mt-1">Foto real del objeto impreso para mostrar en el catálogo.</p>
+                            {formData.glbFilename && (
+                                <div className="mt-2 w-20 h-20 rounded-lg overflow-hidden bg-gray-100 border p-1">
+                                    <img
+                                        src={`${api.defaults.baseURL?.replace(/\/api\/?$/, '')}/uploads/impresos/${formData.glbFilename}`}
+                                        className="w-full h-full object-cover rounded"
                                     />
-                                    <div className="flex items-center gap-3">
-                                        <button
-                                            type="button"
-                                            onClick={() => imageInputRef.current?.click()}
-                                            disabled={uploading}
-                                            className={`flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm disabled:opacity-50 transition-colors ${attemptedSubmit && !formData.glbFilename ? 'border border-red-300 text-red-600 bg-red-50 hover:bg-red-100' : ''}`}
-                                        >
-                                            <PhotoIcon className="w-4 h-4" />
-                                            {uploading ? 'Subiendo...' : 'Subir Imagen'}
-                                        </button>
-                                        {formData.glbFilename && (
-                                            <div className="flex items-center gap-1 text-sm text-emerald-600">
-                                                <CheckCircleIcon className="w-4 h-4" />
-                                                <span className="truncate max-w-[200px]">{formData.glbFilename}</span>
-                                            </div>
-                                        )}
-                                    </div>
-                                    <p className="text-xs text-gray-400 mt-1">Foto real del objeto impreso para mostrar en el catálogo.</p>
-                                    {formData.glbFilename && (
-                                        <div className="mt-2 w-20 h-20 rounded-lg overflow-hidden bg-gray-100 border p-1">
-                                            <img
-                                                src={`${api.defaults.baseURL?.replace(/\/api\/?$/, '')}/uploads/impresos/${formData.glbFilename}`}
-                                                className="w-full h-full object-cover rounded"
-                                            />
-                                        </div>
-                                    )}
                                 </div>
                             )}
+                        </div>
+                    )}
 
-                            <label className="block">
-                                <span className="text-sm font-medium text-gray-700 mb-1 block">Precio (S/)</span>
-                                <input type="number" step="0.01" value={formData.price || ''} onChange={e => setFormData(p => ({ ...p, price: parseFloat(e.target.value) }))} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none" />
-                            </label>
+                    <label className="block">
+                        <span className="text-sm font-medium text-gray-700 mb-1 block">Precio (S/)</span>
+                        <input type="number" step="0.01" value={formData.price || ''} onChange={e => setFormData(p => ({ ...p, price: parseFloat(e.target.value) }))} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none" />
+                    </label>
 
-                            <div className="flex gap-3 pt-4">
-                                <button type="button" onClick={() => setShowModal(false)} className="flex-1 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">Cancelar</button>
-                                <button
-                                    type="submit"
-                                    disabled={uploading}
-                                    className="flex-1 px-4 py-2 text-white rounded-lg hover:opacity-90 disabled:opacity-50"
-                                    style={{ backgroundColor: THEME.primary }}
-                                >
-                                    {editItem ? 'Guardar' : 'Crear'}
-                                </button>
-                            </div>
-                        </form>
+                    <div className="flex gap-3 pt-4">
+                        <button type="button" onClick={() => setShowModal(false)} className="flex-1 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">Cancelar</button>
+                        <button
+                            type="submit"
+                            disabled={uploading}
+                            className="flex-1 px-4 py-2 text-white rounded-lg hover:opacity-90 disabled:opacity-50"
+                            style={{ backgroundColor: THEME.primary }}
+                        >
+                            {editItem ? 'Guardar' : 'Crear'}
+                        </button>
                     </div>
-                </div>
-            )}
+                </form>
+            </AnimatedModal>
 
             {/* Status Management Modal */}
-            {showStatusModal && (
-                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={() => setShowStatusModal(false)}>
-                    <div className="bg-white rounded-2xl w-full max-w-sm" onClick={e => e.stopPropagation()}>
-                        <div className="p-4 border-b flex justify-between items-center bg-gray-50 rounded-t-2xl">
-                            <h3 className="font-semibold text-gray-900">Gestionar Pedido</h3>
-                            <button onClick={() => setShowStatusModal(false)}><XMarkIcon className="w-5 h-5 text-gray-500 hover:text-gray-700" /></button>
-                        </div>
-                        <form onSubmit={handleStatusSubmit} className="p-5 space-y-4">
-                            <label className="block">
-                                <span className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 block">Estado de Entrega</span>
-                                <select
-                                    value={statusForm.status}
-                                    onChange={(e) => setStatusForm(prev => ({ ...prev, status: e.target.value }))}
-                                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none bg-white"
-                                >
-                                    <option value="ACCEPTED">Aceptado (Recibido)</option>
-                                    <option value="IN_PROGRESS">En curso (Imprimiendo)</option>
-                                    <option value="DELIVERED">Entregado (Finalizado)</option>
-                                </select>
-                            </label>
+            <AnimatedModal
+                isOpen={showStatusModal}
+                onClose={() => setShowStatusModal(false)}
+                title="Gestionar Pedido"
+                maxWidth="max-w-sm"
+            >
+                <form onSubmit={handleStatusSubmit} className="space-y-4">
+                    <label className="block">
+                        <span className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 block">Estado de Entrega</span>
+                        <select
+                            value={statusForm.status}
+                            onChange={(e) => setStatusForm(prev => ({ ...prev, status: e.target.value }))}
+                            className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none bg-white"
+                        >
+                            <option value="ACCEPTED">Aceptado (Recibido)</option>
+                            <option value="IN_PROGRESS">En curso (Imprimiendo)</option>
+                            <option value="DELIVERED">Entregado (Finalizado)</option>
+                        </select>
+                    </label>
 
-                            <label className="block">
-                                <span className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 block">Estimación de Tiempo</span>
-                                <input
-                                    type="text"
-                                    value={statusForm.estimate}
-                                    onChange={(e) => setStatusForm(prev => ({ ...prev, estimate: e.target.value }))}
-                                    placeholder="Ej: 2 días, 5 horas..."
-                                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none"
-                                />
-                                <p className="text-[10px] text-gray-400 mt-1">Este texto lo verá el cliente en su línea de tiempo.</p>
-                            </label>
+                    <label className="block">
+                        <span className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 block">Estimación de Tiempo</span>
+                        <input
+                            type="text"
+                            value={statusForm.estimate}
+                            onChange={(e) => setStatusForm(prev => ({ ...prev, estimate: e.target.value }))}
+                            placeholder="Ej: 2 días, 5 horas..."
+                            className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none"
+                        />
+                        <p className="text-[10px] text-gray-400 mt-1">Este texto lo verá el cliente en su línea de tiempo.</p>
+                    </label>
 
-                            <div className="pt-2">
-                                <button type="submit" className="w-full py-2 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 transition-colors shadow">
-                                    Actualizar Estado
-                                </button>
-                            </div>
-                        </form>
+                    <div className="pt-2">
+                        <button type="submit" className="w-full py-2 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 transition-colors shadow">
+                            Actualizar Estado
+                        </button>
                     </div>
-                </div>
-            )}
+                </form>
+            </AnimatedModal>
         </div>
     )
 }

@@ -165,7 +165,7 @@ export default function Auth() {
                   <span className="px-3 text-xs text-zinc-500 bg-white relative z-10">o continúa con</span>
                   <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-px bg-zinc-200" />
                 </div>
-                <div className="grid grid-cols-2 gap-3">
+                <div className="flex flex-col gap-3">
                   <OAuthButton onClick={() => loginWith("google")} icon={GoogleIcon}>Google</OAuthButton>
                 </div>
               </form>

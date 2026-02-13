@@ -12,6 +12,7 @@ import Swal from 'sweetalert2'
 
 
 import PurchaseDetailModal from './admin/PurchaseDetailModal'
+import AnimatedModal from '../components/AnimatedModal'
 
 const THEME = { primary: '#059669' }
 
@@ -327,101 +328,99 @@ export default function AdminCourses() {
             )}
 
             {/* DETAIL MODAL */}
-            {detailItem && (
-                <PurchaseDetailModal
-                    purchase={detailItem}
-                    onClose={() => setDetailItem(null)}
-                    type="Curso"
-                />
-            )}
+            <PurchaseDetailModal
+                purchase={detailItem}
+                onClose={() => setDetailItem(null)}
+                type="Curso"
+            />
 
-            {showModal && (
-                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={() => setShowModal(false)}>
-                    <div className="bg-white rounded-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
-                        <div className="flex items-center justify-between p-4 border-b">
-                            <h2 className="text-lg font-semibold">{editItem ? 'Editar' : 'Nuevo'} Curso</h2>
-                            <button onClick={() => setShowModal(false)} className="p-1 hover:bg-gray-100 rounded-lg"><XMarkIcon className="w-5 h-5" /></button>
-                        </div>
-                        <form onSubmit={handleSubmit} className="p-4 space-y-4">
-                            <label className="block">
-                                <span className="text-sm font-medium text-gray-700 mb-1 block">Título *</span>
-                                <input
-                                    value={formData.title || ''}
-                                    onChange={e => setFormData(p => ({ ...p, title: e.target.value }))}
-                                    required
-                                    className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none ${attemptedSubmit && !formData.title ? 'border-red-300 ring-1 ring-red-100 placeholder-red-300' : 'border-gray-300'}`}
-                                />
-                            </label>
-                            <label className="block">
-                                <span className="text-sm font-medium text-gray-700 mb-1 block">Descripción *</span>
-                                <textarea
-                                    value={formData.desc || ''}
-                                    onChange={e => setFormData(p => ({ ...p, desc: e.target.value }))}
-                                    rows={3}
-                                    required
-                                    className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none ${attemptedSubmit && !formData.desc ? 'border-red-300 ring-1 ring-red-100 placeholder-red-300' : 'border-gray-300'}`}
-                                />
-                            </label>
-                            <label className="block">
-                                <span className="text-sm font-medium text-gray-700 mb-1 block">Duración (ej: 4 semanas) *</span>
-                                <input
-                                    value={formData.duration || ''}
-                                    onChange={e => setFormData(p => ({ ...p, duration: e.target.value }))}
-                                    placeholder="Ej: 6 semanas"
-                                    required
-                                    className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none ${attemptedSubmit && !formData.duration ? 'border-red-300 ring-1 ring-red-100 placeholder-red-300' : 'border-gray-300'}`}
-                                />
-                            </label>
 
-                            {/* Image Upload */}
-                            <div className="block">
-                                <span className="text-sm font-medium text-gray-700 mb-2 block">Imagen del curso</span>
-                                <input
-                                    type="file"
-                                    ref={imageInputRef}
-                                    accept="image/*"
-                                    onChange={handleImageUpload}
-                                    className="hidden"
-                                />
-                                <div className="flex items-center gap-3">
-                                    <button
-                                        type="button"
-                                        onClick={() => imageInputRef.current?.click()}
-                                        disabled={uploadingImage}
-                                        className={`flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm disabled:opacity-50 transition-colors ${attemptedSubmit && !formData.image ? 'border border-red-300 text-red-600 bg-red-50 hover:bg-red-100' : ''}`}
-                                    >
-                                        <PhotoIcon className="w-4 h-4" />
-                                        {uploadingImage ? 'Subiendo...' : 'Subir imagen'}
-                                    </button>
-                                    {formData.image && (
-                                        <div className="flex items-center gap-2">
-                                            <img src={`/cursos/${formData.image}`} alt="Curso" className="w-10 h-10 object-cover rounded" />
-                                            <span className="text-sm text-emerald-600 truncate max-w-[120px]">{formData.image}</span>
-                                        </div>
-                                    )}
+
+
+
+            <AnimatedModal
+                isOpen={showModal}
+                onClose={() => setShowModal(false)}
+                title={`${editItem ? 'Editar' : 'Nuevo'} Curso`}
+            >
+                <form onSubmit={handleSubmit} className="space-y-4">
+                    <label className="block">
+                        <span className="text-sm font-medium text-gray-700 mb-1 block">Título *</span>
+                        <input
+                            value={formData.title || ''}
+                            onChange={e => setFormData(p => ({ ...p, title: e.target.value }))}
+                            required
+                            className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none ${attemptedSubmit && !formData.title ? 'border-red-300 ring-1 ring-red-100 placeholder-red-300' : 'border-gray-300'}`}
+                        />
+                    </label>
+                    <label className="block">
+                        <span className="text-sm font-medium text-gray-700 mb-1 block">Descripción *</span>
+                        <textarea
+                            value={formData.desc || ''}
+                            onChange={e => setFormData(p => ({ ...p, desc: e.target.value }))}
+                            rows={3}
+                            required
+                            className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none ${attemptedSubmit && !formData.desc ? 'border-red-300 ring-1 ring-red-100 placeholder-red-300' : 'border-gray-300'}`}
+                        />
+                    </label>
+                    <label className="block">
+                        <span className="text-sm font-medium text-gray-700 mb-1 block">Duración (ej: 4 semanas) *</span>
+                        <input
+                            value={formData.duration || ''}
+                            onChange={e => setFormData(p => ({ ...p, duration: e.target.value }))}
+                            placeholder="Ej: 6 semanas"
+                            required
+                            className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none ${attemptedSubmit && !formData.duration ? 'border-red-300 ring-1 ring-red-100 placeholder-red-300' : 'border-gray-300'}`}
+                        />
+                    </label>
+
+                    {/* Image Upload */}
+                    <div className="block">
+                        <span className="text-sm font-medium text-gray-700 mb-2 block">Imagen del curso</span>
+                        <input
+                            type="file"
+                            ref={imageInputRef}
+                            accept="image/*"
+                            onChange={handleImageUpload}
+                            className="hidden"
+                        />
+                        <div className="flex items-center gap-3">
+                            <button
+                                type="button"
+                                onClick={() => imageInputRef.current?.click()}
+                                disabled={uploadingImage}
+                                className={`flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm disabled:opacity-50 transition-colors ${attemptedSubmit && !formData.image ? 'border border-red-300 text-red-600 bg-red-50 hover:bg-red-100' : ''}`}
+                            >
+                                <PhotoIcon className="w-4 h-4" />
+                                {uploadingImage ? 'Subiendo...' : 'Subir imagen'}
+                            </button>
+                            {formData.image && (
+                                <div className="flex items-center gap-2">
+                                    <img src={`/cursos/${formData.image}`} alt="Curso" className="w-10 h-10 object-cover rounded" />
+                                    <span className="text-sm text-emerald-600 truncate max-w-[120px]">{formData.image}</span>
                                 </div>
-                            </div>
-
-                            <label className="block">
-                                <span className="text-sm font-medium text-gray-700 mb-1 block">Precio (S/)</span>
-                                <input type="number" step="0.01" value={formData.price || ''} onChange={e => setFormData(p => ({ ...p, price: parseFloat(e.target.value) }))} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none" />
-                            </label>
-
-                            <div className="flex gap-3 pt-4">
-                                <button type="button" onClick={() => setShowModal(false)} className="flex-1 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">Cancelar</button>
-                                <button
-                                    type="submit"
-                                    disabled={uploadingImage}
-                                    className="flex-1 px-4 py-2 text-white rounded-lg hover:opacity-90 disabled:opacity-50"
-                                    style={{ backgroundColor: THEME.primary }}
-                                >
-                                    {editItem ? 'Guardar' : 'Crear'}
-                                </button>
-                            </div>
-                        </form>
+                            )}
+                        </div>
                     </div>
-                </div>
-            )}
+
+                    <label className="block">
+                        <span className="text-sm font-medium text-gray-700 mb-1 block">Precio (S/)</span>
+                        <input type="number" step="0.01" value={formData.price || ''} onChange={e => setFormData(p => ({ ...p, price: parseFloat(e.target.value) }))} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none" />
+                    </label>
+
+                    <div className="flex gap-3 pt-4">
+                        <button type="button" onClick={() => setShowModal(false)} className="flex-1 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">Cancelar</button>
+                        <button
+                            type="submit"
+                            disabled={uploadingImage}
+                            className="flex-1 px-4 py-2 text-white rounded-lg hover:opacity-90 disabled:opacity-50"
+                            style={{ backgroundColor: THEME.primary }}
+                        >
+                            {editItem ? 'Guardar' : 'Crear'}
+                        </button>
+                    </div>
+                </form>
+            </AnimatedModal>
         </div>
     )
 }
