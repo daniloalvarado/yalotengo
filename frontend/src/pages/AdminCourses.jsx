@@ -127,8 +127,9 @@ export default function AdminCourses() {
             desc: item.cou_txt_desc || '',
             image: item.cou_txt_image || '',
             price: item.cou_dec_price,
-            duration: item.cou_txt_duration || ''
-        } : { title: '', desc: '', image: '', price: 99.90, duration: '' })
+            duration: item.cou_txt_duration || '',
+            seats: item.cou_int_seats || 10
+        } : { title: '', desc: '', image: '', price: 99.90, duration: '', seats: 10 })
         setAttemptedSubmit(false)
         setShowModal(true)
     }
@@ -178,11 +179,13 @@ export default function AdminCourses() {
         }
 
         try {
+            const payload = { ...formData, cou_int_seats: Number(formData.seats) }
+
             if (editItem) {
-                await api.put(`/admin/courses/${editItem.cou_int_id}`, formData)
+                await api.put(`/admin/courses/${editItem.cou_int_id}`, payload)
                 toast.success('Actualizado correctamente')
             } else {
-                await api.post('/admin/courses', formData)
+                await api.post('/admin/courses', payload)
                 toast.success('Creado correctamente')
             }
             setShowModal(false)
@@ -266,6 +269,11 @@ export default function AdminCourses() {
                                 <div className="flex-1 min-w-0">
                                     <h3 className="font-semibold text-gray-900 truncate">{c.cou_txt_title}</h3>
                                     <p className="text-sm text-gray-500 truncate">{c.cou_txt_duration}</p>
+                                    <p className="text-xs text-gray-400 mt-1">
+                                        Cupos: <span className="font-medium text-gray-600">{c.cou_int_seats}</span>
+                                        <span className="mx-1">•</span>
+                                        Vendidos: <span className="font-medium text-gray-600">{c.cou_int_sold || 0}</span>
+                                    </p>
                                 </div>
                                 <span className={`shrink-0 px-2 py-1 text-xs font-medium rounded-full ${c.cou_bool_active ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-100 text-gray-500'}`}>
                                     {c.cou_bool_active ? 'Activo' : 'Inactivo'}
@@ -371,6 +379,18 @@ export default function AdminCourses() {
                             placeholder="Ej: 6 semanas"
                             required
                             className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none ${attemptedSubmit && !formData.duration ? 'border-red-300 ring-1 ring-red-100 placeholder-red-300' : 'border-gray-300'}`}
+                        />
+                    </label>
+
+                    <label className="block">
+                        <span className="text-sm font-medium text-gray-700 mb-1 block">Cupos Totales *</span>
+                        <input
+                            type="number"
+                            min="1"
+                            value={formData.seats || ''}
+                            onChange={e => setFormData(p => ({ ...p, seats: e.target.value }))}
+                            required
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none"
                         />
                     </label>
 

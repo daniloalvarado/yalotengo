@@ -12,6 +12,7 @@ const mp = new MercadoPagoConfig({ accessToken: process.env.MP_ACCESS_TOKEN })
 const paymentClient = new Payment(mp)
 
 // POST /cart/purchase - Procesar pago unificado de productos digitales
+// POST /cart/purchase - Procesar pago unificado de productos digitales
 r.post('/purchase', auth, async (req, res) => {
     const { items, token, payment_method_id, issuer_id, installments = 1, payer } = req.body
 
@@ -26,6 +27,7 @@ r.post('/purchase', auth, async (req, res) => {
         // 1. Validar y recolectar items (deben ser PENDING y pertenecer al usuario)
         for (const item of items) {
             let purchaseRecord = null
+            let courseRecord = null // Para verificar cupos si es curso
 
             if (item.type === 'model') {
                 purchaseRecord = await Model3DPurchase.findOne({
@@ -37,18 +39,38 @@ r.post('/purchase', auth, async (req, res) => {
                 })
             } else if (item.type === 'course') {
                 purchaseRecord = await CoursePurchase.findOne({
-                    where: { cpu_int_id: item.id, use_int_id: req.user.use_int_id, cpu_txt_status: 'PENDING' }
+                    where: { cpu_int_id: item.id, use_int_id: req.user.use_int_id, cpu_txt_status: 'PENDING' },
+                    include: [{ model: CoursePurchase.associations.course.target, as: 'course' }]
                 })
+                // Verificar Cupos si es Curso
+                if (purchaseRecord && purchaseRecord.course) {
+                    const qty = purchaseRecord.cpu_int_quantity || 1
+                    if (purchaseRecord.course.cou_int_sold + qty > purchaseRecord.course.cou_int_seats) {
+                        return res.status(400).json({
+                            error: `El curso "${purchaseRecord.course.cou_txt_title}" no tiene suficientes cupos (${purchaseRecord.course.cou_int_seats - purchaseRecord.course.cou_int_sold} disponibles).`
+                        })
+                    }
+                    courseRecord = purchaseRecord.course
+                }
             }
 
             if (purchaseRecord) {
-                // Usamos el precio guardado en la tabla de compra
-                const price = item.type === 'model' ? Number(purchaseRecord.pur_dec_amount)
-                    : item.type === 'book' ? Number(purchaseRecord.bpu_dec_amount)
-                        : Number(purchaseRecord.cpu_dec_amount)
+                // Precio base
+                let price = 0
+                let quantity = 1
 
-                totalAmount += price
-                purchasesToUpdate.push({ record: purchaseRecord, type: item.type })
+                if (item.type === 'model') {
+                    price = Number(purchaseRecord.pur_dec_amount)
+                    quantity = purchaseRecord.pur_int_quantity || 1
+                } else if (item.type === 'book') {
+                    price = Number(purchaseRecord.bpu_dec_amount)
+                } else if (item.type === 'course') {
+                    price = Number(purchaseRecord.cpu_dec_amount)
+                    quantity = purchaseRecord.cpu_int_quantity || 1
+                }
+
+                totalAmount += (price * quantity)
+                purchasesToUpdate.push({ record: purchaseRecord, type: item.type, course: courseRecord, quantity })
             }
         }
 
@@ -86,16 +108,24 @@ r.post('/purchase', auth, async (req, res) => {
             // 4. Actualizar estado de todos los items
             const paymentId = String(result.id)
 
-            await Promise.all(purchasesToUpdate.map(async ({ record, type }) => {
+            await Promise.all(purchasesToUpdate.map(async ({ record, type, course, quantity }) => {
                 if (type === 'model') {
                     record.pur_txt_status = 'PAID'
                     record.pur_txt_payment_id = paymentId
                 } else if (type === 'book') {
                     record.bpu_txt_status = 'PAID'
-                    // BookPurchase podría no tener campo payment_id explícito en el modelo, verifiquemos si existe o lo agregamos después
-                    // Asumiendo que existe o ignorando si no (el status es lo importante)
                 } else if (type === 'course') {
                     record.cpu_txt_status = 'PAID'
+                    record.cpu_txt_payment_id = paymentId
+                    // Increment Course Sold Count
+                    if (course) {
+                        try {
+                            // Check concurrency again? or just increment
+                            // We rely on the initial check + optimistic 
+                            course.cou_int_sold = (course.cou_int_sold || 0) + (quantity || 1)
+                            await course.save()
+                        } catch (err) { console.error('Error inc course sold', err) }
+                    }
                 }
                 return record.save()
             }))
@@ -107,12 +137,6 @@ r.post('/purchase', auth, async (req, res) => {
                 message: 'Pago realizado con éxito'
             })
         } else {
-            // Marcar como fallidos (opcional, o dejarlos pending para reintentar)
-            /* 
-            await Promise.all(purchasesToUpdate.map(async ({ record, type }) => {
-               // Update status to FAILED if desired
-            })) 
-            */
             return res.status(400).json({
                 error: 'El pago no fue aprobado',
                 status: result.status

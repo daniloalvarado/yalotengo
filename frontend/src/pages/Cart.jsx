@@ -135,6 +135,16 @@ export default function Cart() {
 
   async function load() {
     setErrorMsg(null);
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setReservations([]);
+      setModels([]);
+      setBooks([]);
+      setCourses([]);
+      setLoadingGlobal(false);
+      return;
+    }
+
     try {
       // Cargar reservaciones
       const reservationsRes = await api.get("/reservations/my").catch(() => ({ data: { reservations: [] } }));
@@ -228,6 +238,31 @@ export default function Cart() {
       navigate('/books/checkout', { state: { book: item.book } });
     } else {
       navigate('/courses/checkout', { state: { course: item.course } });
+    }
+  };
+
+  const handleUpdateQuantity = async (type, id, currentQty, change) => {
+    const newQty = currentQty + change;
+    if (newQty < 1) return;
+
+    // Optimistic UI update (optional, but good)
+    // For now, let's rely on loading state
+    setLoadingIds(prev => ({ ...prev, [`${type}-${id}`]: true }));
+
+    const endpoint = type === 'model'
+      ? `/models3d/cart/${id}`
+      : `/courses/cart/${id}`; // Courses supports quantity
+
+    try {
+      await api.put(endpoint, { quantity: newQty });
+      // Update local state to reflect change immediately or reload
+      // Reloading is safer for totals calculation
+      await load();
+      window.dispatchEvent(new Event('cart:update'));
+    } catch (e) {
+      toast.error(e.response?.data?.error || 'Error al actualizar cantidad');
+    } finally {
+      setLoadingIds(prev => ({ ...prev, [`${type}-${id}`]: false }));
     }
   };
 
@@ -367,31 +402,53 @@ export default function Cart() {
                   <div className="space-y-4">
 
                     {/* Modelos 3D */}
-                    {models.map((item) => (
-                      <div key={`model-${item.pur_int_id}`} className="bg-white rounded-xl border border-gray-100 p-4 flex items-center justify-between gap-4 relative z-0 hover:z-10 transition-all">
-                        <div className="flex items-center gap-4">
-                          <div className="w-12 h-12 bg-emerald-50 rounded-lg flex items-center justify-center flex-shrink-0">
-                            <CubeIcon className="w-6 h-6 text-emerald-600" />
+                    {models.map((item) => {
+                      const isPrinted = item.model?.mod_txt_category === 'IMPRESO';
+                      return (
+                        <div key={`model-${item.pur_int_id}`} className="bg-white rounded-xl border border-gray-100 p-4 flex items-center justify-between gap-4 relative z-0 hover:z-10 transition-all">
+                          <div className="flex items-center gap-4">
+                            <div className="w-12 h-12 bg-emerald-50 rounded-lg flex items-center justify-center flex-shrink-0">
+                              <CubeIcon className="w-6 h-6 text-emerald-600" />
+                            </div>
+                            <div>
+                              <p className="font-medium text-gray-900">{item.model?.mod_txt_name || 'Modelo 3D'}</p>
+                              <p className="text-xs text-gray-500">{isPrinted ? 'Impresión 3D' : 'Modelo 3D Digital'}</p>
+                            </div>
                           </div>
-                          <div>
-                            <p className="font-medium text-gray-900">{item.model?.mod_txt_name || 'Modelo 3D'}</p>
-                            <p className="text-xs text-gray-500">Modelo 3D Digital</p>
+                          <div className="flex items-center gap-4">
+                            {isPrinted && (
+                              <div className="flex items-center border border-gray-200 rounded-lg">
+                                <button
+                                  onClick={() => handleUpdateQuantity('model', item.pur_int_id, item.pur_int_quantity || 1, -1)}
+                                  disabled={loadingIds[`model-${item.pur_int_id}`] || (item.pur_int_quantity || 1) <= 1}
+                                  className="px-2 py-1 text-gray-500 hover:bg-gray-100 disabled:opacity-50"
+                                >-</button>
+                                <span className="px-2 text-sm font-medium text-gray-700 min-w-[20px] text-center">
+                                  {item.pur_int_quantity || 1}
+                                </span>
+                                <button
+                                  onClick={() => handleUpdateQuantity('model', item.pur_int_id, item.pur_int_quantity || 1, 1)}
+                                  disabled={loadingIds[`model-${item.pur_int_id}`]}
+                                  className="px-2 py-1 text-gray-500 hover:bg-gray-100 disabled:opacity-50"
+                                >+</button>
+                              </div>
+                            )}
+                            <span className="font-bold text-gray-900">
+                              {PEN.format(Number(item.pur_dec_amount) * (isPrinted ? (item.pur_int_quantity || 1) : 1))}
+                            </span>
+                            <Tooltip text="Eliminar" position="top">
+                              <button
+                                onClick={() => handleRemoveProduct('model', item.pur_int_id)}
+                                disabled={loadingIds[`model-${item.pur_int_id}`]}
+                                className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50"
+                              >
+                                <TrashIcon className="w-5 h-5" />
+                              </button>
+                            </Tooltip>
                           </div>
                         </div>
-                        <div className="flex items-center gap-4">
-                          <span className="font-bold text-gray-900">{PEN.format(item.pur_dec_amount)}</span>
-                          <Tooltip text="Eliminar" position="top">
-                            <button
-                              onClick={() => handleRemoveProduct('model', item.pur_int_id)}
-                              disabled={loadingIds[`model-${item.pur_int_id}`]}
-                              className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50"
-                            >
-                              <TrashIcon className="w-5 h-5" />
-                            </button>
-                          </Tooltip>
-                        </div>
-                      </div>
-                    ))}
+                      )
+                    })}
 
                     {/* Libros */}
                     {books.map((item) => (
@@ -433,7 +490,24 @@ export default function Cart() {
                           </div>
                         </div>
                         <div className="flex items-center gap-4">
-                          <span className="font-bold text-gray-900">{PEN.format(item.cpu_dec_amount)}</span>
+                          <div className="flex items-center border border-gray-200 rounded-lg">
+                            <button
+                              onClick={() => handleUpdateQuantity('course', item.cpu_int_id, item.cpu_int_quantity || 1, -1)}
+                              disabled={loadingIds[`course-${item.cpu_int_id}`] || (item.cpu_int_quantity || 1) <= 1}
+                              className="px-2 py-1 text-gray-500 hover:bg-gray-100 disabled:opacity-50"
+                            >-</button>
+                            <span className="px-2 text-sm font-medium text-gray-700 min-w-[20px] text-center">
+                              {item.cpu_int_quantity || 1}
+                            </span>
+                            <button
+                              onClick={() => handleUpdateQuantity('course', item.cpu_int_id, item.cpu_int_quantity || 1, 1)}
+                              disabled={loadingIds[`course-${item.cpu_int_id}`]}
+                              className="px-2 py-1 text-gray-500 hover:bg-gray-100 disabled:opacity-50"
+                            >+</button>
+                          </div>
+                          <span className="font-bold text-gray-900">
+                            {PEN.format(Number(item.cpu_dec_amount) * (item.cpu_int_quantity || 1))}
+                          </span>
                           <Tooltip text="Eliminar" position="top">
                             <button
                               onClick={() => handleRemoveProduct('course', item.cpu_int_id)}

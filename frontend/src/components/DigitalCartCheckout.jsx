@@ -23,8 +23,14 @@ export default function DigitalCartCheckout({ items, onPaymentSuccess }) {
     const totalAmount = items.reduce((acc, item) => {
         const price = item.model?.mod_dec_price || item.book?.boo_dec_price || item.course?.cou_dec_price || 0
         // Usar pur_dec_amount si está disponible, sino precio del producto
-        const finalPrice = Number(item.pur_dec_amount || item.bpu_dec_amount || item.cpu_dec_amount || price)
-        return acc + finalPrice
+        const itemPrice = Number(item.pur_dec_amount || item.bpu_dec_amount || item.cpu_dec_amount || price)
+
+        // Determinar cantidad según el tipo de item
+        let quantity = 1
+        if (item.pur_int_quantity) quantity = item.pur_int_quantity
+        else if (item.cpu_int_quantity) quantity = item.cpu_int_quantity
+
+        return acc + (itemPrice * quantity)
     }, 0)
 
     const handleCardSubmit = async (formData) => {

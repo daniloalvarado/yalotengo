@@ -35,6 +35,16 @@ const Course = sequelize.define('Course', {
         type: DataTypes.TINYINT,
         allowNull: false,
         defaultValue: 1
+    },
+    cou_int_seats: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 10
+    },
+    cou_int_sold: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0
     }
 }, {
     tableName: 'cou_course',
@@ -72,6 +82,11 @@ const CoursePurchase = sequelize.define('CoursePurchase', {
     cpu_dec_amount: {
         type: DataTypes.DECIMAL(10, 2),
         allowNull: false
+    },
+    cpu_int_quantity: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 1
     }
 }, {
     tableName: 'cpu_course_purchase',

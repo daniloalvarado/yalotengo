@@ -27,6 +27,7 @@ r.get('/', async (req, res) => {
 // IMPORTANTE: Estas rutas deben estar ANTES de /:id
 
 // POST /courses/cart - Añadir al carrito (crear PENDING sin pago)
+// POST /courses/cart - Añadir al carrito (crear PENDING sin pago)
 r.post('/cart', auth, async (req, res) => {
     const { courseId } = req.body
 
@@ -34,6 +35,11 @@ r.post('/cart', auth, async (req, res) => {
         const course = await Course.findByPk(courseId)
         if (!course || !course.cou_bool_active) {
             return res.status(404).json({ error: 'Curso no encontrado' })
+        }
+
+        // Validación de Cupos (Solo informativo, la reserva real es al pagar)
+        if (course.cou_int_sold >= course.cou_int_seats) {
+            return res.status(400).json({ error: 'Lo sentimos, este curso ya no tiene cupos disponibles.' })
         }
 
         // Verificar si ya existe en el carrito (PENDING)
@@ -46,7 +52,30 @@ r.post('/cart', auth, async (req, res) => {
         })
 
         if (existing) {
-            return res.status(400).json({ error: 'Este curso ya está en tu carrito' })
+            const newQuantity = (existing.cpu_int_quantity || 1) + 1
+            // Check availability for NEW total quantity
+            if (course.cou_int_sold + newQuantity > course.cou_int_seats) {
+                return res.status(400).json({ error: `Solo quedan ${course.cou_int_seats - course.cou_int_sold} cupos disponibles.` })
+            }
+            existing.cpu_int_quantity = newQuantity
+            await existing.save()
+
+            return res.json({
+                success: true,
+                message: 'Cantidad actualizada',
+                cartItem: {
+                    id: existing.cpu_int_id,
+                    courseId: courseId,
+                    name: course.cou_txt_title,
+                    price: course.cou_dec_price,
+                    quantity: existing.cpu_int_quantity
+                }
+            })
+        }
+
+        // Check availability for quantity 1
+        if (course.cou_int_sold + 1 > course.cou_int_seats) {
+            return res.status(400).json({ error: 'Lo sentimos, este curso ya no tiene cupos disponibles.' })
         }
 
         // Crear registro PENDING
@@ -54,7 +83,8 @@ r.post('/cart', auth, async (req, res) => {
             use_int_id: req.user.use_int_id,
             cou_int_id: courseId,
             cpu_txt_status: 'PENDING',
-            cpu_dec_amount: course.cou_dec_price
+            cpu_dec_amount: course.cou_dec_price,
+            cpu_int_quantity: 1
         })
 
         res.json({
@@ -70,6 +100,33 @@ r.post('/cart', auth, async (req, res) => {
     } catch (e) {
         console.error('[Courses] Cart add error:', e)
         res.status(500).json({ error: 'Error al añadir al carrito' })
+    }
+})
+
+// PUT /courses/:id - Actualizar curso (incluyendo cupos)
+r.put('/:id', auth, async (req, res) => {
+    // Verificar rol de administrador (asumiendo que auth middleware añade req.user)
+    // TODO: Implementar middleware de rol si es necesario. Por ahora confiamos en auth.
+
+    try {
+        const course = await Course.findByPk(req.params.id)
+        if (!course) {
+            return res.status(404).json({ error: 'Curso no encontrado' })
+        }
+
+        const { cou_int_seats } = req.body
+        if (cou_int_seats !== undefined) {
+            course.cou_int_seats = cou_int_seats
+        }
+
+        // Actualizar otros campos si es necesario (el endpoint original no existía, lo añado para admin)
+        // ...
+
+        await course.save()
+        res.json({ success: true, message: 'Curso actualizado', course })
+    } catch (e) {
+        console.error('[Courses] Update error:', e)
+        res.status(500).json({ error: 'Error al actualizar curso' })
     }
 })
 
@@ -114,6 +171,38 @@ r.delete('/cart/:id', auth, async (req, res) => {
     }
 })
 
+// PUT /courses/cart/:id - Actualizar cantidad
+r.put('/cart/:id', auth, async (req, res) => {
+    const { quantity } = req.body
+    if (!quantity || quantity < 1) return res.status(400).json({ error: 'Cantidad inválida' })
+
+    try {
+        const purchase = await CoursePurchase.findOne({
+            where: {
+                cpu_int_id: req.params.id,
+                use_int_id: req.user.use_int_id,
+                cpu_txt_status: 'PENDING'
+            },
+            include: [{ model: Course, as: 'course' }]
+        })
+
+        if (!purchase) return res.status(404).json({ error: 'Item no encontrado' })
+
+        // Check availability
+        if (purchase.course.cou_int_sold + quantity > purchase.course.cou_int_seats) {
+            return res.status(400).json({ error: `Solo quedan ${purchase.course.cou_int_seats - purchase.course.cou_int_sold} cupos disponibles.` })
+        }
+
+        purchase.cpu_int_quantity = quantity
+        await purchase.save()
+
+        res.json({ success: true, message: 'Cantidad actualizada', quantity })
+    } catch (e) {
+        console.error('[Courses] Cart update error:', e)
+        res.status(500).json({ error: 'Error al actualizar cantidad' })
+    }
+})
+
 // ========== FIN CARRITO ==========
 
 // GET /courses/:id - Detalle de un curso
@@ -130,8 +219,9 @@ r.get('/:id', async (req, res) => {
 })
 
 // POST /courses/purchase - Comprar curso con MercadoPago
+// POST /courses/purchase - Comprar curso con MercadoPago
 r.post('/purchase', auth, async (req, res) => {
-    const { courseId, token, payment_method_id, issuer_id, installments = 1, payer } = req.body
+    const { courseId, token, payment_method_id, issuer_id, installments = 1, payer, quantity = 1 } = req.body
 
     try {
         const course = await Course.findByPk(courseId)
@@ -139,14 +229,22 @@ r.post('/purchase', auth, async (req, res) => {
             return res.status(404).json({ error: 'Curso no encontrado' })
         }
 
-        const price = Number(course.cou_dec_price)
+        // --- CRITICAL SEAT CHECK ---
+        // Verificar disponibilidad JUSTO ANTES de procesar
+        if (course.cou_int_sold + quantity > course.cou_int_seats) {
+            return res.status(400).json({ error: 'Lo sentimos, no hay suficientes cupos disponibles para completar tu compra.' })
+        }
+        // ---------------------------
+
+        const price = Number(course.cou_dec_price) * quantity
 
         // Crear registro de compra pendiente
         const purchase = await CoursePurchase.create({
             use_int_id: req.user.use_int_id,
             cou_int_id: courseId,
             cpu_txt_status: 'PENDING',
-            cpu_dec_amount: price
+            cpu_dec_amount: price,
+            cpu_int_quantity: quantity
         })
 
         // Email del comprador
@@ -156,7 +254,7 @@ r.post('/purchase', auth, async (req, res) => {
         const paymentData = {
             transaction_amount: price,
             token: token,
-            description: `Curso: ${course.cou_txt_title}`,
+            description: `Curso: ${course.cou_txt_title} (x${quantity})`,
             installments: parseInt(installments, 10),
             payment_method_id: payment_method_id,
             issuer_id: issuer_id ? parseInt(issuer_id, 10) : undefined,
@@ -182,6 +280,20 @@ r.post('/purchase', auth, async (req, res) => {
             purchase.cpu_txt_payment_id = String(result.id)
             await purchase.save()
 
+            // --- INCREMENT SOLD COUNT ---
+            try {
+                // Read fresh to ensure accuracy
+                const freshCourse = await Course.findByPk(courseId)
+                if (freshCourse) {
+                    freshCourse.cou_int_sold = (freshCourse.cou_int_sold || 0) + quantity
+                    await freshCourse.save()
+                }
+            } catch (incError) {
+                console.error('[Courses] Error incrementing sold count:', incError)
+                // Payment was successful, so we don't fail the request, but log critical error
+            }
+            // -----------------------------
+
             return res.json({
                 success: true,
                 purchaseId: purchase.cpu_int_id,
@@ -197,6 +309,7 @@ r.post('/purchase', auth, async (req, res) => {
                 statusDetail: result.status_detail
             })
         }
+
     } catch (e) {
         console.error('[Courses] Payment error:', e)
         return res.status(500).json({

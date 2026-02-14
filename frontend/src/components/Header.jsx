@@ -121,6 +121,16 @@ export default function Header() {
 
   const reservationsLabel = user?.use_txt_role === 'admin' ? "Reservas" : "Reservas";
 
+  // --- LÓGICA DE ACTIVACIÓN MANUAL ---
+  // Esto evita problemas con redirecciones y estados intermedios
+  const isHome = loc.pathname === '/';
+  const isCart = isAuthed && loc.pathname === '/cart';
+  const isPurchases = isAuthed && loc.pathname === '/purchases';
+
+  // Reservas solo se activa si estás logueado Y en la ruta correcta
+  const targetReservations = user?.use_txt_role === 'admin' ? "/admin-reservas" : "/reservations";
+  const isReservations = isAuthed && loc.pathname === targetReservations;
+
   return (
     <header className="sticky top-0 z-40 border-b border-zinc-900 bg-zinc-950/90 ">
       <div className="mx-auto max-w-7xl px-6 h-16 grid grid-cols-2 md:grid-cols-[1fr_auto_1fr] items-center gap-4">
@@ -128,7 +138,7 @@ export default function Header() {
         <div className="flex items-center gap-3">
           <Link to="/" className="flex items-center gap-2">
             <div className="h-9 w-9 rounded-xl bg-emerald-500 grid place-items-center text-zinc-900 font-black">T</div>
-            <span className="hidden sm:block text-base font-semibold text-white">Yalotengo</span>
+            <span className={`hidden sm:block text-base font-semibold transition-colors ${isHome ? 'text-emerald-400' : 'text-white'}`}>Yalotengo</span>
           </Link>
         </div>
 
@@ -168,24 +178,30 @@ export default function Header() {
           </NavLink>
 
           {/* Reservas */}
-          <NavLink
+          <Link
             to={reservationsLink}
-            className={({ isActive }) => {
-              if (reservationsLink === "/auth") return `${linkBase} ${linkIdle}`;
-              return `${linkBase} ${isActive ? linkActive : linkIdle}`;
-            }}
+            className={isReservations ? `${linkBase} ${linkActive}` : `${linkBase} ${linkIdle}`}
             onClick={(e) => handleSamePageClick(e, reservationsLink)}
           >
             {reservationsLabel}
-          </NavLink>
+          </Link>
         </nav>
 
         {/* Right actions */}
         <div className="flex items-center justify-end gap-3">
-          {/* Cart and Purchases - hide for admin */}
+          {/* Cart y Purchases: Visibles, pero behavior distinto si no auth */}
+
           {user?.use_txt_role !== 'admin' && (
             <>
-              <Link to="/cart" className="relative inline-flex items-center gap-2 rounded-xl border border-white-800 bg-zinc-900/60 px-3 h-10 text-zinc-100 hover:bg-zinc-900" aria-label="Carrito">
+              {/* Cart Button: Always goes to /cart (public now) */}
+              <Link
+                to="/cart"
+                className={`relative inline-flex items-center gap-2 rounded-xl border px-3 h-10 transition-all ${isCart
+                    ? 'border-emerald-500/50 bg-zinc-900 text-emerald-400'
+                    : 'border-white-800 bg-zinc-900/60 text-zinc-100 hover:bg-zinc-900'
+                  }`}
+                aria-label="Carrito"
+              >
                 <ShoppingCartIcon className="h-5 w-5" />
                 <span className="hidden sm:inline">Carrito</span>
                 <span className={`ml-1 inline-flex items-center justify-center text-[10px] leading-none rounded-full min-w-5 h-5 px-1.5 font-semibold animate-in zoom-in duration-200 ${loadingCart ? 'bg-zinc-700 text-zinc-300' : 'bg-emerald-500 text-zinc-900'}`}>
@@ -193,13 +209,14 @@ export default function Header() {
                 </span>
               </Link>
 
-              <NavLink
-                to="/purchases"
-                className={({ isActive }) => `${linkBase} ${isActive ? linkActive : linkIdle}`}
-                onClick={(e) => handleSamePageClick(e, '/purchases')}
+              {/* Mis Compras: Requires Auth. If not auth, goes to /auth */}
+              <Link
+                to={isAuthed ? "/purchases" : "/auth"}
+                className={isPurchases ? `${linkBase} ${linkActive}` : `${linkBase} ${linkIdle}`}
+                onClick={(e) => handleSamePageClick(e, isAuthed ? '/purchases' : '/auth')}
               >
                 Mis compras
-              </NavLink>
+              </Link>
             </>
           )}
 

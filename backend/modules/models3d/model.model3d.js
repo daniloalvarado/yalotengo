@@ -81,6 +81,11 @@ export const Model3DPurchase = sequelize.define('mod_purchase', {
         type: DataTypes.STRING(50),
         allowNull: false,
         defaultValue: '1 día'
+    },
+    pur_int_quantity: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 1
     }
 }, {
     tableName: 'mod_purchase',

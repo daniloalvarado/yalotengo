@@ -99,6 +99,52 @@ async function ensureSchema() {
     }
   } catch (e) { /* tabla puede no existir */ }
 
+  // mod_purchase campos para Impresiones 3D (Cantidad)
+  try {
+    const qi = sequelize.getQueryInterface()
+    const desc = await qi.describeTable('mod_purchase')
+    if (!('pur_int_quantity' in desc)) {
+      await qi.addColumn('mod_purchase', 'pur_int_quantity', {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 1
+      })
+    }
+  } catch (e) { /* tabla puede no existir */ }
+
+  // cou_course campos para Cupos
+  try {
+    const qi = sequelize.getQueryInterface()
+    const desc = await qi.describeTable('cou_course')
+    if (!('cou_int_seats' in desc)) {
+      await qi.addColumn('cou_course', 'cou_int_seats', {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 10
+      })
+    }
+    if (!('cou_int_sold' in desc)) {
+      await qi.addColumn('cou_course', 'cou_int_sold', {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0
+      })
+    }
+  } catch (e) { /* tabla puede no existir */ }
+
+  // cpu_course_purchase campos (Cantidad)
+  try {
+    const qi = sequelize.getQueryInterface()
+    const desc = await qi.describeTable('cpu_course_purchase')
+    if (!('cpu_int_quantity' in desc)) {
+      await qi.addColumn('cpu_course_purchase', 'cpu_int_quantity', {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 1
+      })
+    }
+  } catch (e) { /* tabla puede no existir */ }
+
   // mod_model3d para Soft Delete
   try {
     const qi = sequelize.getQueryInterface()

@@ -55,6 +55,19 @@ r.post('/cart', auth, async (req, res) => {
             return res.status(400).json({ error: 'Este libro ya está en tu carrito' })
         }
 
+        // Verificar si ya lo compró (PAID)
+        const purchased = await BookPurchase.findOne({
+            where: {
+                use_int_id: req.user.use_int_id,
+                boo_int_id: bookId,
+                bpu_txt_status: 'PAID'
+            }
+        })
+
+        if (purchased) {
+            return res.status(400).json({ error: 'Ya has comprado este libro anteriormente.' })
+        }
+
         // Crear registro PENDING
         const purchase = await BookPurchase.create({
             use_int_id: req.user.use_int_id,
@@ -143,6 +156,19 @@ r.post('/purchase', auth, async (req, res) => {
         const book = await Book.findByPk(bookId)
         if (!book || !book.boo_bool_active) {
             return res.status(404).json({ error: 'Libro no encontrado' })
+        }
+
+        // Verificar si ya lo compró
+        const existing = await BookPurchase.findOne({
+            where: {
+                use_int_id: req.user.use_int_id,
+                boo_int_id: bookId,
+                bpu_txt_status: 'PAID'
+            }
+        })
+
+        if (existing) {
+            return res.status(400).json({ error: 'Ya has comprado este libro anteriormente.' })
         }
 
         const price = Number(book.boo_dec_price)

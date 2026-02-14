@@ -38,14 +38,14 @@ createRoot(document.getElementById('root')).render(
     <BrowserRouter>
       <Routes>
         <Route element={<Layout />}>
-          <Route index element={<RequireAuth><Home /></RequireAuth>} />
+          <Route index element={<Home />} />
           <Route path="/auth" element={<Auth />} />
-          <Route path="/cart" element={<RequireAuth><Cart /></RequireAuth>} />
+          <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<RequireAuth><Checkout /></RequireAuth>} />
           <Route path="/order/:id" element={<RequireAuth><Order /></RequireAuth>} />
           <Route path="/catalog" element={<Catalog />} />
           <Route path="/order/:ordId" element={<OrderDetail />} />
-          <Route path="/purchases" element={<Purchases />} />
+          <Route path="/purchases" element={<RequireAuth><Purchases /></RequireAuth>} />
           <Route path="/admin_2EU32984Y3BJSFGADF_ASFADF" element={<Admin />} />
           <Route path="/reservations" element={<RequireAuth><Reservation /></RequireAuth>} />
           <Route path="/admin-reservas" element={<RequireAuth><AdminReservations /></RequireAuth>} />

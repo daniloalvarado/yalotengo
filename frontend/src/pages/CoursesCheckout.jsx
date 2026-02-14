@@ -58,7 +58,9 @@ export default function CoursesCheckout() {
             }
         } catch (e) {
             console.error('Error en pago:', e)
-            setPaymentError(e.response?.data?.error || 'Error procesando pago')
+            const msg = e.response?.data?.error || 'Error procesando pago'
+            setPaymentError(msg)
+            toast.error(msg)
         } finally {
             setProcessing(false)
         }

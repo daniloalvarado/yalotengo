@@ -14,12 +14,28 @@ export default function Books() {
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
     const [addingToCart, setAddingToCart] = useState({})
+    const [ownedIds, setOwnedIds] = useState(new Set())
+    const [cartIds, setCartIds] = useState(new Set())
 
     useEffect(() => {
         const fetchBooks = async () => {
             try {
                 const { data } = await api.get('/books')
                 setBooks(data)
+
+                const token = localStorage.getItem('token')
+                if (token) {
+                    const [purchasesRes, cartRes] = await Promise.all([
+                        api.get('/books/my/purchases').catch(() => ({ data: [] })),
+                        api.get('/books/cart').catch(() => ({ data: [] }))
+                    ])
+
+                    const owned = new Set(purchasesRes.data.map(p => p.boo_int_id))
+                    const inCart = new Set(cartRes.data.map(p => p.boo_int_id))
+
+                    setOwnedIds(owned)
+                    setCartIds(inCart)
+                }
             } catch (e) {
                 setError('Error al cargar libros')
                 console.error(e)
@@ -28,6 +44,20 @@ export default function Books() {
             }
         }
         fetchBooks()
+    }, [])
+
+    // Escuchar actualizaciones del carrito para refrescar estado
+    useEffect(() => {
+        const onCartUpdate = async () => {
+            const token = localStorage.getItem('token')
+            if (!token) return
+            try {
+                const { data } = await api.get('/books/cart')
+                setCartIds(new Set(data.map(p => p.boo_int_id)))
+            } catch (e) { console.error(e) }
+        }
+        window.addEventListener('cart:update', onCartUpdate)
+        return () => window.removeEventListener('cart:update', onCartUpdate)
     }, [])
 
     const handleBuy = (book) => {
@@ -112,23 +142,36 @@ export default function Books() {
                                             {PEN.format(book.boo_dec_price)}
                                         </p>
                                         <div className="flex items-center gap-2">
-                                            <Tooltip text="Añadir al carrito" position="top">
-                                                <button
-                                                    onClick={() => handleAddToCart(book)}
-                                                    disabled={addingToCart[book.boo_int_id]}
-                                                    className="p-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors disabled:opacity-50"
-                                                >
-                                                    <ShoppingCartIcon className="w-5 h-5" />
-                                                </button>
-                                            </Tooltip>
-                                            <Tooltip text="Comprar ahora" position="top">
-                                                <button
-                                                    onClick={() => handleBuy(book)}
-                                                    className="p-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors"
-                                                >
-                                                    <BanknotesIcon className="w-5 h-5" />
-                                                </button>
-                                            </Tooltip>
+                                            {ownedIds.has(book.boo_int_id) ? (
+                                                <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-lg border border-emerald-100">
+                                                    Adquirido
+                                                </span>
+                                            ) : cartIds.has(book.boo_int_id) ? (
+                                                <span className="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded-lg border border-blue-100">
+                                                    En carrito
+                                                </span>
+                                            ) : (
+                                                <Tooltip text="Añadir al carrito" position="top">
+                                                    <button
+                                                        onClick={() => handleAddToCart(book)}
+                                                        disabled={addingToCart[book.boo_int_id]}
+                                                        className="p-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors disabled:opacity-50"
+                                                    >
+                                                        <ShoppingCartIcon className="w-5 h-5" />
+                                                    </button>
+                                                </Tooltip>
+                                            )}
+
+                                            {!ownedIds.has(book.boo_int_id) && !cartIds.has(book.boo_int_id) && (
+                                                <Tooltip text="Comprar ahora" position="top">
+                                                    <button
+                                                        onClick={() => handleBuy(book)}
+                                                        className="p-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors"
+                                                    >
+                                                        <BanknotesIcon className="w-5 h-5" />
+                                                    </button>
+                                                </Tooltip>
+                                            )}
                                         </div>
                                     </div>
                                 </div>

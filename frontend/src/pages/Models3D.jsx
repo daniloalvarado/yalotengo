@@ -17,6 +17,9 @@ export default function Models3D() {
 
     const [activeTab, setActiveTab] = useState('DIGITALIZADO') // DIGITALIZADO, IMPRESO
 
+    const [ownedIds, setOwnedIds] = useState(new Set())
+    const [cartIds, setCartIds] = useState(new Set())
+
     useEffect(() => {
         loadModels()
     }, [])
@@ -25,6 +28,22 @@ export default function Models3D() {
         try {
             const { data } = await api.get('/models3d')
             setModels(data)
+
+            const token = localStorage.getItem('token')
+            if (token) {
+                const [purchasesRes, cartRes] = await Promise.all([
+                    api.get('/models3d/my/purchases').catch(() => ({ data: [] })),
+                    api.get('/models3d/cart').catch(() => ({ data: [] }))
+                ])
+
+                const owned = new Set(purchasesRes.data.map(p => p.mod_int_id))
+                // Para cartIds, el endpoint /cart retorna items con mod_int_id dentro
+                // Revisando routes, /cart devuelve Model3DPurchase, asi que el ID del modelo está en mod_int_id
+                const inCart = new Set(cartRes.data.map(p => p.mod_int_id))
+
+                setOwnedIds(owned)
+                setCartIds(inCart)
+            }
         } catch (e) {
             console.error('Error cargando modelos:', e)
             toast.error('Error al cargar modelos')
@@ -32,6 +51,20 @@ export default function Models3D() {
             setLoading(false)
         }
     }
+
+    // Escuchar actualizaciones del carrito
+    useEffect(() => {
+        const onCartUpdate = async () => {
+            const token = localStorage.getItem('token')
+            if (!token) return
+            try {
+                const { data } = await api.get('/models3d/cart')
+                setCartIds(new Set(data.map(p => p.mod_int_id)))
+            } catch (e) { console.error(e) }
+        }
+        window.addEventListener('cart:update', onCartUpdate)
+        return () => window.removeEventListener('cart:update', onCartUpdate)
+    }, [])
 
     const handleBuy = async (model) => {
         const token = localStorage.getItem('token')
@@ -74,8 +107,16 @@ export default function Models3D() {
 
         setAddingToCart(prev => ({ ...prev, [model.mod_int_id]: true }))
         try {
-            await api.post('/models3d/cart', { modelId: model.mod_int_id })
-            toast.success('Modelo añadido al carrito')
+            const { data } = await api.post('/models3d/cart', { modelId: model.mod_int_id })
+            const qty = data.cartItem?.quantity || data.cartItem?.pur_int_quantity || 1
+            const isPrinted = (model.mod_txt_category || 'DIGITALIZADO') === 'IMPRESO'
+
+            if (isPrinted) {
+                toast.success(`Modelo añadido. Tienes ${qty} unidad${qty > 1 ? 'es' : ''} en el carrito`)
+            } else {
+                toast.success('Modelo digital añadido al carrito')
+            }
+
             window.dispatchEvent(new Event('cart:update'))
         } catch (e) {
             const msg = e.response?.data?.error || 'Error al añadir al carrito'
@@ -184,23 +225,37 @@ export default function Models3D() {
                                         </span>
                                     </div>
                                     <div className="flex items-center gap-2">
-                                        <Tooltip text="Añadir al carrito" position="top">
-                                            <button
-                                                onClick={() => handleAddToCart(model)}
-                                                disabled={addingToCart[model.mod_int_id]}
-                                                className="p-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl transition-colors disabled:opacity-50"
-                                            >
-                                                <ShoppingCartIcon className="w-5 h-5" />
-                                            </button>
-                                        </Tooltip>
-                                        <Tooltip text="Comprar ahora" position="top">
-                                            <button
-                                                onClick={() => handleBuy(model)}
-                                                className="p-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl transition-colors"
-                                            >
-                                                <BanknotesIcon className="w-5 h-5" />
-                                            </button>
-                                        </Tooltip>
+                                        {((activeTab === 'DIGITALIZADO' && ownedIds.has(model.mod_int_id)) || (activeTab === 'DIGITALIZADO' && cartIds.has(model.mod_int_id))) ? (
+                                            ownedIds.has(model.mod_int_id) ? (
+                                                <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-lg border border-emerald-100">
+                                                    Adquirido
+                                                </span>
+                                            ) : (
+                                                <span className="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded-lg border border-blue-100">
+                                                    En carrito
+                                                </span>
+                                            )
+                                        ) : (
+                                            <>
+                                                <Tooltip text="Añadir al carrito" position="top">
+                                                    <button
+                                                        onClick={() => handleAddToCart(model)}
+                                                        disabled={addingToCart[model.mod_int_id]}
+                                                        className="p-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl transition-colors disabled:opacity-50"
+                                                    >
+                                                        <ShoppingCartIcon className="w-5 h-5" />
+                                                    </button>
+                                                </Tooltip>
+                                                <Tooltip text="Comprar ahora" position="top">
+                                                    <button
+                                                        onClick={() => handleBuy(model)}
+                                                        className="p-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl transition-colors"
+                                                    >
+                                                        <BanknotesIcon className="w-5 h-5" />
+                                                    </button>
+                                                </Tooltip>
+                                            </>
+                                        )}
                                     </div>
                                 </div>
                             </div>

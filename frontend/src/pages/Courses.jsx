@@ -67,8 +67,9 @@ export default function Courses() {
 
         setAddingToCart(prev => ({ ...prev, [course.cou_int_id]: true }))
         try {
-            await api.post('/courses/cart', { courseId: course.cou_int_id })
-            toast.success('Curso añadido al carrito')
+            const { data } = await api.post('/courses/cart', { courseId: course.cou_int_id })
+            const qty = data.cartItem?.quantity || data.cartItem?.cpu_int_quantity || 1
+            toast.success(`Curso añadido. Tienes ${qty} cupo${qty > 1 ? 's' : ''} en el carrito`)
             window.dispatchEvent(new Event('cart:update'))
         } catch (e) {
             const msg = e.response?.data?.error || 'Error al añadir al carrito'
@@ -159,18 +160,29 @@ export default function Courses() {
                                         <Tooltip text="Añadir al carrito" position="top">
                                             <button
                                                 onClick={() => handleAddToCart(course)}
-                                                disabled={addingToCart[course.cou_int_id]}
-                                                className="p-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl transition-colors disabled:opacity-50"
+                                                disabled={addingToCart[course.cou_int_id] || (course.cou_int_sold >= course.cou_int_seats)}
+                                                className={`p-2 rounded-xl transition-colors ${(course.cou_int_sold >= course.cou_int_seats)
+                                                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                                                    : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+                                                    }`}
                                             >
                                                 <ShoppingCartIcon className="w-5 h-5" />
                                             </button>
                                         </Tooltip>
-                                        <Tooltip text="Inscribirse al curso" position="top">
+                                        <Tooltip text={(course.cou_int_sold >= course.cou_int_seats) ? "Agotado" : "Inscribirse al curso"} position="top">
                                             <button
                                                 onClick={() => handleBuy(course)}
-                                                className="p-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl transition-colors"
+                                                disabled={course.cou_int_sold >= course.cou_int_seats}
+                                                className={`p-2 rounded-xl transition-colors ${(course.cou_int_sold >= course.cou_int_seats)
+                                                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                                    : 'bg-emerald-600 hover:bg-emerald-700 text-white'
+                                                    }`}
                                             >
-                                                <AcademicCapIcon className="w-5 h-5" />
+                                                {(course.cou_int_sold >= course.cou_int_seats) ? (
+                                                    <span className="text-xs font-bold px-1">AGOTADO</span>
+                                                ) : (
+                                                    <AcademicCapIcon className="w-5 h-5" />
+                                                )}
                                             </button>
                                         </Tooltip>
                                     </div>

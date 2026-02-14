@@ -52,8 +52,37 @@ r.post('/cart', auth, async (req, res) => {
             }
         })
 
+        const isPrinted = model.mod_txt_category === 'IMPRESO'
+
         if (existing) {
-            return res.status(400).json({ error: 'Este modelo ya está en tu carrito' })
+            if (isPrinted) {
+                // Si es impreso, incrementamos cantidad
+                existing.pur_int_quantity = (existing.pur_int_quantity || 1) + 1
+                await existing.save()
+                return res.json({
+                    success: true,
+                    message: 'Cantidad actualizada en el carrito',
+                    cartItem: existing
+                })
+            } else {
+                // Si es digital, no permitimos duplicados
+                return res.status(400).json({ error: 'Este modelo digital ya está en tu carrito' })
+            }
+        }
+
+        if (!isPrinted) {
+            // Verificar si ya lo compró (PAID)
+            const purchased = await Model3DPurchase.findOne({
+                where: {
+                    use_int_id: req.user.use_int_id,
+                    mod_int_id: modelId,
+                    pur_txt_status: 'PAID'
+                }
+            })
+
+            if (purchased) {
+                return res.status(400).json({ error: 'Ya has comprado este modelo digital anteriormente.' })
+            }
         }
 
         // Crear registro PENDING
@@ -61,7 +90,10 @@ r.post('/cart', auth, async (req, res) => {
             use_int_id: req.user.use_int_id,
             mod_int_id: modelId,
             pur_txt_status: 'PENDING',
-            pur_dec_amount: model.mod_dec_price
+            pur_dec_amount: model.mod_dec_price,
+            pur_int_quantity: 1, // Por defecto 1
+            pur_txt_delivery_status: isPrinted ? 'ACCEPTED' : undefined,
+            pur_txt_delivery_estimate: isPrinted ? '1 día' : undefined
         })
 
         res.json({
@@ -71,12 +103,49 @@ r.post('/cart', auth, async (req, res) => {
                 id: purchase.pur_int_id,
                 modelId: modelId,
                 name: model.mod_txt_name,
-                price: model.mod_dec_price
+                price: model.mod_dec_price,
+                quantity: 1
             }
         })
     } catch (e) {
         console.error('[Models3D] Cart add error:', e)
         res.status(500).json({ error: 'Error al añadir al carrito' })
+    }
+})
+
+// PUT /models3d/cart/:id - Actualizar cantidad (Solo impresos)
+r.put('/cart/:id', auth, async (req, res) => {
+    const { quantity } = req.body
+
+    if (!quantity || quantity < 1) {
+        return res.status(400).json({ error: 'Cantidad inválida' })
+    }
+
+    try {
+        const purchase = await Model3DPurchase.findOne({
+            where: {
+                pur_int_id: req.params.id,
+                use_int_id: req.user.use_int_id,
+                pur_txt_status: 'PENDING'
+            },
+            include: [{ model: Model3D, as: 'model' }]
+        })
+
+        if (!purchase) {
+            return res.status(404).json({ error: 'Item no encontrado' })
+        }
+
+        if (purchase.model.mod_txt_category !== 'IMPRESO') {
+            return res.status(400).json({ error: 'No se puede cambiar cantidad de items digitales' })
+        }
+
+        purchase.pur_int_quantity = quantity
+        await purchase.save()
+
+        res.json({ success: true, message: 'Cantidad actualizada', quantity })
+    } catch (e) {
+        console.error('[Models3D] Cart update error:', e)
+        res.status(500).json({ error: 'Error al actualizar cantidad' })
     }
 })
 
@@ -145,6 +214,20 @@ r.post('/purchase', auth, async (req, res) => {
         const model = await Model3D.findByPk(modelId)
         if (!model || !model.mod_bool_active) {
             return res.status(404).json({ error: 'Modelo no encontrado' })
+        }
+
+        // Verificar si es digital y ya lo compró
+        if (model.mod_txt_category !== 'IMPRESO') {
+            const existing = await Model3DPurchase.findOne({
+                where: {
+                    use_int_id: req.user.use_int_id,
+                    mod_int_id: modelId,
+                    pur_txt_status: 'PAID'
+                }
+            })
+            if (existing) {
+                return res.status(400).json({ error: 'Ya has comprado este modelo digital anteriormente.' })
+            }
         }
 
         const price = Number(model.mod_dec_price)
