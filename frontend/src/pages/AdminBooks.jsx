@@ -462,7 +462,12 @@ export default function AdminBooks() {
                             </button>
                             {formData.coverImage && (
                                 <div className="flex items-center gap-2">
-                                    <img src={formData.coverImage.startsWith('libros/') ? `/${formData.coverImage}` : `/libros/${formData.coverImage}`} alt="Portada" className="w-10 h-10 object-cover rounded" />
+                                    <img
+                                        src={formData.coverImage.startsWith('libros/') ? `/${formData.coverImage}` : `/uploads/books/${formData.coverImage}`}
+                                        onError={(e) => { e.target.src = `/libros/${formData.coverImage}` }}
+                                        alt="Portada"
+                                        className="w-10 h-10 object-cover rounded"
+                                    />
                                     <span className="text-sm text-emerald-600 truncate max-w-[120px]">{formData.coverImage}</span>
                                 </div>
                             )}

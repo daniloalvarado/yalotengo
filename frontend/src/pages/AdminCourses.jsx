@@ -418,7 +418,12 @@ export default function AdminCourses() {
                             </button>
                             {formData.image && (
                                 <div className="flex items-center gap-2">
-                                    <img src={`/cursos/${formData.image}`} alt="Curso" className="w-10 h-10 object-cover rounded" />
+                                    <img
+                                        src={`/uploads/courses/${formData.image}`}
+                                        onError={(e) => { e.target.src = `/cursos/${formData.image}` }}
+                                        alt="Curso"
+                                        className="w-10 h-10 object-cover rounded"
+                                    />
                                     <span className="text-sm text-emerald-600 truncate max-w-[120px]">{formData.image}</span>
                                 </div>
                             )}
