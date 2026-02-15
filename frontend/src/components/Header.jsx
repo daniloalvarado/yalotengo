@@ -122,10 +122,12 @@ export default function Header() {
   // Esto evita problemas con redirecciones y estados intermedios
   const isHome = loc.pathname === '/';
 
-  // Usamos el estado en memoria (uiState).
-  // Si acabamos de cargar la página (F5), uiState.introShown es false -> ANIMA.
-  // Si venimos de otra página (navegación), uiState.introShown es true -> NO ANIMA.
-  const shouldAnimate = isHome && !uiState.introShown;
+  // Usamos useMemo para "congelar" la decisión de animar CUANDO CAMBIA LA RUTA.
+  // Si Home.jsx cambia uiState.introShown a true despues del montaje,
+  // este useMemo NO se recalcula (porque isHome no cambia), manteniendo la animación activa.
+  const shouldAnimate = useMemo(() => {
+    return isHome && !uiState.introShown;
+  }, [isHome]);
 
   const isCart = isAuthed && loc.pathname === '/cart';
   const isPurchases = isAuthed && loc.pathname === '/purchases';

@@ -183,7 +183,17 @@ export default function Books() {
                                 <div className="cover">
                                     {book.boo_txt_cover_image ? (
                                         <img
-                                            src={book.boo_txt_cover_image.startsWith('libros/') ? `/${book.boo_txt_cover_image}` : `/libros/${book.boo_txt_cover_image}`}
+                                            src={
+                                                book.boo_txt_cover_image.startsWith('http') ? book.boo_txt_cover_image :
+                                                    book.boo_txt_cover_image.startsWith('uploads') ? `/${book.boo_txt_cover_image}` :
+                                                        `/uploads/books/${book.boo_txt_cover_image}`
+                                            }
+                                            onError={(e) => {
+                                                // Fallback para imágenes antiguas en /libros
+                                                if (!e.target.src.includes('/libros/')) {
+                                                    e.target.src = `/libros/${book.boo_txt_cover_image}`
+                                                }
+                                            }}
                                             alt={book.boo_txt_title}
                                             className="w-full h-full object-cover rounded-[10px]"
                                         />

@@ -35,32 +35,32 @@ const modelsStorage = multer.diskStorage({
     }
 })
 
-// Storage for Books (.pdf in backend, images in public)
+// Storage for Books (.pdf in backend, images in backend/uploads/books)
 const booksStorage = multer.diskStorage({
     destination: (req, file, cb) => {
         if (file.fieldname === 'pdfFile') {
-            // PDFs go to secure backend storage
+            // PDFs go to secure backend storage (not public)
             const fullPath = ensureDir(path.join(__dirname, '../storage'), 'books')
             cb(null, fullPath)
         } else {
-            // Covers go to public/libros
-            cb(null, ensureDir(publicPath, 'libros'))
+            // Covers go to backend/uploads/books (public via /uploads)
+            const fullPath = ensureDir(path.join(__dirname, '../uploads'), 'books')
+            cb(null, fullPath)
         }
     },
     filename: (req, file, cb) => {
-        // Use original name (sanitized)
         const uniqueName = file.originalname.replace(/\s+/g, '_')
         cb(null, uniqueName)
     }
 })
 
-// Storage for Courses (images)
+// Storage for Courses (images in backend/uploads/courses)
 const coursesStorage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, ensureDir(publicPath, 'cursos'))
+        const fullPath = ensureDir(path.join(__dirname, '../uploads'), 'courses')
+        cb(null, fullPath)
     },
     filename: (req, file, cb) => {
-        // Use original name (sanitized)
         const uniqueName = file.originalname.replace(/\s+/g, '_')
         cb(null, uniqueName)
     }

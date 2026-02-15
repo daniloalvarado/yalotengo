@@ -261,7 +261,8 @@ export default function AdminCourses() {
                         <div key={c.cou_int_id} className={`bg-white rounded-xl border p-4 shadow-sm transition-all ${!c.cou_bool_active ? 'opacity-60' : ''}`}>
                             {c.cou_txt_image && (
                                 <img
-                                    src={`/cursos/${c.cou_txt_image}`}
+                                    src={`/uploads/courses/${c.cou_txt_image}`}
+                                    onError={(e) => { e.target.src = `/cursos/${c.cou_txt_image}` }}
                                     alt={c.cou_txt_title}
                                     className="w-full h-32 object-cover rounded-lg mb-3"
                                 />

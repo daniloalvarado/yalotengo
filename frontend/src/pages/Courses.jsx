@@ -124,7 +124,16 @@ export default function Courses() {
                             <div className="aspect-video bg-gradient-to-br from-emerald-100 to-emerald-200 relative overflow-hidden rounded-t-2xl">
                                 {course.cou_txt_image ? (
                                     <img
-                                        src={`/cursos/${course.cou_txt_image}`}
+                                        src={
+                                            course.cou_txt_image.startsWith('http') ? course.cou_txt_image :
+                                                `/uploads/courses/${course.cou_txt_image}`
+                                        }
+                                        onError={(e) => {
+                                            // Fallback para imágenes antiguas en /cursos
+                                            if (!e.target.src.includes('/cursos/')) {
+                                                e.target.src = `/cursos/${course.cou_txt_image}`
+                                            }
+                                        }}
                                         alt={course.cou_txt_title}
                                         className="w-full h-full object-cover"
                                     />

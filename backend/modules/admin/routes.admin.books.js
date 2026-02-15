@@ -168,15 +168,14 @@ r.delete('/:id', adminAuth, async (req, res) => {
             }
         }
 
-        // 2. Eliminar Portada (frontend/public/libros)
+        // 2. Eliminar Portada (backend/uploads/books)
         if (book.boo_txt_cover_image) {
-            const coverPath = path.join(__dirname, '../../../frontend/public/libros', book.boo_txt_cover_image)
+            const coverPath = path.join(__dirname, '../../uploads/books', book.boo_txt_cover_image)
             if (fs.existsSync(coverPath)) {
                 try {
                     fs.unlinkSync(coverPath)
                     console.log(`[Admin Books] Deleted Cover: ${coverPath}`)
                 } catch (e) {
-                    // Try without 'libros' prefix if needed, but usually filename is just name
                     console.error(`[Admin Books] Error deleting Cover: ${e}`)
                 }
             }

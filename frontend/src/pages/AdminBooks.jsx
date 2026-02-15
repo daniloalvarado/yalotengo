@@ -294,7 +294,8 @@ export default function AdminBooks() {
                         <div key={b.boo_int_id} className={`bg-white rounded-xl border p-4 shadow-sm transition-all ${!b.boo_bool_active ? 'opacity-60' : ''}`}>
                             {b.boo_txt_cover_image && (
                                 <img
-                                    src={`/libros/${b.boo_txt_cover_image}`}
+                                    src={`/uploads/books/${b.boo_txt_cover_image}`}
+                                    onError={(e) => { e.target.src = `/libros/${b.boo_txt_cover_image}` }}
                                     alt={b.boo_txt_title}
                                     className="w-full h-32 object-cover rounded-lg mb-3"
                                 />

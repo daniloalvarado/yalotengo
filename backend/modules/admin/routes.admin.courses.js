@@ -146,9 +146,9 @@ r.delete('/:id', adminAuth, async (req, res) => {
             }
         })
 
-        // Eliminar imagen física (frontend/public/cursos)
+        // Eliminar imagen física (backend/uploads/courses)
         if (course.cou_txt_image) {
-            const imagePath = path.join(__dirname, '../../../frontend/public/cursos', course.cou_txt_image)
+            const imagePath = path.join(__dirname, '../../uploads/courses', course.cou_txt_image)
             if (fs.existsSync(imagePath)) {
                 try {
                     fs.unlinkSync(imagePath)
