@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import { adminAuth } from '../../utils/adminAuth.js'
-import { Course } from '../courses/model.course.js'
+import { Course, CoursePurchase } from '../courses/model.course.js'
 import { uploadCourseImage } from '../../utils/upload.js'
 import path from 'path'
 import fs from 'fs'
@@ -123,6 +123,28 @@ r.delete('/:id', adminAuth, async (req, res) => {
         if (!course) {
             return res.status(404).json({ error: 'Curso no encontrado' })
         }
+
+        // 🛡️ SAFE DELETION CHECK
+        const purchases = await CoursePurchase.findOne({
+            where: {
+                cou_int_id: id,
+                cpu_txt_status: 'PAID'
+            }
+        })
+
+        if (purchases) {
+            return res.status(400).json({
+                error: 'No se puede eliminar este curso porque ya ha sido comprado por usuarios. Por favor, desactívalo en su lugar.'
+            })
+        }
+
+        // 🧹 CLEANUP: Delete pending/failed purchases (Cart items)
+        await CoursePurchase.destroy({
+            where: {
+                cou_int_id: id,
+                cpu_txt_status: ['PENDING', 'FAILED']
+            }
+        })
 
         // Eliminar imagen física (frontend/public/cursos)
         if (course.cou_txt_image) {

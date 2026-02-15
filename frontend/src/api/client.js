@@ -12,7 +12,7 @@ const PUBLIC_PATHS = [
   /^\/auth\/register\b/,
   /^\/auth\/oauth\b/,
   /^\/notify\b/,
-  /^\/catalog\b/,
+
   /^\/status\b/,
   /^\/reservations\/slots\b/,
 ];

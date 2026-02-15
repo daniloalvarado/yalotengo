@@ -103,6 +103,7 @@ export default function AdminCourses() {
         try {
             await api.delete(`/admin/courses/${id}`)
             fetchCourses()
+            fetchPurchases() // 🔄 Update purchases list immediately
             Swal.fire({
                 title: '¡Eliminado!',
                 text: 'El curso ha sido eliminado.',

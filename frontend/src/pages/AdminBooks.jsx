@@ -102,6 +102,7 @@ export default function AdminBooks() {
         try {
             await api.delete(`/admin/books/${id}`)
             fetchBooks()
+            fetchPurchases() // 🔄 Update purchases list immediately
             Swal.fire({
                 title: '¡Eliminado!',
                 text: 'El libro ha sido eliminado.',

@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import { adminAuth } from '../../utils/adminAuth.js'
-import { Book } from '../books/model.book.js'
+import { Book, BookPurchase } from '../books/model.book.js'
 import { uploadBookFiles } from '../../utils/upload.js'
 import path from 'path'
 import fs from 'fs'
@@ -131,6 +131,28 @@ r.delete('/:id', adminAuth, async (req, res) => {
         if (!book) {
             return res.status(404).json({ error: 'Libro no encontrado' })
         }
+
+        // 🛡️ SAFE DELETION CHECK
+        const purchases = await BookPurchase.findOne({
+            where: {
+                boo_int_id: id,
+                bpu_txt_status: 'PAID'
+            }
+        })
+
+        if (purchases) {
+            return res.status(400).json({
+                error: 'No se puede eliminar este libro porque ya ha sido comprado por usuarios. Por favor, desactívalo en su lugar.'
+            })
+        }
+
+        // 🧹 CLEANUP: Delete pending/failed purchases (Cart items)
+        await BookPurchase.destroy({
+            where: {
+                boo_int_id: id,
+                bpu_txt_status: ['PENDING', 'FAILED']
+            }
+        })
 
         // Eliminar archivos físicos
         // 1. Eliminar PDF (backend/storage/books)

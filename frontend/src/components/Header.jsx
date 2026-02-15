@@ -16,11 +16,7 @@ export default function Header() {
 
   const isAuthed = useMemo(() => Boolean(token && token !== ""), [token]);
 
-  // --- LÓGICA DE DETECCIÓN DE LINK ACTIVO (CATÁLOGO) ---
-  const isActiveCatalog = (kind) => {
-    const params = new URLSearchParams(loc.search);
-    return loc.pathname === '/catalog' && params.get('kind') === kind;
-  };
+
 
   // --- PREVENIR PARPADEO AL CLICAR EN EL MISMO LINK ---
   const handleSamePageClick = (e, targetPath) => {

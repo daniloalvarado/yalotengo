@@ -101,11 +101,15 @@ export default function AdminModels3D() {
         try {
             await api.delete(`/admin/models3d/${id}`)
             fetchModels()
-            Swal.fire(
-                '¡Eliminado!',
-                'El modelo ha sido eliminado.',
-                'success'
-            )
+            fetchPurchases() // 🔄 Update purchases list immediately
+            Swal.fire({
+                title: '¡Eliminado!',
+                text: 'El libro ha sido eliminado.',
+                imageUrl: '/favicon.png',
+                imageWidth: 100,
+                imageHeight: 100,
+                imageAlt: 'Logo Invéntalo'
+            })
         } catch (e) {
             Swal.fire(
                 'Error',

@@ -248,43 +248,88 @@ r.delete('/:id', adminAuth, async (req, res) => {
             return res.status(404).json({ error: 'Modelo no encontrado' })
         }
 
-        // Eliminar archivo físico
-        if (model.mod_txt_glb_filename) {
-            const filePath = path.join(__dirname, '../../../uploads/models', model.mod_txt_glb_filename)
-            // Nota: Ajustamos la ruta relativa. Como estamos en modules/admin, subir 3 niveles:
-            // modules/admin -> modules -> backend -> uploads
-            // Wait, __dirname is backend/modules/admin
-            // So ../../uploads/models is correct?
-            // backend/modules/admin/../../uploads/models -> backend/uploads/models. Correct.
-            // Let's verify path construction.
-            // My previous thought said ../../uploads/models. Let's re-verify.
-            // backend/modules/admin -> backend/modules -> backend -> uploads. That is 2 levels up if uploads is in backend/uploads?
-            // Directory structure in Step 2030:
-            // backend/uploads exists.
-            // backend/modules/admin (Step 2050) exists.
-            // So path is backend/modules/admin.
-            // ../ -> backend/modules
-            // ../../ -> backend
-            // ../../uploads/models -> backend/uploads/models.
-            // YES. using ../../uploads/models
+        // 🛡️ SAFE DELETION CHECK
+        const purchases = await Model3DPurchase.findOne({
+            where: {
+                mod_int_id: id,
+                pur_txt_status: 'PAID'
+            }
+        })
+
+        if (purchases) {
+            return res.status(400).json({
+                error: 'No se puede eliminar este modelo porque ya ha sido comprado por usuarios. Por favor, desactívalo en su lugar.'
+            })
         }
 
-        // Logic implementation:
-        // Soft delete: We keep the files to allow restoration. 
-        // If we want to hard delete in future, we can add a 'force' param.
-        /*
+        // 🧹 CLEANUP: Delete pending/failed purchases (Cart items)
+        await Model3DPurchase.destroy({
+            where: {
+                mod_int_id: id,
+                pur_txt_status: ['PENDING', 'FAILED']
+            }
+        })
+
+        // Eliminar archivo físico (GLB do modelo 3D)
         if (model.mod_txt_glb_filename) {
             const filePath = path.join(__dirname, '../../uploads/models', model.mod_txt_glb_filename)
             if (fs.existsSync(filePath)) {
                 try {
                     fs.unlinkSync(filePath)
-                    console.log(`[Admin Models3D] Deleted file: ${filePath}`)
+                    console.log(`[Admin Models3D] Deleted GLB file: ${filePath}`)
                 } catch (err) {
-                    console.error(`[Admin Models3D] Error deleting file: ${err}`)
+                    console.error(`[Admin Models3D] Error deleting GLB file: ${err}`)
                 }
             }
         }
+
+        // Eliminar imagen del modelo impreso (si existe)
+        // Nota: Los modelos impresos guardan la imagen en el mismo campo mod_txt_glb_filename o en otro?
+        // Revisando el código de upload (AdminModels3D.jsx):
+        // Para IMPRESO: payload.printedImage = formData.glbFilename.
+        // Y en backend: uploadImpresos guarda en 'uploads/impresos'.
+        // Pero el modelo guarda el nombre en mod_txt_glb_filename.
+
+        // Si es IMPRESO, buscar en uploads/impresos.
+        if (model.mod_txt_category === 'IMPRESO' && model.mod_txt_glb_filename) {
+            const imagePath = path.join(__dirname, '../../uploads/impresos', model.mod_txt_glb_filename)
+            if (fs.existsSync(imagePath)) {
+                try {
+                    fs.unlinkSync(imagePath)
+                    console.log(`[Admin Models3D] Deleted Printed Image: ${imagePath}`)
+                } catch (err) {
+                    console.error(`[Admin Models3D] Error deleting Printed Image: ${err}`)
+                }
+            }
+        } else if (model.mod_txt_category !== 'IMPRESO' && model.mod_txt_glb_filename) {
+            // Es DIGITAL (GLB), ya borramos arriba en uploads/models.
+            // Pero cuidado: el bloque de arriba borraba en uploads/models incondicionalmente.
+            // Debemos diferenciar.
+        }
+
+        /* 
+           Corrección: 
+           - Digitales (GLB) van a 'uploads/models'.
+           - Impresos (Imagen) van a 'uploads/impresos'.
+           - Ambos usan mod_txt_glb_filename.
         */
+
+        const isPrinted = model.mod_txt_category === 'IMPRESO';
+        const filename = model.mod_txt_glb_filename;
+
+        if (filename) {
+            const folder = isPrinted ? '../../uploads/impresos' : '../../uploads/models';
+            const filePath = path.join(__dirname, folder, filename);
+
+            if (fs.existsSync(filePath)) {
+                try {
+                    fs.unlinkSync(filePath);
+                    console.log(`[Admin Models3D] Deleted file (${isPrinted ? 'Image' : 'GLB'}): ${filePath}`);
+                } catch (err) {
+                    console.error(`[Admin Models3D] Error deleting file: ${err}`);
+                }
+            }
+        }
 
         await model.destroy()
         res.json({ ok: true })

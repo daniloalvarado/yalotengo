@@ -157,7 +157,7 @@ export default function Reservation() {
 
         Swal.fire({
             title: '¡Pago Exitoso!', text: 'Tu entrada ha sido generada.',
-            imageUrl: '/favicon.png', imageWidth: 80, imageHeight: 80, confirmButtonColor: THEME.primary
+            imageUrl: '/favicon.png', imageWidth: 100, imageHeight: 100, confirmButtonColor: THEME.primary
         });
     }
 

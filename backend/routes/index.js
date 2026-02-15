@@ -4,9 +4,6 @@ import statusRoutes from './status.js'
 // ✅ AUTH
 import authRoutes from '../modules/auth/routes.auth.js'
 
-// ✅ CATÁLOGO (se mantiene para productos/libros - TODO: integrar MercadoPago)
-import catalogRoutes from '../modules/catalog/routes.catalog.js'
-
 // ✅ ARCHIVOS Y NOTIFICACIONES
 import downloadsRoutes from '../modules/files/routes.downloads.js'
 import notifyRoutes from '../modules/notify/routes.notify.js'
@@ -34,7 +31,6 @@ import adminModels3dRoutes from '../modules/admin/routes.admin.models3d.js'
 import adminBooksRoutes from '../modules/admin/routes.admin.books.js'
 import adminCoursesRoutes from '../modules/admin/routes.admin.courses.js'
 import adminStatsRoutes from '../modules/admin/routes.admin.stats.js'
-
 const r = Router()
 
 // Estado y salud
@@ -44,8 +40,7 @@ r.use('/', statusRoutes)
 r.use('/api/auth', authRoutes)
 r.use('/auth', authRoutes)
 
-// --- CATÁLOGO DE PRODUCTOS ---
-r.use('/catalog', catalogRoutes)
+
 
 // --- MODELOS 3D ---
 r.use('/models3d', models3dRoutes)

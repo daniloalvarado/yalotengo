@@ -6,9 +6,7 @@ import Layout from './pages/Layout'
 import Home from './pages/Home'
 import Auth from './pages/Auth'
 import Cart from './pages/Cart'
-import Checkout from './pages/Checkout'
 import Order from './pages/Order'
-import Catalog from './pages/Catalog'
 import { Toaster } from 'react-hot-toast'
 import OrderDetail from './pages/OrderDetail'
 import Admin from './pages/Admin'
@@ -41,9 +39,8 @@ createRoot(document.getElementById('root')).render(
           <Route index element={<Home />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/cart" element={<Cart />} />
-          <Route path="/checkout" element={<RequireAuth><Checkout /></RequireAuth>} />
           <Route path="/order/:id" element={<RequireAuth><Order /></RequireAuth>} />
-          <Route path="/catalog" element={<Catalog />} />
+          <Route path="/order/:ordId" element={<OrderDetail />} />
           <Route path="/order/:ordId" element={<OrderDetail />} />
           <Route path="/purchases" element={<RequireAuth><Purchases /></RequireAuth>} />
           <Route path="/admin_2EU32984Y3BJSFGADF_ASFADF" element={<Admin />} />
