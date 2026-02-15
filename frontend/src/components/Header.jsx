@@ -128,7 +128,10 @@ export default function Header() {
   const isReservations = isAuthed && loc.pathname === targetReservations;
 
   return (
-    <header className="sticky top-0 z-40 border-b border-zinc-900 bg-zinc-950/90 ">
+    <header
+      className={`sticky top-0 z-40 border-b border-zinc-900 bg-zinc-950/90 ${isHome ? 'animate-slide-down-slow opacity-0' : ''}`}
+      style={isHome ? { animationDelay: '.8s' } : {}}
+    >
       <div className="mx-auto max-w-7xl px-6 h-16 grid grid-cols-2 md:grid-cols-[1fr_auto_1fr] items-center gap-4">
         {/* Brand */}
         <div className="flex items-center gap-3">

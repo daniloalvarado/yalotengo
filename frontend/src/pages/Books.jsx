@@ -101,12 +101,15 @@ export default function Books() {
         <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-8 px-4">
             <div className="max-w-6xl mx-auto">
                 {/* Header */}
-                <div className="text-left mb-10">
-                    <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
-                        Libros Digitales
-                    </h1>
+                <div className="mb-10">
+                    <div className="flex items-center gap-3 mb-2">
+                        <BookOpenIcon className="w-8 h-8 text-emerald-600" />
+                        <h1 className="text-3xl md:text-4xl font-bold text-gray-900">
+                            Libros Digitales
+                        </h1>
+                    </div>
                     <p className="text-gray-600">
-                        Descarga libros
+                        Descarga libros en formato PDF y EPUB para leer en cualquier dispositivo.
                     </p>
                 </div>
 

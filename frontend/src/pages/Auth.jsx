@@ -35,10 +35,12 @@ function OAuthButton({ onClick, children, icon }) {
   );
 }
 
+import { toast } from "react-hot-toast";
+
 export default function Auth() {
   const nav = useNavigate();
   const [tab, setTab] = useState("login");
-  const [msg, setMsg] = useState("");
+  // const [msg, setMsg] = useState(""); // Removed in favor of toast
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -59,7 +61,8 @@ export default function Auth() {
       nav("/");
     }
     if (err) {
-      setMsg(err);
+      // setMsg(err);
+      toast.error(err);
       window.history.replaceState({}, "", "/auth");
     }
   }, [nav]);
@@ -71,27 +74,30 @@ export default function Auth() {
       setToken(data.token);
       nav("/");
     } catch (e) {
-      setMsg(e?.response?.data?.error || "Error de login");
+      // setMsg(e?.response?.data?.error || "Error de login");
+      toast.error(e?.response?.data?.error || "Error al iniciar sesión");
     }
   }
 
   async function handleRegister(e) {
     e.preventDefault();
     if (password.length < 8) {
-      setMsg("La contraseña debe tener al menos 8 caracteres.");
+      toast.error("La contraseña debe tener al menos 8 caracteres.");
       return;
     }
     if (documento && documento.length !== 8) {
-      setMsg("El DNI debe tener 8 números.");
+      toast.error("El DNI debe tener 8 números.");
       return;
     }
 
     try {
       const { data } = await api.post("/auth/register", { nombres, apellidos, documento, email, password });
       setToken(data.token);
+      toast.success("Cuenta creada exitosamente");
       nav("/");
     } catch (e) {
-      setMsg(e?.response?.data?.error || "Error de registro");
+      // setMsg(e?.response?.data?.error || "Error de registro");
+      toast.error(e?.response?.data?.error || "Error al registrarse");
     }
   }
 
@@ -141,12 +147,6 @@ export default function Auth() {
                 Crear cuenta
               </button>
             </div>
-
-            {msg && (
-              <div className="mb-4 rounded-lg border border-rose-300 bg-rose-50 text-rose-700 px-4 py-3 text-sm">
-                {msg}
-              </div>
-            )}
 
             {tab === "login" ? (
               <form onSubmit={handleLogin} className="space-y-4">

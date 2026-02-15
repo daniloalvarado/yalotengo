@@ -1,5 +1,5 @@
 import React from 'react';
-import { PlusIcon, MinusIcon } from "@heroicons/react/24/outline";
+import { PlusIcon, MinusIcon, CalendarDaysIcon } from "@heroicons/react/24/outline";
 
 // Estilos específicos para este paso
 const selectionStyles = `
@@ -52,7 +52,11 @@ export default function ReservationSelection({
     return (
         <div style={styles.container}>
             <style>{selectionStyles}</style>
-            <h1 style={styles.title}>Reserva tu Entrada</h1>
+
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', marginBottom: '1.5rem' }}>
+                <CalendarDaysIcon style={{ width: '32px', height: '32px', color: theme.primary }} />
+                <h1 style={{ ...styles.title, marginBottom: 0 }}>Reserva tu Entrada</h1>
+            </div>
 
             <div className="reservation-grid">
                 {/* Sección Fecha */}

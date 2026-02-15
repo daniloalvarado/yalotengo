@@ -52,7 +52,9 @@ const authLimiter = rateLimit({
   legacyHeaders: false,
   message: 'Demasiados intentos de inicio de sesión. Espere 15 min.'
 })
-app.use('/auth', authLimiter) // Aplica SOLO a rutas que empiezan con /auth
+// Aplicar SOLO a login y register, NO a /auth/me (que se llama en cada recarga)
+app.use('/auth/login', authLimiter)
+app.use('/auth/register', authLimiter)
 
 // Servir archivos estáticos (modelos 3D, PDFs, etc.)
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')))

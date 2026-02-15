@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 15-02-2026 a las 17:44:06
+-- Tiempo de generación: 15-02-2026 a las 19:25:58
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -209,7 +209,9 @@ INSERT INTO `mod_model3d` (`mod_int_id`, `mod_txt_name`, `mod_txt_desc`, `mod_tx
 (10, 'Impreso 3', 'Modelo impreso disponible para venta directa.', 'printed_1770491716029_Impresos3.jpg', 99.90, 'IMPRESO', 1, '2026-02-06 21:51:29', '2026-02-07 19:22:01', NULL),
 (11, 'Impreso 1', 'Modelo impreso disponible para venta directa', 'printed_1770491672135_impreso1.jpg', 149.90, 'IMPRESO', 1, '2026-02-07 18:56:55', '2026-02-07 19:14:34', NULL),
 (12, 'Isula', 'Isula', 'Isula.glb', 19.90, 'DIGITALIZADO', 1, '2026-02-09 19:59:48', '2026-02-09 20:05:22', '2026-02-09 20:05:22'),
-(14, 'Isula', 'Isual', 'Isula.glb', 19.90, 'DIGITALIZADO', 1, '2026-02-09 21:10:37', '2026-02-09 21:11:08', '2026-02-09 21:11:08');
+(14, 'Isula', 'Isual', 'Isula.glb', 19.90, 'DIGITALIZADO', 1, '2026-02-09 21:10:37', '2026-02-09 21:11:08', '2026-02-09 21:11:08'),
+(15, 'Isula', 'Isula', 'Isula.glb', 19.90, 'DIGITALIZADO', 1, '2026-02-15 16:57:39', '2026-02-15 16:58:54', '2026-02-15 16:58:54'),
+(16, 'Isula', 'Isula', 'Isula.glb', 19.90, 'DIGITALIZADO', 1, '2026-02-15 17:11:56', '2026-02-15 17:13:43', '2026-02-15 17:13:43');
 
 -- --------------------------------------------------------
 
@@ -238,21 +240,6 @@ CREATE TABLE `mod_purchase` (
 INSERT INTO `mod_purchase` (`pur_int_id`, `use_int_id`, `mod_int_id`, `pur_txt_status`, `pur_txt_payment_id`, `pur_dec_amount`, `pur_dt_created`, `pur_dt_updated`, `pur_txt_delivery_status`, `pur_txt_delivery_estimate`, `pur_int_quantity`) VALUES
 (23, 7, 1, 'PAID', '1344718373', 19.90, '2026-02-14 22:46:38', '2026-02-14 22:46:39', 'ACCEPTED', '1 día', 1),
 (27, 7, 2, 'PENDING', NULL, 19.90, '2026-02-15 16:35:53', '2026-02-15 16:35:53', 'ACCEPTED', '1 día', 1);
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `ord_order`
---
-
-CREATE TABLE `ord_order` (
-  `ord_int_id` int(11) NOT NULL,
-  `use_int_id` int(11) DEFAULT NULL,
-  `ord_dec_total` decimal(12,2) DEFAULT NULL,
-  `ord_txt_status` varchar(20) DEFAULT NULL,
-  `ord_dt_ready_at` datetime DEFAULT NULL,
-  `ord_txt_whatsapp` varchar(30) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -351,12 +338,6 @@ ALTER TABLE `mod_purchase`
   ADD KEY `mod_int_id` (`mod_int_id`);
 
 --
--- Indices de la tabla `ord_order`
---
-ALTER TABLE `ord_order`
-  ADD PRIMARY KEY (`ord_int_id`);
-
---
 -- Indices de la tabla `res_reservation`
 --
 ALTER TABLE `res_reservation`
@@ -414,19 +395,13 @@ ALTER TABLE `cpu_course_purchase`
 -- AUTO_INCREMENT de la tabla `mod_model3d`
 --
 ALTER TABLE `mod_model3d`
-  MODIFY `mod_int_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `mod_int_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT de la tabla `mod_purchase`
 --
 ALTER TABLE `mod_purchase`
-  MODIFY `pur_int_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
-
---
--- AUTO_INCREMENT de la tabla `ord_order`
---
-ALTER TABLE `ord_order`
-  MODIFY `ord_int_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `pur_int_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT de la tabla `res_reservation`
