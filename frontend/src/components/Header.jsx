@@ -3,6 +3,7 @@ import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { ShoppingCartIcon } from "@heroicons/react/24/outline";
 import api, { setToken as setAuthToken } from "../api/client";
 import UserMenu from './UserMenu';
+import { uiState } from '../utils/uiState';
 
 export default function Header() {
   const nav = useNavigate();
@@ -120,6 +121,12 @@ export default function Header() {
   // --- LÓGICA DE ACTIVACIÓN MANUAL ---
   // Esto evita problemas con redirecciones y estados intermedios
   const isHome = loc.pathname === '/';
+
+  // Usamos el estado en memoria (uiState).
+  // Si acabamos de cargar la página (F5), uiState.introShown es false -> ANIMA.
+  // Si venimos de otra página (navegación), uiState.introShown es true -> NO ANIMA.
+  const shouldAnimate = isHome && !uiState.introShown;
+
   const isCart = isAuthed && loc.pathname === '/cart';
   const isPurchases = isAuthed && loc.pathname === '/purchases';
 
@@ -129,8 +136,8 @@ export default function Header() {
 
   return (
     <header
-      className={`sticky top-0 z-40 border-b border-zinc-900 bg-zinc-950/90 ${isHome ? 'animate-slide-down-slow opacity-0' : ''}`}
-      style={isHome ? { animationDelay: '.8s' } : {}}
+      className={`sticky top-0 z-40 border-b border-zinc-900 bg-zinc-950/90 ${shouldAnimate ? 'animate-slide-down-slow opacity-0' : ''}`}
+      style={shouldAnimate ? { animationDelay: '.8s' } : {}}
     >
       <div className="mx-auto max-w-7xl px-6 h-16 grid grid-cols-2 md:grid-cols-[1fr_auto_1fr] items-center gap-4">
         {/* Brand */}
