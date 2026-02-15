@@ -4,6 +4,7 @@ import cors from 'cors'
 import helmet from 'helmet'
 import morgan from 'morgan'
 import passport from 'passport'
+import rateLimit from 'express-rate-limit'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import routes from './routes/index.js'
@@ -30,6 +31,28 @@ app.use(helmet({
 }))
 app.use(morgan('dev'))
 app.use(passport.initialize())
+
+// Rate Limiting Global (Para DoS - "Freno de emergencia")
+// Permite muchas peticiones (1000) para que el usuario navegue tranquilo
+const globalLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 1000,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: 'Demasiadas peticiones generales. Calma un poco.'
+})
+app.use(globalLimiter)
+
+// Rate Limiting Estricto (Para Fuerza Bruta en Login/Registro)
+// Aquí es donde "intentan las millones de peticiones" para adivinar passwords
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 20, // Solo 20 intentos de login/registro cada 15 min
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: 'Demasiados intentos de inicio de sesión. Espere 15 min.'
+})
+app.use('/auth', authLimiter) // Aplica SOLO a rutas que empiezan con /auth
 
 // Servir archivos estáticos (modelos 3D, PDFs, etc.)
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
@@ -166,7 +189,7 @@ async function start() {
     await sequelize.sync()
     app.listen(PORT, () => console.log('Backend on :' + PORT))
   } catch (err) {
-    console.error('[Error] No se pudo conectar a la base de datos:', err.message)
+    console.error('[Error] No se pudo conectar a la base de datos.')
     process.exit(1)
   }
 }

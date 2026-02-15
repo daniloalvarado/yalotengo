@@ -152,7 +152,7 @@ r.post('/:id/mercadopago', auth, async (req, res) => {
         }
 
     } catch (err) {
-        console.error('[MercadoPago] Payment error:', err)
+        console.error('[MercadoPago] Error en el procesamiento del pago.')
 
         // Manejar errores específicos de MP
         if (err.cause) {

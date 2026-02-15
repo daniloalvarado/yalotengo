@@ -1,30 +1,19 @@
- UNIVERSIDAD NACIONAL DE LA AMAZONIA PERUANA
+UNIVERSIDAD NACIONAL DE LA AMAZONIA PERUANA 
 
 │UNAP 
 
 FISI│ 
 
-PROYECTO: 
+TÍTULO: 
 
-“PLATAFORMA WEB DE COMERCIALIZACIÓN 
+“ANÁLISIS DE RIESGOS: PLATAFORMA WEB DE COMERCIALIZACIÓN INTEGRAL 
+DE PRODUCTOS DESARROLLADOS POR ‘INVÉNTALO’” 
 
-INTEGRAL DE PRODUCTOS DESARROLLADOS POR 
+ASIGNATURA: 
 
-‘INVÉNTALO’” 
+ARQUITECTURA DE SISTEMAS DE INFORMACION 
 
-CURSO 
-
-Arquitectura de Sistemas de Información 
-
-DOCENTE: 
-
-Ing. Noronha Gómez, Antonio 
-
-GRUPO: 
-
-GRUPO-06 
-
-INTEGRANTES: 
+Integrantes: 
 
 Alvarado Silvano Danilo 
 Pezo Murrieta Orison 
@@ -33,185 +22,13 @@ Romero Rosario Niquelson
 Torres Flores Julio 
 Zumaeta Zegarra Walter 
 
-IQUITOS – PERÚ 
+Docente: 
 
-2026 
+Ing. Antonio Noronha Gómez 
 
- 
- 
- 
-ÍNDICE 
+                                                            IQUITOS – PERÚ 
 
-I. 
-
-Proyecto .......................................................................................................4 
-
-1.1. 
-
-Introducción ..........................................................................................4 
-
-1.2. 
-
-Justificación de la elección del tema .........................................................4 
-
-1.3.  Objetivo general del proyecto ...................................................................4 
-
-1.4.  Objetivos específicos del proyecto ............................................................4 
-
-1.5. 
-
-Alcance .................................................................................................5 
-
-1.6. 
-
-Fuera del alcance del proyecto (no contemplado): ......................................5 
-
-II.  Metodología de desarrollo del proyecto ............................................................5 
-
-III.  Etapa 1: Desarrollo del modelo general .............................................................6 
-
-1.7.  Contexto del sistema ..............................................................................6 
-
-Identificación y descripción de los procesos clave del negocio ............ ¡Error! 
-
-1.8. 
-Marcador no definido. 
-
-1.9. 
-
-Especificaciones de Actores ........................ ¡Error! Marcador no definido. 
-
-1.10. 
-
-Especificaciones de Casos de uso....................................................... 10 
-
-1.11. 
-
-Diagrama General de los casos de uso en el software ............................ 13 
-
-1.12. 
-
-Diagramas de actividades y secuencia ................................................. 13 
-
-1.13.  Gestión Contratos ...................................... ¡Error! Marcador no definido. 
-
-1.14. 
-
-Diagrama de Clase ............................................................................ 14 
-
-1.15. 
-
-Framework de la metodología del proyecto ........................................... 14 
-
-IV.  Etapa 2: Creación de lista de funciones .......................................................... 16 
-
-1.16.  Trabajo pendiente del Producto .............................................................. 16 
-
-1.17. 
-
-Épica ............................................................................................... 16 
-
-1.18. 
-
-Historia de los usuarios ...................................................................... 16 
-
-1.19. 
-
-Reparación de errores ........................................................................ 19 
-
-1.20. 
-
-Identificación y especificación de los requerimientos funcionales ........... 19 
-
-1.21. 
-
-Deuda Técnica .................................................................................. 21 
-
-1.22. 
-
-Adquisición de conocimiento .............................................................. 22 
-
-V.  Etapa 3: Creación de un plan por función ........................................................ 16 
-
-1.23. 
-
-Fases del Proyecto ............................................................................ 22 
-
-1.24.  Cronograma ......................................................................................... 24 
-
-VI. 
-
-Etapa 4: Creación de un diseño por función ................................................. 25 
-
-1.25. 
-
-Información de los interesados ........................................................... 25 
-
-1.26. 
-
-Evaluación de la información de los interesados ................................... 26 
-
-VII. 
-
-Etapa 5: Creación de una compilación por función ....................................... 27 
-
-1.27. 
-
-Despliegue ....................................................................................... 31 
-
-1.1. 
-
-Evaluación de Opciones Tecnológicas ..................................................... 31 
-
-1.2. 
-
-Plataformas y Herramientas ................................................................... 32 
-
-1.3. 
-
-Implementación del Sistema de Información ............................................ 32 
-
-1.4.  Diagrama de Flujo de Datos ................................................................... 33 
-
-1.5. 
-
-Plataformas a Emplear .......................................................................... 34 
-
-1.6.  Diagrama de Despliegue ........................................................................ 34 
-
-VIII. 
-
-Evaluación de la Calidad del Sistema .......................................................... 34 
-
-1.28. 
-
-Pruebas de Funcionalidad .................................................................. 34 
-
-1.29. 
-
-Pruebas de Usabilidad ....................................................................... 37 
-
-1.30. 
-
-Pruebas de Rendimiento .................................................................... 37 
-
-1.31. 
-
-Pruebas de Seguridad ........................................................................ 37 
-
-IX.  Mantenimiento y Evolución de la ASI .............................................................. 38 
-
-1.32. 
-
-Estrategias de Actualización y Mejora Continua ..................................... 38 
-
-1.33. 
-
-Procedimiento de Gestión del Cambio ................................................. 39 
-
-1.34. 
-
-Plan de Monitoreo y Soporte Técnico ................................................... 39 
+       2026 
 
  
  
@@ -219,2768 +36,1300 @@ Plan de Monitoreo y Soporte Técnico ...........................................
  
  
  
+Contenido 
+ANÁLISIS DE RIESGOS SEGÚN ISO/IEC 27001................................................................................................ 3 
+
+1.  Establecer el Contexto .................................................................................................................................. 3 
+
+2. Identificación de Activos .................................................................................................................................. 4 
+
+3.  Amenazas y Vulnerabilidades ................................................................................................................... 6 
+
+4.  Metodología para la Valoración de Riesgos ....................................................................................... 9 
+
+5.  Valoración de Riesgos ................................................................................................................................ 10 
+
+6.  Plan de Tratamiento de Riesgos ........................................................................................................... 13 
+
+7.  Monitoreo y Revisión ................................................................................................................................. 14 
+
+ 
  
  
  
- 
- 
- 
-I.  Proyecto  
+ANÁLISIS DE RIESGOS SEGÚN ISO/IEC 27001 
 
-1.1. 
+1.  Establecer el Contexto 
 
-Introducción 
+Organización: Centro de Investigación, Innovación y Capacitación “Invéntalo”. 
 
-El proyecto consiste en el desarrollo e implementación de una plataforma web de 
-comercialización integral para el centro de investigación, innovación y capacitación 
-“Invéntalo”.  Actualmente,  el  centro  genera  productos  innovadores,  prototipos  y 
-resultados de investigación científica de alto valor, pero carece de un canal digital 
-unificado para su exhibición y venta. Esta solución tecnológica busca centralizar y 
-potenciar  la  difusión  de  dichos  desarrollos,  transformándolos  en  soluciones 
-accesibles para el mercado y la sociedad. 
+Alcance: Análisis centrado en la seguridad de los sistemas de información que 
+gestionan la plataforma web “INVÉNTALO”, destinada a la comercialización integral de 
+productos y servicios. Se incluyen los módulos de gestión de usuarios y roles, clientes, 
+catálogo de productos y cursos, carrito de compras, pedidos, pagos, ticketing del micro 
+museo, generación de reportes y consulta del historial de operaciones por parte de los 
+usuarios. 
 
-1.2. 
+Contexto Organizacional: El proyecto “INVÉNTALO” consiste en la implementación de 
+una plataforma web orientada a centralizar y automatizar la venta de productos 
+tecnológicos, la inscripción a cursos y la emisión de entradas para el micro museo 
+interactivo. El sistema busca optimizar la gestión administrativa, reducir errores 
+asociados a procesos manuales y mejorar la trazabilidad de las operaciones. Asimismo, 
+permite a los clientes registrarse, realizar compras o inscripciones y consultar su 
+historial de transacciones de manera sencilla a través de una plataforma web accesible. 
 
-Justificación de la elección del tema 
+Contexto Normativo: El sistema debe garantizar la confidencialidad, integridad y 
+disponibilidad de la información, así como la protección de los datos personales de los 
+usuarios. Además, debe asegurar la trazabilidad y transparencia de las transacciones y 
+reportes generados, en concordancia con los principios de la norma ISO/IEC 27001, 
+aunque no contemple integración directa con sistemas contables o fiscales. 
 
-La  falta  de  una  plataforma  digital  provoca  baja  visibilidad  de  los  productos, 
-dispersión de la información y escasa accesibilidad para usuarios interesados. La 
-implementación de este sistema se justifica por la necesidad de: 
+Contexto Técnico: El sistema está implementado bajo una arquitectura web tipo SPA 
+con API REST. El backend utiliza Node.js con Express.js y una base de datos MySQL 
+gestionada mediante Sequelize ORM. La autenticación se realiza mediante Google 
+Console (OAuth) y JSON Web Tokens (JWT). El almacenamiento de archivos se 
+gestiona con MinIO y el procesamiento de pagos se integra con la pasarela 
+MercadoPago. El frontend está desarrollado con React v18, Vite, TailwindCSS, React 
+Router DOM, Axios y tecnologías de visualización 3D. 
 
-•  Fortalecer la proyección institucional y académica del centro. 
-
-•  Optimizar  la  transferencia  de  conocimiento  hacia  el  mercado  y  la 
-
-sociedad. 
-
-•  Garantizar  la  sostenibilidad  económica  de  las  actividades  del  centro 
-
-mediante un canal de ventas eficiente y escalable. 
-
-1.3. 
-
-Objetivo general del proyecto 
-
-Desarrollar  e  implementar  una  plataforma  web  de  comercialización  integral  que 
-permita centralizar, organizar, exhibir y comercializar los productos desarrollados 
-por  “Invéntalo”,  fortaleciendo  su  visibilidad  e  impacto  académico,  social  y 
-económico. 
-
-1.4. 
-
-Objetivos específicos del proyecto 
-
-•  Centralizar todos los productos y desarrollos en un solo sistema. 
-
-•  Organizar  la  información  mediante  categorías  y  pestañas  para  facilitar  la 
-
-navegación. 
-
-•  Mejorar la difusión de los resultados de investigación e innovación. 
-
-•  Optimizar los procesos de gestión, exhibición y venta. 
-
-•  Contribuir  a  la  sostenibilidad  institucional  mediante  un  canal  digital 
-
-escalable. 
+Criterios de Riesgo: Se consideran riesgos Críticos aquellos que podrían ocasionar la 
+interrupción total del servicio, fraudes en pagos, acceso no autorizado a información 
+sensible, pérdidas financieras significativas o daño severo a la reputación de la 
+organización. Los riesgos Altos implican interrupciones importantes del sistema o 
+vulneraciones de seguridad con impacto considerable. Los riesgos Medios pueden 
+generar fallas temporales, reprocesamientos o inconsistencias limitadas en la 
+información. Los riesgos Bajos tienen un impacto mínimo en las operaciones. La 
+evaluación de riesgos se basa en una metodología cualitativa que considera el impacto 
+y la probabilidad de ocurrencia. 
 
  
-1.5. 
+2.   Identificación de Activos 
 
-Alcance 
+Para la Plataforma Web de Comercialización Integral de “INVÉNTALO”, los 
+siguientes 23 activos son cruciales: 
 
-El sistema funcionará como un canal digital institucional accesible desde distintos 
-dispositivos mediante navegadores web. 
+Activos de Información 
 
-Este sistema permitirá: 
+1.  Base de Datos de Usuarios, Ventas y Operaciones (MySQL): Contiene datos 
 
-•  Autenticación de usuarios con roles de Administrador y Cliente. 
+sensibles de usuarios/clientes, productos/cursos, pedidos, pagos, tickets, 
+inscripciones e historial/auditoría. 
 
-•  Gestión integral de productos (impresiones 3D, libros tecnológicos) y cursos 
+2.  Servidor de Aplicaciones (Infraestructura Cloud): Entorno de ejecución que 
+aloja el backend (Node.js/Express) y expone la API REST que procesa la lógica 
+de negocio. 
 
-(robótica y drones). 
+3.  Repositorio de Objetos (MinIO): Almacena archivos e imágenes (productos, 
 
-•  Administración y venta de entradas (teleticket) para el micro museo. 
+recursos de cursos y/o adjuntos operativos), asegurando disponibilidad y control 
+de acceso. 
 
-•  Carrito de compras y procesamiento de pagos en línea. 
+4.  Interfaz de Usuario: Panel de Administración: Permite a los administradores 
+gestionar usuarios/roles, catálogo, stock, pedidos, pagos, cursos, tickets y 
+reportes. 
 
-•  Visualización y análisis de venta. 
+5.  Interfaz de Usuario: Catálogo y Compra: Vista para que los clientes exploren 
 
-•  Consulta de historial de operaciones para los usuarios. 
+productos, gestionen el carrito y generen pedidos. 
 
-1.6. 
+6.  Interfaz de Usuario: Cursos e Inscripción: Módulo para que los clientes 
 
-Fuera del alcance del proyecto (no contemplado): 
+visualicen cursos/talleres y registren inscripciones. 
 
-•  Gestión logística externa o envío físico de productos. 
+7.  Interfaz de Usuario: Ticketing del Micro Museo: Módulo para compra/consulta 
 
-• 
+de entradas y control del estado del ticket (vigente/usado/anulado). 
 
-Integración con sistemas contables externos. 
+8.  Credenciales de Acceso y Tokens (OAuth/JWT): Nombres de usuario y 
 
-•  Automatización inicial de procesos comerciales complejos. 
+contraseñas (hasheadas), tokens JWT y credenciales OAuth de Google (activos 
+críticos de seguridad). 
 
-II.  Metodología de desarrollo del proyecto  
+Activos Físicos 
 
-La metodología seleccionada es iterativa e incremental. Esta elección permite un 
-desarrollo progresivo de la plataforma, facilitando ajustes continuos basados en la 
-validación de cada fase. 
+9.  Infraestructura de Servidores en la Nube: Servidores físicos del proveedor 
 
-Descripción de la aplicación de la metodología: 
+cloud que alojan la aplicación, la base de datos y MinIO, asegurando operación 
+continua. 
 
-1.  Análisis de requerimientos: Se identificaron las necesidades funcionales 
-(como  la  gestión  de  productos  y  pagos)  y  no  funcionales  (seguridad, 
-usabilidad) mediante entrevistas con stakeholders y cuestionarios. 
+10. Estaciones de Trabajo de Desarrollo (Laptops/PC): Equipos del equipo 
 
-2.  Diseño  del  sistema:  Se  realizó  el  modelado  de  la  arquitectura  bajo  un 
-enfoque SPA (Single Page Application) y comunicación vía API REST. Incluyó 
-el diseño de la base de datos y la interfaz de usuario (UI/UX). 
+utilizados para codificar, probar, administrar y desplegar la plataforma; contienen 
+código y credenciales. 
 
-3.  Desarrollo:  Construcción  modular  de  la  plataforma  (frontend  y  backend) 
-utilizando  frameworks  y  lenguajes  de  programación  web,  priorizando  la 
-escalabilidad. 
+11. Equipos de Operación (Administración/Soporte): Dispositivos usados por el 
+
+rol administrador para gestionar pedidos, pagos, stock y reportes. 
+
+12. Equipos de Red Local (Routers/Switches): Dispositivos que proporcionan 
+conectividad a internet para administrar los servicios en la nube y acceder al 
+panel. 
+
+Activos de Software 
+
+13. Aplicación Web “INVÉNTALO”: Sistema principal que gestiona catálogo, 
+carrito, pedidos, pagos (MercadoPago), cursos, tickets, reportes e historial. 
+
+14. Código Fuente del Proyecto: Conjunto de archivos del frontend y backend que 
+componen la aplicación y representan la propiedad intelectual del proyecto. 
+
+15. Framework/Librerías Frontend (React v18 + Vite + TailwindCSS): 
+Tecnologías sobre las que se construye la interfaz del cliente (SPA), 
+enrutamiento y experiencia de usuario. 
+
+16. Runtime/Framework Backend (Node.js + Express.js): Tecnologías sobre las 
+
+que se construye la API REST y la lógica de negocio del sistema. 
+
+17. ORM Sequelize: Herramienta para la gestión de modelos, validaciones y 
+
+operaciones sobre la base de datos MySQL. 
+
+18. SGBD MySQL: Motor de base de datos relacional utilizado para almacenar de 
+
+forma persistente y segura la información del sistema. 
+
+19. Integración de Pagos (MercadoPago): Servicio y componentes de integración 
+
+(incluyendo confirmación vía backend/webhooks) para procesar pagos y 
+actualizar estados de pedidos. 
+
+Activos de Personal 
+
+20. Líder de Proyecto / Desarrollador Principal: Responsable de la supervisión 
+general, decisiones técnicas, seguridad base, despliegue y mantenimiento del 
+sistema. 
+
+21. Equipo de Desarrollo y Soporte: Miembros con roles de backend, frontend, 
+
+base de datos, QA/pruebas, UI/UX y documentación. 
+
+22. Rol “Administrador/Gestor”: Usuario con permisos elevados para administrar 
+
+catálogo, stock, pedidos, pagos, cursos, tickets y reportes. 
+
+23. Usuarios Finales (Clientes): Usuarios externos que realizan compras, se 
+
+inscriben a cursos, adquieren tickets y consultan su historial (principal fuente de 
+datos personales y transacciones). 
 
  
-4.  Pruebas: Se realizaron pruebas mediante prototipado iterativo y validación 
-manual  de  escenarios  críticos  de  casos  de  uso  para  verificar  el 
-cumplimiento de los requerimientos funcionales y la experiencia de usuario. 
+ 
+3.  Amenazas y Vulnerabilidades  
 
-5.  Implementación:  Despliegue  de  la  plataforma  en  un  entorno  productivo 
+Se han identificado las siguientes amenazas y vulnerabilidades: 
 
-(servidores y hosting) para uso en general 
+Nombre Activo 
 
-6.  Mejora continua: Fase de actualización y optimización constante basada en 
-incorporación  de  nuevas 
+Amenaza 
 
-la  retroalimentación  de  los  usuarios  y  la 
-funcionalidades. 
+Vulnerabilidad 
 
-III.  Etapa 1: Desarrollo del modelo general  
+Base de Datos de 
+Usuarios, Ventas y 
+Operaciones (MySQL) 
 
-1.7. 
+Filtración de Datos (Data 
+Breach) 
 
-Contexto del sistema  
+Servidor de 
+Aplicaciones 
+(Infraestructura Cloud) 
 
-El  sistema  se  desarrolla  para  el  centro  de  investigación,  innovación  y 
-capacitación “Invéntalo”, el cual genera productos científicos, tecnológicos 
-y creativos. La plataforma funcionará como un portal e-commerce orientado 
-a  investigadores,  estudiantes,  aliados  estratégicos  y  público  en  general. 
-Operará  en  un  entorno  web  accesible  desde  diversos  dispositivos, 
-permitiendo  la  consulta  de  información,  exploración  de  productos  y 
-adquisición  de  los  mismos.  Su  propósito  estratégico  es  fortalecer  la 
-proyección  institucional  y  la  transferencia  de  conocimiento  mediante  una 
-arquitectura de aplicación de página única (SPA) que se comunica con una 
-API REST. 
+Paralización del Servicio 
+por Agotamiento de 
+Recursos 
 
-1.8. 
+Repositorio de 
+Objetos (MinIO) 
 
-Obtención y especificación de los requerimientos 
-
-Requerimientos funcionales 
-
-El sistema deberá permitir: 
-
-Código  Nombre del 
-
-Descripción Detallada 
-
-Requerimiento 
-
-RF-01 
-
-Autenticación de 
-usuarios 
-
-RF-02  Gestión de roles 
-
-El sistema debe permitir el registro e inicio de sesión 
-de usuarios, diferenciando los roles de Administrador 
-y Usuario (Cliente). 
-
-El sistema debe controlar el acceso a las 
-funcionalidades según el rol asignado (Administrador 
-o Usuario). 
-
-RF-03 
-
-Registro de 
-productos  
-
-El administrador debe poder registrar productos 
-(modelos 3d digitalizados, impresiones 3D y libros 
-tecnológicos) con información detallada. 
-
-RF-06 
-
-RF-07 
-
-RF-08 
-
-RF-04 
-
-Actualización de 
-productos y curso 
-
-El administrador debe poder modificar precios, 
-descripciones e imágenes. 
-
-RF-05 
-
-Eliminar productos 
-
-Activación y 
-desactivación de 
-productos 
-
-El administrador podrá eliminar los productos del 
-sistema 
-El sistema debe permitir activar o desactivar 
-productos del catálogo según disponibilidad. 
-
-Clasificación de 
-productos 
-
-El sistema debe permitir organizar los productos por 
-categorías (Digitalizados e Impresos). 
-
-Visualización del 
-catálogo 
-
-Los usuarios deben poder visualizar el catálogo de 
-productos de forma clara y ordenada. 
-
-RF-9 
-
-Gestión de cursos 
-
-El administrador debe registrar, modificar, activar o 
-desactivar y eliminar cursos. 
-
-RF-10 
-
-Compra de 
-productos y cursos 
-
-El sistema debe permitir a los usuarios seleccionar 
-productos o cursos para después realizar compras en 
-línea. 
-
-RF-11 
-
-Carrito de compras  
-
-El sistema debe permitir agregar y eliminar productos 
-del carrito antes de la compra. 
-
-RF-12 
-
-Procesamiento de 
-pagos 
-
-El sistema debe procesar pagos en línea por 
-productos y cursos. 
-
-RF-13 
-
-Registro de pagos 
-
-El sistema debe registrar el estado del pago 
-(pendiente, aprobado o rechazado). 
-
-RF-14 
-
-Seguimiento de 
-transacciones para 
-Impresiones 3D 
-
-RF-15 
-
-Descarga de 
+Exposición pública de 
 archivos 
 
-RF-16 
+Interfaz de Usuario: 
+Panel de 
+Administración 
 
-Validación de perfil 
+Cross-Site Scripting 
+(XSS) 
 
-Visualización y 
-análisis de ventas 
+Interfaz de Usuario: 
+Catálogo y Compra 
 
-La gestión de estado de entrega para impresiones 3D 
-(aceptado, en curso y entregado). 
+Manipulación de precios / 
+fraude de compra 
 
-Después del pago exitoso, el usuario puede descargar 
-modelos 3D en formato GLB y también puede 
-descargar libros en PDF. 
-El cliente debe poder editar su perfil para poder 
-comprar productos (impresos en 3D) y comprar 
-cursos. 
-El administrador podrá visualizar todas las ventas del 
-mes mediante un dashborad. 
+Interfaz de Usuario: 
+Cursos e Inscripción 
 
-Historial de 
-operaciones 
+Acceso no autorizado a 
+contenido/inscripciones 
 
-El sistema debe permitir consultar el historial de 
-compras, pagos e inscripciones. 
+Fallos en control de 
+acceso, 
+credenciales/secretos 
+expuestos, permisos 
+excesivos o copias de BD 
+sin protección. 
+
+Falta de monitoreo, 
+límites y escalamiento; 
+picos de tráfico o 
+procesos pesados sin 
+control. 
 
-Gestión de venta de 
-entradas del micro 
-museo (ADMIN) 
+Buckets/policies mal 
+configuradas, URLs sin 
+expiración, ausencia de 
+control de acceso por 
+roles. 
+
+Renderización de datos 
+sin sanitización/escape 
+en listados, formularios o 
+reportes del panel. 
+
+Validaciones solo en 
+frontend (precio, 
+descuentos, stock) sin 
+verificación estricta en 
+backend. 
+
+Falta de control por 
+estado de 
+pago/inscripción y 
+autorización por roles. 
+
+Interfaz de Usuario: 
+Ticketing del Micro 
+Museo 
+
+Reutilización/Falsificación 
+de tickets 
+
+Credenciales de 
+Acceso y Tokens 
+(OAuth/JWT) 
 
-El administrador debe poder registrar visitantes 
-presenciales que realizan pago en efectivo, validar 
-entradas mediante un scanner de código QR y ver 
-todas las reservas realizadas en el sistema 
+Ataque de Fuerza Bruta / 
+Toma de cuenta 
 
-RF-17 
+Infraestructura de 
+Servidores en la Nube 
 
-RF-18 
+Caída del proveedor / 
+indisponibilidad regional 
 
-RF-19 
+Estaciones de Trabajo 
+de Desarrollo 
+(Laptops/PC) 
 
- 
- 
-RF-20 
+Infección por Malware / 
+robo de credenciales 
 
-Reserva de entradas 
-para el micro museo 
-(USUARIO) 
+Equipos de Operación 
+Administrativa 
 
-El usuario debe poder seleccionar la fecha de visita y 
-ver la disponibilidad de horarios, elegir el horario 
-disponible para esa fecha, indicar la cantidad de 
-personas que visitarán, proceder al pago de la reserva, 
-recibir un código QR de confirmación de su reserva, y 
-consultar el historial de sus reservas realizadas. 
+Robo/Pérdida del 
+dispositivo 
 
-Requerimientos no funcionales 
+Equipos de Red Local 
+(Routers/Switches) 
 
-El sistema deberá cumplir con los siguientes criterios de calidad: 
+Interrupción de 
+conectividad / MITM 
 
-Código  Categoría 
+Aplicación Web “e-
+commerce 
+INVÉNTALO” 
 
-Descripción del Requerimiento 
+Inyección SQL / acceso 
+indebido 
 
-RNF-
-01 
+Código Fuente del 
+Proyecto 
 
-RNF-
-02 
+Fuga de Propiedad 
+Intelectual 
 
-RNF-
-03 
+Tokens de ticket 
+predecibles, sin 
+expiración, sin estado 
+“usado/anulado” validado 
+en servidor. 
 
-RNF-
-04 
+Sin rate limiting, sin 
+bloqueo por intentos, 
+secretos JWT débiles o 
+expiración excesiva. 
 
-RNF-
-05 
+Dependencia de una sola 
+región o falta de plan de 
+respaldo/recuperación. 
 
-RNF-
-06 
+Antivirus desactualizado, 
+llaves/API en texto plano, 
+descarga de herramientas 
+no confiables. 
 
-RNF-
-07 
+Falta de cifrado, bloqueo 
+de pantalla o sesiones 
+persistentes sin 
+cierre/expiración. 
 
-RNF-
-08 
+Equipos sin 
+mantenimiento, firmware 
+viejo, Wi-Fi inseguro o 
+contraseñas por defecto. 
 
-RNF-
-09 
+Validación insegura de 
+entradas o endpoints sin 
+autorización uniforme 
+(fallas de RBAC). 
 
-Usabilidad 
+Repositorio público por 
+error, acceso sin MFA o 
+secretos expuestos en el 
+repositorio. 
 
-Accesibilidad 
+Frameworks/Librerías 
+Frontend (React, Vite, 
+TailwindCSS) 
 
-Rendimiento 
+Dependencias 
+vulnerables (Supply 
+Chain) 
 
-El sistema debe contar con una interfaz intuitiva, clara y 
-fácil de usar para todo tipo de usuarios. 
+Runtime y Framework 
+Backend (Node.js y 
+Express.js) 
 
-El sistema debe ser accesible desde navegadores web 
-en dispositivos móviles y de escritorio. 
+Exposición de endpoints 
+críticos 
 
-El sistema debe responder a las acciones del usuario 
-en tiempos adecuados, sin demoras perceptibles. 
+ORM Sequelize 
 
-Disponibilidad 
+Corrupción de datos / 
+bypass de validaciones 
 
-El sistema debe estar disponible de forma continua, 
-minimizando tiempos de inactividad. 
+SGBD MySQL 
 
-Seguridad 
+Rendimiento degradado 
 
-El sistema debe proteger la información de los usuarios 
-y controlar el acceso mediante autenticación segura. 
+Pasarela de Pagos 
+(MercadoPago) 
 
-Integridad de datos  El sistema debe garantizar la consistencia y 
+Confirmación falsa de 
+pago / fraude 
 
-confiabilidad de la información almacenada. 
+Líder de Proyecto / 
+Desarrollador Principal 
 
-Escalabilidad 
+Fuga de conocimiento 
+clave 
 
-El sistema debe permitir la incorporación de nuevos 
-productos, cursos y funcionalidades sin afectar su 
-desempeño. 
+Equipo de Desarrollo y 
+Soporte 
 
-Compatibilidad 
-
-El sistema debe funcionar correctamente en los 
-principales navegadores web. 
-
-Mantenibilidad 
-
-El sistema debe permitir actualizaciones y mejoras de 
-forma sencilla y ordenada. 
-
-RNF-10  Arquitectura 
-
-El sistema debe implementarse bajo una arquitectura 
-SPA con comunicación mediante API REST. 
-
-RNF-11  Confiabilidad 
-
-El sistema debe asegurar la correcta ejecución de las 
-transacciones de compra e inscripción. 
-
-RNF-12  Respaldo de 
-información 
-
-El sistema debe contar con mecanismos de respaldo 
-para evitar pérdida de datos. 
-
- 
- 
- 
-1.9. 
-
-Identificación y descripción de los procesos clave del 
-
-negocio  
-
-Se  han  identificado  ocho  escenarios  que  representan  las  situaciones 
-críticas que justifican la existencia de la plataforma: 
-
-1.  Difusión  y  exhibición  de  productos:  El  centro  genera  productos 
-académicos  y  tecnológicos  que  se  organizan  en  categorías  para  ser 
-visualizados en un catálogo por el público. 
-
-2.  Comercialización de productos: Permite que los usuarios seleccionen 
-productos  del  catálogo,  realicen  la  adquisición  y  el  centro  gestione  el 
-pedido y registre la venta. 
-
-3.  Gestión  administrativa  de  productos:  El  responsable  administrativo 
-registra  nuevos  desarrollos,  actualiza  información,  elimina  y  activa  o 
-desactiva productos según disponibilidad. 
-
-4.  Compra y gestión de cursos: El centro registra capacitaciones en áreas 
-como  robótica,  drones  y  digitalización  en  3D;  los  usuarios  consultan, 
-compra, editan su perfil y el sistema confirma su participación. 
-
-5.  Procesamiento de pagos: Registro y control de transacciones mediante 
-métodos digitales, validando si la operación es confirmada o rechazada. 
-6.  Gestión  de  pedidos  y  seguimiento:  Control  del  estado  de  las 
-operaciones  (aceptado,  en  curso,  entregado)  y  almacenamiento  del 
-historial para consulta del usuario. 
-
-7.  Visualización y análisis de ventas: Recopilación y procesamiento de 
-datos de ventas y datos de usuarios para la toma de decisiones por parte 
-de los responsables. 
-
-1.10. 
-
- Especificaciones de Actores 
-
-El  sistema  define  dos  tipos  de  usuarios  que  interactúan  directamente  con  la 
-plataforma: 
-
-Actor 
-Administrador  Responsable  de 
-
-Descripción 
-
-Cliente 
-
-la  gestión 
-
-integral:  administración  de 
-productos,  cursos,  usuarios,  disponibilidad  de  entradas  al 
-micro museo y generación de reportes. 
-Usuario  final  que  visualiza  el  catálogo,  realiza  compras,  se 
-inscribe en cursos, selecciona métodos de pago y consulta su 
-historial de operaciones. 
-
- 
- 
- 
- 
-1.11.  Especificaciones de Casos de uso  
-
-CU-01: Autenticación / Login 
-
-Elemento 
-Caso de uso 
-Actor(es) 
-Descripción 
-
-Precondiciones 
-Postcondiciones 
-Flujo principal 
-
-Flujos alternos 
-Requerimientos 
-relacionados 
-
-Descripción 
-CU-01 Autenticación / Login 
-Administrador, Cliente 
-Permite al usuario autenticarse en el sistema mediante 
-credenciales válidas para acceder según su rol. 
-El usuario debe estar previamente registrado. 
-El usuario accede al sistema con permisos según su rol. 
-1. Accede a login  
-2. Ingresa credenciales  
-3. El sistema valida  
-4. Acceso concedido 
-4a. Credenciales incorrectas → mensaje de error 
-RF-01, RF-02 
-
-CU-02: Administrar Productos 
-
-Elemento 
-Caso de uso 
-Actor principal 
-Descripción 
-
-Precondiciones 
-Postcondiciones 
-Flujo principal 
-
-Casos extendidos 
-
-Requerimientos 
-relacionados 
-
-Descripción 
-CU-02 Administrar productos 
-Administrador 
-Gestiona  el  registro,  actualización  y  control  de 
-productos del sistema. 
-Administrador autenticado 
-Productos actualizados en el sistema 
-1. Accede a gestión de productos  
-2. Visualiza catálogo  
-3. Selecciona acción 
-CU-03.1 Añadir producto  
-CU-03.2 Modificar producto  
-CU-03.3 Activar / Desactivar producto 
-CU-03.4 Eliminar producto 
-RF-04, RF-05, RF-06, RF-07 
-
-CU-03: Visualizar y analizar ventas 
-
-Elemento 
-Caso de uso 
-Actor principal 
-Descripción 
-
-Precondiciones 
-
-Descripción 
-CU-05 Visualizar y analizar ventas 
-Administrador 
-Permite  visualizar  y  analizar  el  historial  de  ventas 
-del mes. 
-Estar autenticado con el rol administrador 
-
- 
- 
-Postcondiciones 
-Flujo principal 
-Casos incluidos 
-Requerimientos 
-relacionados 
-
-Ventas visualizadas 
-1. Accede al dashboard 
-Ninguna 
-RF-19 
-
-CU-04: Validación de perfil 
-
-Elemento 
-Caso de uso 
-Actor principal 
-Descripción 
-Precondiciones 
-Postcondiciones 
-Flujo principal 
-
-Casos incluidos 
-Requerimientos relacionados  RF-18 
-
-Descripción 
-CU-04 Validación de perfil 
-Cliente 
-Permite que el cliente actualice sus datos 
-Ninguna 
-La compra de modelos 3D impresos y de cursos 
-1. Accede al catálogo de modelos 3D impresos 
-2. Accede al catálogo de cursos. 
-Ninguno 
-
-CU-05: Visualizar Catálogo 
-
-Elemento 
-Caso de uso 
-Actor principal 
-Descripción 
-
-Precondiciones 
-Postcondiciones 
-Flujo principal 
-
-Casos incluidos 
-Requerimientos 
-relacionados 
-
-CU-06: Carrito de Compras 
-
-Elemento 
-Caso de uso 
-Actor principal 
-Descripción 
-
-Precondiciones 
-Postcondiciones 
-Requerimientos 
-relacionados 
-
-productos 
-
-visualizar 
-
-Descripción 
-CU-05 Visualizar catálogo 
-Cliente 
-Permite 
-organizados por categorías. 
-Ninguna 
-Productos visualizados 
-1. Accede al catálogo  
-2. Visualiza productos 
-Carrito de compras 
-RF-09 
-
-disponibles 
-
-Descripción 
-CU-06 Carrito de compras 
-Cliente 
-Gestiona  los  productos  seleccionados  antes  del 
-pago. 
-Cliente autenticado 
-Carrito actualizado 
-RF-12 
-
- 
- 
- 
-CU-07: Finalizar Pago 
-
-Elemento 
-Caso de uso 
-Actor principal 
-Descripción 
-
-Precondiciones 
-Postcondiciones 
-Casos extendidos 
-Requerimientos 
-relacionados 
-
- CU-08: Método de Pago 
-
-Descripción 
-CU-07 Finalizar pago 
-Cliente 
-Permite  realizar  el  pago  de  productos  o  cursos 
-seleccionados. 
-Carrito con productos 
-Pago procesado 
-Pago exitoso, Pago cancelado 
-RF-12, RF-13, RF-14 
-
-Elemento 
-
-Descripción 
-
-Caso de uso 
-Actor principal 
-Descripción 
-Casos extendidos  Transacción bancaria, Yape 
-
-CU-08 Método de pago 
-Cliente 
-Permite seleccionar el método de pago disponible. 
-
- CU-09: Pago Exitoso 
-
-Elemento 
-Caso de uso 
-Actor principal  Cliente 
-Descripción 
-
-CU-09 Pago exitoso 
-
-Descripción 
-
-Confirma que el pago fue procesado correctamente. 
-
-CU-10: Pago Cancelado 
-
-Elemento 
-Caso de uso 
-Actor principal  Cliente 
-Descripción 
-
-CU-10 Pago cancelado 
-
-Descripción 
-
-Indica que el pago no se completó correctamente. 
-
- 
- 
- 
- 
- 
-1.12.  Diagrama General de los casos de uso en el software  
-
-1.13.  Diagramas de actividades y secuencia  
-
- 
- 
- 
-1.14.  Diagrama de Clase  
-
-1.15.  Framework de la metodología del proyecto  
-
-Para el desarrollo de la Plataforma Web de Comercialización Integral de productos 
-desarrollados por “Invéntalo”, se adopta un framework híbrido, combinando: 
-
-•  TOGAF  (The  Open  Group  Architecture  Framework)  como  marco  de 
-
-arquitectura empresarial. 
-
-•  Metodología iterativa e incremental, alineada a principios ágiles similares 
-
-a FDD (Feature Driven Development). 
-
-Esta combinación resulta adecuada porque el proyecto involucra múltiples capas 
-arquitectónicas (negocio, datos, aplicaciones y tecnología) y requiere un desarrollo 
-progresivo,  escalable  y  orientado  a  funcionalidades  concretas  como  productos, 
-cursos, pagos y reportes. 
-
-Framework basado en TOGAF (ADM) aplicado al proyecto 
-
-Fase TOGAF 
-
-Descripción 
-general 
-
-Preliminary Phase  Define  principios, 
-alcance  y  equipo 
-del proyecto 
-
-Architecture 
-
-A. 
-Vision 
-
-la 
-
-Define 
-arquitectónica 
-stakeholders 
-
-visión 
-y 
-
-el 
-
-en 
-
-específica 
-
-Aplicación 
-proyecto “Invéntalo” 
-Se  definió  el  objetivo  del  sistema: 
-centralizar,  exhibir  y  comercializar 
-productos  de 
-“Invéntalo”.  Se 
-identificaron actores (Administrador 
-y  Cliente)  y  el  alcance  web 
-institucional. 
-Visión:  plataforma  web  accesible, 
-escalable  y  segura.  Stakeholders: 
-“Invéntalo”,  universidad, 
-centro 
-
- 
-B. 
-Architecture 
-
-Business 
-
-Modela 
-del negocio 
-
-procesos 
-
-Information 
-
-C. 
-Systems 
-Architecture 
-
-Define  arquitectura 
-de 
-y 
-datos 
-aplicaciones 
-
-Technology 
-
-D. 
-Architecture 
-
-Define 
-infraestructura 
-tecnológica 
-
-E.  Opportunities 
-and Solutions 
-
-Identifica  mejoras  y 
-soluciones 
-
-F. 
-Planning 
-
-Migration 
-
-Planifica 
-implementación 
-prioridades 
-
-y 
-
-G. 
-Implementation 
-Governance 
-
-Controla  ejecución 
-y calidad 
-
-Architecture 
-
-H. 
-Change 
-Management 
-
-Gestiona  cambios 
-futuros 
-
-Requirements 
-Management 
-
-Gestión continua de 
-requisitos 
-
-la 
-
-investigadores,  usuarios  finales  y 
-aliados estratégicos. 
-Se  modelaron  procesos  clave: 
-productos, 
-de 
-difusión 
-comercialización, 
-gestión 
-administrativa, inscripción a cursos, 
-venta de entradas del micromuseo y 
-generación de reportes. 
-Datos: productos, usuarios, cursos, 
-pedidos, 
-reportes. 
-pagos, 
-Aplicación: plataforma web tipo SPA 
-con comunicación vía API REST. 
-Tecnologías  web 
-y 
-(frontend 
-backend), base de datos relacional, 
-servidores web, servicios de hosting 
-y control de versiones. 
-Optimización 
-difusión 
-de 
-institucional,  automatización  de 
-ventas, 
-la 
-transferencia  de  conocimiento  y 
-sostenibilidad económica. 
-módulos: 
-Desarrollo 
-autenticación, 
-de 
-productos, cursos, pagos, pedidos y 
-entregas 
-reportes,  permitiendo 
-progresivas. 
-Validación 
-continua  mediante 
-pruebas  funcionales,  revisión  de 
-requisitos  con 
-y 
-stakeholders 
-control de calidad del software. 
-Arquitectura  escalable  que  permite 
-incorporar nuevas funcionalidades y 
-mejoras  sin  afectar  el  sistema 
-existente. 
-no 
-Requisitos 
-funcionales  gestionados  de  forma 
-iterativa,  validados  con  prototipos, 
-casos de uso y pruebas. 
-
-fortalecimiento  de 
-
-funcionales 
-
-gestión 
-
-por 
-
-y 
-
-Enfoque iterativo e incremental 
-
-El desarrollo del sistema se organiza en iteraciones, donde cada ciclo incluye: 
-
-1.  Análisis de requerimientos 
-2.  Diseño del sistema 
-3.  Desarrollo modular 
-4.  Pruebas funcionales y de usabilidad 
-
- 
-5.  Implementación 
-6.  Mejora continua 
-
-Este  enfoque  permite  entregar  valor  de  manera  progresiva,  reducir  riesgos  y 
-asegurar  que  la  plataforma  responda  fielmente  a  las  necesidades  del  centro 
-“Invéntalo”. 
-
-IV.  Etapa 2: Creación de lista de funciones  
-
-1.16.  Trabajo pendiente del Producto  
-
-• 
-
-• 
-
-• 
-
-• 
-
-• 
-
-• 
-• 
-
-[Alta] CU-03.1 Añadir producto (feature): Formulario para registrar 
-producto (nombre, descripción, archivo glb y pdf, precio). 
-[Alta] CU-05 Visualizar catálogo (feature): Página pública de catálogo 
-con paginación y filtros por categoría. 
-[Alta] CU-06 Carrito de compras (feature): Añadir/eliminar ítems; 
-persistencia por usuario; resumen de compra. 
-[Alta] CU-07 Finalizar pago (feature): Integración con pasarela de pago 
-(pruebas con sandbox). 
-[Media] CU-03 Visualizar y analizar ventas: Permite visualizar y analizar 
-el historial de ventas del mes. 
-[Baja] UI: Mejora responsiva y accesibilidad de pantallas. 
-[Baja] Documentación API: crear endpoints públicos/privados 
-documentados. 
-
-1.17.  Épica  
-
-Como administrador del centro “Invéntalo”, necesito una plataforma web 
-integral para exhibir, vender y gestionar productos y cursos, de modo que se 
-potencie la difusión institucional y se genere sostenibilidad económica 
-mediante ventas y reportes efectivos. 
-
-1.18.  Historia de los usuarios  
-
-Historia de Usuario HU-01: Autenticación y control de acceso 
-Rol: Administrador/Cliente 
-
-•  Descripción:  
-Como Administrador/Cliente desea autenticarse con credenciales 
-validas para acceder a la plataforma con permisos según el rol 
-asignado 
-Prioridad: Alta 
-•  Precondiciones: El administrado/cliente debe estar registrado. 
-
- 
-•  Criterios de aceptación: 
-
-1.  El sistema valida credenciales y habilita funcionalidades 
-
-según rol (Administrador o Cliente). 
-
-2.  Si las credenciales son incorrectas, se muestra un mensaje 
-
-claro sin revelar información sensible 
-
-•  Features relacionadas: 
- CU-01 Autenticación/ Login 
-
-Historia de Usuario HU-02: Gestión de Productos 
-Rol: Administrador 
-
-•  Descripción:  
-Como Administrador, quiero registrar, editar, eliminar, activar y 
-desactivar productos, para mantener actualizado el catálogo de la 
-plataforma. 
-Prioridad: Alta 
-•  Precondiciones:   
-El administrador debe haber iniciado sesión. 
-•  Criterios de aceptación: 
-
-3.  El sistema permite registrar productos con nombre, 
-
-descripción, precio, archivo glb o pdf. 
-
-4.  El producto registrado puede ser eliminado, activado o 
-
-desactivado. 
-
-5.  Solo los productos activos se visualizan en el catálogo 
-
-público. 
-
-•  Features relacionadas: 
- CU-03.1 Añadir producto, CU-03.2 Modificar producto, CU-03.3 
-Activar o desactivar producto. CU-03.4 Eliminar producto.  
-
-Historia de Usuario HU-03: Visualización de catalogo 
-Rol: Cliente 
-
-•  Descripción:  
-
-Como Cliente, desea explorar el catálogo organizado por secciones, 
-para identificar rápidamente productos digitales, impresiones 3D, 
-libros y cursos. 
-
-Prioridad: Alta 
-•  Precondiciones:   
-Ninguna 
-•  Criterios de aceptación: 
-
- 
- 
- 
-1.  El catálogo muestra productos activos, ordenados y con 
-
-información esencial (nombre, precio, descripción, archivo) 
-2.  El usuario puede navegar por secciones y acceder al detalle 
-
-del producto. 
-•  Features relacionadas: 
- CU-05 Visualizar catalogo  
-
-Historia de Usuario HU-04: Carrito de Compras 
-Rol: Cliente 
-
-•  Descripción: 
-
-Como Cliente, quiero agregar productos al carrito y modificar 
-cantidades, para gestionar mis compras antes de pagar. 
-
-•  Prioridad: Alta 
-•  Precondiciones:  
-
-El cliente debe estar registrado. 
-
-•  Criterios de aceptación: 
-
-1.  El sistema permite agregar y eliminar productos del carrito. 
-2.  El total de la compra se actualiza automáticamente. 
-3.  El carrito conserva los productos durante la sesión del 
-
-usuario. 
-
-•  Features relacionadas:  
-
-CU-06 Carrito de compras. 
-
-Historia de Usuario HU-05: Proceso de Pago 
-Rol: Cliente 
-
-•  Descripción:  
-
-Como Cliente, quiero realizar el pago en línea de mis productos, 
-para completar la compra de forma segura. 
-
-•  Prioridad: Alta 
-•  Precondiciones:  
-
-El carrito debe contener al menos un producto. 
-
-•  Criterios de aceptación: 
-
-1.  El sistema permite seleccionar un método de pago. 
-2.  El sistema confirma si el pago fue aprobado o rechazado. 
-3.  Se genera un comprobante de compra. 
-
-•  Features relacionadas:  
-CU-07 Finalizar pago. 
-
- 
- 
- 
-1.19.  Reparación de errores  
-
-El sistema incorpora validaciones y controles al registrar y consultar 
-información en la base de datos, lo que reduce inconsistencias y fallos 
-durante el uso. Ante cualquier error no previsto, el desarrollador se 
-encargará de diagnosticar y analizar para su pronta solución. 
-
-1.20. 
-
-Identificación y especificación de los requerimientos 
-
-funcionales  
-
-RF-01: Autenticación de usuario 
-
-•  Descripción:  
-
-El sistema debe permitir el registro, inicio de sesión y cierre de 
-sesión de usuarios. 
-
-•  Actores:  
-
-Administrador, Cliente. 
-
-•  Prioridad: Alta. 
-•  Precondiciones:  
-
-El usuario debe contar con credenciales válidas. 
-
-•  Flujo básico: 
-
-1.  El usuario ingresa sus credenciales. 
-2.  El sistema valida la información. 
-3.  El sistema permite el acceso según el rol. 
-
-•  Relación con historias: HU-01 
-
-RF-02: Gestión de productos 
-
-•  Descripción:  
-
-El sistema debe permitir al Administrador registrar, editar, elimina, 
-activa o desactivar productos. 
-
-•  Actores:  
-
-Administrador. 
-•  Prioridad: Alta. 
-•  Precondiciones:  
-
-Administrador autenticado. 
-
-•  Flujo básico: 
-
-1.  Registrar producto con datos obligatorios. 
-2.  Editar o desactivar producto existente. 
-3.  Visualizar listado actualizado. 
-
-•  Relación con historias: HU-02. 
-
-RF-03: Visualización de catalogo 
-
-•  Descripción:  
-
- 
-Presenta catalogo público de productos disponibles 
-
-•  Actores:  
-Cliente 
-
-•  Prioridad: Alta. 
-•  Precondiciones:  
-
-Registro exitoso en la pagina 
-
-•  Flujo básico: 
-
-1.  Cliente visualiza el catálogo y las secciones que presentan 
-2.  Cliente selecciona un producto para leer su información más 
-
-al detalle 
-
-•  Relación con historias: HU-03. 
-
-RF-03: Carrito de compras 
-
-•  Descripción:  
-
-El sistema debe permitir al Cliente gestionar un carrito de compras. 
-
-•  Actores:  
-Cliente. 
-
-•  Prioridad: Alta. 
-•  Precondiciones:  
-
-Cliente autenticado. 
-
-•  Flujo básico: 
-
-1.  Añadir productos al carrito. 
-2.  Modificar cantidades. 
-3.  Visualizar total. 
-
-•  Relación con historias: HU-04. 
-
-RF-04: Proceso de pago 
-•  Descripción:  
-
-El sistema debe permitir realizar pagos en línea de manera segura. 
-
-•  Actores:  
-Cliente. 
-
-•  Prioridad: Alta. 
-•  Precondiciones:  
-
-Carrito con productos. 
-
-•  Flujo básico: 
-
-1.  Seleccionar método de pago. 
-2.  Procesar transacción. 
-3.  Confirmar resultado. 
-
-•  Relación con historias: HU-05. 
-
- 
-1.21.  Deuda Técnica  
-
-DT-01: Optimización de consultas a la base de datos 
-
-•  Descripción:  
-
-Existen consultas SQL sin índices que pueden afectar el rendimiento 
-del sistema cuando aumente el volumen de datos. 
-Impacto: Alto (tiempos de respuesta elevados). 
-
-• 
-•  Prioridad: Alta. 
-•  Riesgo:  
-
-Lentitud general del sistema y mala experiencia de usuario. 
-
-•  Acción propuesta:  
-
-Crear índices, optimizar consultas y revisar planes de ejecución. 
-
-DT-02: Falta de pruebas automatizadas 
-
-•  Descripción:  
-
-El sistema no cuenta con pruebas unitarias ni de integración que 
-aseguren el correcto funcionamiento tras cambios. 
-• 
-Impacto: Medio. 
-•  Prioridad: Media. 
-•  Riesgo:  
-
-Introducción de errores en nuevas versiones. 
-
-•  Acción propuesta:  
-
-Implementar pruebas unitarias y de integración para módulos 
-críticos. 
-
-DT-03: Gestión de copias de seguridad 
-
-•  Descripción:  
-
-No se ha definido una política automatizada de copias de seguridad 
-de la base de datos. 
-• 
-Impacto: Alto. 
-•  Prioridad: Alta. 
-•  Riesgo:  
-
-Pérdida de información ante fallos del sistema. 
-
-•  Acción propuesta:  
-
-Configurar backups automáticos y política de recuperación. 
-
-DT-04: Seguridad de la aplicación 
-
-•  Descripción:  
-
-Falta reforzar mecanismos de seguridad frente a ataques comunes. 
-• 
-Impacto: Alto. 
-•  Prioridad: Alta. 
-•  Riesgo:  
-
-Vulnerabilidades XSS, CSRF o inyección SQL. 
-
-•  Acción propuesta:  
-
-Aplicar buenas prácticas OWASP y validaciones de seguridad. 
-
-1.22.  Adquisición de conocimiento  
-
-• 
-• 
-
-Capacitación en pasarelas de pago. 
-Buenas prácticas de seguridad web. 
-
-V.  Etapa 3: Creación de un plan por función  
-
-1.23.  Fases del Proyecto  
-
-Fase 1: Análisis de la Necesidad y Requerimientos del Sistema 
-Esta fase se orienta a comprender en profundidad el problema identificado: 
-la  ausencia  de  una  plataforma  digital  unificada  para  organizar,  exhibir  y 
-comercializar los productos desarrollados por el centro “Invéntalo”. Desde 
-la perspectiva de arquitectura, se define qué información debe gestionarse 
-y qué servicios debe ofrecer el sistema. 
-Actividades desarrolladas: 
-
-•  Análisis de la situación actual del centro de investigación. 
-• 
-
-Identificación de las limitaciones en visibilidad, gestión y accesibilidad 
-de los productos. 
-
-•  Definición de los objetivos generales y específicos del sistema. 
-• 
-
-Identificación de los requerimientos funcionales y no funcionales. 
-
-•  Determinación de los actores que interactúan con el sistema. 
-•  Delimitación del alcance del sistema de información. 
-
-Esta  fase  permite  establecer  la  arquitectura  del  negocio,  definiendo  qué 
-procesos deben ser soportados por el sistema. 
-
-Fase 2: Diseño de la Arquitectura del Sistema 
-En esta fase se estructura la solución desde el punto de vista arquitectónico, 
-definiendo  cómo  se  organizará  el  sistema  y  cómo  interactuarán  sus 
-componentes.  Se  busca  garantizar  escalabilidad,  mantenibilidad  y  una 
-correcta separación de responsabilidades. 
-Actividades desarrolladas: 
-
-•  Definición de la arquitectura general del sistema web. 
-•  Diseño de la estructura de navegación y experiencia de usuario. 
-• 
-
-Identificación de los módulos funcionales del sistema. 
-
-•  Diseño lógico de la base de datos para centralizar la información. 
-•  Definición de la relación entre datos, procesos y aplicaciones. 
-
- 
- 
-Esta  fase  corresponde  principalmente  a  la  arquitectura  de  sistemas  de 
-información, integrando datos y aplicaciones para soportar los procesos del 
-centro “Invéntalo”. 
-
-Fase 3: Diseño de la Base de Datos 
-Esta fase se centra en la arquitectura de datos del sistema, asegurando que 
-la  información  sea  almacenada  de  forma  estructurada,  coherente  y 
-centralizada. 
-Actividades desarrolladas: 
-
-• 
-
-Identificación de las entidades principales del sistema. 
-
-•  Definición de tablas, atributos y relaciones. 
-•  Normalización de la base de datos. 
-•  Diseño lógico orientado a facilitar la gestión, consulta y mantenimiento 
-
-de la información. 
-Una base de datos bien diseñada permite que el sistema gestione de 
-manera  eficiente  los  productos,  categorías  y  demás  elementos 
-informativos del centro. 
-
-Fase 4: Implementación del Sistema 
-En  esta  fase  se  materializa  la  arquitectura  definida,  desarrollando  la 
-los 
-plataforma  web  de  manera  modular  y  escalable,  conforme  a 
-requerimientos establecidos. 
-Actividades desarrolladas: 
-
-•  Desarrollo de la plataforma web. 
-• 
-
-Implementación de los módulos funcionales definidos. 
-Integración entre la base de datos y la aplicación. 
-
-• 
-
-•  Aplicación  de  buenas  prácticas  de  desarrollo  para  asegurar 
-
-mantenibilidad. 
-
-•  Construcción del sistema considerando crecimiento futuro. 
-
-Esta fase representa la arquitectura de aplicaciones, donde se implementan 
-los servicios que permiten la interacción entre usuarios y datos. 
-
-Fase 5: Modelado de Componentes y Despliegue 
-Esta 
-fase  permite  visualizar  cómo  está  estructurado  el  sistema 
-internamente y cómo será desplegado en un entorno real, desde el enfoque 
-de arquitectura tecnológica. 
-Actividades desarrolladas: 
-
-•  Elaboración del diagrama de componentes. 
-• 
-
-Identificación de los módulos de software y sus relaciones. 
-
-•  Elaboración del diagrama de despliegue. 
-•  Definición de la distribución del sistema en servidores y entorno web. 
-
- 
- 
- 
-Esta  fase  aborda  la  arquitectura  tecnológica,  asegurando  que  la  solución 
-sea viable y coherente con el entorno de ejecución. 
-
-Fase 6: Pruebas del Sistema 
-En esta fase se valida el correcto funcionamiento del sistema, asegurando 
-que  la  solución  cumpla  con  los  objetivos  planteados  y  ofrezca  una 
-experiencia adecuada al usuario. 
-Actividades desarrolladas: 
-
-•  Pruebas funcionales del sistema. 
-•  Validación de la correcta interacción entre módulos. 
-•  Evaluación de la usabilidad de la plataforma. 
-•  Verificación del rendimiento general del sistema. 
-
-Las pruebas permiten garantizar la calidad del sistema antes de su puesta 
-en marcha. 
-
-Fase 7: Implementación y Puesta en Producción 
-Esta fase finaliza el ciclo de desarrollo, permitiendo que la plataforma esté 
-disponible para su uso real. 
-Actividades desarrolladas: 
-•  Despliegue del sistema en el entorno productivo. 
-•  Verificación del correcto funcionamiento en producción. 
-•  Ajustes finales basados en pruebas y observaciones. 
-•  Presentación de resultados del proyecto. 
-Esta  fase  consolida  la  arquitectura  del  sistema  de  información  y  deja  la 
-solución lista para su uso y evolución futura. 
-
-1.24.  Cronograma  
-
-Semana 
-Semana 
-1 
-
-Fechas 
-19 – 25 de 
-enero 
-
-Fase del Proyecto 
-
-Análisis de la 
-necesidad y 
-requerimientos 
-
-Semana 
-2 
-
-26 de enero 
-– 1 de 
-febrero 
-
-Diseño de la 
-arquitectura del 
-sistema 
-
-Actividades Detalladas 
-• Análisis del problema identificado 
-en el centro “Invéntalo”. 
-• Identificación de necesidades de 
-centralización, organización y 
-comercialización de productos. 
-• Definición de objetivos generales y 
-específicos del sistema. 
-• Identificación de actores y alcance 
-del sistema. 
-• Levantamiento de requerimientos 
-funcionales y no funcionales. 
-• Definición de la arquitectura 
-general de la plataforma web. 
-• Identificación de módulos 
-funcionales del sistema. 
-
- 
- 
- 
-Semana 
-3 
-
-2 – 8 de 
-febrero 
-
-Diseño de la base de 
-datos 
-
-Semana 
-4 
-
-9 – 15 de 
-febrero 
-
-Implementación del 
-sistema 
-
-Semana 
-5 
-
-16 – 21 de 
-febrero 
-
-Pruebas, despliegue y 
-cierre 
-
-• Diseño de la estructura de 
-navegación y experiencia de usuario. 
-• Definición de la interacción entre 
-procesos, datos y aplicaciones. 
-• Identificación de entidades 
-principales del sistema. 
-• Diseño lógico de la base de datos. 
-• Definición de tablas, atributos y 
-relaciones. 
-• Normalización de la base de datos 
-para asegurar integridad y 
-coherencia de la información. 
-• Desarrollo de la plataforma web. 
-• Implementación modular de las 
-funcionalidades definidas. 
-• Integración entre la aplicación y la 
-base de datos. 
-• Aplicación de criterios de 
-escalabilidad y mantenibilidad. 
-• Elaboración del diagrama de 
-componentes. 
-• Elaboración del diagrama de 
-despliegue. 
-• Pruebas funcionales y de 
-usabilidad del sistema. 
-• Validación final del cumplimiento 
-de objetivos. 
-• Presentación y cierre del proyecto. 
-
-VI.  Etapa 4: Creación de un diseño por función  
-
-1.25. 
-
-Información de los interesados  
-
-En esta etapa se identifican los principales interesados internos del proyecto, 
-considerando sus roles, responsabilidades y grado de participación dentro del 
-desarrollo  de  la  plataforma  web  de  comercialización  integral  de  productos 
-desarrollados por “Invéntalo”. 
-
-el 
-
-Nombre del 
-interesado 
-Alvarado 
-Silvano 
-Danilo 
+Falta de comunicación / 
+errores en cambios 
 
 Rol 
-en 
-proyecto 
-Desarrollador 
-Principal 
-Frontend 
+“Administrador/Gestor” 
+
+Abuso de privilegios / 
+error humano 
+
+Librerías sin actualización 
+ni escaneo, paquetes 
+comprometidos o 
+versiones obsoletas. 
+
+CORS mal configurado, 
+falta de middleware de 
+autorización, rutas admin 
+accesibles 
+indebidamente. 
+
+Uso de consultas “raw” 
+inseguras, validaciones 
+incompletas o falta de 
+transacciones en 
+operaciones críticas. 
+
+Falta de índices, 
+consultas no optimizadas, 
+crecimiento de tablas sin 
+mantenimiento/monitoreo. 
+
+No validar pagos con 
+webhook y verificación 
+server-side; confiar en 
+respuesta del cliente sin 
+conciliación. 
+
+Alta dependencia de una 
+sola persona para 
+despliegue, claves y 
+arquitectura (bus factor). 
+
+Ausencia de code review, 
+pruebas, control de 
+cambios y estándares de 
+despliegue. 
+
+Permisos excesivos, falta 
+de auditoría de acciones, 
+ausencia de doble 
+
+validación en acciones 
+críticas. 
+
+Contraseñas reutilizadas 
+y falta de alertas, 
+medidas anti-bot o 
+segundo factor opcional. 
+
+Usuarios Finales 
+(Clientes) 
+
+Phishing / robo de cuenta 
+
+4.  Metodología para la Valoración de Riesgos 
+
+a.  Determinación del Impacto 
+
+El impacto representa la magnitud de las consecuencias que se producirían si 
+una amenaza llegara a materializarse sobre los activos del e-commerce. Se 
+evalúa en función de la afectación a la confidencialidad, integridad y 
+disponibilidad de la información, así como del impacto operativo, financiero y 
+reputacional. 
+
+Escala cualitativa de Impacto 
 
 Nivel 
-de 
-participación 
-Alto 
-
-Responsabilidades 
-principales 
-Diseño  e  implementación  de 
-interfaces  de  usuario, 
-las 
-integración 
-de 
-funcionalidades, 
-optimización 
-experiencia 
-(UI/UX). 
-
-la 
-usuario 
-
-visual 
-
-de 
-
-de 
-
- 
-Pezo 
-Murrieta 
-Orison 
-
-Rengifo 
-Pinedo 
-Brittany 
-
-Diseñador 
-Interfaz 
-
-de 
-
-Supervisora 
-general 
-Analista 
-requisitos 
-proyecto 
-
-y 
-de 
-del 
-
-Romero 
-Rosario 
-Niquelson 
-
-Desarrollador 
-Backend 
-
-Torres 
-Flores Julio 
-
-Desarrollador 
-Backend 
-
-Zumaeta 
-Zegarra 
-Walter 
-
-Analista 
-requisitos 
-
-de 
-
-Alto 
-
-Muy alto 
-
-Alto 
-
-Alto 
-
-Alto 
-
-de 
-
-gráfico 
-
-levantamiento 
-
-la 
-Diseño 
-plataforma, 
-prototipos 
-visuales, definición de estilos, 
-colores y estructura visual del 
-sistema. 
-Supervisión  del  desarrollo 
-general, 
-y 
-validación de requerimientos, 
-control  del  cumplimiento  de 
-objetivos y alineación con las 
-necesidades del proyecto. 
-Desarrollo  de  la  lógica  del 
-sistema,  implementación  de 
-servicios,  manejo  de  base de 
-datos 
-del 
-y 
-backend. 
-Apoyo  en  la  implementación 
-del 
-funcionalidades 
-de 
-servidor, 
-de 
-integración 
-módulos  y  optimización  del 
-rendimiento del sistema. 
-Identificación, 
-documentación  y  validación 
-de 
-requerimientos 
-funcionales y no funcionales, 
-apoyo  en  la  coherencia  del 
-diseño del sistema. 
-
-seguridad 
-
-1.26.  Evaluación de la información de los interesados  
-
-La evaluación de los interesados permite analizar su influencia, nivel de interés 
-y  el  impacto  que  tienen  en  el  éxito  del  proyecto,  asegurando  una  correcta 
-comunicación  y  asignación  de  responsabilidades  durante  el  desarrollo  por 
-funciones (FDD). 
-
-Interesado 
-
-Alvarado 
-Silvano 
-Danilo 
-
-Pezo 
-Murrieta 
-Orison 
-
-Interés en 
-el 
-proyecto 
-Alto 
-
-Influencia 
-en 
-decisiones 
-Medio 
-
-el 
-
-Impacto 
-en 
-sistema 
-Alto 
-
-Alto 
-
-Medio 
-
-Medio 
-Alto 
-
-– 
-
-Estrategia de gestión 
-
-Mantener 
-comunicación 
-constante 
-sobre 
-requerimientos  visuales 
-y cambios funcionales. 
-Validar  prototipos  de 
-interfaz 
-asegurar 
-y 
-coherencia  visual  con 
-
- 
-Muy alto 
-
-Alto 
-
-Muy alto 
-
-Alto 
-
-Medio 
-
-Alto 
-
-Alto 
-
-Medio 
-
-Alto 
-
-Alto 
-
-Medio 
-
-Medio 
-
-Rengifo 
-Pinedo 
-Brittany 
-
-Romero 
-Rosario 
-Niquelson 
-
-Torres 
-Flores Julio 
-
-Zumaeta 
-Zegarra 
-Walter 
-
-del 
-
-objetivos 
-
-y  asegurar 
-los 
-
-los 
-sistema. 
-en 
-Involucrarla 
-clave, 
-validaciones 
-revisiones  de  avance  y 
-toma  de  decisiones 
-estratégicas. 
-Coordinar 
-funcionalidades 
-backend 
-alineación 
-requerimientos 
-definidos. 
-tareas 
-Asignar 
-específicas  por  función 
-y 
-resultados 
-técnicos. 
-Participar  en  revisiones 
-y 
-de 
-requerimientos 
-validación 
-de 
-funcionalidades 
-implementadas. 
-
-validar 
-
-con 
-
-VII.  Etapa 5: Creación de una compilación por función  
-
-Para  esta  etapa,  a  continuación,  se  presentarán  prototipos  que  fueron 
-utilizados  para 
-los 
-requerimientos  funcionales  establecidos  para  el  desarrollo  de  la  aplicación 
-web de este proyecto. 
-
-la  admisión  del  diseño,  prueba  y  aceptación  de 
-
-IMAGEN Nº01: Página principal 
-
- 
- 
- 
-“IMAGEN Nº01” 
-
-IMAGEN Nº02: Página de Modelos 3D
-
-“IMAGEN Nº02” 
-
- 
- 
- 
-IMAGEN Nº03: Página de venta de libros
-
-“IMAGEN Nº03” 
-
-IMAGEN Nº04: Página de venta de cursos
-
-“IMAGEN Nº04” 
-
- 
- 
- 
-IMAGEN Nº05: Pagina para la reserva de tickets
-
-“IMAGEN Nº05” 
-
-IMAGEN Nº06: Pagina para el login de la página web
-
-“IMAGEN Nº06” 
-
- 
- 
- 
-IMAGEN Nº07: Página de carrito de compras 
-
-“IMAGEN Nº07” 
-
-1.27.  Despliegue  
-
-1.1. 
-
-Evaluación de Opciones Tecnológicas  
-
-Para la implementación de la plataforma web de comercialización integral 
-de productos desarrollados por “Invéntalo”, se evaluaron distintas opciones 
-tecnológicas considerando los siguientes criterios: 
-
-•  Escalabilidad 
-•  Seguridad 
-•  Facilidad de mantenimiento 
-•  Compatibilidad web 
-•  Curva de aprendizaje 
-•  Costos de implementación 
-
-Opciones evaluadas 
-Opción 
-
-Frameworks  PHP 
-(Laravel) 
-
-Frameworks 
-JS 
-(Node.js + React) 
-CMS  (WordPress, 
-Joomla) 
 
 Descripción 
 
-robusto 
+Ejemplo 
 
-MVC 
-y 
+Alto 
 
-Framework 
-moderno, 
-seguro 
-SPA 
-con 
-interactividad 
-Desarrollo  rápido  pero 
-limitado 
+Afecta operaciones críticas en la 
+página web, genera pérdidas 
+financieras significativas, expone 
+datos sensibles o daña 
+gravemente la reputación. 
 
-alta 
+Medio 
 
-Evaluación 
+Interrupción temporal de 
+servicios importantes o pérdida 
+parcial de información. 
 
-Media 
+Bajo 
+
+Daño leve que afecta funciones 
+no críticas sin comprometer la 
+operación principal. 
+
+Caída total de la página web que 
+impide realizar ventas y pagos, 
+fraude en transacciones 
+mediante MercadoPago o 
+filtración masiva de datos 
+personales de clientes. 
+
+Indisponibilidad temporal del 
+sistema de compras o errores en 
+el registro de pedidos que 
+requieren reprocesamiento 
+manual. 
+
+Error visual en el catálogo de 
+productos o retraso menor en la 
+generación de reportes 
+administrativos. 
+
+ 
+ 
+ 
+b.  Determinación de la Probabilidad 
+
+La probabilidad mide la posibilidad de que una amenaza ocurra, considerando 
+factores como el entorno tecnológico de la página web, la exposición a internet, 
+los controles de seguridad implementados y antecedentes de incidentes 
+similares. 
+
+Escala cualitativa de Probabilidad 
+
+Nivel 
+
+Descripción 
 
 Alta 
+
+Media 
 
 Baja 
 
- 
- 
-Arquitectura 
-Monolítica 
-Arquitectura  SPA 
-+ API REST 
+Es probable que ocurra con frecuencia debido a la exposición 
+constante de la página web a internet o controles insuficientes. 
 
-Simplicidad 
-implementación 
-Separación 
-responsabilidades 
+Puede ocurrir bajo determinadas circunstancias o fallos 
+específicos de control. 
 
-de 
+Tiene pocas probabilidades de ocurrir debido a controles efectivos 
+o baja exposición. 
 
-de 
+c.  Matriz de Riesgo (Impacto × Probabilidad): 
 
-Media 
+IMPACTO 
+
+Bajo 
+
+Medio 
+
+Alto 
 
 Alta 
 
-Tecnología seleccionada 
-Arquitectura SPA con React 18.3 + Express.js/Node.js por su escalabilidad, 
-comunidad activa y alineación con requerimientos funcionales. 
+Medio 
 
-1.2. 
+Alto 
 
-Plataformas y Herramientas  
+Crítico 
 
-Durante  el  desarrollo  del  sistema  se  emplearon  diversas  plataformas  y 
-herramientas para cubrir todas las fases del ciclo de vida del software. 
+Media 
 
-Categoría 
-Lenguaje Backend 
-Framework Backend 
-Lenguaje Frontend 
-Base de Datos 
-Diseño UI/UX 
-Control de Versiones 
-Pagos 
-Entorno de Desarrollo 
-Navegadores de Prueba  Google Chrome, Mozilla Firefox 
+Baja 
 
-Herramienta 
-Node.js 
-Express.js 
-React  
-MySQL 8 + Sequelize ORM 
-Figma 
-Git / GitHub 
-Mercado Pago 
-Visual Studio Code 
+Bajo 
 
-Estas  herramientas  garantizan  un  desarrollo  organizado,  colaborativo  y 
-mantenible. 
+Bajo 
 
-1.3. 
+Medio 
 
-Implementación del Sistema de Información  
+Alto 
 
-La implementación del sistema se realizó de manera modular e incremental, 
-siguiendo el enfoque FDD, donde cada funcionalidad se desarrolla, prueba 
-e integra progresivamente. 
-Características de la implementación 
-•  Arquitectura SPA con comunicación vía API REST 
-•  Separación de capas: 
+Bajo 
 
-o  Presentación (Frontend) 
-o  Lógica de negocio (Backend) 
-o  Persistencia de datos (Base de datos) 
+Medio 
 
-•  Control de acceso mediante roles (Administrador y Cliente) 
-•  Validaciones de datos en frontend y backend 
-•  Gestión segura de sesiones y transacciones 
+I
 
- 
- 
- 
-implementación  permite  registrar,  exhibir  y  comercializar  productos, 
-La 
-gestionar usuarios, procesar pagos, administrar pedidos, cursos y entradas del 
-micro museo. 
+I
 
-1.4. 
+D
+A
+D
+L
+B
+A
+B
+O
+R
+P
 
-Diagrama de Flujo de Datos  
+5.  Valoración de Riesgos  
 
- 
-1.5. 
+ACTIVO 
 
-Plataformas a Emplear  
+DESCRIPCIÓN DEL 
+RIESGO 
 
-1.6. 
+VULNERABILIDAD 
 
-Diagrama de Despliegue  
+PROBABILIDAD 
 
-VIII.  Evaluación de la Calidad del Sistema  
+IMPACTO 
 
-1.28.  Pruebas de Funcionalidad 
+NIVEL 
+DE 
+RIESGO 
 
-Las  pruebas  de  funcionalidad  verifican  que  cada  módulo  del  sistema  opere 
-conforme  a  los  requerimientos  funcionales  definidos,  asegurando  que  los 
-procesos  principales  del  sistema  se  ejecuten  correctamente  y  generen  los 
-resultados esperados. 
+Base de Datos de 
+Usuarios, Ventas y 
+Operaciones (MySQL) 
 
-Cuadro 1: Pruebas de Funcionalidad – Autenticación de Usuarios 
+Riesgo de 
+extracción, 
+alteración o 
+eliminación de datos 
 
-Funcionalid
-ad 
-
-ID 
-Prueb
-a 
-PF-01  Registro  de 
-
-usuario 
-
-Descripción  de  la 
-prueba 
-
-Datos  de 
-entrada 
-
-Resultado 
-esperado 
-
-Estado 
-
-Verificar  el  registro 
-correcto  de  nuevos 
-usuarios 
-el 
-sistema 
-
-en 
-
-Nombre, 
-correo, 
-contraseñ
-a válida 
-
-Confor
-me 
-
-Usuario 
-registrado  y 
-almacenad
-o en la base 
-de datos 
-
- 
- 
-PF-02 
-
-Inicio 
-sesión 
-
-de 
-
-PF-03  Control  de 
-roles 
-
-PF-04  Cierre 
-sesión 
-
-de 
-
-Validar el acceso al 
-sistema 
-con 
+Controles de 
+acceso 
+insuficientes, 
 credenciales 
-válidas 
-Verificar  el  acceso 
-según  rol  asignado 
-(Administrador/Clie
-nte) 
-Validar  el  cierre 
-seguro de sesión 
 
-Usuario  y 
-contraseñ
-a 
+Media 
 
-Acceso 
-correcto  al 
-sistema 
+Alto 
 
-Confor
-me 
-
-Credencial
-es por rol 
-
-Acceso  solo 
-a  módulos 
-permitidos 
-
-Confor
-me 
-
-Acción 
-“Cerrar 
-sesión” 
-
-Confor
-me 
-
-Sesión 
-finalizada 
-correctame
-nte 
-
-Cuadro 2: Pruebas de Funcionalidad – Gestión de Productos y Servicios 
-
-Funcionalida
-d 
-
-ID 
-Prueb
-a 
-PF-05  Registro  de 
-
-producto 
-
-PF-06 
-
-Edición 
-producto 
-
-de 
-
-PF-07 
-
-Eliminación 
-de producto 
-
-PF-08  Visualización 
-
-de catálogo 
-
-Descripción 
-de la prueba 
-
-Datos 
-entrada 
-
-de 
-
-Resultado 
-esperado 
-
-Estado 
-
-Nombre, 
-precio, 
-archivo, 
-descripción 
-Datos 
-modificado
-s 
-
-ID 
-producto 
-
-del 
-
-Consulta 
-de 
-productos 
-
-Producto 
-registrado 
-correctament
-e 
-Producto 
-actualizado 
-en  la  base  de 
-datos 
-Producto 
-eliminado 
-correctament
-e 
-Productos 
-visibles  para 
-el cliente 
-
-Conform
-e 
-
-Conform
-e 
-
-Conform
-e 
-
-Conform
-e 
-
-la 
-
-Verificar  el 
-registro  de 
-nuevos 
-productos 
-Validar 
-actualizació
-n  de  datos 
-del producto 
-Verificar 
-la 
-eliminación 
-lógica/física 
-del producto 
-Comprobar 
-la  correcta 
-visualizació
-n 
-catálogo 
-
-del 
-
-Cuadro 3: Pruebas de Funcionalidad – Proceso de Compra e Inscripción 
-
-Funcionalid
-ad 
-
-ID 
-Prueb
-a 
-PF-09  Agregar 
-carrito 
-
-Descripción de la 
-prueba 
-
-Datos 
-entrada 
-
-de 
-
-Resultado 
-esperado 
-
-Estado 
-
-al 
-
-Validar  que 
-productos 
-agreguen 
-carrito 
-
-los 
-se 
-al 
-
-Producto 
-selecciona
-do 
-
-Producto 
-agregado  al 
-carrito 
-
-Confor
-me 
-
- 
- 
-PF-10  Modificar 
-
-carrito 
-
-PF-11  Confirmar 
-
-compra 
-
-Verificar  cambio 
-de cantidades 
-Validar 
-la 
-generación  de  la 
-compra 
-
-Cantidad 
-actualizada 
-Datos 
-de 
-pago 
-
-PF-12 
-
-Inscripción 
-a cursos 
-
-Verificar 
-inscripción 
-cursos/micromu
-seo 
-
-a 
-
-Curso 
-selecciona
-do 
-
-Carrito 
-actualizado 
-Compra 
-registrada 
-correctamen
-te 
-Inscripción 
-confirmada 
-
-Confor
-me 
-Confor
-me 
-
-Confor
-me 
-
-Cuadro 4: Pruebas de Funcionalidad – Gestión Administrativa 
-
-ID 
-Prueba 
-PF-13  Gestión 
-pedidos 
-
-de 
-
-Funcionalidad  Descripción 
-de la prueba 
-Verificar 
-visualización 
-y  control  de 
-pedidos 
-Verificar 
-total 
-ventas 
-
-Visualización 
-de ventas 
-
-el 
-de 
-
-PF-14 
-
-Datos  de 
-entrada 
-Consulta 
-de 
-pedidos 
-
-Resultado 
-esperado 
-Pedidos 
-visibles 
-correctamente 
-
-Estado 
-
-Conforme 
-
-Rango de 
-fechas 
-
-Datos 
-generados 
-correctamente 
-
-Conforme 
-
-Cuadro 5: Pruebas de Funcionalidad – Validaciones del Sistema 
-
-Funcionalida
-d 
-
-ID 
-Prueb
-a 
-PF-16  Validación 
-de campos 
-
-PF-17  Manejo 
-errores 
-
-de 
-
-PF-18  Persistencia 
-
-de datos 
-
-Descripción  de 
-la prueba 
-
-Condición 
-evaluada 
-
-Resultado 
-esperado 
-
-Estado 
-
-Verificar 
-campos 
-obligatorios 
-Validar 
-mensajes  ante 
-fallas 
-
-Campos 
-vacíos 
-
-Datos 
-inválidos 
-
-Verificar 
-almacenamien
-to 
-de 
-información 
-
-Operacion
-es 
-realizadas 
-
-Conform
-e 
-
-Conform
-e 
-
-Conform
-e 
-
-y 
-
-Mensaje  de 
-error 
-mostrado 
-Mensaje 
-claro 
-comprensibl
-e 
-Datos 
-guardados 
-correctamen
-te 
-
-Las pruebas de funcionalidad realizadas demuestran que el sistema cumple 
-con los requerimientos establecidos, permitiendo una correcta ejecución de 
+Alto 
 
  
  
  
- 
-los  procesos  principales,  asegurando  confiabilidad  operativa  y  correcta 
-interacción entre los módulos del sistema. 
-
-1.29.  Pruebas de Usabilidad  
-
-Se  evaluó  la  facilidad  de  uso  del  sistema,  la  claridad  de  la  interfaz  y  la 
-experiencia general del usuario final. 
-Criterios evaluados 
-
-•  Navegación intuitiva entre seciones 
-•  Claridad de textos, botones y mensajes 
-•  Organización visual del contenido 
-•  Facilidad para encontrar productos y cursos 
-•  Comprensión del proceso de compra e inscripción 
-
-Resultados esperados 
-
-•  Los  usuarios  pueden  completar  tareas  sin  necesidad  de  asistencia 
-
-técnica. 
-
-•  La 
-
-interfaz  es  clara,  coherente  y  accesible  desde  diferentes 
-
-dispositivos. 
-
-•  Se reduce la curva de aprendizaje para usuarios nuevos. 
-
-1.30.  Pruebas de Rendimiento  
-
-Se  evaluó  el  comportamiento  del  sistema  bajo  diferentes  condiciones  de 
-carga, garantizando tiempos de respuesta adecuados. 
-Aspectos evaluados 
-
-•  Tiempo de carga del sistema 
-•  Respuesta a consultas de productos y reportes 
-•  Manejo de múltiples usuarios concurrentes 
-•  Estabilidad del sistema en operaciones simultáneas 
-
-Resultados esperados 
-
-•  Respuesta rápida a las solicitudes del usuario. 
-•  El sistema mantiene su estabilidad ante múltiples accesos. 
-•  No se presentan caídas ni bloqueos durante operaciones críticas. 
-
-1.31.  Pruebas de Seguridad  
-
-Las  pruebas  de  seguridad  tienen  como  objetivo  proteger  la  información  y 
-garantizar el acceso controlado al sistema. 
-Aspectos evaluados 
-
-•  Autenticación y autorización de usuarios 
-•  Protección de datos personales 
-•  Control de acceso por roles 
-
- 
- 
-•  Prevención de accesos no autorizados 
-•  Validación de entradas para evitar inyecciones de código 
-
-Resultados esperados 
-
-•  Acceso restringido según el rol del usuario. 
-•  Protección de información sensible. 
-•  Reducción de vulnerabilidades de seguridad. 
-
-IX.  Mantenimiento y Evolución de la ASI  
-
-Una vez que la plataforma web de comercialización integral de productos 
-desarrollados por “Invéntalo” se encuentra implementada y operativa, se 
-han definido procedimientos concretos de mantenimiento y evolución que 
-permiten  asegurar  su  continuidad,  estabilidad  y  mejora  constante, 
-respondiendo a las necesidades reales de los usuarios y de la organización. 
-
-1.32.  Estrategias de Actualización y Mejora Continua  
-
-Desde la puesta en producción del sistema, se viene aplicando una 
-estrategia de mejora continua basada en la experiencia de uso, incidencias 
-detectadas y nuevas necesidades funcionales. 
-Actualizaciones funcionales aplicadas 
-
-•  Se han realizado ajustes en el módulo de gestión de productos, 
-
-mejorando la carga de imágenes y la edición de información desde el 
-panel administrativo. 
-
-•  Se optimizó el proceso de compra, reduciendo pasos innecesarios y 
-
-mejorando la confirmación de pedidos. 
-
-•  Se incorporaron mejoras en el módulo de cursos y entradas del micro 
-museo, permitiendo una visualización más clara para el cliente. 
-•  Se ajustaron validaciones de formularios en frontend y backend para 
-
-reducir errores de ingreso de datos. 
-
-Actualizaciones técnicas realizadas 
-
-•  Se actualizaron dependencias del framework backend para mantener 
-
-la seguridad y compatibilidad. 
-
-•  Se optimizaron consultas a la base de datos para mejorar los tiempos 
-
-de respuesta. 
-
-•  Se realizaron mejoras en el diseño responsive para asegurar el 
-
-correcto funcionamiento en dispositivos móviles. 
-Estas actualizaciones se aplican de forma periódica, previa validación 
-en un entorno de pruebas, garantizando que el sistema continúe 
-evolucionando sin afectar su operación diaria. 
-
- 
- 
-1.33.  Procedimiento de Gestión del Cambio 
-
-El  sistema  cuenta  con  un  procedimiento  de  gestión  del  cambio  que  se 
-aplica  cada  vez  que  se  identifica  la  necesidad  de  modificar  o  agregar 
-funcionalidades. 
-
-Procedimiento aplicado 
-
-1.  Identificación 
-
-cambio 
-El cambio es identificado a partir de reportes de usuarios, sugerencias 
-del administrador o necesidades operativas detectadas durante el uso 
-del sistema. 
-
-del 
-
-2.  Análisis 
-
-impacto 
-del 
-Se evalúa el impacto del cambio en los módulos existentes, base de 
-datos, seguridad y experiencia del usuario. 
-
-3.  Aprobación 
-
-cambio 
-El  cambio  es  revisado  y  aprobado  por  el  equipo  responsable, 
-considerando tiempo, recursos y beneficios. 
-
-del 
-
-4.  Implementación 
-
-pruebas 
-El cambio se desarrolla y prueba en un entorno controlado, verificando 
-su correcto funcionamiento. 
-
-entorno 
-
-de 
-
-en 
-
-5.  Validación 
-
-cambio 
-Se realizan pruebas funcionales para asegurar que el cambio cumple 
-su objetivo y no afecta otras funcionalidades. 
-
-del 
-
-6.  Despliegue 
-
-producción 
-en 
-Una  vez  validado,  el  cambio  se  implementa  en  el  sistema  en 
-producción durante ventanas de mantenimiento programadas. 
-
-Este  procedimiento  ha  permitido 
-realizar  cambios  controlados, 
-manteniendo  la  estabilidad  del  sistema  y  evitando  interrupciones  en  el 
-servicio. 
-
-1.34.  Plan de Monitoreo y Soporte Técnico 
-
-El sistema cuenta con un plan de monitoreo y soporte técnico activo que 
-asegura su disponibilidad y correcto funcionamiento. 
-
-Monitoreo del sistema 
-
-•  Se supervisa de manera continua el estado del servidor web y la base 
-
-de datos. 
-
   
-•  Se  revisan  registros  de  errores  (logs)  para  detectar  fallas  o 
+ 
+ 
+ 
+sensibles de 
+clientes, pedidos y 
+pagos por acceso 
+no autorizado. 
 
-comportamientos anómalos. 
+expuestas o falta 
+de cifrado. 
 
-•  Se controla el rendimiento del sistema, especialmente en módulos 
+Riesgo de 
+indisponibilidad total 
+del e-commerce por 
+fallos o saturación 
+de recursos. 
 
-críticos como consultas de productos y procesos de compra. 
+Falta de 
+monitoreo y 
+escalamiento 
+automático. 
 
-•  Se verifica periódicamente el uso del almacenamiento y recursos del 
+Riesgo de 
+exposición pública 
+de imágenes y 
+archivos del e-
+commerce. 
 
-servidor. 
+Políticas de 
+acceso mal 
+configuradas o 
+URLs sin 
+expiración. 
 
-Soporte técnico aplicado 
+Servidor de 
+Aplicaciones 
+(Infraestructura Cloud) 
 
-•  Se  brinda  soporte  técnico  a  usuarios  administrativos  ante 
+Repositorio de Objetos 
+(MinIO) 
 
-problemas operativos. 
+Media 
 
-•  Se  atienden  incidencias  reportadas  por  las  clientes  relacionadas 
+Alto 
 
-con acceso, compras o inscripciones. 
+Alto 
 
-•  Se  realizan  correcciones  inmediatas  ante  errores  funcionales 
+Media 
 
-detectados. 
+Medio 
 
-•  Se ejecuta mantenimiento preventivo para evitar fallas futuras. 
+Medio 
 
-Gracias  a  este  plan  de  monitoreo  y  soporte  técnico,  el  sistema  se 
-mantiene operativo, confiable y preparado para responder a un aumento 
-de usuarios y nuevas funcionalidades. 
+Interfaz de Usuario: 
+Panel de Administración 
 
-  
+Interfaz de Usuario: 
+Catálogo y Compra 
+
+Riesgo de secuestro 
+de sesión o 
+manipulación de 
+acciones 
+administrativas 
+(XSS). 
+
+Riesgo de 
+manipulación de 
+precios, descuentos 
+o stock durante el 
+proceso de compra. 
+
+Falta de 
+sanitización de 
+entradas y 
+salidas. 
+
+Media 
+
+Medio 
+
+Medio 
+
+Validaciones solo 
+en frontend. 
+
+Media 
+
+Alto 
+
+Alto 
+
+Interfaz de Usuario: 
+Cursos e Inscripción 
+
+Riesgo de acceso a 
+cursos sin pago o 
+inscripción válida. 
+
+Falta de 
+validación por 
+estado de pago. 
+
+Baja 
+
+Medio 
+
+Bajo 
+
+Interfaz de Usuario: 
+Ticketing del Micro 
+Museo 
+
+Riesgo de 
+reutilización o 
+falsificación de 
+tickets. 
+
+Tokens 
+predecibles o sin 
+control de estado. 
+
+Credenciales de Acceso 
+y Tokens (OAuth/JWT) 
+
+Riesgo de toma de 
+cuentas por fuerza 
+bruta o robo de 
+tokens. 
+
+Ausencia de rate 
+limiting y 
+expiración larga 
+de tokens. 
+
+Media 
+
+Alto 
+
+Alto 
+
+Alta 
+
+Alto 
+
+Crítico 
+
+Infraestructura de 
+Servidores en la Nube 
+
+Riesgo de 
+interrupción 
+prolongada del 
+servicio por fallas 
+del proveedor. 
+
+Dependencia de 
+una sola región. 
+
+Baja 
+
+Alto 
+
+Medio 
+
+Estaciones de Trabajo 
+de Desarrollo 
+(Laptops/PC) 
+
+Riesgo de fuga de 
+código fuente y 
+credenciales por 
+robo o pérdida. 
+
+Falta de cifrado 
+de disco y 
+controles de 
+seguridad. 
+
+Media 
+
+Alto 
+
+Alto 
+
+Equipos de Operación 
+Administrativa 
+
+Riesgo de acceso 
+indebido por pérdida 
+o robo del 
+dispositivo. 
+
+Sesiones 
+persistentes y 
+falta de bloqueo. 
+
+Media 
+
+Medio 
+
+Medio 
+
+Equipos de Red Local 
+(Routers/Switches) 
+
+Riesgo de 
+imposibilidad de 
+administración del 
+e-commerce por 
+fallas de red. 
+
+Infraestructura sin 
+redundancia. 
+
+Media 
+
+Bajo 
+
+Bajo 
+
+Aplicación Web “e-
+commerce 
+INVÉNTALO” 
+
+Riesgo de inyección 
+SQL o acceso 
+indebido a datos. 
+
+Validación 
+insuficiente y 
+errores en 
+autorización. 
+
+Baja 
+
+Alto 
+
+Medio 
+
+Código Fuente del 
+Proyecto 
+
+Riesgo de 
+exposición pública 
+del código y 
+secretos. 
+
+Repositorio mal 
+configurado. 
+
+Baja 
+
+Alto 
+
+Medio 
+
+Frameworks/Librerías 
+Frontend 
+
+Riesgo por 
+dependencias 
+vulnerables (supply 
+chain). 
+
+Falta de 
+actualización y 
+escaneo de 
+dependencias. 
+
+Runtime y Framework 
+Backend 
+(Node.js/Express) 
+
+Riesgo de 
+explotación de 
+endpoints críticos. 
+
+CORS y 
+middleware de 
+seguridad mal 
+configurados. 
+
+ORM Sequelize 
+
+SGBD MySQL 
+
+Riesgo de 
+corrupción o 
+inconsistencia de 
+datos. 
+
+Uso inseguro de 
+consultas raw y 
+falta de 
+transacciones. 
+
+Riesgo de 
+degradación del 
+rendimiento. 
+
+Consultas no 
+optimizadas e 
+índices 
+inexistentes. 
+
+Media 
+
+Medio 
+
+Medio 
+
+Media 
+
+Alto 
+
+Alto 
+
+Media 
+
+Medio 
+
+Medio 
+
+Alta 
+
+Medio 
+
+Alto 
+
+Pasarela de Pagos 
+(MercadoPago) 
+
+Riesgo de 
+confirmación falsa 
+de pagos o fraude. 
+
+No validación de 
+pagos vía 
+webhooks. 
+
+Media 
+
+Alto 
+
+Alto 
+
+Líder de Proyecto / 
+Desarrollador Principal 
+
+Riesgo de 
+dependencia 
+excesiva del 
+conocimiento 
+técnico. 
+
+Ausencia de 
+documentación 
+formal. 
+
+Media 
+
+Alto 
+
+Alto 
+
+Equipo de Desarrollo y 
+Soporte 
+
+Riesgo de errores 
+en producción por 
+mala coordinación. 
+
+Falta de procesos 
+formales y 
+revisiones. 
+
+Media 
+
+Medio 
+
+Medio 
+
+Rol 
+“Administrador/Gestor” 
+
+Riesgo de abuso de 
+privilegios o errores 
+críticos. 
+
+Permisos 
+excesivos y falta 
+de auditoría. 
+
+Media 
+
+Alto 
+
+Alto 
+
+Usuarios Finales 
+(Clientes) 
+
+Riesgo de phishing 
+y robo de cuentas. 
+
+Contraseñas 
+débiles y 
+ausencia de 
+alertas. 
+
+Alta 
+
+Medio 
+
+Alto 
+
+6.  Plan de Tratamiento de Riesgos  
+
+Para  cada  riesgo  identificado,  se  proponen  las  siguientes  estrategias  de 
+mitigación, con un enfoque en la implementación técnica: 
+
+ACTIVO 
+
+DESCRIPCIÓN DE 
+CONTROL 
+
+EVIDENCIA 
+
+PROB. 
+RESIDUAL 
+
+IMPACTO 
+RESIDUAL 
+
+NIVEL 
+RESIDUAL 
+
+Base de 
+Datos MySQL 
+
+Servidor de 
+Aplicaciones 
+
+MinIO 
+
+Implementar 
+cifrado, roles 
+con mínimo 
+privilegio y 
+auditoría de 
+accesos. 
+
+Configurar 
+monitoreo, 
+alertas y 
+escalamiento 
+automático. 
+
+Restringir 
+acceso por 
+políticas y usar 
+URLs 
+temporales. 
+
+Configuración 
+de BD y logs. 
+
+Baja 
+
+Alto 
+
+Medio 
+
+Baja 
+
+Medio 
+
+Bajo 
+
+Panel de 
+monitoreo 
+cloud. 
+
+Configuración 
+de buckets. 
+
+Baja 
+
+Medio 
+
+Bajo 
+
+Credenciales 
+y Tokens 
+
+Aplicar rate 
+limiting, 
+expiración corta 
+
+Código de 
+autenticación. 
+
+Baja 
+
+Alto 
+
+Medio 
+
+MercadoPago 
+
+Código 
+Fuente 
+
+y rotación de 
+JWT. 
+
+Validar pagos 
+solo vía 
+webhooks 
+firmados. 
+
+Repositorio 
+privado con 
+ramas 
+protegidas y 
+MFA. 
+
+Logs de 
+webhooks. 
+
+Baja 
+
+Alto 
+
+Medio 
+
+Configuración 
+Git. 
+
+Baja 
+
+Alto 
+
+Medio 
+
+Líder de 
+Proyecto 
+
+Documentación 
+técnica y 
+transferencia de 
+conocimiento. 
+
+Manual 
+técnico y 
+actas. 
+
+Baja 
+
+Medio 
+
+Bajo 
+
+7.  Monitoreo y Revisión 
+
+El monitoreo continuo es esencial para detectar desviaciones, evaluar la 
+efectividad de los controles de seguridad implementados y asegurar la 
+disponibilidad, rendimiento e integridad del e-commerce “INVÉNTALO”. 
+
+•  Disponibilidad del Servicio (RNF-Disponibilidad): 
+
+o  Métrica: Tiempo de actividad (uptime) del e-commerce y de la API 
+
+REST. 
+
+o  Objetivo: > 99.9% de uptime mensual. 
+o  Herramienta: UptimeRobot y monitoreo nativo del proveedor cloud. 
+
+•  Rendimiento de la Plataforma (RNF-Rendimiento): 
+
+o  Métrica: Tiempo promedio de carga de las vistas más utilizadas 
+(Login, Catálogo, Carrito, Checkout, Panel de Administración). 
+
+o  Objetivo: < 2 segundos por vista en condiciones normales. 
+o  Herramienta: Google Lighthouse (auditorías periódicas), 
+
+herramientas de monitoreo de frontend (ej. Sentry) y métricas del 
+servidor Node.js. 
+
+• 
+
+Integridad de Datos y Operaciones (RNF-Integridad): 
+
+ 
+o  Métrica: Porcentaje de pedidos, pagos e inscripciones procesados 
+
+correctamente sin reprocesos. 
+
+o  Objetivo: > 98% de operaciones exitosas. 
+o  Herramienta: Logs del backend (Node.js/Express), registros de 
+
+transacciones y validaciones en base de datos MySQL. 
+
+•  Seguridad de Autenticación y Acceso (RNF-Seguridad): 
+
+o  Métrica: Número de intentos fallidos de inicio de sesión por usuario 
+
+en un período de 24 horas. 
+
+o  Objetivo: < 5 intentos fallidos por usuario. 
+o  Métrica adicional: Detección de accesos inusuales (múltiples IPs, 
+
+ubicaciones o dispositivos en corto tiempo). 
+
+o  Herramienta: Logs de autenticación (JWT/OAuth), análisis de logs 
+
+del backend y alertas de seguridad. 
+•  Uso de Recursos del Sistema (RNF-Capacidad): 
+
+o  Métrica: Uso de CPU y RAM del servidor de aplicaciones. 
+o  Objetivo: Mantener el uso promedio por debajo del 70%. 
+o  Herramienta: Dashboards del proveedor cloud y monitoreo del 
+
+runtime Node.js. 
+
+o  Métrica adicional: Crecimiento del almacenamiento de base de 
+
+datos MySQL y del repositorio de objetos MinIO. 
+
+o  Objetivo: Monitorear crecimiento y proyectar capacidad para evitar 
+
+saturación. 
+
+o  Herramienta: Paneles de administración de MySQL y MinIO. 
+
+•  Procesamiento de Pagos (RNF-Confiabilidad): 
+
+o  Métrica: Porcentaje de pagos confirmados correctamente mediante 
+
+MercadoPago (webhooks válidos). 
+
+o  Objetivo: > 99% de pagos conciliados correctamente. 
+o  Herramienta: Logs de webhooks de MercadoPago y registros del 
+
+backend. 
+
+•  Cumplimiento de Backups y Recuperación: 
+
+o  Métrica: Porcentaje de respaldos exitosos de la base de datos y 
+
+archivos críticos. 
+
+o  Objetivo: 100% de éxito en backups programados. 
+o  Herramienta: Registros del sistema de backups del proveedor 
+
+cloud y pruebas periódicas de restauración. 
+
  
  
 

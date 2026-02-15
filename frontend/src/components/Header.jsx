@@ -138,7 +138,7 @@ export default function Header() {
         <div className="flex items-center gap-3">
           <Link to="/" className="flex items-center gap-2">
             <div className="h-9 w-9 rounded-xl bg-emerald-500 grid place-items-center text-zinc-900 font-black">T</div>
-            <span className={`hidden sm:block text-base font-semibold transition-colors ${isHome ? 'text-emerald-400' : 'text-white'}`}>Yalotengo</span>
+            <span className="hidden sm:block text-base font-semibold transition-colors text-white">Yalotengo</span>
           </Link>
         </div>
 
@@ -196,10 +196,7 @@ export default function Header() {
               {/* Cart Button: Always goes to /cart (public now) */}
               <Link
                 to="/cart"
-                className={`relative inline-flex items-center gap-2 rounded-xl border px-3 h-10 transition-all ${isCart
-                    ? 'border-emerald-500/50 bg-zinc-900 text-emerald-400'
-                    : 'border-white-800 bg-zinc-900/60 text-zinc-100 hover:bg-zinc-900'
-                  }`}
+                className="relative inline-flex items-center gap-2 rounded-xl border px-3 h-10 transition-all border-white-800 bg-zinc-900/60 text-zinc-100 hover:bg-zinc-900"
                 aria-label="Carrito"
               >
                 <ShoppingCartIcon className="h-5 w-5" />

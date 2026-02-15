@@ -261,7 +261,7 @@ r.put('/change-password', async (req, res) => {
 
     res.json({ ok: true, message: 'Password updated' })
   } catch (e) {
-    console.error(e)
+    console.error('[Auth] Error changing password.')
     res.status(500).json({ error: 'Server error' })
   }
 })
