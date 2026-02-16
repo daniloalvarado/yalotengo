@@ -56,19 +56,39 @@ const authLimiter = rateLimit({
 app.use('/auth/login', authLimiter)
 app.use('/auth/register', authLimiter)
 
-import { getFileStream } from './services/storage.js'
+import { getFileStream, getFileStats } from './services/storage.js'
 
 // Proxy para servir archivos desde MinIO
 app.get('/uploads/*', async (req, res) => {
+  const key = req.params[0]
   try {
-    const key = req.params[0]
+    // 1. Obtener metadata para saber el Content-Type
+    const stats = await getFileStats(key)
+
+    if (stats.metaData && stats.metaData['content-type']) {
+      res.setHeader('Content-Type', stats.metaData['content-type'])
+    } else {
+      // Fallback simple
+      if (key.endsWith('.glb')) res.setHeader('Content-Type', 'model/gltf-binary')
+      if (key.endsWith('.jpg') || key.endsWith('.jpeg')) res.setHeader('Content-Type', 'image/jpeg')
+      if (key.endsWith('.png')) res.setHeader('Content-Type', 'image/png')
+      if (key.endsWith('.pdf')) res.setHeader('Content-Type', 'application/pdf')
+    }
+
+    if (stats.size) {
+      res.setHeader('Content-Length', stats.size)
+    }
+
+    // 2. Obtener y pipear el stream
     const stream = await getFileStream(key)
     stream.pipe(res)
+
   } catch (err) {
     if (err.code === 'NoSuchKey') {
+      console.warn(`[Proxy 404] File not found: ${key}`)
       return res.status(404).json({ error: 'File not found' })
     }
-    console.error('[Proxy] Error serving file:', err.message)
+    console.error(`[Proxy Error] Serving ${key}:`, err.message)
     res.status(500).json({ error: 'Error serving file' })
   }
 })

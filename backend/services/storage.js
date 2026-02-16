@@ -80,6 +80,20 @@ export async function getSignedUrl(folder, filename) {
 }
 
 /**
+ * Obtener metadata de un archivo (para Content-Type y Length)
+ */
+export async function getFileStats(key) {
+    const parts = key.split('/')
+    if (parts.length < 2) return await s3.statObject(BUCKET, key)
+
+    const folder = parts[0]
+    const filename = parts.slice(1).join('/')
+    const mappedKey = getMappedKey(folder, filename)
+
+    return await s3.statObject(BUCKET, mappedKey)
+}
+
+/**
  * Obtener stream de un archivo para servirlo
  * @param {string} key - Clave del archivo como viene del request (ej: 'books/cover.jpg')
  */
