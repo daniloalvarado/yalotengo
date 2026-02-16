@@ -2,12 +2,7 @@ import { Router } from 'express'
 import { adminAuth } from '../../utils/adminAuth.js'
 import { Course, CoursePurchase } from '../courses/model.course.js'
 import { uploadCourseImage } from '../../utils/upload.js'
-import path from 'path'
-import fs from 'fs'
-import { fileURLToPath } from 'url'
-
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
+import { uploadFile, deleteFile } from '../../services/storage.js'
 
 const r = Router()
 
@@ -26,7 +21,7 @@ r.get('/', adminAuth, async (req, res) => {
 
 // POST /admin/courses/upload - Subir imagen del curso
 r.post('/upload', adminAuth, (req, res) => {
-    uploadCourseImage(req, res, (err) => {
+    uploadCourseImage(req, res, async (err) => {
         if (err) {
             console.error('[Admin Courses] upload error:', err)
             return res.status(400).json({ error: err.message || 'Error al subir imagen' })
@@ -34,11 +29,18 @@ r.post('/upload', adminAuth, (req, res) => {
         if (!req.file) {
             return res.status(400).json({ error: 'No se recibió imagen' })
         }
-        res.json({
-            ok: true,
-            filename: req.file.filename,
-            originalName: req.file.originalname
-        })
+
+        try {
+            const filename = await uploadFile(req.file.buffer, 'courses', req.file.originalname, req.file.mimetype)
+            res.json({
+                ok: true,
+                filename: filename,
+                originalName: req.file.originalname
+            })
+        } catch (uploadErr) {
+            console.error('[Admin Courses] MinIO upload error:', uploadErr)
+            res.status(500).json({ error: 'Error al subir imagen a MinIO' })
+        }
     })
 })
 
@@ -78,6 +80,11 @@ r.put('/:id', adminAuth, async (req, res) => {
         const course = await Course.findByPk(id)
         if (!course) {
             return res.status(404).json({ error: 'Curso no encontrado' })
+        }
+
+        // Si cambia la imagen, borrar la anterior
+        if (image && course.cou_txt_image && image !== course.cou_txt_image) {
+            await deleteFile('courses', course.cou_txt_image)
         }
 
         if (title) course.cou_txt_title = title
@@ -146,17 +153,9 @@ r.delete('/:id', adminAuth, async (req, res) => {
             }
         })
 
-        // Eliminar imagen física (backend/uploads/courses)
+        // Eliminar imagen de MinIO
         if (course.cou_txt_image) {
-            const imagePath = path.join(__dirname, '../../uploads/courses', course.cou_txt_image)
-            if (fs.existsSync(imagePath)) {
-                try {
-                    fs.unlinkSync(imagePath)
-                    console.log(`[Admin Courses] Deleted Image: ${imagePath}`)
-                } catch (e) {
-                    console.error(`[Admin Courses] Error deleting Image: ${e}`)
-                }
-            }
+            await deleteFile('courses', course.cou_txt_image)
         }
 
         await course.destroy()

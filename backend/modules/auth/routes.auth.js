@@ -6,6 +6,7 @@ import { Strategy as GoogleStrategy } from 'passport-google-oauth20'
 import { User } from './model.user.js'
 import { sign, verify } from '../../utils/jwt.js'
 import { uploadAvatar } from '../../utils/upload.js'
+import { uploadFile, deleteFile } from '../../services/storage.js'
 import fs from 'fs'
 import path from 'path'
 
@@ -209,19 +210,11 @@ r.post('/avatar', async (req, res) => {
 
       // OPTIONAL: Delete old avatar if not external (starts with http)
       if (u.use_txt_avatar && !u.use_txt_avatar.startsWith('http')) {
-        // Since we are in backend/modules/auth/routes.auth.js, and process.cwd() is backend root
-        const oldPath = path.join(process.cwd(), 'uploads/avatars', u.use_txt_avatar)
-        try {
-          if (fs.existsSync(oldPath)) {
-            fs.unlinkSync(oldPath)
-            console.log('🗑️ Old avatar deleted:', oldPath)
-          }
-        } catch (err) {
-          console.error('Error deleting old avatar:', err)
-        }
+        await deleteFile('avatars', u.use_txt_avatar)
       }
 
-      u.use_txt_avatar = req.file.filename
+      const filename = await uploadFile(req.file.buffer, 'avatars', req.file.originalname, req.file.mimetype)
+      u.use_txt_avatar = filename
       await u.save()
 
       res.json({ ok: true, avatar: u.use_txt_avatar })

@@ -56,8 +56,22 @@ const authLimiter = rateLimit({
 app.use('/auth/login', authLimiter)
 app.use('/auth/register', authLimiter)
 
-// Servir archivos estáticos (modelos 3D, PDFs, etc.)
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
+import { getFileStream } from './services/storage.js'
+
+// Proxy para servir archivos desde MinIO
+app.get('/uploads/*', async (req, res) => {
+  try {
+    const key = req.params[0]
+    const stream = await getFileStream(key)
+    stream.pipe(res)
+  } catch (err) {
+    if (err.code === 'NoSuchKey') {
+      return res.status(404).json({ error: 'File not found' })
+    }
+    console.error('[Proxy] Error serving file:', err.message)
+    res.status(500).json({ error: 'Error serving file' })
+  }
+})
 
 app.get('/health', (_req, res) => res.json({ ok: true }))
 app.use('/', routes)

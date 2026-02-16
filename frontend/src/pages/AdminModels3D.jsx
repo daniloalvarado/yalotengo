@@ -159,19 +159,23 @@ export default function AdminModels3D() {
 
     const openModal = (item = null) => {
         setEditItem(item)
+        const currentCat = item ? item.mod_txt_category : modelCategory
+
         setFormData(item ? {
             name: item.mod_txt_name,
             desc: item.mod_txt_desc || '',
             glbFilename: item.mod_txt_glb_filename,
             price: item.mod_dec_price,
             category: item.mod_txt_category,
-            currentCategory: item.mod_txt_category
+            currentCategory: item.mod_txt_category,
+            printedImage: item.mod_txt_category === 'IMPRESO' ? item.mod_txt_glb_filename : null
         } : {
             name: '',
             desc: '',
             glbFilename: '',
             price: 19.90,
-            category: modelCategory
+            category: currentCat,
+            printedImage: null
         })
         setAttemptedSubmit(false)
         setShowModal(true)
@@ -220,7 +224,12 @@ export default function AdminModels3D() {
             const { data } = await api.post('/admin/models3d/upload-image', formDataUpload, {
                 headers: { 'Content-Type': 'multipart/form-data' }
             })
-            setFormData(prev => ({ ...prev, printedImage: data.filename, glbFilename: data.filename }))
+            // Here we update printedImage AND glbFilename (reused for image name in DB)
+            setFormData(prev => ({
+                ...prev,
+                printedImage: data.filename,
+                glbFilename: data.filename
+            }))
             toast.success('Imagen subida correctamente')
         } catch (err) {
             toast.error(err.response?.data?.error || 'Error al subir imagen')
@@ -462,10 +471,6 @@ export default function AdminModels3D() {
                 onClose={() => setDetailItem(null)}
                 type="Modelo 3D"
             />
-
-
-
-
 
             <AnimatedModal
                 isOpen={showModal}

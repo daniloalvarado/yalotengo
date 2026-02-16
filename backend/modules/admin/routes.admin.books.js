@@ -2,12 +2,7 @@ import { Router } from 'express'
 import { adminAuth } from '../../utils/adminAuth.js'
 import { Book, BookPurchase } from '../books/model.book.js'
 import { uploadBookFiles } from '../../utils/upload.js'
-import path from 'path'
-import fs from 'fs'
-import { fileURLToPath } from 'url'
-
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
+import { uploadFile, deleteFile } from '../../services/storage.js'
 
 const r = Router()
 
@@ -26,29 +21,38 @@ r.get('/', adminAuth, async (req, res) => {
 
 // POST /admin/books/upload - Subir archivos (PDF y/o imagen)
 r.post('/upload', adminAuth, (req, res) => {
-    uploadBookFiles(req, res, (err) => {
+    uploadBookFiles(req, res, async (err) => {
         if (err) {
             console.error('[Admin Books] upload error:', err)
             return res.status(400).json({ error: err.message || 'Error al subir archivos' })
         }
 
-        const result = { ok: true }
+        try {
+            const result = { ok: true }
 
-        if (req.files?.pdfFile?.[0]) {
-            result.pdfFilename = req.files.pdfFile[0].filename
-            result.pdfOriginalName = req.files.pdfFile[0].originalname
+            if (req.files?.pdfFile?.[0]) {
+                const file = req.files.pdfFile[0]
+                const filename = await uploadFile(file.buffer, 'books/pdf', file.originalname, file.mimetype)
+                result.pdfFilename = filename
+                result.pdfOriginalName = file.originalname
+            }
+
+            if (req.files?.coverImage?.[0]) {
+                const file = req.files.coverImage[0]
+                const filename = await uploadFile(file.buffer, 'books', file.originalname, file.mimetype)
+                result.coverFilename = filename
+                result.coverOriginalName = file.originalname
+            }
+
+            if (!result.pdfFilename && !result.coverFilename) {
+                return res.status(400).json({ error: 'No se recibieron archivos' })
+            }
+
+            res.json(result)
+        } catch (uploadErr) {
+            console.error('[Admin Books] MinIO upload error:', uploadErr)
+            res.status(500).json({ error: 'Error al guardar archivos en MinIO' })
         }
-
-        if (req.files?.coverImage?.[0]) {
-            result.coverFilename = req.files.coverImage[0].filename
-            result.coverOriginalName = req.files.coverImage[0].originalname
-        }
-
-        if (!result.pdfFilename && !result.coverFilename) {
-            return res.status(400).json({ error: 'No se recibieron archivos' })
-        }
-
-        res.json(result)
     })
 })
 
@@ -87,6 +91,16 @@ r.put('/:id', adminAuth, async (req, res) => {
         const book = await Book.findByPk(id)
         if (!book) {
             return res.status(404).json({ error: 'Libro no encontrado' })
+        }
+
+        // Si se sube nuevo PDF, borrar el anterior
+        if (pdfFilename && book.boo_txt_pdf_filename && pdfFilename !== book.boo_txt_pdf_filename) {
+            await deleteFile('books/pdf', book.boo_txt_pdf_filename)
+        }
+
+        // Si se sube nueva portada, borrar la anterior
+        if (coverImage && book.boo_txt_cover_image && coverImage !== book.boo_txt_cover_image) {
+            await deleteFile('books', book.boo_txt_cover_image)
         }
 
         if (title) book.boo_txt_title = title
@@ -154,31 +168,13 @@ r.delete('/:id', adminAuth, async (req, res) => {
             }
         })
 
-        // Eliminar archivos físicos
-        // 1. Eliminar PDF (backend/storage/books)
+        // Eliminar archivos físicos de MinIO
         if (book.boo_txt_pdf_filename) {
-            const pdfPath = path.join(__dirname, '../../storage/books', book.boo_txt_pdf_filename)
-            if (fs.existsSync(pdfPath)) {
-                try {
-                    fs.unlinkSync(pdfPath)
-                    console.log(`[Admin Books] Deleted PDF: ${pdfPath}`)
-                } catch (e) {
-                    console.error(`[Admin Books] Error deleting PDF: ${e}`)
-                }
-            }
+            await deleteFile('books/pdf', book.boo_txt_pdf_filename)
         }
 
-        // 2. Eliminar Portada (backend/uploads/books)
         if (book.boo_txt_cover_image) {
-            const coverPath = path.join(__dirname, '../../uploads/books', book.boo_txt_cover_image)
-            if (fs.existsSync(coverPath)) {
-                try {
-                    fs.unlinkSync(coverPath)
-                    console.log(`[Admin Books] Deleted Cover: ${coverPath}`)
-                } catch (e) {
-                    console.error(`[Admin Books] Error deleting Cover: ${e}`)
-                }
-            }
+            await deleteFile('books', book.boo_txt_cover_image)
         }
 
         await book.destroy()
