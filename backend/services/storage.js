@@ -11,7 +11,7 @@ import { v4 as uuidv4 } from 'uuid'
  * @returns {Promise<string>} - Nombre del archivo guardado (key)
  */
 const FOLDER_MAP = {
-    'books': 'libros',
+    'books': 'libros/portadas',
     'books/pdf': 'libros/pdf',
     'courses': 'cursos',
     'models': 'modelos',
@@ -24,7 +24,7 @@ const FOLDER_MAP = {
  */
 function getMappedKey(folder, filename) {
     const mappedFolder = FOLDER_MAP[folder] || folder
-    return `yalotengo/${mappedFolder}/${filename}`
+    return `${mappedFolder}/${filename}`
 }
 
 /**
