@@ -184,9 +184,9 @@ export default function Books() {
                                     {book.boo_txt_cover_image ? (
                                         <img
                                             src={
-                                                book.boo_txt_cover_image.startsWith('http') ? book.boo_txt_cover_image :
-                                                    book.boo_txt_cover_image.startsWith('uploads') ? `/${book.boo_txt_cover_image}` :
-                                                        `/uploads/books/${book.boo_txt_cover_image}`
+                                                book.boo_txt_cover_image.startsWith('http')
+                                                    ? book.boo_txt_cover_image
+                                                    : `${api.defaults.baseURL?.replace(/\/api\/?$/, '')}/uploads/books/${book.boo_txt_cover_image}`
                                             }
                                             onError={(e) => {
                                                 // Fallback para imágenes antiguas en /libros

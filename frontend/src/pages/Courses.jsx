@@ -125,8 +125,9 @@ export default function Courses() {
                                 {course.cou_txt_image ? (
                                     <img
                                         src={
-                                            course.cou_txt_image.startsWith('http') ? course.cou_txt_image :
-                                                `/uploads/courses/${course.cou_txt_image}`
+                                            course.cou_txt_image.startsWith('http')
+                                                ? course.cou_txt_image
+                                                : `${api.defaults.baseURL?.replace(/\/api\/?$/, '')}/uploads/courses/${course.cou_txt_image}`
                                         }
                                         onError={(e) => {
                                             // Fallback para imágenes antiguas en /cursos
