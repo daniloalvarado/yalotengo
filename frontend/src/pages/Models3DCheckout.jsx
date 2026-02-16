@@ -126,7 +126,7 @@ export default function Models3DCheckout() {
     const handleDownload = () => {
         if (purchaseResult?.purchaseId) {
             const token = localStorage.getItem('token')
-            window.open(`${api.defaults.baseURL}/models3d/download/${purchaseResult.purchaseId}?token=${encodeURIComponent(token)}`, '_blank')
+            window.location.href = `${api.defaults.baseURL}/models3d/download/${purchaseResult.purchaseId}?token=${encodeURIComponent(token)}`
         }
     }
 

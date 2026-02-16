@@ -325,9 +325,15 @@ r.get('/download/:purchaseId', auth, async (req, res) => {
         // Use 'models' folder which maps to 'modelos' in storage.js
         const key = `models/${filename}`
 
+        // Construir nombre amigable para la descarga (usando el nombre del modelo)
+        // Ejemplo: "Mosca.glb" en lugar de "177123_mosca.glb"
+        const friendlyName = `${purchase.model.mod_txt_name}.glb`.replace(/[^a-zA-Z0-9áéíóúÁÉÍÓÚñÑ \.\-_]/g, '')
+
         try {
             const stream = await getFileStream(key)
-            res.setHeader('Content-Disposition', `attachment; filename="${filename}"`)
+            // Encode filename for UTF-8 support (modern browsers)
+            const encodedName = encodeURIComponent(friendlyName)
+            res.setHeader('Content-Disposition', `attachment; filename="${friendlyName}"; filename*=UTF-8''${encodedName}`)
             res.setHeader('Content-Type', 'model/gltf-binary')
             stream.pipe(res)
         } catch (streamErr) {

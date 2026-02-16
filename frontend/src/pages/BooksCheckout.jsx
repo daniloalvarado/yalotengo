@@ -124,7 +124,7 @@ export default function BooksCheckout() {
         if (purchaseResult?.purchaseId) {
             const base = (api.defaults.baseURL || '').replace(/\/$/, '')
             const token = localStorage.getItem('token')
-            window.open(`${base}/books/download/${purchaseResult.purchaseId}?token=${encodeURIComponent(token)}`, '_blank')
+            window.location.href = `${base}/books/download/${purchaseResult.purchaseId}?token=${encodeURIComponent(token)}`
         }
     }
 
