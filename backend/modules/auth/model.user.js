@@ -14,7 +14,8 @@ export const User = sequelize.define('core_user', {
 
   // --- AGREGA ESTAS DOS LÍNEAS ---
   use_txt_google_id: DataTypes.STRING(64), // Para guardar el ID de Google
-  use_txt_avatar: DataTypes.TEXT,          // Para guardar la URL de la foto (TEXT por si es muy larga)
+  use_txt_avatar: DataTypes.TEXT,          // Para guardar la URL de la foto atual (MinIO o Provider)
+  use_txt_provider_avatar: DataTypes.TEXT, // Backup: URL original de Google/FB
   use_txt_address: DataTypes.STRING(255),  // Dirección
   use_txt_phone: DataTypes.STRING(20)      // Teléfono
   // -------------------------------

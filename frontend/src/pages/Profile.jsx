@@ -165,7 +165,19 @@ export default function Profile() {
                     <div className="relative group cursor-pointer" onClick={handleAvatarClick}>
                         <div className="w-40 h-40 rounded-full overflow-hidden border-4 border-white shadow-lg bg-zinc-100 flex items-center justify-center">
                             {avatarUrl ? (
-                                <img src={avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
+                                <img
+                                    src={avatarUrl}
+                                    alt="Avatar"
+                                    className="w-full h-full object-cover"
+                                    onError={(e) => {
+                                        if (user?.use_txt_provider_avatar && e.target.src !== user.use_txt_provider_avatar) {
+                                            e.target.src = user.use_txt_provider_avatar;
+                                        } else {
+                                            e.target.onerror = null;
+                                            e.target.style.display = 'none'; // Ocultar si falla todo para mostrar el icono de fondo
+                                        }
+                                    }}
+                                />
                             ) : (
                                 <UserCircleIcon className="w-full h-full text-zinc-300 p-4" />
                             )}

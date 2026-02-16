@@ -53,8 +53,13 @@ export default function UserMenu({ user, onLogout }) {
             className="h-full w-full object-cover"
             referrerPolicy="no-referrer"
             onError={(e) => {
-              e.target.onerror = null;
-              e.target.src = "https://cdn-icons-png.flaticon.com/512/149/149071.png"; // Imagen default bonita
+              // Fallback priority: 1. Provider Avatar (Google/FB) -> 2. Default Placeholder
+              if (user?.use_txt_provider_avatar && e.target.src !== user.use_txt_provider_avatar) {
+                e.target.src = user.use_txt_provider_avatar;
+              } else {
+                e.target.onerror = null;
+                e.target.src = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+              }
             }}
           />
         ) : (

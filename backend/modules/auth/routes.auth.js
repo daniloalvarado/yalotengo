@@ -17,11 +17,11 @@ passport.use(new FacebookStrategy({
   clientID: process.env.FB_APP_ID || 'x',
   clientSecret: process.env.FB_APP_SECRET || 'x',
   callbackURL: process.env.FB_CALLBACK_URL || 'http://localhost:3000/api/auth/facebook/callback',
-  profileFields: ['id', 'emails', 'name', 'photos'] // 👈 CAMBIO 1: Pedimos 'photos'
+  profileFields: ['id', 'emails', 'name', 'photos']
 }, async (_at, _rt, profile, done) => {
   try {
     const email = profile.emails?.[0]?.value?.toLowerCase() || `${profile.id}@facebook.local`
-    const avatar = profile.photos?.[0]?.value || null // 👈 Capturamos foto
+    const avatar = profile.photos?.[0]?.value || null
 
     let u = await User.findOne({ where: { use_txt_email: email } })
     if (!u) {
@@ -31,13 +31,14 @@ passport.use(new FacebookStrategy({
         use_txt_apellidos: profile.name?.familyName || 'User',
         use_txt_role: 'cliente',
         use_txt_fb_id: profile.id,
-        use_txt_avatar: avatar // 👈 Guardamos foto
+        use_txt_avatar: avatar,
+        use_txt_provider_avatar: avatar // Guardamos backup
       })
     } else {
-      // Si ya existe, actualizamos IDs y foto si no tiene
       let changed = false;
       if (!u.use_txt_fb_id) { u.use_txt_fb_id = profile.id; changed = true; }
       if (!u.use_txt_avatar && avatar) { u.use_txt_avatar = avatar; changed = true; }
+      if (avatar && u.use_txt_provider_avatar !== avatar) { u.use_txt_provider_avatar = avatar; changed = true; } // Update backup
       if (changed) await u.save();
     }
     done(null, u)
@@ -57,36 +58,30 @@ passport.use(new GoogleStrategy({
     const email = profile.emails?.[0]?.value?.toLowerCase()
     if (!email) return done(new Error("No email from Google"))
 
-    // Capturamos la foto
     const avatar = profile.photos?.[0]?.value || null
-
-    // CHISMOSO: Mira tu terminal negra cuando te loguees para ver esto
-    console.log('📸 [GOOGLE DEBUG] Foto recibida:', avatar);
 
     let u = await User.findOne({ where: { use_txt_email: email } })
 
-    // CASO 1: USUARIO NUEVO
     if (!u) {
-      console.log('✨ Creando usuario nuevo con foto...');
       u = await User.create({
         use_txt_email: email,
         use_txt_nombres: profile.name?.givenName || 'Google',
         use_txt_apellidos: profile.name?.familyName || 'User',
         use_txt_role: 'cliente',
         use_txt_google_id: profile.id,
-        use_txt_avatar: avatar // <--- Guardamos foto
+        use_txt_avatar: avatar,
+        use_txt_provider_avatar: avatar // Guardamos backup
       })
     }
-    // CASO 2: EL USUARIO YA EXISTÍA (TU CASO)
     else {
-      console.log('🔄 Usuario existe, actualizando foto...');
-
       // FORZAMOS LA ACTUALIZACIÓN:
-      // Si Google nos da foto, la guardamos en la BD sí o sí
       u.use_txt_google_id = profile.id;
       if (avatar && !u.use_txt_avatar) {
         u.use_txt_avatar = avatar;
       }
+      // Siempre actualizamos el provider avatar por si cambió en Google
+      if (avatar) u.use_txt_provider_avatar = avatar;
+
       await u.save();
     }
     done(null, u)

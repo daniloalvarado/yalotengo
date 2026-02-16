@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import { Model3D, Model3DPurchase } from './model.model3d.js'
+import { getFileStream } from '../../services/storage.js'
 import { auth } from '../../utils/jwt.js'
 import { MercadoPagoConfig, Payment } from 'mercadopago'
 import crypto from 'crypto'
@@ -300,6 +301,7 @@ r.post('/purchase', auth, async (req, res) => {
 })
 
 // GET /models3d/download/:purchaseId - Descargar modelo (solo si pagó)
+// GET /models3d/download/:purchaseId - Descargar modelo (solo si pagó)
 r.get('/download/:purchaseId', auth, async (req, res) => {
     try {
         const purchase = await Model3DPurchase.findByPk(req.params.purchaseId, {
@@ -319,21 +321,28 @@ r.get('/download/:purchaseId', auth, async (req, res) => {
         }
 
         const filename = purchase.model.mod_txt_glb_filename
-        const modelsPath = path.resolve(__dirname, '../../uploads/models')
-        const filePath = path.join(modelsPath, filename)
 
-        if (!fs.existsSync(filePath)) {
-            return res.status(404).json({ error: 'Archivo no encontrado' })
+        // Use 'models' folder which maps to 'modelos' in storage.js
+        const key = `models/${filename}`
+
+        try {
+            const stream = await getFileStream(key)
+            res.setHeader('Content-Disposition', `attachment; filename="${filename}"`)
+            res.setHeader('Content-Type', 'model/gltf-binary')
+            stream.pipe(res)
+        } catch (streamErr) {
+            if (streamErr.code === 'NoSuchKey') {
+                return res.status(404).json({ error: 'Archivo no encontrado en el servidor' })
+            }
+            throw streamErr
         }
-
-        res.setHeader('Content-Disposition', `attachment; filename="${filename}"`)
-        res.setHeader('Content-Type', 'model/gltf-binary')
-        fs.createReadStream(filePath).pipe(res)
     } catch (e) {
         console.error('[Models3D] Download error:', e)
         res.status(500).json({ error: 'Error al descargar' })
     }
 })
+
+
 
 // GET /models3d/my-purchases - Mis compras
 r.get('/my/purchases', auth, async (req, res) => {
