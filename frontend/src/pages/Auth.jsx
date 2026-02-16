@@ -117,6 +117,21 @@ export default function Auth() {
     </svg>
   );
 
+  // Check for token immediately to prevent flash
+  const searchParams = new URLSearchParams(window.location.search)
+  const hasToken = searchParams.get('token')
+
+  if (hasToken) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-emerald-50 via-white to-emerald-100">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600 mx-auto mb-4"></div>
+          <h2 className="text-xl font-semibold text-gray-700">Iniciando sesión...</h2>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-emerald-50 via-white to-emerald-100 p-6">
       <div className="w-full max-w-4xl rounded-2xl border border-zinc-200 bg-white shadow-xl p-8">

@@ -89,7 +89,7 @@ export async function getFileStats(key) {
     const folder = parts[0]
     const filename = parts.slice(1).join('/')
     const mappedKey = getMappedKey(folder, filename)
-
+    // console.log(`[Storage] Stat: ${key} -> ${mappedKey}`)
     return await s3.statObject(BUCKET, mappedKey)
 }
 
@@ -107,5 +107,6 @@ export async function getFileStream(key) {
 
     // Map internal folder (books) to storage folder (yalotengo/libros)
     const mappedKey = getMappedKey(folder, filename)
+    console.log(`[Storage] Stream: ${key} -> ${mappedKey}`)
     return await s3.getObject(BUCKET, mappedKey)
 }
