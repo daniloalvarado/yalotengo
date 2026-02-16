@@ -177,7 +177,11 @@ export default function CoursesCheckout() {
                     <div className="aspect-video bg-gradient-to-br from-emerald-100 to-emerald-200 relative overflow-hidden">
                         {course.cou_txt_image ? (
                             <img
-                                src={`/cursos/${course.cou_txt_image}`}
+                                src={
+                                    course.cou_txt_image.startsWith('http')
+                                        ? course.cou_txt_image
+                                        : `${api.defaults.baseURL?.replace(/\/api\/?$/, '')}/uploads/courses/${course.cou_txt_image}`
+                                }
                                 alt={course.cou_txt_title}
                                 className="w-full h-full object-cover"
                             />

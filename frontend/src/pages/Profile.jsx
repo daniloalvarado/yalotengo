@@ -9,7 +9,7 @@ export default function Profile() {
     const location = useLocation()
     const fileInputRef = useRef(null)
 
-    const missingFields = location.state?.missing || []
+    const [missingFields, setMissingFields] = useState(location.state?.missing || [])
     const isMissing = (field) => missingFields.includes(field)
 
     const [user, setUser] = useState(null)
@@ -72,6 +72,9 @@ export default function Profile() {
                 phone
             })
             toast.success('Perfil actualizado')
+            setMissingFields([]) // Clear red borders immediately
+            // Clear location state to remove red borders
+            navigate(location.pathname, { replace: true, state: {} })
             // Forzar actualización en Header
             window.dispatchEvent(new Event('auth:changed'))
         } catch (e) {

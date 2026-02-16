@@ -5,6 +5,7 @@ import { MercadoPagoConfig, Payment } from 'mercadopago'
 import path from 'path'
 import fs from 'fs'
 import { fileURLToPath } from 'url'
+import { getFileStream } from '../../services/storage.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -258,16 +259,28 @@ r.get('/download/:purchaseId', auth, async (req, res) => {
         }
 
         const filename = purchase.book.boo_txt_pdf_filename
-        const booksPath = path.resolve(__dirname, '../../storage/books')
-        const filePath = path.join(booksPath, filename)
+        // Construct the key for MinIO (folder + filename)
+        // FOLDER_MAP['books/pdf'] -> 'libros/pdf'
+        const key = `books/pdf/${filename}`
 
-        if (!fs.existsSync(filePath)) {
-            return res.status(404).json({ error: 'Archivo no encontrado' })
+        // Construir nombre amigable para la descarga (usando el título del libro)
+        // Ejemplo: "Física Cuántica.pdf" en lugar de "177123_fisica.pdf"
+        const friendlyName = `${purchase.book.boo_txt_title}.pdf`.replace(/[^a-zA-Z0-9áéíóúÁÉÍÓÚñÑ \.\-_]/g, '')
+
+        try {
+            const stream = await getFileStream(key)
+            // Encode filename for UTF-8 support (modern browsers)
+            const encodedName = encodeURIComponent(friendlyName)
+            res.setHeader('Content-Disposition', `attachment; filename="${friendlyName}"; filename*=UTF-8''${encodedName}`)
+            res.setHeader('Content-Type', 'application/pdf')
+            stream.pipe(res)
+        } catch (err) {
+            console.error('[Books] S3 Error:', err)
+            if (err.code === 'NoSuchKey') {
+                return res.status(404).json({ error: 'Archivo no encontrado en el servidor' })
+            }
+            throw err
         }
-
-        res.setHeader('Content-Disposition', `attachment; filename="${filename}"`)
-        res.setHeader('Content-Type', 'application/pdf')
-        fs.createReadStream(filePath).pipe(res)
     } catch (e) {
         console.error('[Books] Download error:', e)
         res.status(500).json({ error: 'Error al descargar' })

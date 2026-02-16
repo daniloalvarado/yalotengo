@@ -82,12 +82,25 @@ export async function getSignedUrl(folder, filename) {
 /**
  * Obtener metadata de un archivo (para Content-Type y Length)
  */
+/**
+ * Obtener metadata de un archivo (para Content-Type y Length)
+ */
 export async function getFileStats(key) {
     const parts = key.split('/')
     if (parts.length < 2) return await s3.statObject(BUCKET, key)
 
-    const folder = parts[0]
-    const filename = parts.slice(1).join('/')
+    let folder = parts[0]
+    let filename = parts.slice(1).join('/')
+
+    // Check if 'folder/subfolder' is in FOLDER_MAP (e.g. 'books/pdf')
+    if (parts.length >= 2) {
+        const potentialFolder = `${parts[0]}/${parts[1]}`
+        if (FOLDER_MAP[potentialFolder]) {
+            folder = potentialFolder
+            filename = parts.slice(2).join('/')
+        }
+    }
+
     const mappedKey = getMappedKey(folder, filename)
     // console.log(`[Storage] Stat: ${key} -> ${mappedKey}`)
     return await s3.statObject(BUCKET, mappedKey)
@@ -102,11 +115,19 @@ export async function getFileStream(key) {
     const parts = key.split('/')
     if (parts.length < 2) return await s3.getObject(BUCKET, key) // Fallback
 
-    const folder = parts[0]
-    const filename = parts.slice(1).join('/')
+    let folder = parts[0]
+    let filename = parts.slice(1).join('/')
+
+    // Check if 'folder/subfolder' is in FOLDER_MAP (e.g. 'books/pdf')
+    if (parts.length >= 2) {
+        const potentialFolder = `${parts[0]}/${parts[1]}`
+        if (FOLDER_MAP[potentialFolder]) {
+            folder = potentialFolder
+            filename = parts.slice(2).join('/')
+        }
+    }
 
     // Map internal folder (books) to storage folder (yalotengo/libros)
     const mappedKey = getMappedKey(folder, filename)
-    console.log(`[Storage] Stream: ${key} -> ${mappedKey}`)
     return await s3.getObject(BUCKET, mappedKey)
 }
