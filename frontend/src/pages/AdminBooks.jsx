@@ -294,8 +294,11 @@ export default function AdminBooks() {
                         <div key={b.boo_int_id} className={`bg-white rounded-xl border p-4 shadow-sm transition-all ${!b.boo_bool_active ? 'opacity-60' : ''}`}>
                             {b.boo_txt_cover_image && (
                                 <img
-                                    src={`/uploads/books/${b.boo_txt_cover_image}`}
-                                    onError={(e) => { e.target.src = `/libros/${b.boo_txt_cover_image}` }}
+                                    src={`${api.defaults.baseURL?.replace(/\/api\/?$/, '')}/uploads/books/${b.boo_txt_cover_image}`}
+                                    onError={(e) => {
+                                        if (e.target.src.includes('/libros/')) return
+                                        e.target.src = `/libros/${b.boo_txt_cover_image}`
+                                    }}
                                     alt={b.boo_txt_title}
                                     className="w-full h-32 object-cover rounded-lg mb-3"
                                 />
@@ -463,8 +466,11 @@ export default function AdminBooks() {
                             {formData.coverImage && (
                                 <div className="flex items-center gap-2">
                                     <img
-                                        src={formData.coverImage.startsWith('libros/') ? `/${formData.coverImage}` : `/uploads/books/${formData.coverImage}`}
-                                        onError={(e) => { e.target.src = `/libros/${formData.coverImage}` }}
+                                        src={formData.coverImage.startsWith('libros/') ? `/${formData.coverImage}` : `${api.defaults.baseURL?.replace(/\/api\/?$/, '')}/uploads/books/${formData.coverImage}`}
+                                        onError={(e) => {
+                                            if (e.target.src.includes('/libros/')) return
+                                            e.target.src = `/libros/${formData.coverImage}`
+                                        }}
                                         alt="Portada"
                                         className="w-10 h-10 object-cover rounded"
                                     />
