@@ -123,16 +123,21 @@ r.get('/public/:idAnimal', async (req, res) => {
     // Creamos la URL absoluta del modelo 3D usando MinIO Proxy (ej: /uploads/microscopicos/file.bundle)
     const baseUrl = `${req.protocol}://${req.get('host')}`
     
-    // Taxonomía dinámica: concatenamos solo los campos que existan
-    const taxFields = [
-      finalModel.kingdom, finalModel.phylum, finalModel.subphylum, 
-      finalModel.class, finalModel.subclass, finalModel.order, 
-      finalModel.family, finalModel.genus, finalModel.specificEpithet
-    ].filter(Boolean)
+    // Taxonomía estructurada con etiquetas y saltos de línea (\n) para mejor lectura en Unity
+    const taxList = []
+    if (finalModel.kingdom) taxList.push(`Reino: ${finalModel.kingdom}`)
+    if (finalModel.phylum) taxList.push(`Filo: ${finalModel.phylum}`)
+    if (finalModel.subphylum) taxList.push(`Subfilo: ${finalModel.subphylum}`)
+    if (finalModel.class) taxList.push(`Clase: ${finalModel.class}`)
+    if (finalModel.subclass) taxList.push(`Subclase: ${finalModel.subclass}`)
+    if (finalModel.order) taxList.push(`Orden: ${finalModel.order}`)
+    if (finalModel.family) taxList.push(`Familia: ${finalModel.family}`)
+    if (finalModel.genus) taxList.push(`Género: ${finalModel.genus}`)
+    if (finalModel.scientificName) taxList.push(`Especie: ${finalModel.scientificName}`)
     
     res.json({
         nombre: finalModel.scientificName,
-        taxonomia: taxFields.join(' > '),
+        taxonomia: `Taxonomía\n${taxList.join('\n')}`,
         descripcion: finalModel.taxonRemarks,
         // Construimos la URL al archivo guardado en el storage
         url_modelo: finalModel.assetBundleFileName 
