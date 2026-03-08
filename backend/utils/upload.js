@@ -88,3 +88,10 @@ export const uploadPrintedImage = multer({
     limits: { fileSize: 10 * 1024 * 1024 }
 }).single('printedImage')
 
+// Subida múltiple para fotos de cotizaciones (hasta 5 fotos de 5MB)
+export const uploadQuoteImages = multer({
+    storage: storage,
+    fileFilter: imageFilter,
+    limits: { fileSize: 5 * 1024 * 1024 }
+}).array('images', 5)
+

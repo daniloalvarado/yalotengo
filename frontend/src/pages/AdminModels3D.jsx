@@ -12,6 +12,7 @@ import { StatusTag, formatDateTime, PEN } from './admin/adminUtils'
 import Swal from 'sweetalert2'
 import PurchaseDetailModal from './admin/PurchaseDetailModal'
 import AnimatedModal from '../components/AnimatedModal'
+import AdminQuotes3D from '../components/AdminQuotes3D'
 
 const THEME = { primary: '#059669' }
 
@@ -309,32 +310,38 @@ export default function AdminModels3D() {
                 )}
             </div>
 
-            <div className="flex gap-2 border-b border-gray-200">
+            <div className="flex gap-2 border-b border-gray-200 overflow-x-auto whitespace-nowrap custom-scrollbar pb-1">
                 <button
                     onClick={() => { setMainTab('products'); setSearchTerm(''); }}
-                    className={`px-4 py-2 text-sm font-medium border-b-2 transition-all ${mainTab === 'products' ? 'border-emerald-500 text-emerald-600' : 'border-transparent text-gray-500 hover:text-gray-700'}`}
+                    className={`px-4 py-2 shrink-0 text-sm font-medium border-b-2 transition-all ${mainTab === 'products' ? 'border-emerald-500 text-emerald-600' : 'border-transparent text-gray-500 hover:text-gray-700'}`}
                 >
                     Productos ({models.length})
                 </button>
                 <button
                     onClick={() => setMainTab('purchases')}
-                    className={`px-4 py-2 text-sm font-medium border-b-2 transition-all ${mainTab === 'purchases' ? 'border-emerald-500 text-emerald-600' : 'border-transparent text-gray-500 hover:text-gray-700'}`}
+                    className={`px-4 py-2 shrink-0 text-sm font-medium border-b-2 transition-all ${mainTab === 'purchases' ? 'border-emerald-500 text-emerald-600' : 'border-transparent text-gray-500 hover:text-gray-700'}`}
                 >
                     Compras ({purchases.length})
+                </button>
+                <button
+                    onClick={() => { setMainTab('quotes'); setSearchTerm(''); }}
+                    className={`px-4 py-2 shrink-0 text-sm font-medium border-b-2 transition-all ${mainTab === 'quotes' ? 'border-emerald-500 text-emerald-600' : 'border-transparent text-gray-500 hover:text-gray-700'}`}
+                >
+                    Cotizaciones 3D
                 </button>
             </div>
 
             {mainTab === 'products' && (
-                <div className="flex gap-2">
+                <div className="flex gap-2 overflow-x-auto whitespace-nowrap custom-scrollbar pb-1">
                     <button
                         onClick={() => setModelCategory('DIGITALIZADO')}
-                        className={`px-3 py-1 text-sm rounded-full transition-colors ${modelCategory === 'DIGITALIZADO' ? 'bg-emerald-100 text-emerald-700 font-medium' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+                        className={`px-3 py-1 shrink-0 text-sm rounded-full transition-colors ${modelCategory === 'DIGITALIZADO' ? 'bg-emerald-100 text-emerald-700 font-medium' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
                     >
                         Digitales (GLB)
                     </button>
                     <button
                         onClick={() => setModelCategory('IMPRESO')}
-                        className={`px-3 py-1 text-sm rounded-full transition-colors ${modelCategory === 'IMPRESO' ? 'bg-emerald-100 text-emerald-700 font-medium' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+                        className={`px-3 py-1 shrink-0 text-sm rounded-full transition-colors ${modelCategory === 'IMPRESO' ? 'bg-emerald-100 text-emerald-700 font-medium' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
                     >
                         Impresos (Físicos)
                     </button>
@@ -409,6 +416,10 @@ export default function AdminModels3D() {
                         </div>
                     )}
                 </div>
+            )}
+
+            {mainTab === 'quotes' && (
+                <AdminQuotes3D />
             )}
 
             {mainTab === 'purchases' && (

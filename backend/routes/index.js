@@ -35,6 +35,9 @@ import adminStatsRoutes from '../modules/admin/routes.admin.stats.js'
 // ✅ MICROSCOPICOS (Unity AR)
 import microscopicosRoutes from '../modules/microscopicos/routes.microscopicos.js'
 
+// ✅ COTIZACIONES 3D
+import cotizaciones3dRoutes from '../modules/cotizaciones3d/routes.cotizaciones3d.js'
+
 const r = Router()
 
 // Estado y salud
@@ -78,5 +81,8 @@ r.use('/admin/stats', adminStatsRoutes)
 // Note: The routes inside routes.microscopicos.js have /admin and /public.
 // So we mount it at the root of the microscopicos path.
 r.use('/microscopicos', microscopicosRoutes)
+
+// --- COTIZACIONES 3D ---
+r.use('/cotizaciones3d', cotizaciones3dRoutes)
 
 export default r

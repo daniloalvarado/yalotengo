@@ -1,10 +1,12 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import api from '../api/client'
 import Model3DViewer from '../components/Model3DViewer'
 import Tooltip from '../components/Tooltip'
 import toast from 'react-hot-toast'
-import { ShoppingCartIcon, CubeIcon, SparklesIcon, BanknotesIcon } from '@heroicons/react/24/outline'
+import { ShoppingCartIcon, CubeIcon, SparklesIcon, BanknotesIcon, DocumentTextIcon } from '@heroicons/react/24/outline'
+import UserQuotes3D from '../components/UserQuotes3D'
+import QuoteModal from '../components/QuoteModal'
 
 const PEN = new Intl.NumberFormat('es-PE', { style: 'currency', currency: 'PEN' })
 
@@ -15,7 +17,9 @@ export default function Models3D() {
     const [addingToCart, setAddingToCart] = useState({})
     const navigate = useNavigate()
 
-    const [activeTab, setActiveTab] = useState('DIGITALIZADO') // DIGITALIZADO, IMPRESO
+    const [activeTab, setActiveTab] = useState('DIGITALIZADO') // DIGITALIZADO, IMPRESO, MIS_COTIZACIONES
+    const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false)
+    const userQuotesRef = useRef(null)
 
     const [ownedIds, setOwnedIds] = useState(new Set())
     const [cartIds, setCartIds] = useState(new Set())
@@ -147,30 +151,52 @@ export default function Models3D() {
                 <p className="text-gray-600">
                     {activeTab === 'DIGITALIZADO'
                         ? 'Explora nuestra colección de modelos 3D digitalizados. Descarga en formato GLB para usar en tus proyectos.'
-                        : 'Adquiere modelos ya impresos en 3D con acabados de alta calidad.'}
+                        : activeTab === 'IMPRESO' 
+                            ? 'Adquiere modelos ya impresos en 3D con acabados de alta calidad.' 
+                            : 'Gestiona tus cotizaciones de modelos 3D personalizados.'}
                 </p>
             </div>
 
             {/* Tabs */}
-            <div className="flex gap-2 mb-6">
-                <button
-                    onClick={() => setActiveTab('DIGITALIZADO')}
-                    className={`px-4 py-2 rounded-lg font-medium flex items-center gap-2 transition-colors ${activeTab === 'DIGITALIZADO' ? 'bg-emerald-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
-                >
-                    <SparklesIcon className="w-4 h-4" />
-                    Digitalizados
-                </button>
-                <button
-                    onClick={() => setActiveTab('IMPRESO')}
-                    className={`px-4 py-2 rounded-lg font-medium flex items-center gap-2 transition-colors ${activeTab === 'IMPRESO' ? 'bg-emerald-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
-                >
-                    <CubeIcon className="w-4 h-4" />
-                    Impresos
-                </button>
+            <div className="flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center mb-6">
+                <div className="flex gap-2 overflow-x-auto w-full pb-2 custom-scrollbar">
+                    <button
+                        onClick={() => setActiveTab('DIGITALIZADO')}
+                        className={`px-4 py-2 rounded-lg font-medium flex items-center shrink-0 gap-2 transition-colors ${activeTab === 'DIGITALIZADO' ? 'bg-emerald-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+                    >
+                        <SparklesIcon className="w-4 h-4" />
+                        Digitalizados
+                    </button>
+                    <button
+                        onClick={() => setActiveTab('IMPRESO')}
+                        className={`px-4 py-2 rounded-lg font-medium flex items-center shrink-0 gap-2 transition-colors ${activeTab === 'IMPRESO' ? 'bg-emerald-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+                    >
+                        <CubeIcon className="w-4 h-4" />
+                        Impresos
+                    </button>
+                    <button
+                        onClick={() => setActiveTab('MIS_COTIZACIONES')}
+                        className={`px-4 py-2 rounded-lg font-medium flex items-center shrink-0 gap-2 transition-colors ${activeTab === 'MIS_COTIZACIONES' ? 'bg-emerald-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+                    >
+                        <DocumentTextIcon className="w-4 h-4" />
+                        Mis Cotizaciones 3D
+                    </button>
+                </div>
+
+                {activeTab === 'MIS_COTIZACIONES' && (
+                    <button 
+                        onClick={() => setIsQuoteModalOpen(true)}
+                        className="px-4 py-2 bg-emerald-100 text-emerald-700 font-bold rounded-xl hover:bg-emerald-200 transition-colors shadow-sm"
+                    >
+                        Cotización Personalizada
+                    </button>
+                )}
             </div>
 
             {/* Grid de modelos */}
-            {filteredModels.length === 0 ? (
+            {activeTab === 'MIS_COTIZACIONES' ? (
+                <UserQuotes3D ref={userQuotesRef} />
+            ) : filteredModels.length === 0 ? (
                 <div className="text-center py-16 bg-gray-50 rounded-2xl">
                     <CubeIcon className="w-16 h-16 mx-auto text-gray-300 mb-4" />
                     <h3 className="text-lg font-medium text-gray-700">No hay modelos {activeTab === 'IMPRESO' ? 'impresos' : 'digitales'} disponibles</h3>
@@ -263,6 +289,15 @@ export default function Models3D() {
                     ))}
                 </div>
             )}
+
+            <QuoteModal 
+                isOpen={isQuoteModalOpen} 
+                onClose={() => setIsQuoteModalOpen(false)}
+                onSuccess={() => {
+                    setActiveTab('MIS_COTIZACIONES')
+                    userQuotesRef.current?.loadQuotes()
+                }}
+            />
         </div>
     )
 }
