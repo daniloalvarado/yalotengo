@@ -23,6 +23,7 @@ import AdminDashboard from './pages/AdminDashboard'
 import AdminModels3D from './pages/AdminModels3D'
 import AdminBooks from './pages/AdminBooks'
 import AdminCourses from './pages/AdminCourses'
+import AdminUnityModels from './pages/AdminUnityModels'
 import Profile from './pages/Profile'
 import Help from './pages/Help'
 
@@ -55,6 +56,7 @@ createRoot(document.getElementById('root')).render(
           {/* Admin pages */}
           <Route path="/admin-dashboard" element={<RequireAuth><AdminDashboard /></RequireAuth>} />
           <Route path="/admin-models3d" element={<RequireAuth><AdminModels3D /></RequireAuth>} />
+          <Route path="/admin-microscopicos" element={<RequireAuth><AdminUnityModels /></RequireAuth>} />
           <Route path="/admin-books" element={<RequireAuth><AdminBooks /></RequireAuth>} />
           <Route path="/admin-courses" element={<RequireAuth><AdminCourses /></RequireAuth>} />
           <Route path="/profile" element={<RequireAuth><Profile /></RequireAuth>} />

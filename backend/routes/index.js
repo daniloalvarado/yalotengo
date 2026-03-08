@@ -31,6 +31,10 @@ import adminModels3dRoutes from '../modules/admin/routes.admin.models3d.js'
 import adminBooksRoutes from '../modules/admin/routes.admin.books.js'
 import adminCoursesRoutes from '../modules/admin/routes.admin.courses.js'
 import adminStatsRoutes from '../modules/admin/routes.admin.stats.js'
+
+// ✅ MICROSCOPICOS (Unity AR)
+import microscopicosRoutes from '../modules/microscopicos/routes.microscopicos.js'
+
 const r = Router()
 
 // Estado y salud
@@ -69,5 +73,10 @@ r.use('/admin/models3d', adminModels3dRoutes)
 r.use('/admin/books', adminBooksRoutes)
 r.use('/admin/courses', adminCoursesRoutes)
 r.use('/admin/stats', adminStatsRoutes)
+
+// --- MICROSCOPICOS (Unity AR) ---
+// Note: The routes inside routes.microscopicos.js have /admin and /public.
+// So we mount it at the root of the microscopicos path.
+r.use('/microscopicos', microscopicosRoutes)
 
 export default r

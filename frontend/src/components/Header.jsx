@@ -169,6 +169,16 @@ export default function Header() {
             Modelos 3D
           </NavLink>
 
+          {/* Unity AR Models - Solo para admins */}
+          {user?.use_txt_role === 'admin' && (
+            <NavLink
+              to="/admin-microscopicos"
+              className={({ isActive }) => `${linkBase} ${isActive ? linkActive : linkIdle}`}
+            >
+              Unity AR
+            </NavLink>
+          )}
+
           {/* Libros */}
           <NavLink
             to={user?.use_txt_role === 'admin' ? "/admin-books" : "/books"}
@@ -254,6 +264,15 @@ export default function Header() {
           >
             Modelos 3D
           </NavLink>
+
+          {user?.use_txt_role === 'admin' && (
+            <NavLink
+              to="/admin-microscopicos"
+              className={({ isActive }) => `${isActive ? "text-white font-medium" : "text-zinc-300 hover:text-white"}`}
+            >
+              Unity AR
+            </NavLink>
+          )}
 
           <NavLink
             to={user?.use_txt_role === 'admin' ? "/admin-books" : "/books"}

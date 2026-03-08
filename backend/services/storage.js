@@ -16,7 +16,8 @@ const FOLDER_MAP = {
     'courses': 'cursos',
     'models': 'modelos',
     'impresos': 'impresos',
-    'avatars': 'avatars'
+    'avatars': 'avatars',
+    'microscopicos': 'microscopicos'
 }
 
 /**
