@@ -144,7 +144,7 @@ export default function AdminUnityModels() {
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
                     <h1 className="text-2xl font-bold text-gray-900">Gestión de Modelos Unity AR</h1>
-                    <p className="text-gray-500 text-sm">Base de datos de Microscópicos (Darwin Core)</p>
+                    <p className="text-gray-500 text-sm">Base de datos de Microscópicos</p>
                 </div>
                 <button
                     onClick={() => openModal()}
@@ -156,7 +156,7 @@ export default function AdminUnityModels() {
                 </button>
             </div>
 
-            {loading ? <div className="text-gray-500">Cargando datos Darwin Core...</div> : (
+            {loading ? <div className="text-gray-500">Cargando datos...</div> : (
                 <div className="overflow-x-auto rounded-lg border border-gray-200 bg-white">
                     <table className="w-full text-sm">
                         <thead className="bg-gray-50">
@@ -225,12 +225,12 @@ export default function AdminUnityModels() {
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <label className="block col-span-1 md:col-span-2">
-                            <span className="text-sm font-medium text-gray-700 block mb-1">Nombre Científico (scientificName) *</span>
+                            <span className="text-sm font-medium text-gray-700 block mb-1">Nombre Científico</span>
                             <input value={formData.scientificName || ''} onChange={e => setFormData(p => ({ ...p, scientificName: e.target.value }))} required className="w-full px-3 py-2 border rounded-lg focus:ring-emerald-500 outline-none" />
                         </label>
                         
                         <div className="col-span-1 md:col-span-2 p-3 bg-gray-50 rounded-lg border text-sm grid grid-cols-2 sm:grid-cols-4 gap-3">
-                            <p className="col-span-full font-semibold text-gray-600 mb-1 text-xs uppercase tracking-wider">Taxonomía Darwin Core</p>
+                            <p className="col-span-full font-semibold text-gray-600 mb-1 text-xs uppercase tracking-wider">Taxonomía</p>
                             <label className="block"><span className="text-xs text-gray-500 block mb-1">Reino</span><input value={formData.kingdom || ''} onChange={e => setFormData(p => ({ ...p, kingdom: e.target.value }))} className="w-full px-2 py-1 border rounded text-xs outline-none" /></label>
                             <label className="block"><span className="text-xs text-gray-500 block mb-1">Filo</span><input value={formData.phylum || ''} onChange={e => setFormData(p => ({ ...p, phylum: e.target.value }))} className="w-full px-2 py-1 border rounded text-xs outline-none" /></label>
                             <label className="block"><span className="text-xs text-gray-500 block mb-1">Subfilo</span><input value={formData.subphylum || ''} onChange={e => setFormData(p => ({ ...p, subphylum: e.target.value }))} className="w-full px-2 py-1 border rounded text-xs outline-none" /></label>
@@ -243,18 +243,18 @@ export default function AdminUnityModels() {
                         </div>
 
                         <label className="block col-span-1 md:col-span-2">
-                            <span className="text-sm font-medium text-gray-700 block mb-1">Nombre Común (vernacularName)</span>
+                            <span className="text-sm font-medium text-gray-700 block mb-1">Nombre Común</span>
                             <input value={formData.vernacularName || ''} onChange={e => setFormData(p => ({ ...p, vernacularName: e.target.value }))} className="w-full px-3 py-2 border rounded-lg focus:ring-emerald-500 outline-none" />
                         </label>
                         
                         <label className="block col-span-1 md:col-span-2">
-                            <span className="text-sm font-medium text-gray-700 block mb-1">Descripción / Notas (taxonRemarks)</span>
+                            <span className="text-sm font-medium text-gray-700 block mb-1">Descripción / Notas</span>
                             <textarea value={formData.taxonRemarks || ''} onChange={e => setFormData(p => ({ ...p, taxonRemarks: e.target.value }))} rows={4} className="w-full px-3 py-2 border rounded-lg focus:ring-emerald-500 outline-none resize-none" />
                             <p className="text-[10px] text-gray-400 mt-1">Texto que verá el usuario en la app de Unity.</p>
                         </label>
 
                         <div className="block col-span-1 md:col-span-2 border rounded-lg p-3 bg-white">
-                            <span className="text-sm font-medium text-gray-700 mb-2 block">Archivo Unity (AssetBundle)</span>
+                            <span className="text-sm font-medium text-gray-700 mb-2 block">Archivo Unity (AssetBundle.molde)</span>
                             <input type="file" ref={fileInputRef} onChange={handleFileUpload} className="hidden" />
                             <div className="flex items-center gap-3">
                                 <button type="button" onClick={() => fileInputRef.current?.click()} disabled={uploading} className="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm disabled:opacity-50 transition-colors">
