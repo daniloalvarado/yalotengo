@@ -4,6 +4,7 @@ import { Microscopico } from './model.microscopico.js'
 import { v4 as uuidv4 } from 'uuid'
 import { uploadFile } from '../../services/storage.js'
 import multer from 'multer'
+import { Op } from 'sequelize'
 
 const r = Router()
 const upload = multer({ storage: multer.memoryStorage() })
@@ -100,16 +101,18 @@ r.post('/admin/upload', adminAuth, upload.single('assetBundleFile'), async (req,
 // La app de Unity espera el JSON para leerlo, justo como lo hacía con Firebase
 r.get('/public/:idAnimal', async (req, res) => {
   try {
-    const model = await Microscopico.findOne({
+    const idParam = req.params.idAnimal
+
+    // Buscamos por nombre científico exacto, nombre común (parcial) o ID numérico
+    const finalModel = await Microscopico.findOne({
       where: {
-        scientificName: req.params.idAnimal, 
-        estado: 'activo'
+        estado: 'activo',
+        [Op.or]: [
+          { scientificName: idParam },
+          { vernacularName: { [Op.like]: `%${idParam}%` } },
+          { id: isNaN(parseInt(idParam)) ? 0 : parseInt(idParam) }
+        ]
       }
-    })
-    
-    // Si no encuentra por nombre científico, intentar por ID normal
-    const finalModel = model || await Microscopico.findOne({ 
-      where: { id: req.params.idAnimal, estado: 'activo' } 
     })
 
     if (!finalModel) {
