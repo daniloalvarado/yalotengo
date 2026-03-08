@@ -101,7 +101,8 @@ r.post('/admin/upload', adminAuth, upload.single('assetBundleFile'), async (req,
 // La app de Unity espera el JSON para leerlo, justo como lo hacía con Firebase
 r.get('/public/:idAnimal', async (req, res) => {
   try {
-    const idParam = req.params.idAnimal
+    // Replace + with space because UnityWebRequest.EscapeURL uses + for spaces
+    const idParam = req.params.idAnimal.replace(/\+/g, ' ')
 
     // Buscamos por nombre científico exacto, nombre común (parcial) o ID numérico
     const finalModel = await Microscopico.findOne({

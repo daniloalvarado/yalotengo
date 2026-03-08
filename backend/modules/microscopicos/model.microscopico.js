@@ -1,7 +1,7 @@
 import { DataTypes } from 'sequelize'
 import { sequelize } from '../../config/db.js'
 
-export const Microscopico = sequelize.define('microscopico', {
+export const Microscopico = sequelize.define('mm_darwin_data', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -31,7 +31,7 @@ export const Microscopico = sequelize.define('microscopico', {
     defaultValue: 'activo'
   }
 }, {
-  tableName: 'microscopico',
+  tableName: 'mm_darwin_data',
   timestamps: true, // Esto creará createdAt y updatedAt
   createdAt: 'fecha_create',
   updatedAt: 'fecha_update',

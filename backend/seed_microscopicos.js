@@ -81,12 +81,12 @@ async function seed() {
     console.log('Conectado a la base de datos.')
 
     await Microscopico.sync({ alter: true }) // asegura que exista la tabla
-    console.log('Tabla microscopico sincronizada.')
+    console.log('Tabla mm_darwin_data sincronizada.')
     
     // Contar cuántos hay
     const count = await Microscopico.count()
     if (count > 0) {
-      console.log('Ya existen registros en la tabla microscopico. Abortando seed para no duplicar.')
+      console.log('Ya existen registros en la tabla mm_darwin_data. Abortando seed para no duplicar.')
       process.exit(0)
     }
 

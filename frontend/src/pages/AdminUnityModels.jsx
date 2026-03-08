@@ -11,6 +11,7 @@ const THEME = { primary: '#059669' }
 export default function AdminUnityModels() {
     const navigate = useNavigate()
     const [models, setModels] = useState([])
+    const [searchTerm, setSearchTerm] = useState('')
     const [loading, setLoading] = useState(true)
     const [isAdmin, setIsAdmin] = useState(false)
     
@@ -137,6 +138,11 @@ export default function AdminUnityModels() {
         }
     }
 
+    const filteredModels = models.filter(m => {
+        const term = searchTerm.toLowerCase()
+        return (m.scientificName?.toLowerCase().includes(term) || m.vernacularName?.toLowerCase().includes(term))
+    })
+
     if (!isAdmin) return <div className="p-8 text-center text-gray-500">Verificando permisos...</div>
 
     return (
@@ -156,6 +162,16 @@ export default function AdminUnityModels() {
                 </button>
             </div>
 
+            <div className="mb-2">
+                <input 
+                    type="text" 
+                    placeholder="Buscar por nombre científico o común..." 
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full sm:w-1/2 md:w-1/3 px-4 py-2 border border-gray-300 rounded-lg focus:ring-emerald-500 outline-none text-sm transition-all shadow-sm"
+                />
+            </div>
+
             {loading ? <div className="text-gray-500">Cargando datos...</div> : (
                 <div className="overflow-x-auto rounded-lg border border-gray-200 bg-white">
                     <table className="w-full text-sm">
@@ -169,7 +185,7 @@ export default function AdminUnityModels() {
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-100">
-                            {models.map(m => (
+                            {filteredModels.map(m => (
                                 <tr key={m.id} className="hover:bg-gray-50 transition-colors">
                                     <td className="px-4 py-3">
                                         <div className="font-bold text-gray-900 italic">{m.scientificName}</div>
@@ -209,10 +225,10 @@ export default function AdminUnityModels() {
                                     </td>
                                 </tr>
                             ))}
-                            {models.length === 0 && (
+                            {filteredModels.length === 0 && (
                                 <tr>
                                     <td colSpan="5" className="px-4 py-8 text-center text-gray-500">
-                                        No hay modelos registrados.
+                                        No se encontraron especies microscópicas.
                                     </td>
                                 </tr>
                             )}
