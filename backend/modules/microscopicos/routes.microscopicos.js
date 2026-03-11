@@ -107,8 +107,8 @@ r.get('/admin/dashboard', adminAuth, async (req, res) => {
     })
 
     // 2. Métricas de Modelos
-    const totalModels = await Microscopico.count()
-    const activeModels = await Microscopico.count({ where: { estado: 'activo' } })
+    const totalModels = await ModelMicroscopico.count()
+    const activeModels = await ModelMicroscopico.count({ where: { estado: 'activo' } })
 
     res.json({
       totalLeads,
