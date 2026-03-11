@@ -3,8 +3,9 @@ import { useNavigate } from 'react-router-dom'
 import api from '../api/client'
 import toast from 'react-hot-toast'
 import Swal from 'sweetalert2'
-import { PlusIcon, PencilIcon, TrashIcon, EyeIcon, EyeSlashIcon, ArrowUpTrayIcon, CheckCircleIcon } from '@heroicons/react/24/outline'
+import { PlusIcon, PencilIcon, TrashIcon, EyeIcon, EyeSlashIcon, ArrowUpTrayIcon, CheckCircleIcon, ChartBarSquareIcon, CircleStackIcon } from '@heroicons/react/24/outline'
 import AnimatedModal from '../components/AnimatedModal'
+import AdminUnityDashboard from './AdminUnityDashboard'
 
 const THEME = { primary: '#059669' }
 
@@ -20,6 +21,9 @@ export default function AdminUnityModels() {
     const [formData, setFormData] = useState({})
     const [uploading, setUploading] = useState(false)
     const fileInputRef = useRef(null)
+
+    // Nuevo estado para Pestañas
+    const [activeTab, setActiveTab] = useState('gestion')
 
     useEffect(() => {
         const checkAdmin = async () => {
@@ -149,20 +153,44 @@ export default function AdminUnityModels() {
         <div className="max-w-6xl mx-auto p-4 sm:p-6 space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold text-gray-900">Gestión de Modelos Unity AR</h1>
-                    <p className="text-gray-500 text-sm">Base de datos de Microscópicos</p>
+                    <h1 className="text-2xl font-bold text-gray-900">Gestión de App AR</h1>
+                    <p className="text-gray-500 text-sm">Panel de control de Realidad Aumentada</p>
                 </div>
+                {activeTab === 'gestion' && (
+                    <button
+                        onClick={() => openModal()}
+                        className="flex items-center justify-center gap-2 px-4 py-2 text-white rounded-lg shadow-md hover:opacity-90 transition-all"
+                        style={{ backgroundColor: THEME.primary }}
+                    >
+                        <PlusIcon className="w-5 h-5" />
+                        <span>Agregar Especie</span>
+                    </button>
+                )}
+            </div>
+
+            {/* Pestañas de Navegación */}
+            <div className="flex space-x-1 bg-gray-100/50 p-1.5 rounded-xl border border-gray-200">
                 <button
-                    onClick={() => openModal()}
-                    className="flex items-center justify-center gap-2 px-4 py-2 text-white rounded-lg shadow-md hover:opacity-90 transition-all"
-                    style={{ backgroundColor: THEME.primary }}
+                    onClick={() => setActiveTab('gestion')}
+                    className={`flex items-center gap-2 flex-1 justify-center py-2.5 text-sm font-medium rounded-lg transition-all ${activeTab === 'gestion' ? 'bg-white text-emerald-700 shadow-sm' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'}`}
                 >
-                    <PlusIcon className="w-5 h-5" />
-                    <span>Agregar Especie</span>
+                    <CircleStackIcon className="w-5 h-5" />
+                    Modelos 3D
+                </button>
+                <button
+                    onClick={() => setActiveTab('dashboard')}
+                    className={`flex items-center gap-2 flex-1 justify-center py-2.5 text-sm font-medium rounded-lg transition-all ${activeTab === 'dashboard' ? 'bg-white text-emerald-700 shadow-sm' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'}`}
+                >
+                    <ChartBarSquareIcon className="w-5 h-5" />
+                    Dashboard AR
                 </button>
             </div>
 
-            <div className="mb-2">
+            {activeTab === 'dashboard' ? (
+                <AdminUnityDashboard />
+            ) : (
+                <>
+                    <div className="mb-2">
                 <input 
                     type="text" 
                     placeholder="Buscar por nombre científico o común..." 
@@ -235,6 +263,8 @@ export default function AdminUnityModels() {
                         </tbody>
                     </table>
                 </div>
+            )}
+            </>
             )}
 
             <AnimatedModal isOpen={showModal} onClose={() => setShowModal(false)} title={editItem ? 'Editar Especie' : 'Nueva Especie'} maxWidth="max-w-2xl">

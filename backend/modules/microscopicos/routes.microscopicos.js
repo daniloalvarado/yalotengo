@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { uploadFile } from '../../services/storage.js'
 import multer from 'multer'
 import { Op } from 'sequelize'
+import { User } from '../auth/model.user.js' // Added import for User model
 
 const r = Router()
 const upload = multer({ storage: multer.memoryStorage() })
@@ -90,6 +91,34 @@ r.post('/admin/upload', adminAuth, upload.single('assetBundleFile'), async (req,
   } catch (error) {
     console.error('Upload Error:', error)
     res.status(500).json({ error: 'Error subiendo archivo' })
+  }
+})
+
+// GET /admin/dashboard (Dashboard Analítico AR)
+r.get('/admin/dashboard', adminAuth, async (req, res) => {
+  try {
+    // 1. Métricas de Usuarios AR (Leads)
+    const totalLeads = await User.count({ where: { use_txt_role: 'unity_ar' } })
+    const recentLeads = await User.findAll({
+      where: { use_txt_role: 'unity_ar' },
+      order: [['use_int_id', 'DESC']], // Asumiendo que IDs mayores son más recientes
+      limit: 5,
+      attributes: ['use_txt_nombres', 'use_txt_email']
+    })
+
+    // 2. Métricas de Modelos
+    const totalModels = await Microscopico.count()
+    const activeModels = await Microscopico.count({ where: { estado: 'activo' } })
+
+    res.json({
+      totalLeads,
+      recentLeads,
+      totalModels,
+      activeModels
+    })
+  } catch (error) {
+    console.error('Error cargando AR Dashboard:', error)
+    res.status(500).json({ error: 'Error del servidor al cargar Dashboard' })
   }
 })
 

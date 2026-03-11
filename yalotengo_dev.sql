@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 08-03-2026 a las 16:29:59
+-- Tiempo de generación: 11-03-2026 a las 16:29:56
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -104,6 +104,25 @@ INSERT INTO `core_user` (`use_int_id`, `use_txt_nombres`, `use_txt_apellidos`, `
 (6, 'Danilo', 'Alvarado', NULL, 'daniloalvarado2002@gmail.com', NULL, 'admin', NULL, 'https://lh3.googleusercontent.com/a/ACg8ocIXE_67oxaxc4_1gxHQJM-aSlIodxkGaEQMpiFOatkUTHY8066Z9w=s96-c', '100016188293704955189', NULL, NULL, 'https://lh3.googleusercontent.com/a/ACg8ocIXE_67oxaxc4_1gxHQJM-aSlIodxkGaEQMpiFOatkUTHY8066Z9w=s96-c'),
 (7, 'Leo', 'Alvarado', '72453509', 'leoalvarado1203@gmail.com', NULL, 'cliente', NULL, '1771213652293_inventalo.png', '113717031116314250808', 'Anita Cabrera. Calle 2 de Frebrero #167', '953808566', 'https://lh3.googleusercontent.com/a/ACg8ocIFC225JxESSkVKPGkGAc5H22t7T14P8dA93_kswOg1_LCl6Q=s96-c'),
 (10, 'LEONARDO DANILO ALVARADO SILVANO', 'ALVARADO SILVANO', NULL, '21131b0685@unapiquitos.edu.pe', NULL, 'cliente', NULL, '2715b02d-3c3b-4811-88ac-8314c55cbdf3.png', '107611113163449265882', NULL, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `cotizacion3d`
+--
+
+CREATE TABLE `cotizacion3d` (
+  `cot_int_id` int(11) NOT NULL,
+  `use_int_id` int(11) NOT NULL,
+  `cot_txt_description` text NOT NULL,
+  `cot_jso_images` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`cot_jso_images`)),
+  `cot_txt_phone` varchar(20) DEFAULT NULL,
+  `cot_bool_notify_whatsapp` tinyint(1) DEFAULT 0,
+  `cot_bool_notify_email` tinyint(1) DEFAULT 0,
+  `cot_txt_status` enum('Pendiente','Cotizado','Comprado','Rechazado') DEFAULT 'Pendiente',
+  `cot_txt_admin_response` text DEFAULT NULL,
+  `cot_dat_created` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -216,9 +235,9 @@ INSERT INTO `mod_model3d` (`mod_int_id`, `mod_txt_name`, `mod_txt_desc`, `mod_tx
 (2, 'Mosca', 'Modelo 3D detallado de una mosca ', '1771268127223_mosca.glb', 19.90, 'DIGITALIZADO', 1, '0000-00-00 00:00:00', '2026-02-16 18:55:29', NULL),
 (3, 'Pulga', 'Modelo 3D detallado de una pulga', '1771268138790_pulga.glb', 19.90, 'DIGITALIZADO', 1, '0000-00-00 00:00:00', '2026-02-16 18:55:40', NULL),
 (8, 'Impreso 1', 'Modelo impreso disponible para venta directa.', 'printed_1770490115369_impreso1.jpg', 149.90, 'IMPRESO', 1, '2026-02-06 21:51:29', '2026-02-07 18:54:45', '2026-02-07 18:54:45'),
-(9, 'Impreso 2', 'Modelo impreso disponible para venta directa.', '1772980488408_Impreso2.jpg', 79.90, 'IMPRESO', 1, '2026-02-06 21:51:29', '2026-03-08 14:34:51', NULL),
-(10, 'Impreso 3', 'Modelo impreso disponible para venta directa.', '1772980501551_Impresos3.jpg', 99.90, 'IMPRESO', 1, '2026-02-06 21:51:29', '2026-03-08 14:35:04', NULL),
-(11, 'Impreso 1', 'Modelo impreso disponible para venta directa', '1772980475877_Impreso1.jpg', 149.90, 'IMPRESO', 1, '2026-02-07 18:56:55', '2026-03-08 14:34:39', NULL);
+(9, 'Impreso 2', 'Modelo impreso disponible para venta directa.', '1772984876683_Impreso2.jpg', 79.90, 'IMPRESO', 1, '2026-02-06 21:51:29', '2026-03-08 15:47:57', NULL),
+(10, 'Impreso 3', 'Modelo impreso disponible para venta directa.', '1772984888107_Impresos3.jpg', 99.90, 'IMPRESO', 1, '2026-02-06 21:51:29', '2026-03-08 15:48:09', NULL),
+(11, 'Impreso 1', 'Modelo impreso disponible para venta directa', '1772984867474_Impreso1.jpg', 149.90, 'IMPRESO', 1, '2026-02-07 18:56:55', '2026-03-08 15:47:48', NULL);
 
 -- --------------------------------------------------------
 
@@ -322,6 +341,13 @@ ALTER TABLE `core_user`
   ADD UNIQUE KEY `use_txt_email` (`use_txt_email`);
 
 --
+-- Indices de la tabla `cotizacion3d`
+--
+ALTER TABLE `cotizacion3d`
+  ADD PRIMARY KEY (`cot_int_id`),
+  ADD KEY `use_int_id` (`use_int_id`);
+
+--
 -- Indices de la tabla `cou_course`
 --
 ALTER TABLE `cou_course`
@@ -393,6 +419,12 @@ ALTER TABLE `core_user`
   MODIFY `use_int_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
+-- AUTO_INCREMENT de la tabla `cotizacion3d`
+--
+ALTER TABLE `cotizacion3d`
+  MODIFY `cot_int_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
 -- AUTO_INCREMENT de la tabla `cou_course`
 --
 ALTER TABLE `cou_course`
@@ -438,6 +470,12 @@ ALTER TABLE `res_reservation`
 ALTER TABLE `bpu_book_purchase`
   ADD CONSTRAINT `bpu_book_purchase_ibfk_1` FOREIGN KEY (`boo_int_id`) REFERENCES `boo_book` (`boo_int_id`) ON UPDATE CASCADE,
   ADD CONSTRAINT `bpu_book_purchase_user_fk` FOREIGN KEY (`use_int_id`) REFERENCES `core_user` (`use_int_id`) ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `cotizacion3d`
+--
+ALTER TABLE `cotizacion3d`
+  ADD CONSTRAINT `cotizacion3d_ibfk_1` FOREIGN KEY (`use_int_id`) REFERENCES `core_user` (`use_int_id`) ON DELETE CASCADE;
 
 --
 -- Filtros para la tabla `cpu_course_purchase`

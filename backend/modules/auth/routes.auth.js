@@ -139,6 +139,41 @@ r.get('/google/callback',
   }
 )
 
+// --- AR LOGIN ENPOINT PARA UNITY ---
+r.post('/ar-login', async (req, res) => {
+  try {
+    const { email, nombre } = req.body
+    if (!email) return res.status(400).json({ error: 'Falta correo electrónico' })
+
+    const lowerEmail = email.toLowerCase()
+    let u = await User.findOne({ where: { use_txt_email: lowerEmail } })
+
+    if (!u) {
+      // Registrar desde cero con rol especial de Realidad Aumentada
+      u = await User.create({
+        use_txt_email: lowerEmail,
+        use_txt_nombres: nombre || 'Usuario',
+        use_txt_apellidos: 'AR',
+        use_txt_role: 'unity_ar'
+      })
+    } else {
+      // Si ya existía pero no tiene nombre, se lo prestamos de la app
+      if (!u.use_txt_nombres || u.use_txt_nombres === 'Usuario' || u.use_txt_nombres === 'FB' || u.use_txt_nombres === 'Google') {
+        if (nombre) {
+          u.use_txt_nombres = nombre
+          await u.save()
+        }
+      }
+    }
+
+    // Retornamos un token válido para futuras solicitudes desde la App si se requiriese
+    res.json({ ok: true, token: sign({ use_int_id: u.use_int_id, email: u.use_txt_email, role: u.use_txt_role }), user: u })
+  } catch (error) {
+    console.error('AR Login Error:', error)
+    res.status(500).json({ error: 'Error del servidor al registrar AR' })
+  }
+})
+
 // --- CAMBIO 3: ENDPOINT /me PARA EL FRONTEND ---
 r.get('/me', async (req, res) => {
   try {
