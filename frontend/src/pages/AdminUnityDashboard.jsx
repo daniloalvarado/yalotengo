@@ -75,10 +75,10 @@ export default function AdminUnityDashboard() {
                                 <div key={idx} className="px-6 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors">
                                     <div className="flex items-center gap-3">
                                         <div className="w-10 h-10 rounded-full bg-emerald-100 text-emerald-700 font-bold flex items-center justify-center shrink-0">
-                                            {user.use_txt_nombres ? user.use_txt_nombres.charAt(0).toUpperCase() : 'U'}
+                                            {(user.ar_name || user.use_txt_nombres) ? (user.ar_name || user.use_txt_nombres).charAt(0).toUpperCase() : 'U'}
                                         </div>
                                         <div>
-                                            <p className="font-medium text-gray-900 text-sm">{user.use_txt_nombres}</p>
+                                            <p className="font-medium text-gray-900 text-sm">{user.ar_name || user.use_txt_nombres}</p>
                                             <p className="text-xs text-gray-500">{user.use_txt_email}</p>
                                         </div>
                                     </div>

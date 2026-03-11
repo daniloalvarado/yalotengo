@@ -149,21 +149,22 @@ r.post('/ar-login', async (req, res) => {
     let u = await User.findOne({ where: { use_txt_email: lowerEmail } })
 
     if (!u) {
-      // Registrar desde cero con rol especial de Realidad Aumentada
+      // Registrar desde cero como cliente normal pero encendiendo la bandera AR
       u = await User.create({
         use_txt_email: lowerEmail,
         use_txt_nombres: nombre || 'Usuario',
         use_txt_apellidos: 'AR',
-        use_txt_role: 'unity_ar'
+        use_txt_role: 'cliente',
+        is_ar_user: true,
+        ar_name: nombre || 'Usuario'
       })
     } else {
-      // Si ya existía pero no tiene nombre, se lo prestamos de la app
-      if (!u.use_txt_nombres || u.use_txt_nombres === 'Usuario' || u.use_txt_nombres === 'FB' || u.use_txt_nombres === 'Google') {
-        if (nombre) {
-          u.use_txt_nombres = nombre
-          await u.save()
-        }
-      }
+      // Si el usuario ya existe (es Admin, Cliente, de Google, etc.)
+      // NO le tocamos ni el Rol ni su Nombre real para no dañar su cuenta web.
+      // Solo aseguramos que se marque como Usuario AR y guardamos bajo qué nombre se registró en la App.
+      u.is_ar_user = true
+      u.ar_name = nombre || u.use_txt_nombres || 'Usuario'
+      await u.save()
     }
 
     // Retornamos un token válido para futuras solicitudes desde la App si se requiriese

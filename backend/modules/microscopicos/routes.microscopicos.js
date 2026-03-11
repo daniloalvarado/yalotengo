@@ -32,12 +32,12 @@ r.get('/admin', adminAuth, async (req, res) => {
 r.get('/admin/dashboard', adminAuth, async (req, res) => {
   try {
     // 1. Métricas de Usuarios AR (Leads)
-    const totalLeads = await User.count({ where: { use_txt_role: 'unity_ar' } })
+    const totalLeads = await User.count({ where: { is_ar_user: true } })
     const recentLeads = await User.findAll({
-      where: { use_txt_role: 'unity_ar' },
+      where: { is_ar_user: true },
       order: [['use_int_id', 'DESC']], // Asumiendo que IDs mayores son más recientes
       limit: 5,
-      attributes: ['use_txt_nombres', 'use_txt_email']
+      attributes: ['use_txt_nombres', 'use_txt_email', 'ar_name']
     })
 
     // 2. Métricas de Modelos

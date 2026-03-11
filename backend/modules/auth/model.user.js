@@ -17,7 +17,11 @@ export const User = sequelize.define('core_user', {
   use_txt_avatar: DataTypes.TEXT,          // Para guardar la URL de la foto atual (MinIO o Provider)
   use_txt_provider_avatar: DataTypes.TEXT, // Backup: URL original de Google/FB
   use_txt_address: DataTypes.STRING(255),  // Dirección
-  use_txt_phone: DataTypes.STRING(20)      // Teléfono
+  use_txt_phone: DataTypes.STRING(20),      // Teléfono
+
+  // --- NUEVAS COLUMNAS PARA UNITY AR ---
+  is_ar_user: { type: DataTypes.BOOLEAN, defaultValue: false },
+  ar_name: DataTypes.STRING(120)
   // -------------------------------
 
 }, { tableName: 'core_user', timestamps: false })
