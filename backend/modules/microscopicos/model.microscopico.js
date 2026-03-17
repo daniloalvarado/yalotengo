@@ -1,5 +1,6 @@
 import { DataTypes } from 'sequelize'
 import { sequelize } from '../../config/db.js'
+import { Translation } from './model.translation.js'
 
 export const Microscopico = sequelize.define('mm_darwin_data', {
   id: {
@@ -25,6 +26,7 @@ export const Microscopico = sequelize.define('mm_darwin_data', {
   taxonRemarks: { type: DataTypes.TEXT },
   
   assetBundleFileName: { type: DataTypes.STRING },
+  qr_image_url: { type: DataTypes.STRING },
   
   estado: {
     type: DataTypes.ENUM('activo', 'desactivo', 'eliminado'),
@@ -36,5 +38,14 @@ export const Microscopico = sequelize.define('mm_darwin_data', {
   createdAt: 'fecha_create',
   updatedAt: 'fecha_update',
   deletedAt: 'fecha_delete',
-  paranoid: false // Si es true, usa deletedAt. Lo manejamos con 'estado' pero añadiremos fecha_delete manualmente si se elimina de forma suave.
+})
+
+// Asociaciones de Idiomas
+Microscopico.hasMany(Translation, {
+  foreignKey: 'microscopico_id',
+  as: 'translations'
+})
+
+Translation.belongsTo(Microscopico, {
+  foreignKey: 'microscopico_id'
 })

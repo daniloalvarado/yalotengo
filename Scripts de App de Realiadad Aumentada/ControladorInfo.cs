@@ -1,0 +1,249 @@
+using UnityEngine;
+using TMPro;
+using UnityEngine.UI;
+using System.Collections;
+using System.Collections.Generic;
+
+public class ControladorInfo : MonoBehaviour
+{
+    [Header("UI")]
+    public TextMeshProUGUI txtNombre, txtTaxonomia, txtDescripcion, txtFlechitaBoton;
+    public Button btnAgrandar;
+    public GameObject panelInformacion; 
+    public float margenBordes = 50f; 
+    
+    // Variables de control interno
+    private bool vistaInmersiva = false;
+    private RectTransform rectBoton;
+    private Vector2 posOriginal, anchorMinOriginal, anchorMaxOriginal, pivotOriginal;
+    private CanvasGroup panelCanvasGroup;
+
+    // --- DICCIONARIOS DE TRADUCCIÓN ---
+    private readonly Dictionary<string, string> dictTaxonomia = new Dictionary<string, string> {
+        {"Reino:", "Kingdom:"}, {"Filo:", "Phylum:"}, {"Subfilo:", "Subphylum:"}, {"Clase:", "Class:"}, 
+        {"Subclase:", "Subclass:"}, {"Orden:", "Order:"}, {"Familia:", "Family:"}, {"Género:", "Genus:"}, 
+        {"Especie:", "Species:"}, {"Taxonomía", "Taxonomy"}
+    };
+
+    void Start()
+    {
+        if (btnAgrandar != null)
+        {
+            rectBoton = btnAgrandar.GetComponent<RectTransform>();
+            
+            // "Fotografiamos" cómo pusiste el botón en el editor de Unity
+            posOriginal = rectBoton.anchoredPosition;
+            anchorMinOriginal = rectBoton.anchorMin;
+            anchorMaxOriginal = rectBoton.anchorMax;
+            pivotOriginal = rectBoton.pivot;
+
+            btnAgrandar.onClick.AddListener(AlternarVista);
+            btnAgrandar.gameObject.SetActive(false);
+        }
+        
+        if (panelInformacion != null && !panelInformacion.TryGetComponent(out panelCanvasGroup))
+            panelCanvasGroup = panelInformacion.AddComponent<CanvasGroup>();
+        
+        LimpiarPanel();
+    }
+
+    public void MostrarDatosFirebase(LectorApiAR.ModeloResponse datos, GameObject modelo3DEscaneado)
+    {
+        // 1. SI LLEGAN DATOS DE TEXTO (Paso 1 del LectorApi)
+        if (datos != null)
+        {
+            string nombreDefinitivo = datos.nombre;
+            string taxonomiaDefinitiva = datos.taxonomia;
+            string descripcionDefinitiva = datos.descripcion;
+
+            string idiomaActual = PlayerPrefs.GetString("IdiomaSeleccionado", "es").ToLower();
+            
+            // Buscar si hay traducción dinámica
+            if (idiomaActual != "es" && datos.traducciones != null)
+            {
+                foreach (var t in datos.traducciones)
+                {
+                    if (t.language_code.ToLower() == idiomaActual)
+                    {
+                        if (!string.IsNullOrEmpty(t.name)) nombreDefinitivo = t.name;
+                        if (!string.IsNullOrEmpty(t.descripcion)) descripcionDefinitiva = t.descripcion;
+                        break;
+                    }
+                }
+                
+                // Si el idioma actual no es español, aplicar siempre el diccionario estático de taxonomía (ej: "Reino:" a "Kingdom:")
+                if (idiomaActual == "en")
+                {
+                    taxonomiaDefinitiva = TraducirMulti(taxonomiaDefinitiva, dictTaxonomia);
+                }
+            }
+
+            if (txtNombre != null) txtNombre.text = nombreDefinitivo;
+            if (txtTaxonomia != null) txtTaxonomia.text = "";
+            if (txtDescripcion != null) txtDescripcion.text = "";
+
+            StopAllCoroutines();
+            StartCoroutine(TypewriterSecuencial(taxonomiaDefinitiva, descripcionDefinitiva));
+        }
+
+        // 2. SI LLEGA EL MODELO 3D (Paso 2 del LectorApi)
+        if (modelo3DEscaneado != null)
+        {
+            vistaInmersiva = false;
+            if (panelInformacion != null) { panelInformacion.SetActive(true); StartCoroutine(FadePanel(1f, 0.5f)); }
+            if (txtFlechitaBoton != null) txtFlechitaBoton.text = "↓"; 
+            
+            RestaurarBoton();
+            if (btnAgrandar != null) btnAgrandar.gameObject.SetActive(true);
+        }
+    }
+
+    private IEnumerator TypewriterSecuencial(string textoTaxonomia, string textoDescripcion)
+    {
+        // Limpiamos la UI en Unity
+        if (txtTaxonomia != null) { txtTaxonomia.text = textoTaxonomia; txtTaxonomia.maxVisibleCharacters = 0; }
+        if (txtDescripcion != null) { txtDescripcion.text = textoDescripcion; txtDescripcion.maxVisibleCharacters = 0; }
+        
+        yield return new WaitForSeconds(0.3f); // Esperar a que el panel casi termine de aparecer, solo 1 vez
+        
+        if (txtTaxonomia) { txtTaxonomia.ForceMeshUpdate(); yield return AnimarTexto(txtTaxonomia); }
+        if (txtDescripcion) { txtDescripcion.ForceMeshUpdate(); yield return AnimarTexto(txtDescripcion); }
+    }
+
+    private IEnumerator AnimarTexto(TextMeshProUGUI txt)
+    {
+        int total = txt.textInfo.characterCount;
+        for (int i = 0; i <= total; i += 2)
+        {
+            txt.maxVisibleCharacters = i;
+            yield return new WaitForSeconds(0.005f); 
+        }
+        txt.maxVisibleCharacters = 99999;
+    }
+
+    // --- TRADUCCIÓN OPTIMIZADA ESTÁTICA ---
+    private string TraducirMulti(string texto, Dictionary<string, string> dict)
+    {
+        if (string.IsNullOrEmpty(texto)) return texto;
+        foreach (var par in dict) texto = texto.Replace(par.Key, par.Value);
+        return texto;
+    }
+
+    private IEnumerator FadePanel(float targetAlpha, float duration)
+    {
+        if (panelCanvasGroup == null) yield break;
+
+        float startAlpha = panelCanvasGroup.alpha;
+        float time = 0;
+
+        while (time < duration)
+        {
+            time += Time.deltaTime;
+            panelCanvasGroup.alpha = Mathf.Lerp(startAlpha, targetAlpha, time / duration);
+            yield return null;
+        }
+        panelCanvasGroup.alpha = targetAlpha;
+
+        if (targetAlpha == 0f) panelInformacion.SetActive(false);
+    }
+
+    public void AlternarVista()
+    {
+        vistaInmersiva = !vistaInmersiva; 
+
+        StopAllCoroutines(); // Detener otras animaciones en curso
+        if (txtDescripcion != null) txtDescripcion.maxVisibleCharacters = 99999; // Forzar que se lea todo si se interrumpe
+        if (txtTaxonomia != null) txtTaxonomia.maxVisibleCharacters = 99999; // Forzar que se lea todo si se interrumpe
+
+        if (vistaInmersiva)
+        {
+            // MODO INMERSIVO: Fade Out al panel y cambiamos flecha
+            if (panelInformacion != null) StartCoroutine(FadePanel(0f, 0.3f));
+            if (txtFlechitaBoton != null) txtFlechitaBoton.text = "↑";
+            
+            // Animamos deslizando el botón a la esquina INFERIOR DERECHA
+            if (rectBoton != null)
+            {
+                // 1. Anclajes matemáticos a la Derecha (X=1) y Abajo (Y=0)
+                Vector2 targetAnchorMin = new Vector2(1, 0); 
+                Vector2 targetAnchorMax = new Vector2(1, 0); 
+                Vector2 targetPivot = new Vector2(1, 0); 
+                
+                // 2. Nos separamos del borde. La 'X' es negativa para empujarlo hacia la izquierda (hacia adentro de la pantalla)
+                Vector2 targetPos = new Vector2(-margenBordes, margenBordes);
+                
+                // 3. ¡Iniciamos la animación! (0.4f es la velocidad)
+                StartCoroutine(AnimarBoton(targetAnchorMin, targetAnchorMax, targetPivot, targetPos, 0.4f));
+            }
+        }
+        else
+        {
+            if (panelInformacion) { panelInformacion.SetActive(true); StartCoroutine(FadePanel(1f, 0.3f)); }
+            if (txtFlechitaBoton) txtFlechitaBoton.text = "↓";
+            if (rectBoton) StartCoroutine(AnimarBoton(anchorMinOriginal, anchorMaxOriginal, pivotOriginal, posOriginal, 0.4f));
+        }
+    }
+
+    private IEnumerator AnimarBoton(Vector2 targetAnchorMin, Vector2 targetAnchorMax, Vector2 targetPivot, Vector2 targetPos, float duration)
+    {
+        float time = 0;
+        Vector2 startAnchorMin = rectBoton.anchorMin;
+        Vector2 startAnchorMax = rectBoton.anchorMax;
+        Vector2 startPivot = rectBoton.pivot;
+        Vector2 startPos = rectBoton.anchoredPosition;
+
+        while (time < duration)
+        {
+            time += Time.deltaTime;
+            float t = Mathf.SmoothStep(0f, 1f, time / duration);
+
+            rectBoton.anchorMin = Vector2.Lerp(startAnchorMin, targetAnchorMin, t);
+            rectBoton.anchorMax = Vector2.Lerp(startAnchorMax, targetAnchorMax, t);
+            rectBoton.pivot = Vector2.Lerp(startPivot, targetPivot, t);
+            rectBoton.anchoredPosition = Vector2.Lerp(startPos, targetPos, t);
+            
+            yield return null;
+        }
+
+        rectBoton.anchorMin = targetAnchorMin;
+        rectBoton.anchorMax = targetAnchorMax;
+        rectBoton.pivot = targetPivot;
+        rectBoton.anchoredPosition = targetPos;
+    }
+
+    public void LimpiarPanel()
+    {
+        if (txtNombre != null) txtNombre.text = "Escanea un animal...";
+        if (txtTaxonomia != null) 
+        {
+            txtTaxonomia.text = "";
+            txtTaxonomia.maxVisibleCharacters = 99999;
+        }
+        if (txtDescripcion != null) 
+        {
+            txtDescripcion.text = "";
+            txtDescripcion.maxVisibleCharacters = 99999;
+        }
+        
+        if (btnAgrandar != null) btnAgrandar.gameObject.SetActive(false);
+        if (panelInformacion != null)
+        {
+            panelInformacion.SetActive(true);
+            if (panelCanvasGroup != null) panelCanvasGroup.alpha = 1f;
+        }
+        
+        RestaurarBoton();
+    }
+
+    private void RestaurarBoton()
+    {
+        // Esta función devuelve el botón exactamente a como lo dejaste en Unity
+        if (rectBoton != null)
+        {
+            rectBoton.anchorMin = anchorMinOriginal;
+            rectBoton.anchorMax = anchorMaxOriginal;
+            rectBoton.pivot = pivotOriginal;
+            rectBoton.anchoredPosition = posOriginal;
+        }
+    }
+}

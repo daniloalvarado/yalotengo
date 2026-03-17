@@ -1,0 +1,66 @@
+Taxonomía
+Reino: Animalia
+Filo: Arthropoda
+Clase: Arachnida
+Subclase: Acari
+Orden: Trombidiformes
+Familia: Trombiculidae
+Género: Neotrombicula
+Especie: Neotrombicula autumnalis
+
+
+El isango (Trombicula autumnalis / Eutrombicula batatas) es un ácaro microscópico de color rojizo, frecuente en pastizales y vegetación baja de zonas rurales y de la Amazonía. En su fase larvaria puede adherirse a la piel humana y producir una irritación intensa, con ronchas y picazón marcada, sobre todo en piernas y zonas de pliegues. Para reducir el riesgo, se recomienda usar repelente, cubrir las piernas al caminar entre hierba, evitar sentarse directamente sobre pasto seco y realizar higiene de la piel y la ropa después de la exposición.
+
+
+Taxonomía:
+Reino: Animalia
+Filo: Arthropoda
+Subfilo: Crustacea
+Clase: Malacostraca
+Orden: Isopoda
+Familia: Armadillidiidae
+Género: Armadillidium
+Especie: A. vulgare
+
+
+Crustáceo terrestre ampliamente distribuido en Europa y otras regiones del mundo. Posee un exoesqueleto segmentado y siete pares de patas. Su característica más notable es la capacidad de enrollarse completamente formando una esfera (conglobación) como mecanismo de defensa frente a depredadores. Respira mediante estructuras similares a branquias adaptadas a ambientes húmedos, por lo que depende de la humedad para sobrevivir. Se alimenta de hojas y materia orgánica en descomposición, cumpliendo un rol ecológico importante en el reciclaje de nutrientes del suelo. No es peligroso para el ser humano.
+
+
+
+Taxonomía:
+Reino: Animalia
+Filo: Arthropoda
+Clase: Arachnida
+Subclase: Acari
+Orden: Trombidiformes
+Familia: Eriophyidae
+Género: Aceria
+Especie: A. anthocoptes
+
+Ácaro microscópico fitófago, de cuerpo alargado y vermiforme, con solo dos pares de patas (a diferencia de otros ácaros que poseen cuatro). Vive sobre tejidos vegetales, principalmente en cardos, donde succiona el contenido celular. Produce deformaciones, enrollamientos y manchas en hojas y tallos, afectando el crecimiento de la planta. Debido a su especificidad hacia ciertas especies vegetales, se ha utilizado como agente de control biológico contra cardos invasores. No representa riesgo directo para humanos ni animales domésticos.
+
+
+
+Taxonomía:
+Reino: Animalia
+Filo: Tardigrada
+Clase: Eutardigrada
+Orden: Parachela
+Familia: Hypsibiidae
+Género: Hypsibius
+Especie: H. dujardini
+
+Microanimal acuático conocido como “oso de agua” por su forma robusta y movimientos lentos. Presenta ocho patas cortas terminadas en garras, y un aparato bucal adaptado para perforar células vegetales o alimentarse de microorganismos. Es célebre por su capacidad de entrar en un estado de criptobiosis, reduciendo su metabolismo casi a cero cuando enfrenta desecación, temperaturas extremas, falta de oxígeno o radiación intensa. En ese estado puede sobrevivir durante años. Es inofensivo para humanos y constituye un modelo clave en estudios de biología molecular y resistencia celular.
+
+
+Taxonomía:
+Reino: Animalia
+Filo: Arthropoda
+Clase: Arachnida
+Subclase: Acari
+Orden: Sarcoptiformes
+Familia: Sarcoptidae
+Género: Sarcoptes
+Especie: S. scabiei
+
+Ácaro parásito microscópico responsable de la sarna en humanos y otros mamíferos. La hembra excava túneles en la capa superficial de la piel (estrato córneo), donde deposita sus huevos. La reacción del sistema inmunológico frente al ácaro y sus productos metabólicos provoca picazón intensa, enrojecimiento y lesiones cutáneas, que suelen intensificarse durante la noche. Se transmite principalmente por contacto directo y prolongado entre personas. Requiere tratamiento médico específico para su eliminación y medidas de higiene para evitar reinfecciones.

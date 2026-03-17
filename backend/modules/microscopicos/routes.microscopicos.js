@@ -1,8 +1,9 @@
 import { Router } from 'express'
 import { adminAuth } from '../../utils/adminAuth.js'
 import { Microscopico } from './model.microscopico.js'
+import { Translation } from './model.translation.js'
 import { v4 as uuidv4 } from 'uuid'
-import { uploadFile } from '../../services/storage.js'
+import { uploadFile, deleteFile } from '../../services/storage.js'
 import multer from 'multer'
 import { Op } from 'sequelize'
 import { User } from '../auth/model.user.js' // Added import for User model
@@ -19,7 +20,8 @@ r.get('/admin', adminAuth, async (req, res) => {
   try {
     const data = await Microscopico.findAll({
       where: { estado: ['activo', 'desactivo'] },
-      order: [['id', 'DESC']]
+      order: [['id', 'DESC']],
+      include: [{ model: Translation, as: 'translations' }]
     })
     res.json(data)
   } catch (error) {
@@ -70,8 +72,17 @@ r.get('/admin/:id', adminAuth, async (req, res) => {
 // POST crear
 r.post('/admin', adminAuth, async (req, res) => {
   try {
-    const model = await Microscopico.create(req.body)
-    res.status(201).json(model)
+    const { translations, ...modelData } = req.body
+    const model = await Microscopico.create(modelData)
+    
+    if (translations && Array.isArray(translations)) {
+      const transToCreate = translations.map(t => ({ ...t, microscopico_id: model.id }))
+      await Translation.bulkCreate(transToCreate)
+    }
+    
+    // Devolvemos el modelo con las traducciones
+    const newModel = await Microscopico.findByPk(model.id, { include: [{ model: Translation, as: 'translations' }] })
+    res.status(201).json(newModel)
   } catch (error) {
     console.error(error)
     res.status(500).json({ error: 'Error al guardar el modelo' })
@@ -83,8 +94,30 @@ r.put('/admin/:id', adminAuth, async (req, res) => {
   try {
     const model = await Microscopico.findByPk(req.params.id)
     if (!model) return res.status(404).json({ error: 'No encontrado' })
-    await model.update({ ...req.body, fecha_update: new Date() })
-    res.json(model)
+    
+    const { translations, ...modelData } = req.body
+
+    // Si el usuario subió un nuevo .molde (y había uno antiguo), borrar el antiguo de MinIO
+    if (modelData.assetBundleFileName && model.assetBundleFileName && modelData.assetBundleFileName !== model.assetBundleFileName) {
+      await deleteFile('microscopicos', model.assetBundleFileName)
+    }
+    
+    // Lo mismo para qr_image_url
+    if (modelData.qr_image_url && model.qr_image_url && modelData.qr_image_url !== model.qr_image_url) {
+      await deleteFile('microscopicos', model.qr_image_url)
+    }
+
+    await model.update({ ...modelData, fecha_update: new Date() })
+
+    // Manejar idiomas: Borrar existentes y crear nuevos
+    if (translations && Array.isArray(translations)) {
+      await Translation.destroy({ where: { microscopico_id: model.id } })
+      const transToCreate = translations.map(t => ({ ...t, microscopico_id: model.id }))
+      await Translation.bulkCreate(transToCreate)
+    }
+
+    const updatedModel = await Microscopico.findByPk(req.params.id, { include: [{ model: Translation, as: 'translations' }] })
+    res.json(updatedModel)
   } catch (error) {
     console.error(error)
     res.status(500).json({ error: 'Error al actualizar' })
@@ -96,6 +129,15 @@ r.delete('/admin/:id', adminAuth, async (req, res) => {
   try {
     const model = await Microscopico.findByPk(req.params.id)
     if (!model) return res.status(404).json({ error: 'No encontrado' })
+    
+    // Eliminar los archivos de almacenamiento físico en MinIO
+    if (model.assetBundleFileName) {
+      await deleteFile('microscopicos', model.assetBundleFileName)
+    }
+    if (model.qr_image_url) {
+      await deleteFile('microscopicos', model.qr_image_url)
+    }
+
     await model.update({ estado: 'eliminado', fecha_delete: new Date() })
     res.json({ success: true })
   } catch (error) {
@@ -105,17 +147,37 @@ r.delete('/admin/:id', adminAuth, async (req, res) => {
 })
 
 // POST Upload AssetBundle a MinIO
-r.post('/admin/upload', adminAuth, upload.single('assetBundleFile'), async (req, res) => {
+r.post('/admin/upload', adminAuth, upload.fields([{ name: 'assetBundleFile', maxCount: 1 }, { name: 'qrImageFile', maxCount: 1 }]), async (req, res) => {
   try {
-    if (!req.file) return res.status(400).json({ error: 'No se envió archivo' })
+    if (!req.files || (!req.files.assetBundleFile && !req.files.qrImageFile)) {
+      return res.status(400).json({ error: 'No se enviaron archivos' })
+    }
     
-    const filename = await uploadFile(
-        req.file.buffer, 
-        'microscopicos', 
-        req.file.originalname, 
-        req.file.mimetype || 'application/octet-stream'
-    )
-    res.json({ filename })
+    const response = {}
+
+    if (req.files.assetBundleFile) {
+      const assetFile = req.files.assetBundleFile[0]
+      const filename = await uploadFile(
+          assetFile.buffer, 
+          'microscopicos', 
+          assetFile.originalname, 
+          assetFile.mimetype || 'application/octet-stream'
+      )
+      response.assetBundleFileName = filename
+    }
+
+    if (req.files.qrImageFile) {
+      const qrFile = req.files.qrImageFile[0]
+      const filename = await uploadFile(
+          qrFile.buffer, 
+          'microscopicos', 
+          qrFile.originalname, 
+          qrFile.mimetype
+      )
+      response.qr_image_url = filename
+    }
+
+    res.json(response)
   } catch (error) {
     console.error('Upload Error:', error)
     res.status(500).json({ error: 'Error subiendo archivo' })
@@ -125,6 +187,31 @@ r.post('/admin/upload', adminAuth, upload.single('assetBundleFile'), async (req,
 // ============================================
 // PUBLIC ROUTES (Para que la app de Unity lea)
 // ============================================
+
+// GET todos los objetivos (marcadores QR) para la App Unity
+r.get('/public/targets', async (req, res) => {
+  try {
+    const models = await Microscopico.findAll({
+      where: {
+        estado: 'activo',
+        qr_image_url: { [Op.not]: null }
+      },
+      attributes: ['scientificName', 'qr_image_url']
+    })
+
+    const baseUrl = `${req.protocol}://${req.get('host')}`
+    
+    const targets = models.map(m => ({
+      name: m.scientificName,
+      url: `${baseUrl}/uploads/microscopicos/${m.qr_image_url}`
+    }))
+
+    res.json(targets)
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ error: 'Error al obtener marcadores QR' })
+  }
+})
 
 // GET modelo por ID para Unity (o por scientificName si se prefiere)
 // La app de Unity espera el JSON para leerlo, justo como lo hacía con Firebase
@@ -142,7 +229,8 @@ r.get('/public/:idAnimal', async (req, res) => {
           { vernacularName: { [Op.like]: `%${idParam}%` } },
           { id: isNaN(parseInt(idParam)) ? 0 : parseInt(idParam) }
         ]
-      }
+      },
+      include: [{ model: Translation, as: 'translations' }]
     })
 
     if (!finalModel) {
@@ -173,6 +261,8 @@ r.get('/public/:idAnimal', async (req, res) => {
         url_modelo: finalModel.assetBundleFileName 
             ? `${baseUrl}/uploads/microscopicos/${finalModel.assetBundleFileName}` 
             : null,
+        // Mandamos las traducciones dinámicas
+        traducciones: finalModel.translations || [],
         // Mandar el resto de info Darwin Core por si la necesita
         darwinCore: finalModel
     })
