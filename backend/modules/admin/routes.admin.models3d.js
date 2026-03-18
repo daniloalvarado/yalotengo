@@ -74,7 +74,7 @@ r.post('/upload-image', adminAuth, (req, res) => {
 r.post('/', adminAuth, async (req, res) => {
     try {
         // category defaults to DIGITALIZADO if not provided
-        const { name, desc, glbFilename, price, category = 'DIGITALIZADO', printedImage } = req.body
+        const { name, desc, glbFilename, price, category = 'DIGITALIZADO', subcategory = 'Sin Categoría', printedImage } = req.body
 
         // Validation based on category
         if (!name) {
@@ -104,6 +104,7 @@ r.post('/', adminAuth, async (req, res) => {
             // Let's re-check Model3D definition.
             mod_txt_glb_filename: category === 'DIGITALIZADO' ? glbFilename : printedImage, // Only for digital
             mod_txt_category: category,
+            mod_txt_subcategory: category === 'DIGITALIZADO' ? subcategory : 'Sin Categoría',
             mod_dec_price: price || 19.90,
             mod_bool_active: true,
             // Store the printed image in a way frontend understands. 
@@ -129,7 +130,7 @@ r.post('/', adminAuth, async (req, res) => {
 r.put('/:id', adminAuth, async (req, res) => {
     try {
         const { id } = req.params
-        const { name, desc, glbFilename, price, category, printedImage } = req.body
+        const { name, desc, glbFilename, price, category, subcategory, printedImage } = req.body
 
         const model = await Model3D.findByPk(id)
         if (!model) {
@@ -144,7 +145,8 @@ r.put('/:id', adminAuth, async (req, res) => {
         if (desc !== undefined) model.mod_txt_desc = desc
         if (price !== undefined) model.mod_dec_price = price
         if (category) model.mod_txt_category = category
-
+        if (category === 'DIGITALIZADO' && subcategory) model.mod_txt_subcategory = subcategory
+        
         let newFilename = null
         if (category === 'DIGITALIZADO' && glbFilename) newFilename = glbFilename
         else if (category === 'IMPRESO' && printedImage) newFilename = printedImage

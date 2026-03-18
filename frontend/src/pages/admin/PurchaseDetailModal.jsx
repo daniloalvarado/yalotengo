@@ -7,10 +7,14 @@ import AnimatedModal from '../../components/AnimatedModal'
 export default function PurchaseDetailModal({ purchase, onClose, type = 'Producto' }) {
     // Cache purchase data to allow exit animation when purchase becomes null
     const [cachedPurchase, setCachedPurchase] = useState(purchase)
+    const [imgError, setImgError] = useState(false)
+    const [fallbackAttempted, setFallbackAttempted] = useState(false)
 
     useEffect(() => {
         if (purchase) {
             setCachedPurchase(purchase)
+            setImgError(false) // reset error state on new purchase
+            setFallbackAttempted(false)
         }
     }, [purchase])
 
@@ -23,14 +27,26 @@ export default function PurchaseDetailModal({ purchase, onClose, type = 'Product
     const productName = item.modelName || item.bookTitle || item.courseTitle || 'Producto desconocido'
     const productType = item.modelId ? 'Modelo 3D' : item.bookId ? 'Libro' : item.courseId ? 'Curso' : type
 
-    // Avatar URL logic
+    // Avatar URL logic with fallback
     let avatarUrl = null
-    if (item.userAvatar) {
+    if (fallbackAttempted && item.userProviderAvatar) {
+        avatarUrl = item.userProviderAvatar
+    } else if (item.userAvatar) {
         if (item.userAvatar.startsWith('http')) {
             avatarUrl = item.userAvatar
         } else {
             const base = (api.defaults.baseURL || '').replace(/\/api\/?$/, '')
             avatarUrl = `${base}/uploads/avatars/${item.userAvatar}`
+        }
+    } else if (item.userProviderAvatar) {
+        avatarUrl = item.userProviderAvatar
+    }
+
+    const handleImgError = () => {
+        if (!fallbackAttempted && item.userProviderAvatar) {
+            setFallbackAttempted(true)
+        } else {
+            setImgError(true)
         }
     }
 
@@ -54,8 +70,13 @@ export default function PurchaseDetailModal({ purchase, onClose, type = 'Product
                         {/* Avatar */}
                         <div className="shrink-0 flex justify-center">
                             <div className="w-20 h-20 rounded-full overflow-hidden border-4 border-white shadow-sm bg-gray-200 flex items-center justify-center">
-                                {avatarUrl ? (
-                                    <img src={avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
+                                {avatarUrl && !imgError ? (
+                                    <img 
+                                        src={avatarUrl} 
+                                        alt="Avatar" 
+                                        className="w-full h-full object-cover" 
+                                        onError={handleImgError}
+                                    />
                                 ) : (
                                     <span className="text-2xl font-bold text-gray-400">
                                         {item.userName ? item.userName[0] : 'U'}

@@ -20,6 +20,7 @@ export default function AdminModels3D() {
     const navigate = useNavigate()
     const [mainTab, setMainTab] = useState('products') // products, purchases
     const [modelCategory, setModelCategory] = useState('DIGITALIZADO') // DIGITALIZADO, IMPRESO
+    const [modelSubcategory, setModelSubcategory] = useState('Todas')
     const [loading, setLoading] = useState(true)
     const [isAdmin, setIsAdmin] = useState(false)
     const [searchTerm, setSearchTerm] = useState('')
@@ -168,6 +169,7 @@ export default function AdminModels3D() {
             glbFilename: item.mod_txt_glb_filename,
             price: item.mod_dec_price,
             category: item.mod_txt_category,
+            subcategory: item.mod_txt_subcategory || 'Sin Categoría',
             currentCategory: item.mod_txt_category,
             printedImage: item.mod_txt_category === 'IMPRESO' ? item.mod_txt_glb_filename : null
         } : {
@@ -176,6 +178,7 @@ export default function AdminModels3D() {
             glbFilename: '',
             price: 19.90,
             category: currentCat,
+            subcategory: 'Sin Categoría',
             printedImage: null
         })
         setAttemptedSubmit(false)
@@ -278,8 +281,16 @@ export default function AdminModels3D() {
 
     const filteredModels = models.filter(m => {
         const cat = m.mod_txt_category || 'DIGITALIZADO'
-        return cat === modelCategory
+        if (cat !== modelCategory) return false;
+        if (modelCategory === 'DIGITALIZADO' && modelSubcategory !== 'Todas') {
+            const sub = m.mod_txt_subcategory || 'Sin Categoría';
+            return sub === modelSubcategory;
+        }
+        return true;
     })
+
+    const digitalModels = models.filter(m => (m.mod_txt_category || 'DIGITALIZADO') === 'DIGITALIZADO');
+    const availableSubcategories = ['Todas', ...new Set(digitalModels.map(m => m.mod_txt_subcategory || 'Sin Categoría'))];
 
     const filteredPurchases = searchTerm
         ? purchases.filter(p =>
@@ -332,19 +343,36 @@ export default function AdminModels3D() {
             </div>
 
             {mainTab === 'products' && (
-                <div className="flex gap-2 overflow-x-auto whitespace-nowrap custom-scrollbar pb-1">
-                    <button
-                        onClick={() => setModelCategory('DIGITALIZADO')}
-                        className={`px-3 py-1 shrink-0 text-sm rounded-full transition-colors ${modelCategory === 'DIGITALIZADO' ? 'bg-emerald-100 text-emerald-700 font-medium' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
-                    >
-                        Digitales (GLB)
-                    </button>
-                    <button
-                        onClick={() => setModelCategory('IMPRESO')}
-                        className={`px-3 py-1 shrink-0 text-sm rounded-full transition-colors ${modelCategory === 'IMPRESO' ? 'bg-emerald-100 text-emerald-700 font-medium' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
-                    >
-                        Impresos (Físicos)
-                    </button>
+                <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between pb-1">
+                    <div className="flex gap-2 overflow-x-auto whitespace-nowrap custom-scrollbar">
+                        <button
+                            onClick={() => { setModelCategory('DIGITALIZADO'); setModelSubcategory('Todas'); }}
+                            className={`px-3 py-1 shrink-0 text-sm rounded-full transition-colors ${modelCategory === 'DIGITALIZADO' ? 'bg-emerald-100 text-emerald-700 font-medium' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+                        >
+                            Digitales (GLB)
+                        </button>
+                        <button
+                            onClick={() => setModelCategory('IMPRESO')}
+                            className={`px-3 py-1 shrink-0 text-sm rounded-full transition-colors ${modelCategory === 'IMPRESO' ? 'bg-emerald-100 text-emerald-700 font-medium' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+                        >
+                            Impresos (Físicos)
+                        </button>
+                    </div>
+
+                    {modelCategory === 'DIGITALIZADO' && (
+                        <div className="flex items-center gap-2">
+                            <span className="text-sm text-gray-500 font-medium">Filtro:</span>
+                            <select
+                                value={modelSubcategory}
+                                onChange={(e) => setModelSubcategory(e.target.value)}
+                                className="px-3 py-1.5 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none bg-white"
+                            >
+                                {availableSubcategories.map(sub => (
+                                    <option key={sub} value={sub}>{sub}</option>
+                                ))}
+                            </select>
+                        </div>
+                    )}
                 </div>
             )}
 
@@ -577,6 +605,19 @@ export default function AdminModels3D() {
                         </div>
                     )}
 
+                    {(formData.category || modelCategory) === 'DIGITALIZADO' && (
+                        <label className="block">
+                            <span className="text-sm font-medium text-gray-700 mb-1 block">Subcategoría</span>
+                            <input
+                                value={formData.subcategory || ''}
+                                onChange={e => setFormData(p => ({ ...p, subcategory: e.target.value }))}
+                                placeholder="Ej: Insectos, Anatomía, Células..."
+                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none"
+                            />
+                            <p className="text-xs text-gray-400 mt-1">Sirve para agrupar los modelos (Ej: Insectos). Si lo dejas vacío dirá 'Sin Categoría'.</p>
+                        </label>
+                    )}
+
                     <label className="block">
                         <span className="text-sm font-medium text-gray-700 mb-1 block">Precio (S/)</span>
                         <input type="number" step="0.01" value={formData.price || ''} onChange={e => setFormData(p => ({ ...p, price: parseFloat(e.target.value) }))} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none" />
@@ -611,9 +652,9 @@ export default function AdminModels3D() {
                             onChange={(e) => setStatusForm(prev => ({ ...prev, status: e.target.value }))}
                             className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none bg-white"
                         >
-                            <option value="ACCEPTED">Aceptado (Recibido)</option>
-                            <option value="IN_PROGRESS">En curso (Imprimiendo)</option>
-                            <option value="DELIVERED">Entregado (Finalizado)</option>
+                            <option value="ACCEPTED">Aceptado</option>
+                            <option value="IN_PROGRESS">En curso</option>
+                            <option value="DELIVERED">Entregado</option>
                         </select>
                     </label>
 

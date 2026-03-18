@@ -84,7 +84,7 @@ app.get('/uploads/*', async (req, res) => {
     stream.pipe(res)
 
   } catch (err) {
-    if (err.code === 'NoSuchKey') {
+    if (err.code === 'NoSuchKey' || err.code === 'NotFound') {
       console.warn(`[Proxy 404] File not found: ${key}`)
       return res.status(404).json({ error: 'File not found' })
     }

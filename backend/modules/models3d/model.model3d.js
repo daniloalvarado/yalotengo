@@ -30,6 +30,11 @@ export const Model3D = sequelize.define('mod_model3d', {
         allowNull: false,
         defaultValue: 'DIGITALIZADO'
     },
+    mod_txt_subcategory: {
+        type: DataTypes.STRING(50),
+        allowNull: false,
+        defaultValue: 'Sin Categoría'
+    },
     mod_bool_active: {
         type: DataTypes.BOOLEAN,
         allowNull: false,

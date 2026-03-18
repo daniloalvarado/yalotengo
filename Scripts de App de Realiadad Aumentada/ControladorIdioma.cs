@@ -28,6 +28,8 @@ public class ControladorIdioma : MonoBehaviour
     [Header("--- MODALES EXTRA ---")]
     public TextMeshProUGUI txtModalMuseoBtn;   
     public TextMeshProUGUI txtModalAjustesBtn; 
+    public TextMeshProUGUI txtAjustesTitulo;      // Nuevo: Título del panel Ajustes
+    public TextMeshProUGUI txtAjustesLabelIdioma; // Nuevo: Label "Idioma" en Ajustes
 
     void Start()
     {
@@ -87,6 +89,8 @@ public class ControladorIdioma : MonoBehaviour
         if(txtTemasBtnAjustes) txtTemasBtnAjustes.text = "Ajustes";
         if(txtArMenuBtn) txtArMenuBtn.text = "Menú";
         if(txtArPlaceholder) txtArPlaceholder.text = "Escanea el código QR...";
+        if(txtAjustesTitulo) txtAjustesTitulo.text = "AJUSTES";
+        if(txtAjustesLabelIdioma) txtAjustesLabelIdioma.text = "Idioma";
     }
 
     private void SetEnglish()
@@ -105,6 +109,8 @@ public class ControladorIdioma : MonoBehaviour
         if(txtTemasBtnAjustes) txtTemasBtnAjustes.text = "Settings";
         if(txtArMenuBtn) txtArMenuBtn.text = "Menu";
         if(txtArPlaceholder) txtArPlaceholder.text = "Scan the QR code...";
+        if(txtAjustesTitulo) txtAjustesTitulo.text = "SETTINGS";
+        if(txtAjustesLabelIdioma) txtAjustesLabelIdioma.text = "Language";
     }
 
     private void SetPortuguese()
@@ -123,6 +129,8 @@ public class ControladorIdioma : MonoBehaviour
         if(txtTemasBtnAjustes) txtTemasBtnAjustes.text = "Ajustes";
         if(txtArMenuBtn) txtArMenuBtn.text = "Menu";
         if(txtArPlaceholder) txtArPlaceholder.text = "Escaneie o código QR...";
+        if(txtAjustesTitulo) txtAjustesTitulo.text = "AJUSTES";
+        if(txtAjustesLabelIdioma) txtAjustesLabelIdioma.text = "Idioma";
     }
 
     private void SetFrench()
@@ -141,6 +149,8 @@ public class ControladorIdioma : MonoBehaviour
         if(txtTemasBtnAjustes) txtTemasBtnAjustes.text = "Paramètres";
         if(txtArMenuBtn) txtArMenuBtn.text = "Menu";
         if(txtArPlaceholder) txtArPlaceholder.text = "Scannez le code QR...";
+        if(txtAjustesTitulo) txtAjustesTitulo.text = "PARAMÈTRES";
+        if(txtAjustesLabelIdioma) txtAjustesLabelIdioma.text = "Langue";
     }
 
     private void SetItalian()
@@ -159,6 +169,8 @@ public class ControladorIdioma : MonoBehaviour
         if(txtTemasBtnAjustes) txtTemasBtnAjustes.text = "Impostazioni";
         if(txtArMenuBtn) txtArMenuBtn.text = "Menu";
         if(txtArPlaceholder) txtArPlaceholder.text = "Scansiona il codice QR...";
+        if(txtAjustesTitulo) txtAjustesTitulo.text = "IMPOSTAZIONI";
+        if(txtAjustesLabelIdioma) txtAjustesLabelIdioma.text = "Lingua";
     }
 
     private void SetGerman()
@@ -177,6 +189,8 @@ public class ControladorIdioma : MonoBehaviour
         if(txtTemasBtnAjustes) txtTemasBtnAjustes.text = "Einstellungen";
         if(txtArMenuBtn) txtArMenuBtn.text = "Menü";
         if(txtArPlaceholder) txtArPlaceholder.text = "QR-Code scannen...";
+        if(txtAjustesTitulo) txtAjustesTitulo.text = "EINSTELLUNGEN";
+        if(txtAjustesLabelIdioma) txtAjustesLabelIdioma.text = "Sprache";
     }
 
     public string GetPlaceholderText()

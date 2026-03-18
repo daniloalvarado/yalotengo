@@ -16,8 +16,8 @@ export default function Models3D() {
     const [selectedModel, setSelectedModel] = useState(null)
     const [addingToCart, setAddingToCart] = useState({})
     const navigate = useNavigate()
-
     const [activeTab, setActiveTab] = useState('DIGITALIZADO') // DIGITALIZADO, IMPRESO, MIS_COTIZACIONES
+    const [modelSubcategory, setModelSubcategory] = useState('Todas')
     const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false)
     const userQuotesRef = useRef(null)
 
@@ -130,7 +130,18 @@ export default function Models3D() {
         }
     }
 
-    const filteredModels = models.filter(m => (m.mod_txt_category || 'DIGITALIZADO') === activeTab)
+    const digitalModels = models.filter(m => (m.mod_txt_category || 'DIGITALIZADO') === 'DIGITALIZADO')
+    const availableSubcategories = ['Todas', ...new Set(digitalModels.map(m => m.mod_txt_subcategory || 'Sin Categoría'))]
+
+    const filteredModels = models.filter(m => {
+        const cat = m.mod_txt_category || 'DIGITALIZADO'
+        if (cat !== activeTab) return false
+        if (activeTab === 'DIGITALIZADO' && modelSubcategory !== 'Todas') {
+            const sub = m.mod_txt_subcategory || 'Sin Categoría'
+            return sub === modelSubcategory
+        }
+        return true
+    })
 
     if (loading) {
         return (
@@ -192,6 +203,22 @@ export default function Models3D() {
                     </button>
                 )}
             </div>
+
+            {/* Filtro Subcategorías (Solo Digitales) */}
+            {activeTab === 'DIGITALIZADO' && availableSubcategories.length > 1 && (
+                <div className="flex items-center gap-3 mb-6 bg-white p-3 rounded-xl border border-gray-100 shadow-sm w-fit">
+                    <span className="text-sm font-medium text-gray-500">Filtrar por:</span>
+                    <select
+                        value={modelSubcategory}
+                        onChange={(e) => setModelSubcategory(e.target.value)}
+                        className="px-4 py-2 text-sm bg-gray-50 border-none rounded-lg focus:ring-2 focus:ring-emerald-500 font-medium text-gray-700 outline-none cursor-pointer"
+                    >
+                        {availableSubcategories.map(sub => (
+                            <option key={sub} value={sub}>{sub}</option>
+                        ))}
+                    </select>
+                </div>
+            )}
 
             {/* Grid de modelos */}
             {activeTab === 'MIS_COTIZACIONES' ? (

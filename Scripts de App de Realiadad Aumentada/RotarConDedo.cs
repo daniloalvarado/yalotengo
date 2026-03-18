@@ -53,16 +53,26 @@ public class RotarConDedo : MonoBehaviour
                 
                 float prevDist = (t1Prev - t2Prev).magnitude;
                 float actualDist = (t1.position - t2.position).magnitude;
-                float diferencia = (actualDist - prevDist) * velocidadZoomCelular;
                 
-                Vector3 nuevaEscala = modeloAGirar.localScale + (Vector3.one * diferencia);
-                
-                // Límites: No dejamos que se vuelva microscópico ni gigante
-                nuevaEscala.x = Mathf.Clamp(nuevaEscala.x, 0.1f, 60f);
-                nuevaEscala.y = Mathf.Clamp(nuevaEscala.y, 0.1f, 60f);
-                nuevaEscala.z = Mathf.Clamp(nuevaEscala.z, 0.1f, 60f);
-                
-                modeloAGirar.localScale = nuevaEscala;
+                // Evitamos divisiones por cero
+                if (prevDist > 0.1f)
+                {
+                    // Sistema Multiplicativo Proporcional (mucho más suave y compatible con modelos enanos)
+                    float factor = actualDist / prevDist;
+                    
+                    // Suavizamos el factor para que no sea tan brusco
+                    float cambioBruto = factor - 1f;
+                    float porcentajeCambio = 1f + (cambioBruto * velocidadZoomCelular * 5f); 
+
+                    Vector3 nuevaEscala = modeloAGirar.localScale * porcentajeCambio;
+                    
+                    // Límites mucho más amplios (Iguales a los de PC)
+                    nuevaEscala.x = Mathf.Clamp(nuevaEscala.x, 0.001f, 500f);
+                    nuevaEscala.y = Mathf.Clamp(nuevaEscala.y, 0.001f, 500f);
+                    nuevaEscala.z = Mathf.Clamp(nuevaEscala.z, 0.001f, 500f);
+                    
+                    modeloAGirar.localScale = nuevaEscala;
+                }
             }
         }
         
