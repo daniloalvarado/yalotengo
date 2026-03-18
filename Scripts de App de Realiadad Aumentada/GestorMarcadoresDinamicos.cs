@@ -33,6 +33,15 @@ public class GestorMarcadoresDinamicos : MonoBehaviour
         VuforiaApplication.Instance.OnVuforiaStarted += OnVuforiaStarted;
     }
 
+    void OnDestroy()
+    {
+        // SIEMPRE desuscribirse para evitar errores de "objeto destruido" al cambiar de escena
+        if (VuforiaApplication.Instance != null)
+        {
+            VuforiaApplication.Instance.OnVuforiaStarted -= OnVuforiaStarted;
+        }
+    }
+
     private void OnVuforiaStarted()
     {
         StartCoroutine(ObtenerMarcadoresDesdeNube());

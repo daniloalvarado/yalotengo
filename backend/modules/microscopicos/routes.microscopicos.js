@@ -254,7 +254,8 @@ r.get('/public/:idAnimal', async (req, res) => {
     if (finalModel.scientificName) taxList.push(`Especie: ${finalModel.scientificName}`)
     
     res.json({
-        nombre: finalModel.vernacularName ? `${finalModel.vernacularName} (${finalModel.scientificName})` : finalModel.scientificName,
+        nombre: finalModel.vernacularName || finalModel.scientificName,
+        nombre_cientifico: finalModel.scientificName,
         taxonomia: `Taxonomía\n${taxList.join('\n')}`,
         descripcion: finalModel.taxonRemarks,
         // Construimos la URL al archivo guardado en el storage

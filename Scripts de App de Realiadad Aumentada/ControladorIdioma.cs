@@ -4,7 +4,6 @@ using TMPro;
 public class ControladorIdioma : MonoBehaviour
 {
     [Header("--- PANEL LOGIN ---")]
-    [Header("--- PANEL LOGIN ---")]
     public TextMeshProUGUI txtLoginTitulo;
     public TextMeshProUGUI txtLoginBtnGoogle;
     public TextMeshProUGUI txtLoginPlaceholderNombre;
@@ -38,6 +37,8 @@ public class ControladorIdioma : MonoBehaviour
 
     public void CambiarIdioma(string codigo)
     {
+        VerificarReferencias();
+
         codigo = codigo.ToLower();
         PlayerPrefs.SetString("IdiomaSeleccionado", codigo);
         PlayerPrefs.Save();
@@ -53,8 +54,25 @@ public class ControladorIdioma : MonoBehaviour
         }
     }
 
+    private void VerificarReferencias()
+    {
+        if (txtArMenuBtn == null) Debug.LogWarning("<color=yellow>ControladorIdioma: ¡Atención! No has arrastrado el componente de texto del BOTÓN MENÚ al script en el Inspector.</color>");
+        if (txtArPlaceholder == null) Debug.LogWarning("<color=yellow>ControladorIdioma: ¡Atención! No has arrastrado el componente de texto de 'ESCANEA UN ANIMAL' al script en el Inspector.</color>");
+    }
+
+    // --- MÉTODOS DE COMPATIBILIDAD PARA TUS BOTONES ANTIGUOS ---
+    public void CambiarAEspanol() => CambiarIdioma("es");
+    public void CambiarAIngles()  => CambiarIdioma("en");
+    public void CambiarAPortugues() => CambiarIdioma("pt");
+    public void CambiarAFrances()   => CambiarIdioma("fr");
+    public void CambiarAItaliano()  => CambiarIdioma("it");
+    public void CambiarAAleman()    => CambiarIdioma("de");
+
     private void SetSpanish()
     {
+        if(txtArMenuBtn == null) Debug.LogWarning("ControladorIdioma: Faltan asignar el botón 'Menú' en el Inspector.");
+        if(txtArPlaceholder == null) Debug.LogWarning("ControladorIdioma: Faltan asignar el texto 'Escanea un animal' en el Inspector.");
+
         if(txtLoginTitulo) txtLoginTitulo.text = "INICIAR SESIÓN";
         if(txtLoginBtnGoogle) txtLoginBtnGoogle.text = "Entrar con Google";
         if(txtLoginPlaceholderNombre) txtLoginPlaceholderNombre.text = "Ingresa tu nombre...";
@@ -68,7 +86,7 @@ public class ControladorIdioma : MonoBehaviour
         if(txtTemasBtnBiodiversidad) txtTemasBtnBiodiversidad.text = "Biodiversidad";
         if(txtTemasBtnAjustes) txtTemasBtnAjustes.text = "Ajustes";
         if(txtArMenuBtn) txtArMenuBtn.text = "Menú";
-        if(txtArPlaceholder) txtArPlaceholder.text = "Escanea un animal...";
+        if(txtArPlaceholder) txtArPlaceholder.text = "Escanea el código QR...";
     }
 
     private void SetEnglish()
@@ -86,7 +104,7 @@ public class ControladorIdioma : MonoBehaviour
         if(txtTemasBtnBiodiversidad) txtTemasBtnBiodiversidad.text = "Biodiversity";
         if(txtTemasBtnAjustes) txtTemasBtnAjustes.text = "Settings";
         if(txtArMenuBtn) txtArMenuBtn.text = "Menu";
-        if(txtArPlaceholder) txtArPlaceholder.text = "Scan an animal...";
+        if(txtArPlaceholder) txtArPlaceholder.text = "Scan the QR code...";
     }
 
     private void SetPortuguese()
@@ -104,7 +122,7 @@ public class ControladorIdioma : MonoBehaviour
         if(txtTemasBtnBiodiversidad) txtTemasBtnBiodiversidad.text = "Biodiversidade";
         if(txtTemasBtnAjustes) txtTemasBtnAjustes.text = "Ajustes";
         if(txtArMenuBtn) txtArMenuBtn.text = "Menu";
-        if(txtArPlaceholder) txtArPlaceholder.text = "Escaneie um animal...";
+        if(txtArPlaceholder) txtArPlaceholder.text = "Escaneie o código QR...";
     }
 
     private void SetFrench()
@@ -122,7 +140,7 @@ public class ControladorIdioma : MonoBehaviour
         if(txtTemasBtnBiodiversidad) txtTemasBtnBiodiversidad.text = "Biodiversité";
         if(txtTemasBtnAjustes) txtTemasBtnAjustes.text = "Paramètres";
         if(txtArMenuBtn) txtArMenuBtn.text = "Menu";
-        if(txtArPlaceholder) txtArPlaceholder.text = "Scannez un animal...";
+        if(txtArPlaceholder) txtArPlaceholder.text = "Scannez le code QR...";
     }
 
     private void SetItalian()
@@ -140,7 +158,7 @@ public class ControladorIdioma : MonoBehaviour
         if(txtTemasBtnBiodiversidad) txtTemasBtnBiodiversidad.text = "Biodiversità";
         if(txtTemasBtnAjustes) txtTemasBtnAjustes.text = "Impostazioni";
         if(txtArMenuBtn) txtArMenuBtn.text = "Menu";
-        if(txtArPlaceholder) txtArPlaceholder.text = "Scansiona un animale...";
+        if(txtArPlaceholder) txtArPlaceholder.text = "Scansiona il codice QR...";
     }
 
     private void SetGerman()
@@ -158,6 +176,20 @@ public class ControladorIdioma : MonoBehaviour
         if(txtTemasBtnBiodiversidad) txtTemasBtnBiodiversidad.text = "Biodiversität";
         if(txtTemasBtnAjustes) txtTemasBtnAjustes.text = "Einstellungen";
         if(txtArMenuBtn) txtArMenuBtn.text = "Menü";
-        if(txtArPlaceholder) txtArPlaceholder.text = "Tier scannen...";
+        if(txtArPlaceholder) txtArPlaceholder.text = "QR-Code scannen...";
+    }
+
+    public string GetPlaceholderText()
+    {
+        string codigo = PlayerPrefs.GetString("IdiomaSeleccionado", "es").ToLower();
+        switch (codigo)
+        {
+            case "en": return "Scan the QR code...";
+            case "pt": return "Escaneie o código QR...";
+            case "fr": return "Scannez le code QR...";
+            case "it": return "Scansiona il codice QR...";
+            case "de": return "QR-Code scannen...";
+            default: return "Escanea el código QR...";
+        }
     }
 }

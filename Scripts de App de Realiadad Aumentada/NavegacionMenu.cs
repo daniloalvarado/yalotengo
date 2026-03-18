@@ -29,29 +29,23 @@ public class NavegacionMenu : MonoBehaviour
         if(textoError != null) textoError.text = "";
 
         // --- LÓGICA DE NAVEGACIÓN INTELIGENTE ---
-        // Verificamos si el usuario viene de cerrar la cámara AR
         if (PlayerPrefs.GetInt("VengoDeAR") == 1)
         {
-            // CASO A: Vienes de la cámara AR -> Te enviamos directo a elegir otra temática
-            IrATematicas(); 
-            PlayerPrefs.SetInt("VengoDeAR", 0); // Borramos la nota
+            // CASO A: El usuario pulsó "Menú" en la escena AR. 
+            // Lo enviamos a las Temáticas (Biodiversidad/Ajustes) para que pueda explorar.
+            PlayerPrefs.SetInt("VengoDeAR", 0); 
+            IrATematicas();
+        }
+        else if (PlayerPrefs.HasKey("CorreoUsuario"))
+        {
+            // CASO B: El usuario acaba de abrir la app y ya está logueado.
+            // Lo enviamos directo a la acción (Cámara AR).
+            IrARealidadAumentada();
         }
         else
         {
-            // CASO B: Abres la app desde cero. 
-            // [NUEVO] Preguntamos: ¿El usuario ya se había registrado antes?
-            if (PlayerPrefs.HasKey("CorreoUsuario"))
-            {
-                // ¡Sí! Ya tiene una cuenta guardada en el celular.
-                // Lo enviamos directo a las Temáticas (saltando el Login)
-                Debug.Log("Usuario recordado: " + PlayerPrefs.GetString("NombreUsuario"));
-                IrATematicas(); 
-            }
-            else
-            {
-                // ¡No! Es la primera vez que abre la app. 
-                MostrarSoloLogin();
-            }
+            // CASO C: Usuario nuevo o sesión no iniciada.
+            MostrarSoloLogin();
         }
     }
 
@@ -105,8 +99,8 @@ public class NavegacionMenu : MonoBehaviour
                 PlayerPrefs.SetString("CorreoUsuario", correo);
                 PlayerPrefs.Save(); 
                 
-                // 5. AVANZAR
-                IrABienvenida();
+                // 5. AVANZAR DIRECTO A AR
+                IrARealidadAumentada();
             }
             else
             {

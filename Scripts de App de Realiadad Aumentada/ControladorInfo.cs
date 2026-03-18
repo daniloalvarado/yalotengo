@@ -82,20 +82,46 @@ public class ControladorInfo : MonoBehaviour
 
             string idiomaActual = PlayerPrefs.GetString("IdiomaSeleccionado", "es").ToLower();
             
-            // Buscar si hay traducción dinámica
+            // --- LÓGICA DE TRADUCCIÓN CON FALLBACK ---
+            LectorApiAR.Traduccion traduccion = null;
+            
+            // Solo buscamos traducciones si el idioma NO es el base (Español)
             if (idiomaActual != "es" && datos.traducciones != null)
             {
+                // 1. Intentamos buscar el idioma seleccionado
                 foreach (var t in datos.traducciones)
                 {
                     if (t.language_code.ToLower() == idiomaActual)
                     {
-                        if (!string.IsNullOrEmpty(t.name)) nombreDefinitivo = t.name;
-                        if (!string.IsNullOrEmpty(t.descripcion)) descripcionDefinitiva = t.descripcion;
+                        traduccion = t;
                         break;
                     }
                 }
-                
-                // Aplicar el diccionario estático de taxonomía según el idioma
+
+                // 2. Si NO existe (ej: Italiano), buscamos en INGLÉS como backup (siempre que no estemos ya en inglés)
+                if (traduccion == null && idiomaActual != "en")
+                {
+                    foreach (var t in datos.traducciones)
+                    {
+                        if (t.language_code.ToLower() == "en")
+                        {
+                            traduccion = t;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            // 3. Aplicamos la traducción encontrada
+            if (traduccion != null)
+            {
+                if (!string.IsNullOrEmpty(traduccion.name)) nombreDefinitivo = traduccion.name;
+                if (!string.IsNullOrEmpty(traduccion.descripcion)) descripcionDefinitiva = traduccion.descripcion;
+            }
+
+            // --- TRADUCCIÓN DE TAXONOMÍA (ETIQUETAS) ---
+            if (idiomaActual != "es")
+            {
                 switch (idiomaActual)
                 {
                     case "en": taxonomiaDefinitiva = TraducirMulti(taxonomiaDefinitiva, dictEN); break;
@@ -106,12 +132,23 @@ public class ControladorInfo : MonoBehaviour
                 }
             }
 
-            if (txtNombre != null) txtNombre.text = nombreDefinitivo;
-            if (txtTaxonomia != null) txtTaxonomia.text = "";
+            // --- PREPARACIÓN DE TEXTOS PARA EL EFECTO ---
+            string tituloCompleto = nombreDefinitivo;
+            
+            // Verificamos que tenga nombre científico y no sea exactamente igual al nombre común
+            if (!string.IsNullOrEmpty(datos.nombre_cientifico) && nombreDefinitivo.ToLower() != datos.nombre_cientifico.ToLower())
+            {
+                // Solo el nombre científico va entre paréntesis y en itálica
+                tituloCompleto += " <i>(" + datos.nombre_cientifico + ")</i>";
+            }
+
+            // --- ANIMACIÓN SECUENCIAL DE LOS 3 COMPONENTES ---
+            if (txtNombre != null) txtNombre.text = "";
+            if (txtTaxonomia != null) txtTaxonomia.text = ""; 
             if (txtDescripcion != null) txtDescripcion.text = "";
 
             StopAllCoroutines();
-            StartCoroutine(TypewriterSecuencial(taxonomiaDefinitiva, descripcionDefinitiva));
+            StartCoroutine(TypewriterSecuencial(tituloCompleto, taxonomiaDefinitiva, descripcionDefinitiva));
         }
 
         // 2. SI LLEGA EL MODELO 3D (Paso 2 del LectorApi)
@@ -126,14 +163,17 @@ public class ControladorInfo : MonoBehaviour
         }
     }
 
-    private IEnumerator TypewriterSecuencial(string textoTaxonomia, string textoDescripcion)
+    private IEnumerator TypewriterSecuencial(string textoNombre, string textoTaxonomia, string textoDescripcion)
     {
-        // Limpiamos la UI en Unity
+        // 1. Limpiamos y preparamos los 3 campos
+        if (txtNombre != null) { txtNombre.text = textoNombre; txtNombre.maxVisibleCharacters = 0; }
         if (txtTaxonomia != null) { txtTaxonomia.text = textoTaxonomia; txtTaxonomia.maxVisibleCharacters = 0; }
         if (txtDescripcion != null) { txtDescripcion.text = textoDescripcion; txtDescripcion.maxVisibleCharacters = 0; }
         
         yield return new WaitForSeconds(0.3f); // Esperar a que el panel casi termine de aparecer, solo 1 vez
         
+        // 2. Animamos en orden: Nombre -> Taxonomía -> Descripción
+        if (txtNombre) { txtNombre.ForceMeshUpdate(); yield return AnimarTexto(txtNombre); }
         if (txtTaxonomia) { txtTaxonomia.ForceMeshUpdate(); yield return AnimarTexto(txtTaxonomia); }
         if (txtDescripcion) { txtDescripcion.ForceMeshUpdate(); yield return AnimarTexto(txtDescripcion); }
     }
@@ -241,7 +281,11 @@ public class ControladorInfo : MonoBehaviour
 
     public void LimpiarPanel()
     {
-        if (txtNombre != null) txtNombre.text = "Escanea un animal...";
+        if (txtNombre != null) 
+        {
+            ControladorIdioma ci = FindObjectOfType<ControladorIdioma>();
+            txtNombre.text = (ci != null) ? ci.GetPlaceholderText() : "Escanea un animal...";
+        }
         if (txtTaxonomia != null) 
         {
             txtTaxonomia.text = "";

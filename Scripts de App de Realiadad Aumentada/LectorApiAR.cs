@@ -32,6 +32,7 @@ public class LectorApiAR : MonoBehaviour
     public class ModeloResponse
     {
         public string nombre;
+        public string nombre_cientifico;
         public string taxonomia;
         public string descripcion;
         public string url_modelo;
