@@ -7,11 +7,11 @@ public class RotarConDedo : MonoBehaviour
     public Transform modeloAGirar;
 
     public float velocidadRotacionPC = 5f;
-    public float velocidadRotacionCelular = 0.2f;
+    public float velocidadRotacionCelular = 0.4f;
     
     [Header("Velocidad de Zoom")]
-    public float velocidadZoomCelular = 0.02f;
-    public float velocidadZoomPC = 2f; // NUEVO: Para la ruedita del ratón
+    public float velocidadZoomCelular = 0.1f;
+    public float velocidadZoomPC = 10f; // NUEVO: Para la ruedita del ratón
 
     void Update()
     {
@@ -79,15 +79,32 @@ public class RotarConDedo : MonoBehaviour
                 modeloAGirar.Rotate(Camera.main.transform.right, rotY, Space.World);
             }
 
-            // NUEVO: ZOOM CON RUEDITA DEL RATÓN (o deslizar 2 dedos en touchpad)
+            // NUEVO: ZOOM CON RUEDITA DEL RATÓN, TOUCHPAD O TECLADO
             float scroll = Input.GetAxis("Mouse ScrollWheel");
-            if (scroll != 0f)
+
+            // Si el touchpad no envía 'ScrollWheel', probamos con 'mouseScrollDelta' (más preciso en laptops)
+            if (Mathf.Abs(scroll) < 0.0001f) 
             {
-                Vector3 nuevaEscala = modeloAGirar.localScale + (Vector3.one * scroll * velocidadZoomPC);
+                scroll = Input.mouseScrollDelta.y * 0.1f; 
+            }
+
+            // --- TRUCO DEFINITIVO: ZOOM CON TECLADO (+ y -) ---
+            // Si el touchpad falla, el usuario puede usar las teclas + y -
+            if (Input.GetKey(KeyCode.Plus) || Input.GetKey(KeyCode.KeypadPlus) || Input.GetKey(KeyCode.Equals)) 
+                scroll = 0.02f;
+            if (Input.GetKey(KeyCode.Minus) || Input.GetKey(KeyCode.KeypadMinus) || Input.GetKey(KeyCode.Underscore)) 
+                scroll = -0.02f;
+
+            if (Mathf.Abs(scroll) > 0.0001f)
+            {
+                // Usamos un sistema multiplicativo Proporcional
+                float porcentajeCambio = 1f + (scroll * velocidadZoomPC * 0.2f);
+                Vector3 nuevaEscala = modeloAGirar.localScale * porcentajeCambio;
                 
-                nuevaEscala.x = Mathf.Clamp(nuevaEscala.x, 0.1f, 60f);
-                nuevaEscala.y = Mathf.Clamp(nuevaEscala.y, 0.1f, 60f);
-                nuevaEscala.z = Mathf.Clamp(nuevaEscala.z, 0.1f, 60f);
+                // Límites amplios
+                nuevaEscala.x = Mathf.Clamp(nuevaEscala.x, 0.001f, 500f);
+                nuevaEscala.y = Mathf.Clamp(nuevaEscala.y, 0.001f, 500f);
+                nuevaEscala.z = Mathf.Clamp(nuevaEscala.z, 0.001f, 500f);
                 
                 modeloAGirar.localScale = nuevaEscala;
             }

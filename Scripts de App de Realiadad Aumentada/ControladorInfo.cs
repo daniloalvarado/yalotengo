@@ -19,10 +19,34 @@ public class ControladorInfo : MonoBehaviour
     private CanvasGroup panelCanvasGroup;
 
     // --- DICCIONARIOS DE TRADUCCIÓN ---
-    private readonly Dictionary<string, string> dictTaxonomia = new Dictionary<string, string> {
+    private readonly Dictionary<string, string> dictEN = new Dictionary<string, string> {
         {"Reino:", "Kingdom:"}, {"Filo:", "Phylum:"}, {"Subfilo:", "Subphylum:"}, {"Clase:", "Class:"}, 
         {"Subclase:", "Subclass:"}, {"Orden:", "Order:"}, {"Familia:", "Family:"}, {"Género:", "Genus:"}, 
         {"Especie:", "Species:"}, {"Taxonomía", "Taxonomy"}
+    };
+
+    private readonly Dictionary<string, string> dictPT = new Dictionary<string, string> {
+        {"Reino:", "Reino:"}, {"Filo:", "Filo:"}, {"Subfilo:", "Subfilo:"}, {"Clase:", "Classe:"}, 
+        {"Subclase:", "Subclasse:"}, {"Orden:", "Ordem:"}, {"Familia:", "Família:"}, {"Género:", "Gênero:"}, 
+        {"Especie:", "Espécie:"}, {"Taxonomía", "Taxonomia"}
+    };
+
+    private readonly Dictionary<string, string> dictFR = new Dictionary<string, string> {
+        {"Reino:", "Règne:"}, {"Filo:", "Phylum:"}, {"Subfilo:", "Sous-embranchement:"}, {"Clase:", "Classe:"}, 
+        {"Subclase:", "Sous-classe:"}, {"Orden:", "Ordre:"}, {"Familia:", "Famille:"}, {"Género:", "Genre:"}, 
+        {"Especie:", "Espèce:"}, {"Taxonomía", "Taxonomie"}
+    };
+
+    private readonly Dictionary<string, string> dictIT = new Dictionary<string, string> {
+        {"Reino:", "Regno:"}, {"Filo:", "Phylum:"}, {"Subfilo:", "Subphylum:"}, {"Clase:", "Classe:"}, 
+        {"Subclase:", "Sottoclasse:"}, {"Orden:", "Ordine:"}, {"Familia:", "Famiglia:"}, {"Género:", "Genere:"}, 
+        {"Especie:", "Specie:"}, {"Taxonomía", "Tassonomia"}
+    };
+
+    private readonly Dictionary<string, string> dictDE = new Dictionary<string, string> {
+        {"Reino:", "Reich:"}, {"Filo:", "Stamm:"}, {"Subfilo:", "Unterstamm:"}, {"Clase:", "Klasse:"}, 
+        {"Subclase:", "Unterklasse:"}, {"Orden:", "Ordnung:"}, {"Familia:", "Familie:"}, {"Género:", "Gattung:"}, 
+        {"Especie:", "Art:"}, {"Taxonomía", "Taxonomie"}
     };
 
     void Start()
@@ -71,10 +95,14 @@ public class ControladorInfo : MonoBehaviour
                     }
                 }
                 
-                // Si el idioma actual no es español, aplicar siempre el diccionario estático de taxonomía (ej: "Reino:" a "Kingdom:")
-                if (idiomaActual == "en")
+                // Aplicar el diccionario estático de taxonomía según el idioma
+                switch (idiomaActual)
                 {
-                    taxonomiaDefinitiva = TraducirMulti(taxonomiaDefinitiva, dictTaxonomia);
+                    case "en": taxonomiaDefinitiva = TraducirMulti(taxonomiaDefinitiva, dictEN); break;
+                    case "pt": taxonomiaDefinitiva = TraducirMulti(taxonomiaDefinitiva, dictPT); break;
+                    case "fr": taxonomiaDefinitiva = TraducirMulti(taxonomiaDefinitiva, dictFR); break;
+                    case "it": taxonomiaDefinitiva = TraducirMulti(taxonomiaDefinitiva, dictIT); break;
+                    case "de": taxonomiaDefinitiva = TraducirMulti(taxonomiaDefinitiva, dictDE); break;
                 }
             }
 

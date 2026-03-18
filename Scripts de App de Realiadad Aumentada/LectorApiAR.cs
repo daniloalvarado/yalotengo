@@ -11,9 +11,14 @@ public class LectorApiAR : MonoBehaviour
 
     [Header("Configuración de API")]
     [Tooltip("La URL base de tu backend Node.js (Asegúrate de cambiarla al servidor de producción)")]
-    public string apiUrl = "http://localhost:3000/microscopicos/public/";
+    public string apiUrl = "https://yalotengo.onrender.com/microscopicos/public/";
 
     private GameObject modeloCargadoEnEscena;
+    private string ultimoIdCargado = "";
+    
+    [Header("Configuración de Visualización")]
+    [Tooltip("Multiplicador de tamaño. Si el modelo es gigante (Meshy), usa 8. Si es pequeño, usa 1.")]
+    public float escalaInicial = 8f;
 
     [Serializable]
     public class Traduccion
@@ -35,6 +40,11 @@ public class LectorApiAR : MonoBehaviour
 
     public void BuscarDatosEnLaNube(string idAnimal, Transform padreAR)
     {
+        // Si ya estamos mostrando este animal, no hacemos nada (Evita recargas infinitas)
+        if (modeloCargadoEnEscena != null && ultimoIdCargado == idAnimal) return;
+
+        ultimoIdCargado = idAnimal;
+        
         if (controladorInfo != null)
         {
             controladorInfo.txtNombre.text = "...";
@@ -109,17 +119,17 @@ public class LectorApiAR : MonoBehaviour
                     
                     if (modeloCargadoEnEscena != null) Destroy(modeloCargadoEnEscena);
 
-                    modeloCargadoEnEscena = Instantiate(prefab, padre);
+                    // LO EMPARENTAMOS A LA CÁMARA PARA QUE SE QUEDE PEGADO A LA PANTALLA
+                    modeloCargadoEnEscena = Instantiate(prefab, Camera.main.transform);
                     
-                    // REINICIO DE POSICIÓN
-                    modeloCargadoEnEscena.transform.localPosition = Vector3.zero;
-                    // ROTACIÓN INICIAL (de perfil, para que se vea bien al cargar)
-                    modeloCargadoEnEscena.transform.localEulerAngles = new Vector3(0f, 0f, 200f);
+                    // REINICIO DE POSICIÓN: 50cm al frente de la cámara y 5cm hacia ARRIBA
+                    modeloCargadoEnEscena.transform.localPosition = new Vector3(0f, 0.05f, 0.5f);
+                    // ROTACIÓN INICIAL: Mirando a la cámara (180) con perfil a la izquierda (-20) = 160
+                    modeloCargadoEnEscena.transform.localEulerAngles = new Vector3(250f, 0f, 200f);
                     
-                    // --- REDUCCIÓN DE ESCALA ---
-                    // Como el modelo de Meshy mide ~10 metros, lo reducimos al 1% (10 cm)
-                    // Si sigue sin verse, prueba con 0.005f o 0.001f
-                    modeloCargadoEnEscena.transform.localScale = new Vector3(20.01f, 20.01f, 20.01f); 
+                    // --- ESCALA AUTOMÁTICA (NORMALIZACIÓN) ---
+                    // Ya no escalamos a un número fijo, sino que el método Normalizar lo hará abajo
+                    modeloCargadoEnEscena.transform.localScale = Vector3.one; 
 
                     // 1. Verificamos si ya tiene un Collider, si no, le ponemos uno para que tenga "cuerpo"
                     if (modeloCargadoEnEscena.GetComponent<Collider>() == null)
@@ -130,10 +140,12 @@ public class LectorApiAR : MonoBehaviour
                     RotarConDedo scriptTacto = modeloCargadoEnEscena.AddComponent<RotarConDedo>();
                     scriptTacto.modeloAGirar = modeloCargadoEnEscena.transform;
 
+                    NormalizarTamaño(modeloCargadoEnEscena);
+
                     controladorInfo.MostrarDatosFirebase(null, modeloCargadoEnEscena);
                     
                     bundle.Unload(false);
-                    Debug.Log("¡Modelo cargado y escalado con éxito!");
+                    Debug.Log("¡Modelo normalizado y cargado con éxito!");
                 }
                 else
                 {
@@ -144,6 +156,31 @@ public class LectorApiAR : MonoBehaviour
             {
                 Debug.LogError("Error al descargar el modelo: " + www.error);
             }
+        }
+    }
+
+    private void NormalizarTamaño(GameObject objeto)
+    {
+        // 1. Obtenemos todos los MeshRenderers del modelo (hijos incluidos)
+        MeshRenderer[] renderers = objeto.GetComponentsInChildren<MeshRenderer>();
+        if (renderers.Length == 0) return;
+
+        // 2. Calculamos el "cubo" (Bounds) que encierra a todo el bicho
+        Bounds totalBounds = renderers[0].bounds;
+        foreach (MeshRenderer r in renderers)
+        {
+            totalBounds.Encapsulate(r.bounds);
+        }
+
+        // 3. Obtenemos la medida más larga (ya sea alto, ancho o largo)
+        float tamañoActual = Mathf.Max(totalBounds.size.x, totalBounds.size.y, totalBounds.size.z);
+        
+        if (tamañoActual > 0)
+        {
+            // 4. Calculamos cuánto hay que multiplicar para que mida exactamente lo que dice 'escalaInicial'
+            // Si escalaInicial es 0.15f, el bicho medirá 15cm sin importar qué tan grande venía.
+            float factorEscala = escalaInicial / tamañoActual;
+            objeto.transform.localScale *= factorEscala;
         }
     }
 }

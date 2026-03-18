@@ -20,6 +20,7 @@ export default function AdminUnityModels() {
     const [editItem, setEditItem] = useState(null)
     const [formData, setFormData] = useState({})
     const [uploading, setUploading] = useState(false)
+    const [tabIdiomaActivo, setTabIdiomaActivo] = useState(null)
     const fileInputRef = useRef(null)
     const qrInputRef = useRef(null)
 
@@ -102,12 +103,6 @@ export default function AdminUnityModels() {
         let trans = []
         if (item && item.translations && item.translations.length > 0) {
             trans = [...item.translations]
-            // Asegurarnos que siempre haya al menos la de inglés si no existe
-            if (!trans.find(t => t.language_code === 'en')) {
-                trans.push({ language_code: 'en', name: '', taxonomia: '', descripcion: '' })
-            }
-        } else {
-            trans = [{ language_code: 'en', name: '', taxonomia: '', descripcion: '' }]
         }
 
         setFormData(item ? { ...item, translations: trans } : {
@@ -115,6 +110,13 @@ export default function AdminUnityModels() {
             vernacularName: '', taxonRemarks: '', assetBundleFileName: '', qr_image_url: '',
             translations: trans
         })
+        
+        if(trans.length > 0) {
+            setTabIdiomaActivo(trans[0].language_code);
+        } else {
+            setTabIdiomaActivo(null);
+        }
+        
         setShowModal(true)
     }
 
@@ -259,7 +261,7 @@ export default function AdminUnityModels() {
                                             
                                             <div className="flex gap-1 flex-wrap">
                                                 <span className="text-[10px] bg-sky-50 text-sky-700 px-1.5 py-0.5 rounded border border-sky-100">es</span>
-                                                {m.translations?.map(t => (
+                                                {m.translations?.filter(t => t.name || t.descripcion).map(t => (
                                                     <span key={t.id} className="text-[10px] bg-sky-50 text-sky-700 px-1.5 py-0.5 rounded border border-sky-100">
                                                         {t.language_code}
                                                     </span>
@@ -342,47 +344,87 @@ export default function AdminUnityModels() {
                             <p className="text-[10px] text-gray-400 mt-1">Texto base en Español que verá el usuario en la app de Unity.</p>
                         </label>
 
-                        {/* TRADUCCIONES DINÁMICAS */}
-                        <div className="col-span-1 md:col-span-2 p-3 bg-gray-50 rounded-lg border text-sm grid gap-3">
-                            <div className="flex justify-between items-center mb-1">
-                                <p className="font-semibold text-gray-600 text-xs uppercase tracking-wider">Traducciones (Multi-Idioma)</p>
+                        {/* TRADUCCIONES DINÁMICAS (TABS) */}
+                        <div className="col-span-1 md:col-span-2 p-4 bg-gray-50 rounded-xl border border-gray-200">
+                            <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-2">
+                                <h3 className="font-bold text-gray-700 text-sm uppercase tracking-wider flex items-center gap-2">
+                                    <CircleStackIcon className="w-4 h-4 text-emerald-600" />
+                                    Traducciones e Idiomas
+                                </h3>
                                 <button type="button" onClick={async () => {
                                     const { value: lang } = await Swal.fire({
-                                        title: 'Seleccionar Idioma',
+                                        title: 'Añadir Idioma',
                                         input: 'select',
                                         inputOptions: { 'en': 'Inglés', 'pt': 'Portugués', 'fr': 'Francés', 'de': 'Alemán', 'it': 'Italiano' },
-                                        inputPlaceholder: 'Elige un idioma',
+                                        inputPlaceholder: 'Selecciona uno...',
                                         showCancelButton: true,
                                         confirmButtonColor: '#059669'
                                     });
                                     if(lang) {
-                                        if (formData.translations?.find(t => t.language_code === lang)) return toast.error('Este idioma ya fue agregado');
-                                        setFormData(p => ({ ...p, translations: [...(p.translations || []), { language_code: lang, name: '', descripcion: '' }] }))
+                                        if (formData.translations?.find(t => t.language_code === lang)) return toast.error('Este idioma ya existe');
+                                        const newTrans = [...(formData.translations || []), { language_code: lang, name: '', descripcion: '' }];
+                                        setFormData(p => ({ ...p, translations: newTrans }));
+                                        setTabIdiomaActivo(lang); // Cambiar automáticamente a la nueva pestaña
                                     }
-                                }} className="text-xs text-emerald-600 hover:text-emerald-700 font-medium flex items-center gap-1"><PlusIcon className="w-3 h-3"/> Añadir Idioma</button>
+                                }} className="text-xs bg-white border border-emerald-200 text-emerald-600 px-3 py-1.5 rounded-lg hover:bg-emerald-50 transition-colors font-semibold flex items-center gap-1 shadow-sm">
+                                    <PlusIcon className="w-4 h-4"/> Añadir Idioma
+                                </button>
                             </div>
+
+                            {/* CABECERA DE TABS */}
+                            <div className="flex gap-2 overflow-x-auto pb-2 mb-4 no-scrollbar">
+                                {(formData.translations || []).length === 0 ? (
+                                    <p className="text-xs text-gray-400 italic py-2">No hay traducciones adicionales agregadas.</p>
+                                ) : (
+                                    formData.translations.map((t) => {
+                                        const nombres = { en: 'Inglés', pt: 'Portugués', fr: 'Francés', de: 'Alemán', it: 'Italiano' };
+                                        const isActive = tabIdiomaActivo === t.language_code;
+                                        return (
+                                            <button 
+                                                key={t.language_code} 
+                                                type="button" 
+                                                onClick={() => setTabIdiomaActivo(t.language_code)}
+                                                className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap border transition-all ${isActive ? 'bg-emerald-600 text-white border-emerald-600 shadow-md translate-y-[-1px]' : 'bg-white text-gray-500 border-gray-200 hover:border-emerald-300'}`}
+                                            >
+                                                {nombres[t.language_code] || t.language_code}
+                                            </button>
+                                        );
+                                    })
+                                )}
+                            </div>
+
+                            {/* CONTENIDO DEL TAB ACTIVO */}
                             {formData.translations?.map((t, idx) => (
-                                <div key={idx} className="border bg-white rounded-lg p-3 space-y-3 relative group">
-                                    <div className="flex justify-between items-center">
-                                        <h4 className="font-bold text-gray-700 text-xs uppercase bg-gray-100 px-2 py-1 rounded">Idioma: {t.language_code}</h4>
-                                        {t.language_code !== 'en' && (
+                                tabIdiomaActivo === t.language_code && (
+                                    <div key={idx} className="bg-white rounded-xl p-4 border border-emerald-100 shadow-inner space-y-4 animate-fadeIn">
+                                        <div className="flex justify-between items-center pb-2 border-b border-gray-100">
+                                            <span className="text-xs font-black text-emerald-700 uppercase">Editando: {({en:'Inglés', pt:'Portugués', fr:'Francés', de:'Alemán', it:'Italiano'}[t.language_code])}</span>
                                             <button type="button" onClick={() => {
                                                 const newTrans = formData.translations.filter((_, i) => i !== idx);
                                                 setFormData({...formData, translations: newTrans});
-                                            }} className="text-red-500 hover:text-red-700 opacity-0 group-hover:opacity-100 transition-opacity"><TrashIcon className="w-4 h-4" /></button>
-                                        )}
+                                                if(newTrans.length > 0) setTabIdiomaActivo(newTrans[0].language_code);
+                                            }} className="p-1 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors">
+                                                <TrashIcon className="w-4 h-4" />
+                                            </button>
+                                        </div>
+                                        <label className="block">
+                                            <span className="text-[11px] font-bold text-gray-500 block mb-1">Nombre ({t.language_code})</span>
+                                            <input value={t.name || ''} onChange={(e) => {
+                                                const newTrans = [...formData.translations];
+                                                newTrans[idx].name = e.target.value;
+                                                setFormData({...formData, translations: newTrans});
+                                            }} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all" />
+                                        </label>
+                                        <label className="block">
+                                            <span className="text-[11px] font-bold text-gray-500 block mb-1">Descripción ({t.language_code})</span>
+                                            <textarea value={t.descripcion || ''} onChange={(e) => {
+                                                const newTrans = [...formData.translations];
+                                                newTrans[idx].descripcion = e.target.value;
+                                                setFormData({...formData, translations: newTrans});
+                                            }} rows={3} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-emerald-500/20 outline-none resize-none transition-all" />
+                                        </label>
                                     </div>
-                                    <label className="block"><span className="text-[11px] text-gray-500 block mb-1">Nombre Común ({t.language_code})</span><input value={t.name || ''} onChange={(e) => {
-                                        const newTrans = [...formData.translations];
-                                        newTrans[idx].name = e.target.value;
-                                        setFormData({...formData, translations: newTrans});
-                                    }} className="w-full px-2 py-1.5 border rounded text-xs outline-none" placeholder={`Ej: Polar Bear`} /></label>
-                                    <label className="block"><span className="text-[11px] text-gray-500 block mb-1">Descripción ({t.language_code})</span><textarea value={t.descripcion || ''} onChange={(e) => {
-                                        const newTrans = [...formData.translations];
-                                        newTrans[idx].descripcion = e.target.value;
-                                        setFormData({...formData, translations: newTrans});
-                                    }} rows={2} className="w-full px-2 py-1.5 border rounded text-xs outline-none resize-none" placeholder="Description..." /></label>
-                                </div>
+                                )
                             ))}
                         </div>
 

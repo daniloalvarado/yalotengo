@@ -1,25 +1,24 @@
 using UnityEngine;
-using UnityEngine.XR.ARFoundation;
-using UnityEngine.XR.ARSubsystems;
+using Vuforia;
 using UnityEngine.Networking;
 using System.Collections;
-using System.Collections.Generic;
 using System;
 
-[RequireComponent(typeof(ARTrackedImageManager))]
+/// <summary>
+/// Este script descarga imágenes QR de tu backend yalotengo y las inyecta 
+/// en el motor de Vuforia en tiempo real como marcadores rastreables.
+/// </summary>
 public class GestorMarcadoresDinamicos : MonoBehaviour
 {
     [Header("Configuración de API")]
-    [Tooltip("La URL base para obtener la lista de marcadores (ej: http://localhost:3000/microscopicos/public/targets o en producción https://tu-sitio.com/microscopicos/public/targets)")]
-    public string apiTargetsUrl = "http://localhost:3000/microscopicos/public/targets";
-
-    private ARTrackedImageManager trackedImageManager;
+    [Tooltip("URL base para obtener la lista de marcadores")]
+    public string apiTargetsUrl = "https://yalotengo.onrender.com/microscopicos/public/targets";
 
     [Serializable]
     private class TargetResponse
     {
-        public string name; // Debe ser el scientificName o id usado en AnimalAR.cs
-        public string url;
+        public string name; // ID del animal en la base de datos
+        public string url;  // URL de la imagen del marcador (JPG/PNG)
     }
 
     [Serializable]
@@ -30,14 +29,12 @@ public class GestorMarcadoresDinamicos : MonoBehaviour
 
     void Start()
     {
-        trackedImageManager = GetComponent<ARTrackedImageManager>();
-        
-        // Evitamos que inicie con librerías vacías si se requiere
-        if (trackedImageManager.referenceLibrary == null)
-        {
-            trackedImageManager.referenceLibrary = trackedImageManager.CreateRuntimeLibrary();
-        }
+        // Esperamos a que Vuforia esté inicializado antes de inyectar
+        VuforiaApplication.Instance.OnVuforiaStarted += OnVuforiaStarted;
+    }
 
+    private void OnVuforiaStarted()
+    {
         StartCoroutine(ObtenerMarcadoresDesdeNube());
     }
 
@@ -59,18 +56,17 @@ public class GestorMarcadoresDinamicos : MonoBehaviour
 
             if (targets != null && targets.array != null)
             {
-                Debug.Log($"Se encontraron {targets.array.Length} marcadores dinámicos.");
+                Debug.Log($"Vuforia: Se encontraron {targets.array.Length} marcadores dinámicos.");
                 foreach (var t in targets.array)
                 {
-                    StartCoroutine(DescargarYAgnadirMarcador(t.url, t.name));
+                    StartCoroutine(DescargarYAgnadirMarcadorVuforia(t.url, t.name));
                 }
             }
         }
     }
 
-    private IEnumerator DescargarYAgnadirMarcador(string imageUrl, string nombreMarcador)
+    private IEnumerator DescargarYAgnadirMarcadorVuforia(string imageUrl, string nombreMarcador)
     {
-        // Reemplazar espacios por %20 para URLs correctas
         string safeUrl = imageUrl.Replace(" ", "%20");
         
         using (UnityWebRequest www = UnityWebRequestTexture.GetTexture(safeUrl))
@@ -81,30 +77,39 @@ public class GestorMarcadoresDinamicos : MonoBehaviour
             {
                 Texture2D texture = DownloadHandlerTexture.GetContent(www);
                 
-                // Asegurarse de que la textura sea leíble (el backend MinIO devuelve un JPG o PNG estandar)
-                // Se intentará agregar a la librería Mutable
-                if (trackedImageManager.referenceLibrary is MutableRuntimeReferenceImageLibrary mutableLibrary)
+                // --- MAGIA DE VUFORIA ---
+                // Creamos un observador de imagen en tiempo de ejecución de 0.1 metros de ancho
+                var mTarget = VuforiaBehaviour.Instance.ObserverFactory.CreateImageTarget(
+                    texture, 0.1f, nombreMarcador);
+
+                if (mTarget != null)
                 {
-                    // Tamaño sugerido de 0.1 metros (10 centímetros) físico para calcular escala
-                    try 
+                    // Le añadimos un componente de evento para detectar cuando la cámara lo vea
+                    mTarget.OnTargetStatusChanged += (observer, status) => 
                     {
-                        mutableLibrary.ScheduleAddImageWithValidationJob(texture, nombreMarcador, 0.1f);
-                        Debug.Log("Marcador inyectado en RAM exitosamente: " + nombreMarcador);
-                    } 
-                    catch (Exception e) 
-                    {
-                        Debug.LogError("Error inyectando el marcador: " + e.Message);
-                    }
-                }
-                else
-                {
-                    Debug.LogError("Error: ARTrackedImageManager no soporta librerías mutables en esta plataforma o no se ha inicializado correctamente.");
+                        if (status.Status == Status.TRACKED || status.Status == Status.EXTENDED_TRACKED)
+                        {
+                            Debug.Log("Vuforia detectó marcador dinámico: " + nombreMarcador);
+                            AccionAlDetectar(nombreMarcador, mTarget.transform);
+                        }
+                    };
+                    Debug.Log("Vuforia: Marcador inyectado en RAM: " + nombreMarcador);
                 }
             }
             else
             {
-                Debug.LogError($"Fallo al descargar imagen marcador {nombreMarcador} de URL {safeUrl}: {www.error}");
+                Debug.LogError($"Fallo al descargar marcador {nombreMarcador}: {www.error}");
             }
+        }
+    }
+
+    private void AccionAlDetectar(string idAnimal, Transform transformMarcador)
+    {
+        LectorApiAR lector = FindObjectOfType<LectorApiAR>();
+        if (lector != null)
+        {
+            // Disparamos la descarga del modelo 3D
+            lector.BuscarDatosEnLaNube(idAnimal, transformMarcador);
         }
     }
 }
