@@ -22,9 +22,11 @@ export default function AdminUnityModels() {
     const [formData, setFormData] = useState({})
     const [uploadingAsset, setUploadingAsset] = useState(false)
     const [uploadingQr, setUploadingQr] = useState(false)
+    const [uploadingQr2, setUploadingQr2] = useState(false)
     const [tabIdiomaActivo, setTabIdiomaActivo] = useState(null)
     const fileInputRef = useRef(null)
     const qrInputRef = useRef(null)
+    const qrInput2Ref = useRef(null)
 
     // Nuevo estado para Pestañas
     const [activeTab, setActiveTab] = useState('gestion')
@@ -109,7 +111,7 @@ export default function AdminUnityModels() {
 
         setFormData(item ? { ...item, translations: trans } : {
             scientificName: '', kingdom: 'Animalia', phylum: '', subphylum: '', class: '', subclass: '', order: '', family: '', genus: '', specificEpithet: '',
-            vernacularName: '', taxonRemarks: '', assetBundleFileName: '', qr_image_url: '',
+            vernacularName: '', taxonRemarks: '', assetBundleFileName: '', qr_image_url: '', qr_image_url2: '',
             translations: trans
         })
 
@@ -127,13 +129,16 @@ export default function AdminUnityModels() {
         if (!file) return
 
         if (type === 'asset') setUploadingAsset(true)
-        else setUploadingQr(true)
+        else if (type === 'qr') setUploadingQr(true)
+        else setUploadingQr2(true)
 
         const formDataUpload = new FormData()
         if (type === 'asset') {
             formDataUpload.append('assetBundleFile', file)
-        } else {
+        } else if (type === 'qr') {
             formDataUpload.append('qrImageFile', file)
+        } else {
+            formDataUpload.append('qrImageFile2', file)
         }
 
         try {
@@ -148,11 +153,16 @@ export default function AdminUnityModels() {
                 setFormData(prev => ({ ...prev, qr_image_url: data.qr_image_url }))
                 toast.success('Imagen Marcador QR subida correctamente')
             }
+            if (type === 'qr2' && data.qr_image_url2) {
+                setFormData(prev => ({ ...prev, qr_image_url2: data.qr_image_url2 }))
+                toast.success('Imagen Secundaria subida correctamente')
+            }
         } catch (err) {
             toast.error('Error al subir archivo')
         } finally {
             if (type === 'asset') setUploadingAsset(false)
-            else setUploadingQr(false)
+            else if (type === 'qr') setUploadingQr(false)
+            else setUploadingQr2(false)
         }
     }
 
@@ -258,11 +268,18 @@ export default function AdminUnityModels() {
                                             </td>
                                             <td className="px-4 py-3">
                                                 <div className="flex flex-col gap-1.5">
-                                                    {m.qr_image_url ? (
-                                                        <span className="text-[10px] bg-indigo-50 text-indigo-700 px-1.5 py-0.5 rounded border border-indigo-100 inline-block w-max">QR Guardado</span>
-                                                    ) : (
-                                                        <span className="text-[10px] text-gray-400 italic">Sin QR</span>
-                                                    )}
+                                                    <div className="flex gap-2">
+                                                        {m.qr_image_url ? (
+                                                            <span className="text-[10px] bg-indigo-50 text-indigo-700 px-1.5 py-0.5 rounded border border-indigo-100 inline-block w-max">Cod QR</span>
+                                                        ) : (
+                                                            <span className="text-[10px] text-gray-400 italic">Sin QR</span>
+                                                        )}
+                                                        {m.qr_image_url2 ? (
+                                                            <span className="text-[10px] bg-blue-50 text-blue-700 px-1.5 py-0.5 rounded border border-blue-100 inline-block w-max">Foto</span>
+                                                        ) : (
+                                                            <span className="text-[10px] text-gray-400 italic">Sin Foto</span>
+                                                        )}
+                                                    </div>
 
                                                     <div className="flex gap-1 flex-wrap">
                                                         <span className="text-[10px] bg-sky-50 text-sky-700 px-1.5 py-0.5 rounded border border-sky-100">es</span>
@@ -275,17 +292,28 @@ export default function AdminUnityModels() {
                                                 </div>
                                             </td>
                                             <td className="px-4 py-3">
-                                                {m.qr_image_url ? (
-                                                    <div className="w-14 h-14 rounded-lg border border-gray-200 shadow-sm overflow-hidden bg-gray-50 flex items-center justify-center">
-                                                        <img
-                                                            src={`${API_BASE_URL}/uploads/microscopicos/${m.qr_image_url}`}
-                                                            alt="Marcador"
-                                                            className="w-full h-full object-cover"
-                                                        />
-                                                    </div>
-                                                ) : (
-                                                    <span className="text-gray-400 text-xs italic">Sin Imagen</span>
-                                                )}
+                                                <div className="flex gap-2">
+                                                    {m.qr_image_url ? (
+                                                        <div className="w-10 h-10 rounded-lg border border-gray-200 shadow-sm overflow-hidden bg-gray-50 flex items-center justify-center">
+                                                            <img
+                                                                src={`${API_BASE_URL}/uploads/microscopicos/${m.qr_image_url}`}
+                                                                alt="Marcador"
+                                                                className="w-full h-full object-cover"
+                                                            />
+                                                        </div>
+                                                    ) : (
+                                                        <span className="text-gray-400 text-[10px] italic">No QR</span>
+                                                    )}
+                                                    {m.qr_image_url2 && (
+                                                        <div className="w-10 h-10 rounded-lg border border-gray-200 shadow-sm overflow-hidden bg-gray-50 flex items-center justify-center">
+                                                            <img
+                                                                src={`${API_BASE_URL}/uploads/microscopicos/${m.qr_image_url2}`}
+                                                                alt="Marcador 2"
+                                                                className="w-full h-full object-cover"
+                                                            />
+                                                        </div>
+                                                    )}
+                                                </div>
                                             </td>
                                             <td className="px-4 py-3">
                                                 <span className={`text-xs px-2 py-1 rounded-full font-medium ${m.estado === 'activo' ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'}`}>
@@ -437,7 +465,7 @@ export default function AdminUnityModels() {
                             ))}
                         </div>
 
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 col-span-1 md:col-span-2">
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 col-span-1 md:col-span-2">
                             <div className="border rounded-lg p-3 bg-white">
                                 <span className="text-sm font-medium text-gray-700 mb-2 block">Archivo 3D (.molde)</span>
                                 <input type="file" ref={fileInputRef} onChange={(e) => handleFileUpload(e, 'asset')} className="hidden" />
@@ -480,12 +508,38 @@ export default function AdminUnityModels() {
                                     )}
                                 </div>
                             </div>
+                            
+                            <div className="border rounded-lg p-3 bg-white">
+                                <span className="text-sm font-medium text-gray-700 mb-2 block">Foto Natural (JPG/PNG)</span>
+                                <input type="file" ref={qrInput2Ref} onChange={(e) => handleFileUpload(e, 'qr2')} accept="image/png, image/jpeg" className="hidden" />
+                                <div className="flex flex-col gap-2">
+                                    <button type="button" onClick={() => qrInput2Ref.current?.click()} disabled={uploadingQr2} className="flex items-center justify-center gap-2 w-full py-2 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg text-sm disabled:opacity-50 transition-colors">
+                                        <ArrowUpTrayIcon className="w-4 h-4" />
+                                        {uploadingQr2 ? 'Subiendo...' : 'Subir Foto'}
+                                    </button>
+                                    {formData.qr_image_url2 && (
+                                        <div className="flex flex-col items-center justify-center gap-2 mt-2">
+                                            <img
+                                                src={`${API_BASE_URL}/uploads/microscopicos/${formData.qr_image_url2}`}
+                                                alt="QR Preview"
+                                                className="w-24 h-24 object-cover rounded-md border border-gray-200 shadow-sm"
+                                            />
+                                            <div className="flex items-center justify-center gap-1 text-[11px] text-blue-600 bg-blue-50 px-2 py-1 rounded w-full">
+                                                <CheckCircleIcon className="w-3 h-3 shrink-0" />
+                                                <span className="truncate flex-1 font-mono text-center">
+                                                    {formData.qr_image_url2.split('/').pop()}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <div className="flex justify-end gap-3 pt-4 border-t">
                         <button type="button" onClick={() => setShowModal(false)} className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 text-sm font-medium text-gray-700">Cancelar</button>
-                        <button type="submit" disabled={uploadingAsset || uploadingQr} className="px-5 py-2 text-white rounded-lg hover:opacity-90 disabled:opacity-50 text-sm font-medium" style={{ backgroundColor: THEME.primary }}>
+                        <button type="submit" disabled={uploadingAsset || uploadingQr || uploadingQr2} className="px-5 py-2 text-white rounded-lg hover:opacity-90 disabled:opacity-50 text-sm font-medium" style={{ backgroundColor: THEME.primary }}>
                             {editItem ? 'Guardar Cambios' : 'Registrar Especie'}
                         </button>
                     </div>

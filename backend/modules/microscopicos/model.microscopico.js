@@ -27,6 +27,7 @@ export const Microscopico = sequelize.define('mm_darwin_data', {
   
   assetBundleFileName: { type: DataTypes.STRING },
   qr_image_url: { type: DataTypes.STRING },
+  qr_image_url2: { type: DataTypes.STRING },
   
   estado: {
     type: DataTypes.ENUM('activo', 'desactivo', 'eliminado'),

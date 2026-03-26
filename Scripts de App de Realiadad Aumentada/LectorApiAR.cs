@@ -46,11 +46,18 @@ public class LectorApiAR : MonoBehaviour
 
         ultimoIdCargado = idAnimal;
         
+        // --- NUEVO: DESTRUIR INMEDIATAMENTE EL MODELO VIEJO PARA DAR FEEDBACK ---
+        if (modeloCargadoEnEscena != null)
+        {
+            Destroy(modeloCargadoEnEscena);
+            modeloCargadoEnEscena = null;
+        }
+
         if (controladorInfo != null)
         {
-            controladorInfo.txtNombre.text = "...";
-            controladorInfo.txtTaxonomia.text = "...";
-            controladorInfo.txtDescripcion.text = "...";
+            controladorInfo.txtNombre.text = "Identificando...";
+            controladorInfo.txtTaxonomia.text = "Sincronizando modelo 3D...";
+            controladorInfo.txtDescripcion.text = "Por favor, mantén la cámara estable mientras descargamos el modelo de " + idAnimal + "...";
         }
 
         StartCoroutine(SolicitarDatosAPI(idAnimal, padreAR));

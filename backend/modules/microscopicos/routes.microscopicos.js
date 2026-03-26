@@ -102,9 +102,12 @@ r.put('/admin/:id', adminAuth, async (req, res) => {
       await deleteFile('microscopicos', model.assetBundleFileName)
     }
     
-    // Lo mismo para qr_image_url
+    // Lo mismo para qr_image_url y qr_image_url2
     if (modelData.qr_image_url && model.qr_image_url && modelData.qr_image_url !== model.qr_image_url) {
       await deleteFile('microscopicos', model.qr_image_url)
+    }
+    if (modelData.qr_image_url2 && model.qr_image_url2 && modelData.qr_image_url2 !== model.qr_image_url2) {
+      await deleteFile('microscopicos', model.qr_image_url2)
     }
 
     await model.update({ ...modelData, fecha_update: new Date() })
@@ -137,6 +140,9 @@ r.delete('/admin/:id', adminAuth, async (req, res) => {
     if (model.qr_image_url) {
       await deleteFile('microscopicos', model.qr_image_url)
     }
+    if (model.qr_image_url2) {
+      await deleteFile('microscopicos', model.qr_image_url2)
+    }
 
     await model.update({ estado: 'eliminado', fecha_delete: new Date() })
     res.json({ success: true })
@@ -147,9 +153,9 @@ r.delete('/admin/:id', adminAuth, async (req, res) => {
 })
 
 // POST Upload AssetBundle a MinIO
-r.post('/admin/upload', adminAuth, upload.fields([{ name: 'assetBundleFile', maxCount: 1 }, { name: 'qrImageFile', maxCount: 1 }]), async (req, res) => {
+r.post('/admin/upload', adminAuth, upload.fields([{ name: 'assetBundleFile', maxCount: 1 }, { name: 'qrImageFile', maxCount: 1 }, { name: 'qrImageFile2', maxCount: 1 }]), async (req, res) => {
   try {
-    if (!req.files || (!req.files.assetBundleFile && !req.files.qrImageFile)) {
+    if (!req.files || (!req.files.assetBundleFile && !req.files.qrImageFile && !req.files.qrImageFile2)) {
       return res.status(400).json({ error: 'No se enviaron archivos' })
     }
     
@@ -177,6 +183,17 @@ r.post('/admin/upload', adminAuth, upload.fields([{ name: 'assetBundleFile', max
       response.qr_image_url = filename
     }
 
+    if (req.files.qrImageFile2) {
+      const qrFile2 = req.files.qrImageFile2[0]
+      const filename = await uploadFile(
+          qrFile2.buffer, 
+          'microscopicos', 
+          qrFile2.originalname, 
+          qrFile2.mimetype
+      )
+      response.qr_image_url2 = filename
+    }
+
     res.json(response)
   } catch (error) {
     console.error('Upload Error:', error)
@@ -193,18 +210,29 @@ r.get('/public/targets', async (req, res) => {
   try {
     const models = await Microscopico.findAll({
       where: {
-        estado: 'activo',
-        qr_image_url: { [Op.not]: null }
+        estado: 'activo'
       },
-      attributes: ['scientificName', 'qr_image_url']
+      attributes: ['scientificName', 'qr_image_url', 'qr_image_url2']
     })
 
     const baseUrl = `${req.protocol}://${req.get('host')}`
     
-    const targets = models.map(m => ({
-      name: m.scientificName,
-      url: `${baseUrl}/uploads/microscopicos/${m.qr_image_url}`
-    }))
+    const targets = []
+    
+    models.forEach(m => {
+      if (m.qr_image_url) {
+        targets.push({
+          name: m.scientificName,
+          url: `${baseUrl}/uploads/microscopicos/${m.qr_image_url}`
+        })
+      }
+      if (m.qr_image_url2) {
+        targets.push({
+          name: m.scientificName,
+          url: `${baseUrl}/uploads/microscopicos/${m.qr_image_url2}`
+        })
+      }
+    })
 
     res.json(targets)
   } catch (error) {
