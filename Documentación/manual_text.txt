@@ -1,0 +1,959 @@
+1
+Año del Bicentenario, de la consolidación de nuestra Independencia, y de la conmemoración de las heroicas batallas de Junín y Ayacucho
+Universidad Nacional de la Amazonia Peruana
+Facultad de Ingeniería de Sistemas e Informática
+Proyecto: 
+Implementación de un sistema web de matrícula para CETPRO “Padre Jesús García”
+ASIGNATURA:
+INGENIERÍA DE SOFTWARE
+DOCENTE:
+RAFAEL VILCA BARBARÁN
+INTEGRANTES:
+CARLOS D'ALESSANDER BACA RENGIFO
+MICHEL IZQUIERDO RODRIGUEZ
+MAVILA DEL PILAR CAMUS LOPEZ
+JOSE OSWALDO VASQUEZ ZEVALLOS
+WALTER ARMANDO ZUMAETA ZEGARRA
+SEMESTRE ACADÉMICO:
+2024-II
+IQUITOS – PERÚ 
+202
+4
+ÍNDICE
+ÍNDICE
+2
+CAPÍTULO I
+4
+1.
+INTRODUCCIÓN
+4
+2.
+DESCRIPCIÓN DETALLADA DEL TEMA SELECCIONADO
+4
+2.1
+Funcionalidades Principales
+5
+2.2
+Flujo del Proceso
+5
+3.
+PROBLEMÁTICA
+6
+4.
+JUSTIFICACIÓN DE LA ELECCIÓN DE TEMA
+7
+5.
+OBJETIVOS
+7
+5.1
+Objetivo General
+7
+5.2
+Objetivos Específicos
+7
+6.
+ALCANCE
+8
+7.
+PERSONAL INVOLUCRADO
+9
+8.
+METODOLOGÍA
+10
+8.1.
+Metodología de Desarrollo
+10
+8.2.
+Planificación
+10
+CAPÍTULO II: MODELAMIENTO DEL NEGOCIO
+16
+1.
+CASO DE USO DEL NEGOCIO
+16
+2.
+IDENTIFICACIÓN Y DESCRIPCIÓN DE LOS PROCESOS ACTUALES DEL NEGOCIO
+16
+2.1.
+Descripción de procesos clave
+16
+2.2
+Diagrama de actividad del negocio
+17
+3.
+PROPUESTA DE MEJORA
+17
+3.1
+Descripción de procesos clave
+17
+3.2
+Diagrama de actividad del negocio
+18
+CAPÍTULO III: ANÁLISIS Y REQUERIMIENTOS DE SISTEMAS DE INFORMACIÓN
+19
+1.
+DIAGRAMA DE CASO DE USO
+19
+2.
+REQUISITOS FUNCIONALES
+19
+3.
+REQUISITOS NO FUNCIONALES
+21
+4.
+ESPECIFICACIÓN DE CASO DE USO
+22
+4.1.
+Especificación de Caso de Uso: Autenticación de Usuario
+22
+4.2.
+Especificación de Caso de Uso: Gestión de Usuarios
+23
+4.3.
+Especificación de Caso de Uso: Gestión de Docentes
+23
+4.4.
+Especificación de Caso de Uso: Gestión de Programas de Estudio
+25
+4.5.
+Especificación de Caso de Uso: Gestionar Matrícula
+26
+4.6.
+Especificación de Caso de Uso: Aperturar periodo académico
+27
+5.
+DIAGRAMA DE SECUENCIA
+29
+5.1.
+Autenticar usuario
+29
+5.2.
+Gestionar docentes
+29
+5.3.
+Gestionar Usuario
+29
+5.4.
+Gestionar programas de estudio
+29
+5.5.
+Gestionar Matrícula
+30
+5.6.
+Aperturar periodo
+30
+6.
+DIAGRAMA DE CLASES
+30
+7.
+DIAGRAMA ENTIDAD RELACIÓN (BASE DE DATOS)
+30
+CAPÍTULO I
+INTRODUCCIÓN
+En la actualidad, la incorporación de soluciones tecnológicas en la gestión de procesos administrativos es fundamental para mejorar la eficiencia operativa y la experiencia de los usuarios. El CETPRO "Padre Jesús García", una institución dedicada a la formación técnica profesional, enfrenta diversos retos relacionados con su proceso de matrícula, el cual se realiza de forma presencial. Este enfoque implica un manejo manual intensivo de las inscripciones, genera dificultades en el control de cupos y supone una experiencia poco eficiente y estresante tanto para el personal administrativo como para los estudiantes, quienes deben tomar decisiones rápidas sobre los cursos a los que desean inscribirse.
+Para abordar estas dificultades, se plantea la implementación de un sistema web de matrícula diseñado para automatizar y digitalizar el proceso, permitiendo a los estudiantes realizar inscripciones de manera ágil y ordenada, mientras que el personal administrativo puede gestionar el control de cupos y pagos con mayor precisión. Este sistema no solo busca optimizar los procedimientos internos de la institución, sino también mejorar significativamente la satisfacción de los estudiantes al ofrecerles una experiencia más cómoda y eficiente.
+Este proyecto detalla el desarrollo de dicho sistema web, desde la definición de requerimientos funcionales hasta la implementación de soluciones tecnológicas adecuadas, con el propósito de transformar el proceso de matrícula en una herramienta moderna y efectiva que responda a las necesidades actuales del CETPRO y de sus usuarios.
+DESCRIPCIÓN DETALLADA DEL TEMA SE
+LE
+CCIONADO
+Este proyecto tiene como objetivo principal el diseño e implementación de un sistema web de matrícula para el CETPRO “Padre Jesús García”. La solución tecnológica propuesta permitirá automatizar y optimizar la gestión de inscripciones, facilitando el registro de perfiles de estudiantes, la administración de matrículas y el control de cupos para los diferentes cursos ofertados por la institución.
+El sistema contará con una interfaz amigable y accesible para los estudiantes, donde podrán consultar el listado de cursos disponibles, verificar detalles como horarios, costos y requisitos, y realizar su inscripción de forma sencilla y eficiente. Asimismo, ofrecerá herramientas administrativas que permitirán al personal del CETPRO gestionar de manera integral el proceso de matrícula, minimizando errores y ahorrando tiempo.
+Esta iniciativa busca transformar el proceso de matrícula en una experiencia digital moderna que beneficie tanto a los estudiantes como al equipo administrativo, contribuyendo al crecimiento y eficiencia operativa de la institución.
+Por otro lado, el sistema proporcionará a la administración del CETPRO herramientas para gestionar el proceso de matrícula y realizar seguimientos a los estudiantes inscritos. Las características clave incluyen:
+Funcionalidades 
+P
+rincipales
+Gestión de usuarios:
+Registro de estudiantes
+: El administrador será el encargado de 
+registrar a los estudiantes
+ en el sistema tras verificar el pago y la entrega de requisitos de manera presencial o a través de la SUNAT. Durante el registro, se incluirá información relevante como el nombre, número de identificación, correo electrónico y monto pagado.
+Envío de credenciales
+: Una vez registrado, el sistema enviará automáticamente un correo al estudiante con sus 
+credenciales de acceso
+ (usuario y contraseña), que le permitirá ingresar al sistema
+.
+Inicio de sesión: 
+Los estudiantes podrán iniciar sesión con las credenciales recibidas por correo y gestionar su inscripción en los cursos disponibles, según el monto pagado.
+Catálogo de cursos:
+El sistema mostrará al estudiante solo los cursos que coincidan con el monto pagado. Por ejemplo, si un estudiante ha pagado 150 soles, solo podrá visualizar los cursos disponibles a ese precio (Peluquería y Barbería, Panadería y Pastelería, etc.)
+, si pago 120, le 
+saldra
+.
+Cada curso tendrá información detallada, incluyendo el nombre del curso, el turno, la duración, y los requisitos.
+Los estudiantes no podrán ver ni inscribirse en cursos cuyo costo supere el monto pagado, asegurando un control preciso de las matrículas y el acceso.
+Proceso de inscripción:
+Después de iniciar sesión, el estudiante podrá seleccionar y matricularse en los cursos disponibles dentro de su rango de pago.
+Una vez inscrito, el sistema generará una confirmación automática de la matrícula, y el administrador podrá ver en tiempo real las inscripciones y el número de estudiantes en cada curso.
+Gestión administrativa:
+El administrador será el encargado de:
+Registrar estudiantes
+ tras confirmar el pago y los requisitos.
+Asignar los cursos correspondientes según el monto pagado.
+Supervisar las inscripciones, el catálogo de cursos y la disponibilidad de cupos.
+Además, el administrador podrá modificar el catálogo de cursos, actualizar precios y crear nuevos programas según las necesidades del CETPRO.
+Flujo del 
+P
+roceso
+Registro inicial:
+ El administrador registra a un estudiante.
+Credenciales enviadas:
+ El sistema envía las credenciales al estudiante (vía correo electrónico o similar).
+Acceso al sistema:
+ El estudiante inicia sesión con sus credenciales.
+Consulta de cursos: El estudiante navega por el catálogo de cursos disponibles.
+Inscripción:
+ El estudiante selecciona un curso y se inscribe de forma automatizada.
+Confirmación:
+ El estudiante recibe una notificación de confirmación de su inscripción, y el administrador puede visualizar la matrícula realizada.
+PROBLEMÁTICA
+El proceso de matrícula en el CETPRO "Padre Jesús García" se realiza de forma presencial, lo que plantea desafíos significativos tanto para los estudiantes como para el personal administrativo. 
+Decisiones Inmediatas de los Estudiantes
+Durante la matrícula, los estudiantes se enfrentan a la necesidad de tomar decisiones cruciales en un tiempo limitado. Esto puede resultar en las siguientes complicaciones:
+Falta de Reflexión
+: Los estudiantes no disponen de un tiempo adecuado para evaluar sus opciones de cursos y horarios. La necesidad de decidir en el momento puede llevar a elecciones impulsivas, lo que podría no reflejar sus verdaderos intereses o necesidades académicas.
+Estrés y Ansiedad
+: La presión de decidir rápidamente en un ambiente potencialmente aglomerado puede generar estrés. Esto no solo afecta la experiencia de matrícula, sino que también puede influir en su motivación y rendimiento académico en el futuro.
+Confusión en Opciones
+: Con múltiples cursos y horarios disponibles, los estudiantes pueden sentirse abrumados, lo que incrementa el riesgo de cometer errores en su elección.
+Desafíos para el Personal Administrativo
+El personal administrativo juega un papel crucial en el proceso de matrícula, pero enfrenta varios retos:
+Gestión de Cupos
+: Deben monitorear constantemente la disponibilidad de cupos en cada horario. Este control es vital para garantizar que los estudiantes no se matriculen en clases que ya están completas, lo que puede llevar a insatisfacción y frustración entre los alumnos.
+Riesgo de Errores
+: La necesidad de realizar múltiples tareas simultáneamente (matricular a estudiantes, gestionar horarios, controlar cupos) aumenta la probabilidad de cometer errores. Un solo error en la asignación de un curso o un horario puede causar inconvenientes significativos para los estudiantes y el personal.
+Carga Administrativa Elevada
+: El enfoque manual en el proceso de matrícula implica una considerable carga de trabajo. Esto no solo puede llevar a una disminución de la eficiencia operativa, sino que también puede impactar en la calidad del servicio que reciben los estudiantes.
+La problemática actual impacta no solo a los estudiantes y al personal administrativo, sino también a la percepción general de la calidad institucional. Un proceso de matrícula manual, estresante y propenso a errores puede afectar la satisfacción de los estudiantes y su confianza en la institución.
+Estos desafíos evidencian la necesidad de adoptar un sistema automatizado que facilite la toma de decisiones para los estudiantes y optimice las tareas administrativas. La digitalización del proceso permitiría a los estudiantes seleccionar cursos de manera más reflexiva y organizada, mientras que el personal administrativo podría gestionar los cupos y horarios con mayor precisión, reduciendo errores y mejorando la eficiencia operativa de la institución.
+J
+USTIFICACIÓN DE LA ELECCIÓN DE TEMA
+La implementación de un sistema web de matrícula para el CETPRO "Padre Jesús García" tiene como objetivo mejorar la eficiencia del proceso de inscripción y matrícula, considerando que los pagos se realizarán de manera presencial. A pesar de este enfoque presencial para los pagos, el sistema ofrece numerosas ventajas que justifican su desarrollo, tales como:
+Mayor accesibilidad para los estudiantes:
+ Aunque los pagos se realizan presencialmente, los estudiantes podrán gestionar su matrícula y consultar los cursos desde cualquier lugar y en cualquier momento, facilitando la planificación y la selección de cursos sin necesidad de múltiples desplazamientos.
+Optimiza
+r
+ el tiempo del personal administrativo:
+ Al automatizar procesos como el registro de estudiantes, la asignación de cursos según los pagos y la confirmación de inscripciones, el personal podrá reducir significativamente el tiempo dedicado a tareas repetitivas. Esto permitirá una mayor eficiencia en la administración, mejorando la atención a los estudiantes que lleguen presencialmente para realizar sus pagos y cumplir con los requisitos.
+Mejora en la experiencia del usuario:
+ El sistema facilitará el acceso a información clara y precisa sobre los cursos disponibles y sus requisitos, permitiendo que los estudiantes se matriculen de manera rápida una vez realizado el pago presencial. Además, la comunicación vía correo electrónico con el envío de credenciales mejora el flujo de información, eliminando la necesidad de esperar en la sede para este proceso.
+Aunque el sistema requiere que los estudiantes realicen los pagos de manera presencial, la automatización del resto del proceso reduce significativamente las barreras y optimiza tanto la experiencia del estudiante como la del personal administrativo.
+OBJETIVOS
+O
+bjetivo General
+Desarrollar e implementar un sistema web de matrícula para el CETPRO "Padre Jesús García" que permita a los estudiantes realizar su inscripción en los cursos de manera eficiente, tras completar el pago, optimizando así la gestión de horarios y cupos, y facilitando las tareas administrativas para el personal.
+Objetivos Específicos
+Analizar y modelar los procesos de negocio del CETPRO "Padre Jesús García"
+Identificar y especificar los requerimientos de sistemas de información del CETPRO "Padre Jesús García".
+Desarrollar diagramas que representen la estructura y comportamiento del sistema implementado en el CETPRO "Padre Jesús García".
+Implementar el sistema para la gestión de matrícula del CETPRO “Padre Jesús García” siguiendo el diseño y buenas prácticas de desarrollo.
+Planificar e instalar el sistema en el entorno del CETPRO.
+Preparar y defender el proyecto demostrando su funcionalidad.
+ALCANCE
+El alcance del proyecto abarca el diseño e implementación de un sistema web de matrícula para el CETPRO "Padre Jesús García", enfocado en facilitar y automatizar el proceso de inscripción de los estudiantes tras la confirmación de un pago presencial. Entre las principales funcionalidades del sistema se incluyen el registro de estudiantes realizado por el personal administrativo, el envío automático de credenciales de acceso, un catálogo de cursos que se adapta al monto abonado, y un proceso de inscripción que genera confirmaciones automáticas para los usuarios.
+Adicionalmente, el sistema proporcionará herramientas para que los administradores puedan supervisar inscripciones, gestionar cursos, horarios y cupos disponibles, además de generar reportes detallados. Este proyecto se centrará exclusivamente en el proceso de matrícula, excluyendo funcionalidades como la gestión académica posterior o el procesamiento de pagos en línea. De esta manera, se busca ofrecer una solución eficiente y accesible que optimice tanto la experiencia de los estudiantes como la gestión administrativa de la institución.
+PERSONAL INVOLUCRADO
+Nombre
+Rol
+Responsabilidades
+Información de Contacto
+Aprobación
+Vásquez Zevallos
+Desarrollador
+Desarrollo de componentes y funcionalidades específicas del sistema. Participación en el diseño y las pruebas.
+jovz123@gmail.com
+Sí
+Camús
+ 
+Lopez
+Líder de Proyecto
+Coordinación general del equipo, toma de decisiones, planificación y supervisión del progreso del proyecto.
+camus123@gmail.com
+Sí
+Zumaeta Zegarra
+Analista
+Responsable de recopilar y analizar los requisitos del sistema, definiendo las especificaciones funcionales y técnicas, así como de asegurar que el sistema cumpla con las necesidades.
+zumeate21@gmail.com
+Sí
+Izquiero
+ 
+Rodriguez
+Diseñador
+Encargado de crear una interfaz de usuario intuitiva y amigable, optimizando la experiencia del usuario tanto para estudiantes como para administradores.
+izquierdorodriguez123@gmail.com
+Sí
+Izquierdo 
+Rodriguez
+Tester
+E
+ncarga
+do
+ de realizar pruebas exhaustivas del sistema para identificar y corregir errores, garantizando que el producto final sea funcional y confiable.
+izquierdorodriguez
+@gmail.com
+Sí
+METODOLOGÍA
+Metodología de Desarrollo
+Para llevar a cabo el proyecto "Desarrollo e Implementación de un Sistema Web de Matrícula para el CETPRO 'Padre Jesús García'", se ha elegido la metodología ágil Scrum. Este enfoque es ideal para proyectos de software, ya que permite una gestión dinámica y flexible, adaptándose a los cambios y garantizando que las necesidades del usuario sean atendidas de manera continua.
+Scrum organiza el desarrollo en sprints, ciclos cortos que se enfocan en cumplir objetivos específicos dentro de un tiempo definido. Al finalizar cada sprint, se entregará un incremento funcional del sistema, lo que permitirá a los interesados evaluar los avances y realizar ajustes según sea necesario. Esto asegura que el proyecto se mantenga alineado con las expectativas del CETPRO, proporcionando una solución efectiva para el proceso de matrícula.
+Con este marco de trabajo, se busca no solo alcanzar los objetivos del proyecto de manera eficiente, sino también garantizar una experiencia mejorada para los estudiantes y el personal administrativo, logrando un sistema web funcional y ajustado a las necesidades reales de la institución.
+Planificación
+Como se ha señalado previamente, se adoptará el marco de trabajo Scrum. Dentro de este enfoque, se establecen roles cruciales, se utilizan algunos artefactos y se programan eventos específicos para guiar y estructurar efectivamente la ejecución del proyecto.
+Roles del Equipo Scrum
+El equipo de desarrollo estará compuesto por roles específicos, cada uno desempeñando funciones cruciales dentro del marco Scrum.
+Rol
+Encargado
+Responsabilidades
+Product Owner
+C
+amus 
+Lopez
+ Mavila del Pilar
+Definir y priorizar los requisitos del sistema.
+Representar los intereses y expectativas del cliente.
+Scrum Master
+V
+ásquez Zevallos José Oswaldo
+Facilitar el proceso Scrum y eliminar obstáculos.
+Garantizar el funcionamiento efectivo del equipo.
+Equipo de desarrollo 
+Carlos 
+D'alessander
+ Baca Rengifo
+Michel Izquierdo 
+Rodriguez
+Mavila Del Pilar Camus 
+Lopez
+Jose Oswaldo Vasquez Zevallos
+Walter Armando Zumaeta Zegarra
+Implementar el sistema según los requisitos definidos.
+Colaborar en el diseño y desarrollo de funcionalidades. 
+Asegurar la calidad del código y las funcionalidades. 
+Contribuir a la entrega exitosa de incrementos de producto. 
+Planificación de sprints
+El desarrollo de este proyecto se estructurará en 9 sprints, con una duración estimada total de 1
+4
+ semanas. La planificación de los sprints se ha diseñado de manera estratégica para asegurar una distribución equitativa de las tareas y una progresión fluida a lo largo del período de desarrollo.
+Semana
+Sprint
+Objetivos
+1
+Definición del tema del proyecto
+Selección y aprobación del tema del proyecto
+.
+Identificación general de los requerimientos y del equipo del trabajo.
+Identificación preliminar de las principales necesidades del sistema.
+2
+Análisis del negocio
+Revisión detallada del entorno del CETPRO y sus procesos.
+Recolección de información clave 
+del CETPRO
+.
+Identificación de problemas y oportunidades de mejora.
+3
+Identificación de requerimientos
+Definición de los requerimientos funcionales y no funcionales del sistema.
+Priorizar los requerimientos según su relevancia para el CETPRO.
+4
+Modelado y análisis del sistema
+Análisis y modelado del negocio.
+Elaboración de diagramas de actividades que reflejen el proceso del negocio.
+5 
+Diseño preliminar del sistema
+Desarrollo de diagramas para representar la estructura y el comportamiento del sistema.
+Selección de tecnologías (frameworks, lenguajes, IDE) para el desarrollo.
+6
+Configuración del entorno de desarrollo
+Configuración de herramientas de desarrollo y control de versiones (Git, IDE).
+Preparación del entorno de desarrollo local y servidor de pruebas.
+7
+Diseño de base de datos y primeros componentes
+Diseño preliminar de la base de datos.
+Implementación del esquema inicial de la base de datos en el servidor.
+8
+Desarrollo de interfaces principales
+Creación de las primeras interfaces (registro de estudiantes, inicio de sesión).
+Diseño y prueba de usabilidad de los formularios y pantallas.
+Prototipos de las interfaces clave del sistema con revisiones por el equipo.
+9
+Implementación de funcionalidad básicas
+Desarrollo de la funcionalidad de registro de estudiantes y gestión de usuarios.
+Implementación de validaciones y reglas de negocio esenciales.
+Revisión y ajustes tras pruebas funcionales iniciales.
+10
+Pruebas y ajustes de la funcionalidad básica
+Realización de pruebas funcionales para corregir errores.
+Mejoras continuas en la usabilidad y rendimiento del sistema.
+Integración de componentes desarrollados para pruebas de conjunto.
+11
+Desarrollo de funcionalidad avanzadas
+Implementación de funcionalidades avanzadas (gestión de cursos, turnos, etc.).
+Desarrollo de sistemas de autenticación y roles de usuario.
+Optimización del rendimiento y seguridad del sistema.
+12
+Pruebas de integración y refinamiento
+Pruebas de integración de todos los módulos (base de datos, 
+front-end
+, back-
+end
+).
+Ajustes finales para garantizar la estabilidad del sistema.
+13
+Instalación y configuración del sistema
+Planificación e instalación del sistema en el entorno de producción.
+Configuración de seguridad y ajuste de permisos en el entorno final.
+Ejecución de pruebas de instalación y funcionalidad en producción.
+14
+Entrega final y pruebas de aceptación
+Entregar la documentación técnica, incluyendo manuales de usuario y guías de instalación.
+Preparar y entregar la versión final del sistema al cliente o usuario final.
+Realizar pruebas de aceptación con el cliente para validar que el sistema cumpla con todos los requisitos y especificaciones.
+CAPÍTULO II: MODELAMIENTO DEL NEGOCIO
+CASO DE USO DEL NEGOCIO
+IDENTIFICACIÓN Y DESCRIPCIÓN DE LOS PROCESOS ACTUALES DEL NEGOCIO
+Descripción de procesos clave
+S
+olicitar Información de Programas y Horarios
+El proceso comienza cuando un estudiante interesado visita el centro para solicitar información sobre los programas educativos y sus horarios. Debido a la ausencia de un sistema digital, el encargado de matrícula proporciona esta información de forma manual. El encargado consulta documentos impresos que contienen los detalles de los programas disponibles, incluyendo cursos, horarios y los requisitos que deben cumplir los estudiantes para matricularse. El estudiante revisa los documentos y se lleva una copia impresa para evaluar su decisión.
+Pagar
+ Matricula
+El proceso de pago de matrícula se lleva a cabo de manera presencial. Después de haber recibido la información sobre los cursos y haber reunido los requisitos necesarios, el estudiante debe regresar al centro para efectuar el pago. El encargado verifica que el estudiante haya cumplido con todos los requisitos antes de aceptar el pago. Este se realiza en la recepción, donde se registra de manera manual sin integración a un sistema automatizado. Una vez que el pago ha sido procesado, el estudiante puede elegir el curso y horario 
+y dar a conocer al Personal Administrativo.
+Gestionar Matricula
+El proceso de matrícula en el CETPRO utiliza el SIGA CETPRO Perú para gestionar algunos aspectos administrativos, pero muchas tareas siguen siendo manuales. Los estudiantes interactúan con el encargado, quien verifica la disponibilidad de cursos y horarios en el sistema. El pago de la matrícula y la confirmación del registro se gestionan de manera independiente
+. 
+ Aunque el sistema ayuda parcialmente, existe la oportunidad de mejorar los procesos mediante una mayor automatización y personalización.
+Diagrama de actividad del negocio
+PROPUESTA DE MEJORA
+Descripción de procesos clave
+Solicitar Información de Programas y Horarios
+El proceso comienza cuando un estudiante interesado visita el centro para solicitar información sobre los programas educativos y sus horarios. Debido a la ausencia de un sistema digital, el encargado de matrícula proporciona esta información de forma manual. El encargado consulta documentos impresos que contienen los detalles de los programas disponibles, incluyendo cursos, horarios y los requisitos que deben cumplir los estudiantes para matricularse. El estudiante revisa los documentos y se lleva una copia impresa para evaluar su decisión.
+Pagar Matricula
+El proceso de pago de matrícula se lleva a cabo de manera presencial. Después de haber recibido la información sobre los cursos y haber reunido los requisitos necesarios, el estudiante debe regresar al centro para efectuar el pago. El encargado verifica que el estudiante haya cumplido con todos los requisitos antes de aceptar el pago. Este se realiza en la recepción, donde se registra de manera manual sin integración a un sistema automatizado. Una vez que el pago ha sido procesado, el estudiante puede elegir el curso y horario y dar a conocer al Personal Administrativo.
+Gestionar Matricula
+El estudiante inicia sesión en el portal y accede al catálogo de cursos disponibles, teniendo en cuenta que solo puede elegir cursos y turnos cuyo costo no exceda el monto pagado. Al seleccionar los cursos de su interés, el sistema verifica automáticamente si el saldo cubre los cursos elegidos; si el monto es insuficiente, notifica al estudiante y le sugiere ajustar su selección. El estudiante tiene hasta tres intentos para completar el proceso correctamente. Una vez confirmada la inscripción, el sistema registra los cursos seleccionados y actualiza el perfil del estudiante con la información de matrícula, permitiéndole descargar su ficha como comprobante del proceso completado.
+Diagrama de actividad del negocio
+CAPÍTULO III: ANÁLISIS Y REQUERIMIENTOS DE SISTEMAS DE INFORMACIÓN
+ 
+DIAGRAMA DE CASO DE USO
+REQUISITOS FUNCIONALES
+Número de requisito
+RF-01
+Nombre de requisito
+ 
+Autenticación de Usuario
+Tipo
+ Requisito
+ Restricción
+Fuente del requisito
+Página web oficial del CETPRO
+Prioridad del requisito
+ Alta/Esencial
+ Media/Deseado
+ Baja/ Opcional
+RF-01 - Autenticación de Usuario
+: El sistema debe permitir que tanto el 
+Administrador
+ como el 
+Estudiante
+ inicien sesión utilizando sus credenciales de acceso. El sistema debe validar el nombre de usuario y la contraseña ingresados por el usuario. Si las credenciales son correctas, el sistema debe permitir el acceso a la página de inicio correspondiente a cada rol (estudiante o administrador) y proporcionar acceso a las funcionalidades específicas de cada rol.
+Número de requisito
+RF-02
+Nombre de requisito
+Gestión de Usuarios
+Tipo
+ Requisito
+ Restricción
+Fuente del requisito
+Página web oficial del CETPRO
+Prioridad del requisito
+ Alta/Esencial
+ Media/Deseado
+ Baja/ Opcional
+RF-02 - Gestión de Usuarios
+: El sistema debe permitir al 
+Administrador
+ gestionar los perfiles de los estudiantes, incluyendo la posibilidad de añadir, editar y eliminar usuarios. Al añadir un estudiante, el sistema debe permitir al administrador ingresar datos como nombres completos, edad, DNI, correo y foto tamaño carnet. El sistema debe generar automáticamente las credenciales del estudiante en el formato 
+primernombre
+. primerapellido.3ultimosdigitosDNI y guardarlas junto con el perfil del estudiante. El sistema también debe permitir la edición de la información de un 
+estudiante o su eliminación, y notificar al administrador sobre la finalización exitosa de la operación o cualquier error que ocurra durante el proceso.
+Número de requisito
+RF-03
+Nombre de requisito
+Gestión de Docentes
+Tipo
+ Requisito
+ Restricción
+Fuente del requisito
+Página web oficial del CETPRO
+Prioridad del requisito
+ 
+ Alta/Esencial
+ Media/Deseado
+ Baja/ Opcional
+RF-03 - Gestión de Docentes
+: El sistema debe permitir al 
+Administrador
+ agregar, eliminar y editar los datos de los docentes que trabajan en el CETPRO Padre Jesús García. El administrador debe poder ingresar información como nombre, especialidad, disponibilidad y datos de contacto al agregar un nuevo docente. Además, el sistema debe ofrecer la opción de eliminar a un docente mediante una búsqueda por nombre y editar los datos de un docente existente, incluyendo cambios de horario y actualización de información de contacto. El sistema debe guardar cualquier cambio realizado y notificar al administrador sobre la operación exitosa o los errores ocurridos, sugiriendo la modificación del registro existente en caso de duplicados.
+Número de requisito
+RF-04
+Nombre de requisito
+Gestión de Programas de Estudio
+Tipo
+ Requisito
+ Restricción
+Fuente del requisito
+Página web oficial del CETPRO
+Prioridad del requisito
+ Alta/Esencial
+ Media/Deseado
+ Baja/ Opcional
+RF-04 - Gestión de Programas de Estudio
+: El sistema debe permitir al 
+Administrador
+ configurar los programas de estudio disponibles, incluyendo la opción de agregar, modificar y eliminar programas. Al agregar un programa, el administrador debe poder ingresar detalles como el nombre del programa, descripción, requisitos, asignar horarios por turno, cupos (máximo 30 estudiantes) y docentes responsables. El sistema debe validar los horarios asignados para evitar conflictos y registrar la configuración de cada programa. Cualquier modificación o eliminación de un programa debe actualizarse en el sistema, y el administrador debe ser notificado en caso de errores o conflictos de horario. La información actualizada debe mostrarse en la oferta educativa disponible para los estudiantes.
+Número de requisito
+RF-05
+Nombre de requisito
+Gestión de Matricula
+Tipo
+ Requisito
+ Restricción
+Fuente del requisito
+Página web oficial del CETPRO
+Prioridad del requisito
+ Alta/Esencial
+ Media/Deseado
+ Baja/ Opcional
+RF-05 - Gestión de Matrícula
+: 
+El sistema debe permitir a los estudiantes inscribirse en los programas de estudio disponibles, siempre que el período académico haya sido aperturado por el administrador y existan cupos disponibles. Al acceder a la sección de matrícula, el sistema mostrará los programas con sus cupos disponibles, permitirá al estudiante registrar su inscripción y, posteriormente, deberá generar un comprobante provisional con los datos de la matrícula. El pago correspondiente será validado posteriormente; si no se realiza dentro del tiempo estipulado, la inscripción será anulada automáticamente. El sistema notificará cualquier impedimento (falta de cupos o período académico no habilitado) mediante mensajes explicativos.
+Número de requisito
+RF-05
+Nombre de requisito
+Gestión de Matricula
+Tipo
+ Requisito
+ Restricción
+Fuente del requisito
+Página web oficial del CETPRO
+Prioridad del requisito
+ Alta/Esencial
+ Media/Deseado
+ Baja/ Opcional
+RF-06
+ 
+-
+ 
+Apertura de periodo académico:
+ 
+El sistema debe permitir al administrador autenticado aperturar un nuevo periodo académico configurando detalles como nombre, fechas y parámetros adicionales. Tras validar que no existan conflictos con periodos activos, el sistema registrará y activará el nuevo periodo, habilitando la matrícula para los estudiantes.
+Número de requisito
+RF-06
+Nombre de requisito
+Apertura de periodo académico
+Tipo
+ Requisito
+ Restricción
+Fuente del requisito
+Página web oficial del CETPRO
+Prioridad del requisito
+ Alta/Esencial
+ Media/Deseado
+ Baja/ Opcional
+RF-0
+7
+ – Gestión de Reportes: 
+El sistema debe permitir al administrador generar y consultar reportes detallados que faciliten el análisis y seguimiento de los procesos académicos y administrativos.
+Número de requisito
+RF-07
+Nombre de requisito
+Gestión de Reportes
+Tipo
+ Requisito
+ Restricción
+Fuente del requisito
+Página web oficial del CETPRO
+Prioridad del requisito
+ Alta/Esencial
+ Media/Deseado
+ Baja/ Opcional
+REQUISITOS NO FUNCIONALES
+REQUISITO NO FUNCIONAL
+Nombre
+Descripción
+Rendimiento
+El sistema debe gestionar múltiples solicitudes simultáneas sin afectar su rendimiento, especialmente durante los periodos de matrícula, donde puede manejar hasta 200 estudiantes concurrentemente y garantizar un tiempo de respuesta máximo de 2 segundos por solicitud.
+Disponibilidad
+El sistema debe estar disponible al menos el 99.8% del tiempo durante los periodos de matrícula y ser accesible 24/7, especialmente en los días críticos de inscripción y selección de 
+programas
+, ya que esta disponibilidad constante es crucial para evitar retrasos o bloqueos en el proceso de inscripción.
+Seguridad
+Los datos de los estudiantes y sus credenciales deben estar cifrados, y se deben implementar medidas de seguridad como autenticación y autorización para proteger la información confidencial y cumplir con las normativas de seguridad de datos personales.
+Usabilidad
+La interfaz del sistema debe ser intuitiva y fácil de usar para estudiantes y administradores, permitiendo completar el proceso de inscripción en menos de 5 pasos sin asistencia externa, ya que la mayoría de los estudiantes no tiene conocimientos técnicos avanzados, lo que hace esencial la usabilidad del sistema.
+Escalabilidad
+El sistema debe ser escalable para soportar un aumento del 150% en el número de estudiantes inscritos y la oferta de nuevos 
+programas
+ sin necesidad de rediseño o cambios estructurales significativos, permitiendo que el sistema se adapte al crecimiento del CETPRO.
+Mantenibilidad
+El sistema debe ser fácil de mantener y actualizar, permitiendo al equipo técnico realizar ajustes y mejoras en un tiempo promedio de no más de 2 horas, preferiblemente fuera del horario pico, para garantizar la operatividad durante los periodos de matrícula y evitar interrupciones en el proceso de inscripción.
+Compatibilidad
+El sistema debe ser compatible con los principales navegadores (Chrome, Firefox, Safari y Edge) y dispositivos (PC, tabletas y smartphones), asegurando el acceso multiplataforma para los estudiantes.
+ESPECIFICACIÓN DE CASO DE USO
+Especificación de Caso de Uso: Autenticación de Usuario
+Caso de uso: 
+Autenticar Usuario
+ID
+CU01
+Actores
+Estudiante, Administrador
+Descripción
+Permite que tanto el estudiante como el administrador inicien sesión en el sistema utilizando sus credenciales para acceder a las funcionalidades correspondientes a su rol
+.
+Precondición
+El usuario estudiante debe haber completado su registro en el sistema, incluyendo la creación de su cuenta personal.
+El usuario administrador debe conocer las credenciales que el sistema reconoce como administrador.
+Escenario Principal
+El usuario ingresa a la página web del CETPRO.
+El usuario hace 
+click
+ en
+ “Iniciar sesión
+”
+El sistema redirige a la 
+interfaz
+ de Iniciar Sesión.
+El estudiante ingresa su usuario y contraseña.
+Si las credenciales son válidas, el sistema redirige al usuario a su página de inicio correspondiente (estudiante, administrador o docente).
+Postcondiciones
+El usuario ha sido autenticado y puede acceder al contenido y funcionalidades correspondientes a su rol
+.
+Escenarios Alternativos
+Sesión expirada:
+El 
+usuario
+ inicia sesión y permanece inactivo durante un tiempo prolongado.
+El sistema detecta la inactividad y expira la sesión automáticamente.
+El sistema redirige al estudiante a la página de inicio de sesión
+.
+El estudiante debe iniciar sesión nuevamente para continuar.
+Credenciales inválidas:
+El usuario ingresa las credenciales.
+El sistema verifica las credenciales ingresadas.
+Si las credenciales ingresadas por el usuario son inválidas el sistema muestra un mensaje de error y permite al usuario intentarlo nuevamente.
+Especificación de Caso de Uso: Gestión de Usuarios
+Caso de uso: Gestionar Usuarios
+ID
+CU02
+Actores
+Administrador
+Descripción
+Permite al administrador gestionar los perfiles de los estudiantes en el sistema, supervisando su registro, actualizando información de perfiles existentes o eliminando registros de estudiantes cuando sea necesario.
+Precondición
+El administrador debe estar autenticado en el sistema (CU01).
+Escenario Principal
+Registro de Usuarios:
+El administrador inicia sesión.
+El administrador accede al módulo de 
+‘Registro’.
+El administrador elige qué tipo de usuario va a registrar (Estudiante, Administrador)
+El sistema muestra un formulario de datos según el tipo de usuario que se desee registrar.
+El administrador completa los campos necesarios para registrar un usuario nuevo y hace 
+click
+ en 
+‘R
+egistrar
+’ estudiante o administrador según corresponda
+.
+Editar o eliminar usuarios:
+El administrador accede al módulo de ‘Usuarios’.
+Selecciona el tipo de usuario que desea editar o eliminar (Administradores, Estudiantes, Docentes).
+Postcondiciones
+El nuevo usuario 
+queda
+ registrado
+ o actualizado en el sistema, permitiéndole acceder a las funciones correspondientes al iniciar sesión con sus credenciales asignadas.
+Escenarios Alternativos
+Error en 
+el registro o 
+modificación:
+Si ocurre un error al guardar la información del estudiante, el sistema muestra un mensaje de error.
+El administrador puede rectificar los datos ingresados y reintentar guardar.
+Usuario no encontrado:
+Si el administrador intenta 
+buscar
+ a un 
+usuario
+ que no existe en el sistema, el sistema muestra un mensaje indicando que 
+no se encuentra al usuario.
+Especificación de Caso de Uso: Gestión de Docentes
+Caso de uso: 
+Gestionar Docentes
+ID
+CU03
+Actores
+Administrador
+Descripción
+Permite al administrador agregar, eliminar y editar los datos de los docentes que trabajan en el CETPRO Padre Jesús García.
+Precondición
+El administrador debe estar autenticado en el sistema (CU01).
+Escenario Principal
+El administrador accede al módulo de gestión de docentes.
+El sistema muestra la lista de docentes registrados y las opciones disponibles (agregar, editar, eliminar).
+El administrador realiza una de las siguientes acciones:
+Agregar un nuevo docente:
+Selecciona la opción "Agregar docente".
+Ingresa los datos requeridos del docente, como nombre, especialidad, disponibilidad, y datos de contacto.
+Confirma la acción.
+El sistema guarda la información del nuevo docente.
+Editar la información de un docente:
+Selecciona un docente de la lista y hace clic en "Editar".
+Modifica los campos necesarios (por ejemplo, especialidad, datos de contacto, disponibilidad).
+Confirma los cambios realizados.
+El sistema actualiza la información del docente.
+Eliminar un docente:
+Busca al docente en la lista y selecciona la opción "Eliminar".
+Confirma la eliminación para evitar errores.
+El sistema elimina los datos del docente del registro.
+El sistema notifica al administrador que la operación se realizó exitosamente.
+Postcondiciones
+Los datos de los docentes quedan actualizados en el sistema y disponibles para los procesos de asignación en programas y turnos.
+Escenarios Alternativos
+Error en el registro o modificación:
+Si ocurre un error al guardar la información del docente, el sistema muestra un mensaje de error indicando el problema.
+El administrador puede revisar y corregir la información ingresada antes de volver a intentar guardar.
+Docente duplicado:
+Si el administrador intenta registrar un docente que ya existe en el sistema, el sistema muestra un mensaje de advertencia indicando la duplicidad.
+El sistema sugiere al administrador modificar el registro existente en lugar de crear uno duplicado.
+Eliminación accidental:
+Si el administrador intenta eliminar un docente, el sistema solicita confirmación antes de proceder con la eliminación.
+Si el administrador confirma, el sistema procede con la eliminación; de lo contrario, cancela la operación.
+Especificación de Caso de Uso: Gestión de Programas de Estudio
+Caso de uso: Gestionar Programas de Estudio
+ID
+CU0
+4
+Actores
+Administrador
+Descripción
+Permite al administrador configurar los programas de estudio disponibles en el sistema, incluyendo la opción de agregar,
+ editar
+ y eliminar
+ los
+ programas 
+de estudio disponibles en el CETPRO.
+Precondición
+El administrador debe estar autenticado en el sistema (CU01).
+El sistema debe estar en línea y accesible. 
+Escenario Principal
+El administrador accede a
+l módulo de programas.
+Habilitar programas:
+El sistema muestra la lista de programas de estudio que están agregados en el sistema.
+El administrador puede habilitar cualquier programa que se muestre en la lista según el tipo de 
+programa al
+ que corresponda a cada uno. 
+El administrador puede eliminar aquellos programas que por algún caso se considera que hayan sido habilitador por error.
+Gestionar Programas:
+El sistema muestra la lista de programas de estudio que 
+fueron
+ agregados
+ de acuerdo al tipo de programa
+.
+El administrador puede seleccionar editar un programa de la lista.
+El administrador realiza los cambios necesarios y selecciona guardar cambios.
+El sistema actualiza la información del programa editado en la base de datos.
+El administrador tiene la opción de eliminar cualquier programa de estudios en la lista.
+El sistema muestra un mensaje de confirmación de eliminación, si el administrador confirma, procede a eliminar el programa seleccionado.
+Postcondiciones
+La información de los programas
+ (Nombre y tipo) 
+se actualiza y se muestra en las opciones de matrícula.
+Escenarios Alternativos
+Se habilitó un programa equivocado: 
+Si el administrador habilita un programa que no corresponde al periodo académico programado tiene la opción de eliminar aquel programa.
+Especificación de Caso de Uso: Gestionar Matrícula
+Caso de uso: Gestionar Matrícula
+ID
+CU0
+5
+Actores
+Estudiante
+, Administrador
+Descripción
+Permite al estudiante realizar una 
+pre
+m
+atricula
+ en los programas de estudio disponibles, registrando su selección de programas y horarios deseados. La habilitación de la matrícula es gestionada por el administrador tras verificar que el estudiante ha realizado el pago correspondiente y que se cumplen las condiciones necesarias.
+Precondición
+El estudiante debe estar registrado en el sistema.
+El proceso de matrícula debe estar habilitado en el sistema por el administrador.
+El estudiante debe haber realizado el pago correspondiente y este debe estar registrado o en proceso de validación en el sistema.
+Escenario Principal
+Pre
+m
+atrícula
+ por el estudiante
+El estudiante ingresa al 
+sistema con sus credenciales.
+El sistema muestra la lista de programas de estudios disponibles y los horarios con cupos disponibles.
+El estudiante selecciona 
+el programa
+ y horario deseado
+ dando 
+click
+ en ‘Reservar vacante’
+.
+El sistema le muestra un recordatorio de los pasos necesarios para completar la matrícula, incluyendo los documentos requeridos y el pago
+.
+El sistema le muestra un mensaje de vacante reservada exitosamente.
+Verificación del pago y habilitación de matrícula por el administrador
+El estudiante realiza 
+la entrega de documentos y pago
+ 
+requeridos 
+de manera presencial en el CETPRO
+.
+El administrador accede al módulo de 
+‘M
+atrículas
+’
+.
+El 
+administrador selecciona la opción ‘Pendientes’ y le muestra la lista de matrículas pendientes.
+El administrador verifica que el estudiante ha cumplido con todos los requisitos correspondientes a la 
+pre-matrícula
+ y procede a habilitar la matrícula.
+El sistema muestra un mensaje de confirmación indicando que la matrícula ha sido activada exitosamente
+.
+ 
+El sistema 
+actualiza 
+la lista de matrículas activas.
+Postcondiciones
+La prematrícula del estudiante queda registrada en el sistema.
+Tras la confirmación del administrador, la matrícula del estudiante queda habilitada y puede ser consultada en "Mis Matrículas".
+El estudiante puede consultar el estado de los módulos en "Mis Módulos".
+Escenarios Alternativos
+Cupos no disponibles:
+El estudiante intenta seleccionar un programa de estudios sin cupos disponibles.
+El sistema impide la selección y muestra una alerta indicando que el programa no tiene cupos disponibles.
+El estudiante selecciona un programa diferente o finaliza sin confirmar la prematrícula.
+Habilitar Programas no disponible.
+El administrador accede a Habilitar Programas.
+Se muestra un mensaje de que no existe periodo académico actual, la razón es:
+No existe un periodo académico o aún no se ha creado.
+Matrícula no habilitada:
+El estudiante intenta ingresar al módulo de prematrícula, pero la matrícula aún no está habilitada.
+El sistema muestra una alerta indicando que el proceso de matrícula no está habilitado, con posibles razones como:
+El administrador aún no ha habilitado la matrícula.
+Aún no es la fecha de inicio de la matrícula.
+Pago no 
+realizado
+:
+El estudiante completa su 
+pr
+e
+matrícula,
+ pero no realiza el pago presencial dentro del tiempo establecido.
+El sistema notifica al administrador que la prematrícula está pendiente de pago.
+Si el pago no se realiza dentro del tiempo límite, 
+el administrador elimina la matrícula pendiente manualmente o 
+el sistema puede cancelar automáticamente la prematrícula, liberando los cupos
+.
+Especificación de Caso de Uso: Gestionar periodo académico
+Caso de uso: 
+Gestionar periodo académico
+ID
+CU
+06
+Actores
+Administrador
+Descripción
+Permite al administrador iniciar un nuevo periodo académico en el sistema, configurando los detalles necesarios para habilitar la matrícula de los estudiantes. Sin esta acción, los estudiantes no podrán registrarse para el nuevo periodo.
+Precondición
+El administrador debe estar autenticado en el sistema (CU01).
+No debe haber otro periodo académico activo que interfiera con el nuevo periodo.
+Escenario Principal
+El administrador accede al módulo ‘Periodo Académico’ desde el menú lateral.
+El sistema muestra una lista de periodos académicos existentes, tanto activos como finalizados, junto con las acciones disponibles (‘Eliminar’ y ‘Editar’ para cada periodo) y los campos para ingresar los datos del nuevo periodo académico.
+El administrador ingresa los detalles requeridos del nuevo periodo académico, incluyendo:
+Nombre del periodo (
+e.g
+., "2024-I").
+Fecha de inicio y fin del periodo académico.
+Una vez ingresados los datos, el administrador hace clic en el botón ‘Crear Periodo Académico’.
+El sistema guarda el nuevo periodo académico y lo muestra en la lista con las opciones de ‘Eliminar’ y ‘Editar’.
+El sistema notifica al administrador mediante un mensaje que el periodo académico ha sido creado exitosamente.
+Postcondiciones
+El nuevo periodo académico queda registrado y activo en el sistema, habilitando la matrícula de estudiantes.
+Los estudiantes podrán registrarse y gestionar su matrícula para el periodo recién aperturado.
+Escenarios Alternativos
+Error en los datos ingresados:
+Si el administrador ingresa datos incompletos o inválidos (
+e.g
+., fechas incorrectas), el sistema 
+muestra un mensaje de error indicando los campos que necesitan corrección.
+El administrador rectifica los datos y reintenta aperturar el periodo.
+Periodo conflictivo:
+Si el administrador intenta aperturar un periodo con fechas que se solapan con un periodo activo, el sistema muestra un mensaje de advertencia indicando el conflicto.
+El administrador debe ajustar las fechas o cerrar el periodo activo antes de continuar.
+Periodo académico ya aperturado:
+Si ya existe un periodo académico activo, el sistema no permite aperturar uno nuevo hasta que el administrador cierre 
+o elimine 
+el periodo actual.
+Especificación de Caso de Uso: Gestionar 
+Reportes
+Caso de uso: 
+Gestionar 
+Reportes
+ID
+CU
+06
+Actores
+Administrador
+Descripción
+Permite al administrador generar, visualizar y exportar reportes detallados sobre el proceso de matrícula, incluyendo datos de estudiantes, programas, vacantes y progreso académico.
+Precondición
+El administrador debe estar autenticado en el sistema.
+Escenario Principal
+El administrador accede al módulo de "Reportes".
+El sistema muestra las opciones de reportes disponibles:
+- Reporte de Matrículas
+- Reporte de Vacantes
+- Reporte de Progreso de Estudiantes
+- Reporte de Detalles de Estudiantes
+- Reporte de Programas Aperturados.
+El administrador selecciona un tipo de reporte y define filtros, como rango de fechas, programas específicos o turnos.
+El sistema genera el reporte solicitado y lo presenta en pantalla.
+El administrador tiene la opción de exportar el reporte a formatos como PDF o Excel.
+Postcondiciones
+El reporte queda disponible para su consulta o descarga en el formato elegido, permitiendo un análisis detallado de los datos solicitados.
+Escenarios Alternativos
+1. Datos no disponibles: 
+Si no hay información que cumpla con los filtros seleccionados, el sistema muestra un mensaje indicando "No se encontraron resultados".
+2. Error en la generación del reporte: 
+Si ocurre un error técnico, el sistema muestra un mensaje de error e invita a intentar nuevamente o contactar soporte técnico.
+DIAGRAMA DE SECUENCIA
+Autenti
+car u
+suario
+ 
+Gestionar Usuario
+Gestionar 
+p
+rogramas
+ de estudio
+Gestionar Matrícula
+ 
+Estudiante
+Administrador
+Gestionar
+ periodo
+ académico
+      
+  
+DIAGRAMA DE CLASES
+DIAGRAMA ENTIDAD RELACIÓN (BASE DE DATOS)

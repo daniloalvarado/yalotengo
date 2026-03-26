@@ -19,7 +19,8 @@ export default function AdminUnityModels() {
     const [showModal, setShowModal] = useState(false)
     const [editItem, setEditItem] = useState(null)
     const [formData, setFormData] = useState({})
-    const [uploading, setUploading] = useState(false)
+    const [uploadingAsset, setUploadingAsset] = useState(false)
+    const [uploadingQr, setUploadingQr] = useState(false)
     const [tabIdiomaActivo, setTabIdiomaActivo] = useState(null)
     const fileInputRef = useRef(null)
     const qrInputRef = useRef(null)
@@ -124,7 +125,9 @@ export default function AdminUnityModels() {
         const file = e.target.files?.[0]
         if (!file) return
 
-        setUploading(true)
+        if (type === 'asset') setUploadingAsset(true)
+        else setUploadingQr(true)
+        
         const formDataUpload = new FormData()
         if (type === 'asset') {
             formDataUpload.append('assetBundleFile', file)
@@ -147,7 +150,8 @@ export default function AdminUnityModels() {
         } catch (err) {
             toast.error('Error al subir archivo')
         } finally {
-            setUploading(false)
+            if (type === 'asset') setUploadingAsset(false)
+            else setUploadingQr(false)
         }
     }
 
@@ -234,7 +238,7 @@ export default function AdminUnityModels() {
                                 <th className="px-4 py-3 text-left font-medium text-gray-600">ID / Nombre Científico</th>
                                 <th className="px-4 py-3 text-left font-medium text-gray-600">Taxonomía</th>
                                 <th className="px-4 py-3 text-left font-medium text-gray-600">Marcadores / Idiomas</th>
-                                <th className="px-4 py-3 text-left font-medium text-gray-600">AssetBundle</th>
+                                <th className="px-4 py-3 text-left font-medium text-gray-600">Marcador AR</th>
                                 <th className="px-4 py-3 text-left font-medium text-gray-600">Estado</th>
                                 <th className="px-4 py-3 text-right font-medium text-gray-600">Acciones</th>
                             </tr>
@@ -270,12 +274,16 @@ export default function AdminUnityModels() {
                                         </div>
                                     </td>
                                     <td className="px-4 py-3">
-                                        {m.assetBundleFileName ? (
-                                            <span className="text-emerald-600 text-xs font-mono bg-emerald-50 px-2 py-1 rounded truncate max-w-[150px] inline-block">
-                                                {m.assetBundleFileName}
-                                            </span>
+                                        {m.qr_image_url ? (
+                                            <div className="w-14 h-14 rounded-lg border border-gray-200 shadow-sm overflow-hidden bg-gray-50 flex items-center justify-center">
+                                                <img 
+                                                    src={`${import.meta.env.VITE_API_URL.split('/api')[0]}/uploads/${m.qr_image_url}`} 
+                                                    alt="Marcador" 
+                                                    className="w-full h-full object-cover"
+                                                />
+                                            </div>
                                         ) : (
-                                            <span className="text-gray-400 text-xs italic">Sin archivo Unity</span>
+                                            <span className="text-gray-400 text-xs italic">Sin Imagen</span>
                                         )}
                                     </td>
                                     <td className="px-4 py-3">
@@ -433,9 +441,9 @@ export default function AdminUnityModels() {
                                 <span className="text-sm font-medium text-gray-700 mb-2 block">Archivo 3D (.molde)</span>
                                 <input type="file" ref={fileInputRef} onChange={(e) => handleFileUpload(e, 'asset')} className="hidden" />
                                 <div className="flex flex-col gap-2">
-                                    <button type="button" onClick={() => fileInputRef.current?.click()} disabled={uploading} className="flex items-center justify-center gap-2 w-full py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm disabled:opacity-50 transition-colors">
+                                    <button type="button" onClick={() => fileInputRef.current?.click()} disabled={uploadingAsset} className="flex items-center justify-center gap-2 w-full py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm disabled:opacity-50 transition-colors">
                                         <ArrowUpTrayIcon className="w-4 h-4" />
-                                        {uploading ? 'Subiendo...' : 'Subir AssetBundle'}
+                                        {uploadingAsset ? 'Subiendo...' : 'Subir AssetBundle'}
                                     </button>
                                     {formData.assetBundleFileName && (
                                         <div className="flex items-center justify-center gap-1 text-[11px] text-emerald-600 bg-emerald-50 px-2 py-1 rounded">
@@ -450,14 +458,23 @@ export default function AdminUnityModels() {
                                 <span className="text-sm font-medium text-gray-700 mb-2 block">Marcador AR (JPG/PNG)</span>
                                 <input type="file" ref={qrInputRef} onChange={(e) => handleFileUpload(e, 'qr')} accept="image/png, image/jpeg" className="hidden" />
                                 <div className="flex flex-col gap-2">
-                                    <button type="button" onClick={() => qrInputRef.current?.click()} disabled={uploading} className="flex items-center justify-center gap-2 w-full py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-lg text-sm disabled:opacity-50 transition-colors">
+                                    <button type="button" onClick={() => qrInputRef.current?.click()} disabled={uploadingQr} className="flex items-center justify-center gap-2 w-full py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-lg text-sm disabled:opacity-50 transition-colors">
                                         <ArrowUpTrayIcon className="w-4 h-4" />
-                                        {uploading ? 'Subiendo...' : 'Subir Foto QR / Dibujo'}
+                                        {uploadingQr ? 'Subiendo...' : 'Subir Foto QR / Dibujo'}
                                     </button>
                                     {formData.qr_image_url && (
-                                        <div className="flex items-center justify-center gap-1 text-[11px] text-indigo-600 bg-indigo-50 px-2 py-1 rounded">
-                                            <CheckCircleIcon className="w-3 h-3 shrink-0" />
-                                            <span className="truncate max-w-[150px] font-mono">{formData.qr_image_url}</span>
+                                        <div className="flex flex-col items-center justify-center gap-2 mt-2">
+                                            <img 
+                                                src={`${import.meta.env.VITE_API_URL.split('/api')[0]}/uploads/${formData.qr_image_url}`} 
+                                                alt="QR Preview" 
+                                                className="w-24 h-24 object-cover rounded-md border border-gray-200 shadow-sm"
+                                            />
+                                            <div className="flex items-center justify-center gap-1 text-[11px] text-indigo-600 bg-indigo-50 px-2 py-1 rounded w-full">
+                                                <CheckCircleIcon className="w-3 h-3 shrink-0" />
+                                                <span className="truncate flex-1 font-mono text-center">
+                                                    {formData.qr_image_url.split('/').pop()}
+                                                </span>
+                                            </div>
                                         </div>
                                     )}
                                 </div>
@@ -467,7 +484,7 @@ export default function AdminUnityModels() {
 
                     <div className="flex justify-end gap-3 pt-4 border-t">
                         <button type="button" onClick={() => setShowModal(false)} className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 text-sm font-medium text-gray-700">Cancelar</button>
-                        <button type="submit" disabled={uploading} className="px-5 py-2 text-white rounded-lg hover:opacity-90 disabled:opacity-50 text-sm font-medium" style={{ backgroundColor: THEME.primary }}>
+                        <button type="submit" disabled={uploadingAsset || uploadingQr} className="px-5 py-2 text-white rounded-lg hover:opacity-90 disabled:opacity-50 text-sm font-medium" style={{ backgroundColor: THEME.primary }}>
                             {editItem ? 'Guardar Cambios' : 'Registrar Especie'}
                         </button>
                     </div>

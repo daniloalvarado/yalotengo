@@ -10,6 +10,7 @@ import { fileURLToPath } from 'url'
 import routes from './routes/index.js'
 import { sequelize } from './config/db.js'
 import { DataTypes } from 'sequelize'
+import { initMinio } from './config/s3.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -106,6 +107,7 @@ async function ensureSchema() {
 
 async function start() {
   try {
+    await initMinio()
     await sequelize.authenticate()
     await sequelize.query("SET time_zone = '+00:00'")
     await ensureSchema()
