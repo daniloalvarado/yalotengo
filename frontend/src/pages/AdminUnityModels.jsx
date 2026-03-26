@@ -8,6 +8,7 @@ import AnimatedModal from '../components/AnimatedModal'
 import AdminUnityDashboard from './AdminUnityDashboard'
 
 const THEME = { primary: '#059669' }
+const API_BASE_URL = (import.meta.env.VITE_API_BASE || 'http://localhost:3000').replace(/\/api$/, '');
 
 export default function AdminUnityModels() {
     const navigate = useNavigate()
@@ -277,7 +278,7 @@ export default function AdminUnityModels() {
                                         {m.qr_image_url ? (
                                             <div className="w-14 h-14 rounded-lg border border-gray-200 shadow-sm overflow-hidden bg-gray-50 flex items-center justify-center">
                                                 <img 
-                                                    src={`${import.meta.env.VITE_API_URL.split('/api')[0]}/uploads/${m.qr_image_url}`} 
+                                                    src={`${API_BASE_URL}/uploads/${m.qr_image_url}`} 
                                                     alt="Marcador" 
                                                     className="w-full h-full object-cover"
                                                 />
@@ -465,7 +466,7 @@ export default function AdminUnityModels() {
                                     {formData.qr_image_url && (
                                         <div className="flex flex-col items-center justify-center gap-2 mt-2">
                                             <img 
-                                                src={`${import.meta.env.VITE_API_URL.split('/api')[0]}/uploads/${formData.qr_image_url}`} 
+                                                src={`${API_BASE_URL}/uploads/${formData.qr_image_url}`} 
                                                 alt="QR Preview" 
                                                 className="w-24 h-24 object-cover rounded-md border border-gray-200 shadow-sm"
                                             />
