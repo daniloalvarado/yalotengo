@@ -278,7 +278,7 @@ export default function AdminUnityModels() {
                                                 {m.qr_image_url ? (
                                                     <div className="w-14 h-14 rounded-lg border border-gray-200 shadow-sm overflow-hidden bg-gray-50 flex items-center justify-center">
                                                         <img
-                                                            src={`${API_BASE_URL}/uploads/${m.qr_image_url}`}
+                                                            src={`${API_BASE_URL}/uploads/microscopicos/${m.qr_image_url}`}
                                                             alt="Marcador"
                                                             className="w-full h-full object-cover"
                                                         />
@@ -466,7 +466,7 @@ export default function AdminUnityModels() {
                                     {formData.qr_image_url && (
                                         <div className="flex flex-col items-center justify-center gap-2 mt-2">
                                             <img
-                                                src={`${API_BASE_URL}/uploads/${formData.qr_image_url}`}
+                                                src={`${API_BASE_URL}/uploads/microscopicos/${formData.qr_image_url}`}
                                                 alt="QR Preview"
                                                 className="w-24 h-24 object-cover rounded-md border border-gray-200 shadow-sm"
                                             />
