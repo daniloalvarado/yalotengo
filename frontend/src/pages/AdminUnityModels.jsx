@@ -16,7 +16,7 @@ export default function AdminUnityModels() {
     const [searchTerm, setSearchTerm] = useState('')
     const [loading, setLoading] = useState(true)
     const [isAdmin, setIsAdmin] = useState(false)
-    
+
     const [showModal, setShowModal] = useState(false)
     const [editItem, setEditItem] = useState(null)
     const [formData, setFormData] = useState({})
@@ -101,7 +101,7 @@ export default function AdminUnityModels() {
 
     const openModal = (item = null) => {
         setEditItem(item)
-        
+
         let trans = []
         if (item && item.translations && item.translations.length > 0) {
             trans = [...item.translations]
@@ -112,13 +112,13 @@ export default function AdminUnityModels() {
             vernacularName: '', taxonRemarks: '', assetBundleFileName: '', qr_image_url: '',
             translations: trans
         })
-        
-        if(trans.length > 0) {
+
+        if (trans.length > 0) {
             setTabIdiomaActivo(trans[0].language_code);
         } else {
             setTabIdiomaActivo(null);
         }
-        
+
         setShowModal(true)
     }
 
@@ -128,7 +128,7 @@ export default function AdminUnityModels() {
 
         if (type === 'asset') setUploadingAsset(true)
         else setUploadingQr(true)
-        
+
         const formDataUpload = new FormData()
         if (type === 'asset') {
             formDataUpload.append('assetBundleFile', file)
@@ -222,103 +222,103 @@ export default function AdminUnityModels() {
             ) : (
                 <>
                     <div className="mb-2">
-                <input 
-                    type="text" 
-                    placeholder="Buscar por nombre científico o común..." 
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full sm:w-1/2 md:w-1/3 px-4 py-2 border border-gray-300 rounded-lg focus:ring-emerald-500 outline-none text-sm transition-all shadow-sm"
-                />
-            </div>
+                        <input
+                            type="text"
+                            placeholder="Buscar por nombre científico o común..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className="w-full sm:w-1/2 md:w-1/3 px-4 py-2 border border-gray-300 rounded-lg focus:ring-emerald-500 outline-none text-sm transition-all shadow-sm"
+                        />
+                    </div>
 
-            {loading ? <div className="text-gray-500">Cargando datos...</div> : (
-                <div className="overflow-x-auto rounded-lg border border-gray-200 bg-white">
-                    <table className="w-full text-sm">
-                        <thead className="bg-gray-50">
-                            <tr>
-                                <th className="px-4 py-3 text-left font-medium text-gray-600">ID / Nombre Científico</th>
-                                <th className="px-4 py-3 text-left font-medium text-gray-600">Taxonomía</th>
-                                <th className="px-4 py-3 text-left font-medium text-gray-600">Marcadores / Idiomas</th>
-                                <th className="px-4 py-3 text-left font-medium text-gray-600">Marcador AR</th>
-                                <th className="px-4 py-3 text-left font-medium text-gray-600">Estado</th>
-                                <th className="px-4 py-3 text-right font-medium text-gray-600">Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-gray-100">
-                            {filteredModels.map(m => (
-                                <tr key={m.id} className="hover:bg-gray-50 transition-colors">
-                                    <td className="px-4 py-3">
-                                        <div className="font-bold text-gray-900 italic">{m.scientificName}</div>
-                                        <div className="text-xs text-gray-500">{m.vernacularName || 'Sin nombre común'} (ID: {m.id})</div>
-                                    </td>
-                                    <td className="px-4 py-3">
-                                        <div className="text-xs text-gray-600">
-                                            {m.class || '?'} &gt; {m.order || '?'} &gt; {m.family || '?'}
-                                        </div>
-                                    </td>
-                                    <td className="px-4 py-3">
-                                        <div className="flex flex-col gap-1.5">
-                                            {m.qr_image_url ? (
-                                                <span className="text-[10px] bg-indigo-50 text-indigo-700 px-1.5 py-0.5 rounded border border-indigo-100 inline-block w-max">QR Guardado</span>
-                                            ) : (
-                                                <span className="text-[10px] text-gray-400 italic">Sin QR</span>
-                                            )}
-                                            
-                                            <div className="flex gap-1 flex-wrap">
-                                                <span className="text-[10px] bg-sky-50 text-sky-700 px-1.5 py-0.5 rounded border border-sky-100">es</span>
-                                                {m.translations?.filter(t => t.name || t.descripcion).map(t => (
-                                                    <span key={t.id} className="text-[10px] bg-sky-50 text-sky-700 px-1.5 py-0.5 rounded border border-sky-100">
-                                                        {t.language_code}
-                                                    </span>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td className="px-4 py-3">
-                                        {m.qr_image_url ? (
-                                            <div className="w-14 h-14 rounded-lg border border-gray-200 shadow-sm overflow-hidden bg-gray-50 flex items-center justify-center">
-                                                <img 
-                                                    src={`${API_BASE_URL}/uploads/${m.qr_image_url}`} 
-                                                    alt="Marcador" 
-                                                    className="w-full h-full object-cover"
-                                                />
-                                            </div>
-                                        ) : (
-                                            <span className="text-gray-400 text-xs italic">Sin Imagen</span>
-                                        )}
-                                    </td>
-                                    <td className="px-4 py-3">
-                                        <span className={`text-xs px-2 py-1 rounded-full font-medium ${m.estado === 'activo' ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'}`}>
-                                            {m.estado}
-                                        </span>
-                                    </td>
-                                    <td className="px-4 py-3">
-                                        <div className="flex flex-wrap gap-2 justify-end">
-                                            <button onClick={() => openModal(m)} className="p-1.5 text-gray-500 hover:text-emerald-600 hover:bg-emerald-50 rounded">
-                                                <PencilIcon className="w-5 h-5" />
-                                            </button>
-                                            <button onClick={() => handleToggle(m)} className="p-1.5 text-gray-500 hover:text-amber-600 hover:bg-amber-50 rounded">
-                                                {m.estado === 'activo' ? <EyeSlashIcon className="w-5 h-5" /> : <EyeIcon className="w-5 h-5" />}
-                                            </button>
-                                            <button onClick={() => handleDelete(m.id)} className="p-1.5 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded">
-                                                <TrashIcon className="w-5 h-5" />
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            ))}
-                            {filteredModels.length === 0 && (
-                                <tr>
-                                    <td colSpan="5" className="px-4 py-8 text-center text-gray-500">
-                                        No se encontraron especies microscópicas.
-                                    </td>
-                                </tr>
-                            )}
-                        </tbody>
-                    </table>
-                </div>
-            )}
-            </>
+                    {loading ? <div className="text-gray-500">Cargando datos...</div> : (
+                        <div className="overflow-x-auto rounded-lg border border-gray-200 bg-white">
+                            <table className="w-full text-sm">
+                                <thead className="bg-gray-50">
+                                    <tr>
+                                        <th className="px-4 py-3 text-left font-medium text-gray-600">ID / Nombre Científico</th>
+                                        <th className="px-4 py-3 text-left font-medium text-gray-600">Taxonomía</th>
+                                        <th className="px-4 py-3 text-left font-medium text-gray-600">Marcadores / Idiomas</th>
+                                        <th className="px-4 py-3 text-left font-medium text-gray-600">Marcador AR</th>
+                                        <th className="px-4 py-3 text-left font-medium text-gray-600">Estado</th>
+                                        <th className="px-4 py-3 text-right font-medium text-gray-600">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-gray-100">
+                                    {filteredModels.map(m => (
+                                        <tr key={m.id} className="hover:bg-gray-50 transition-colors">
+                                            <td className="px-4 py-3">
+                                                <div className="font-bold text-gray-900 italic">{m.scientificName}</div>
+                                                <div className="text-xs text-gray-500">{m.vernacularName || 'Sin nombre común'} (ID: {m.id})</div>
+                                            </td>
+                                            <td className="px-4 py-3">
+                                                <div className="text-xs text-gray-600">
+                                                    {m.class || '?'} &gt; {m.order || '?'} &gt; {m.family || '?'}
+                                                </div>
+                                            </td>
+                                            <td className="px-4 py-3">
+                                                <div className="flex flex-col gap-1.5">
+                                                    {m.qr_image_url ? (
+                                                        <span className="text-[10px] bg-indigo-50 text-indigo-700 px-1.5 py-0.5 rounded border border-indigo-100 inline-block w-max">QR Guardado</span>
+                                                    ) : (
+                                                        <span className="text-[10px] text-gray-400 italic">Sin QR</span>
+                                                    )}
+
+                                                    <div className="flex gap-1 flex-wrap">
+                                                        <span className="text-[10px] bg-sky-50 text-sky-700 px-1.5 py-0.5 rounded border border-sky-100">es</span>
+                                                        {m.translations?.filter(t => t.name || t.descripcion).map(t => (
+                                                            <span key={t.id} className="text-[10px] bg-sky-50 text-sky-700 px-1.5 py-0.5 rounded border border-sky-100">
+                                                                {t.language_code}
+                                                            </span>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td className="px-4 py-3">
+                                                {m.qr_image_url ? (
+                                                    <div className="w-14 h-14 rounded-lg border border-gray-200 shadow-sm overflow-hidden bg-gray-50 flex items-center justify-center">
+                                                        <img
+                                                            src={`${API_BASE_URL}/uploads/${m.qr_image_url}`}
+                                                            alt="Marcador"
+                                                            className="w-full h-full object-cover"
+                                                        />
+                                                    </div>
+                                                ) : (
+                                                    <span className="text-gray-400 text-xs italic">Sin Imagen</span>
+                                                )}
+                                            </td>
+                                            <td className="px-4 py-3">
+                                                <span className={`text-xs px-2 py-1 rounded-full font-medium ${m.estado === 'activo' ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'}`}>
+                                                    {m.estado}
+                                                </span>
+                                            </td>
+                                            <td className="px-4 py-3">
+                                                <div className="flex flex-wrap gap-2 justify-end">
+                                                    <button onClick={() => openModal(m)} className="p-1.5 text-gray-500 hover:text-emerald-600 hover:bg-emerald-50 rounded">
+                                                        <PencilIcon className="w-5 h-5" />
+                                                    </button>
+                                                    <button onClick={() => handleToggle(m)} className="p-1.5 text-gray-500 hover:text-amber-600 hover:bg-amber-50 rounded">
+                                                        {m.estado === 'activo' ? <EyeSlashIcon className="w-5 h-5" /> : <EyeIcon className="w-5 h-5" />}
+                                                    </button>
+                                                    <button onClick={() => handleDelete(m.id)} className="p-1.5 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded">
+                                                        <TrashIcon className="w-5 h-5" />
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                    {filteredModels.length === 0 && (
+                                        <tr>
+                                            <td colSpan="5" className="px-4 py-8 text-center text-gray-500">
+                                                No se encontraron especies microscópicas.
+                                            </td>
+                                        </tr>
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
+                    )}
+                </>
             )}
 
             <AnimatedModal isOpen={showModal} onClose={() => setShowModal(false)} title={editItem ? 'Editar Especie' : 'Nueva Especie'} maxWidth="max-w-2xl">
@@ -328,7 +328,7 @@ export default function AdminUnityModels() {
                             <span className="text-sm font-medium text-gray-700 block mb-1">Nombre Científico</span>
                             <input value={formData.scientificName || ''} onChange={e => setFormData(p => ({ ...p, scientificName: e.target.value }))} required className="w-full px-3 py-2 border rounded-lg focus:ring-emerald-500 outline-none" />
                         </label>
-                        
+
                         <div className="col-span-1 md:col-span-2 p-3 bg-gray-50 rounded-lg border text-sm grid grid-cols-2 sm:grid-cols-4 gap-3">
                             <p className="col-span-full font-semibold text-gray-600 mb-1 text-xs uppercase tracking-wider">Taxonomía</p>
                             <label className="block"><span className="text-xs text-gray-500 block mb-1">Reino</span><input value={formData.kingdom || ''} onChange={e => setFormData(p => ({ ...p, kingdom: e.target.value }))} className="w-full px-2 py-1 border rounded text-xs outline-none" /></label>
@@ -346,7 +346,7 @@ export default function AdminUnityModels() {
                             <span className="text-sm font-medium text-gray-700 block mb-1">Nombre Común</span>
                             <input value={formData.vernacularName || ''} onChange={e => setFormData(p => ({ ...p, vernacularName: e.target.value }))} className="w-full px-3 py-2 border rounded-lg focus:ring-emerald-500 outline-none" />
                         </label>
-                        
+
                         <label className="block col-span-1 md:col-span-2">
                             <span className="text-sm font-medium text-gray-700 block mb-1">Descripción / Notas</span>
                             <textarea value={formData.taxonRemarks || ''} onChange={e => setFormData(p => ({ ...p, taxonRemarks: e.target.value }))} rows={4} className="w-full px-3 py-2 border rounded-lg focus:ring-emerald-500 outline-none resize-none" />
@@ -369,14 +369,14 @@ export default function AdminUnityModels() {
                                         showCancelButton: true,
                                         confirmButtonColor: '#059669'
                                     });
-                                    if(lang) {
+                                    if (lang) {
                                         if (formData.translations?.find(t => t.language_code === lang)) return toast.error('Este idioma ya existe');
                                         const newTrans = [...(formData.translations || []), { language_code: lang, name: '', descripcion: '' }];
                                         setFormData(p => ({ ...p, translations: newTrans }));
                                         setTabIdiomaActivo(lang); // Cambiar automáticamente a la nueva pestaña
                                     }
                                 }} className="text-xs bg-white border border-emerald-200 text-emerald-600 px-3 py-1.5 rounded-lg hover:bg-emerald-50 transition-colors font-semibold flex items-center gap-1 shadow-sm">
-                                    <PlusIcon className="w-4 h-4"/> Añadir Idioma
+                                    <PlusIcon className="w-4 h-4" /> Añadir Idioma
                                 </button>
                             </div>
 
@@ -389,9 +389,9 @@ export default function AdminUnityModels() {
                                         const nombres = { en: 'Inglés', pt: 'Portugués', fr: 'Francés', de: 'Alemán', it: 'Italiano' };
                                         const isActive = tabIdiomaActivo === t.language_code;
                                         return (
-                                            <button 
-                                                key={t.language_code} 
-                                                type="button" 
+                                            <button
+                                                key={t.language_code}
+                                                type="button"
                                                 onClick={() => setTabIdiomaActivo(t.language_code)}
                                                 className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap border transition-all ${isActive ? 'bg-emerald-600 text-white border-emerald-600 shadow-md translate-y-[-1px]' : 'bg-white text-gray-500 border-gray-200 hover:border-emerald-300'}`}
                                             >
@@ -407,11 +407,11 @@ export default function AdminUnityModels() {
                                 tabIdiomaActivo === t.language_code && (
                                     <div key={idx} className="bg-white rounded-xl p-4 border border-emerald-100 shadow-inner space-y-4 animate-fadeIn">
                                         <div className="flex justify-between items-center pb-2 border-b border-gray-100">
-                                            <span className="text-xs font-black text-emerald-700 uppercase">Editando: {({en:'Inglés', pt:'Portugués', fr:'Francés', de:'Alemán', it:'Italiano'}[t.language_code])}</span>
+                                            <span className="text-xs font-black text-emerald-700 uppercase">Editando: {({ en: 'Inglés', pt: 'Portugués', fr: 'Francés', de: 'Alemán', it: 'Italiano' }[t.language_code])}</span>
                                             <button type="button" onClick={() => {
                                                 const newTrans = formData.translations.filter((_, i) => i !== idx);
-                                                setFormData({...formData, translations: newTrans});
-                                                if(newTrans.length > 0) setTabIdiomaActivo(newTrans[0].language_code);
+                                                setFormData({ ...formData, translations: newTrans });
+                                                if (newTrans.length > 0) setTabIdiomaActivo(newTrans[0].language_code);
                                             }} className="p-1 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors">
                                                 <TrashIcon className="w-4 h-4" />
                                             </button>
@@ -421,7 +421,7 @@ export default function AdminUnityModels() {
                                             <input value={t.name || ''} onChange={(e) => {
                                                 const newTrans = [...formData.translations];
                                                 newTrans[idx].name = e.target.value;
-                                                setFormData({...formData, translations: newTrans});
+                                                setFormData({ ...formData, translations: newTrans });
                                             }} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all" />
                                         </label>
                                         <label className="block">
@@ -429,7 +429,7 @@ export default function AdminUnityModels() {
                                             <textarea value={t.descripcion || ''} onChange={(e) => {
                                                 const newTrans = [...formData.translations];
                                                 newTrans[idx].descripcion = e.target.value;
-                                                setFormData({...formData, translations: newTrans});
+                                                setFormData({ ...formData, translations: newTrans });
                                             }} rows={3} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-emerald-500/20 outline-none resize-none transition-all" />
                                         </label>
                                     </div>
@@ -454,7 +454,7 @@ export default function AdminUnityModels() {
                                     )}
                                 </div>
                             </div>
-                            
+
                             <div className="border rounded-lg p-3 bg-white">
                                 <span className="text-sm font-medium text-gray-700 mb-2 block">Marcador AR (JPG/PNG)</span>
                                 <input type="file" ref={qrInputRef} onChange={(e) => handleFileUpload(e, 'qr')} accept="image/png, image/jpeg" className="hidden" />
@@ -465,9 +465,9 @@ export default function AdminUnityModels() {
                                     </button>
                                     {formData.qr_image_url && (
                                         <div className="flex flex-col items-center justify-center gap-2 mt-2">
-                                            <img 
-                                                src={`${API_BASE_URL}/uploads/${formData.qr_image_url}`} 
-                                                alt="QR Preview" 
+                                            <img
+                                                src={`${API_BASE_URL}/uploads/${formData.qr_image_url}`}
+                                                alt="QR Preview"
                                                 className="w-24 h-24 object-cover rounded-md border border-gray-200 shadow-sm"
                                             />
                                             <div className="flex items-center justify-center gap-1 text-[11px] text-indigo-600 bg-indigo-50 px-2 py-1 rounded w-full">
