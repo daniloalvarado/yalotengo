@@ -15,15 +15,19 @@ public class GestorMarcadoresDinamicos : MonoBehaviour
     [Tooltip("Arrastra aquí un UI Image (como una mira central o marco). Aparecerá cuando no haya marcadores visibles.")]
     public GameObject reticulaApuntador;
 
-    [Header("Configuración de API")]
     [Tooltip("URL base para obtener la lista de marcadores")]
     public string apiTargetsUrl = "https://yalotengo.onrender.com/microscopicos/public/targets";
+
+    [Header("Ajustes de Puntería")]
+    [Tooltip("Distancia máxima en píxeles para que se active el marcador. Ajusta esto según el tamaño de tu OverlayQR.")]
+    public float distanciaUmbral = 200f; // Ajustado a 200px por defecto
 
     [Serializable]
     private class TargetResponse
     {
         public string name; // ID del animal en la base de datos
         public string url;  // URL de la imagen del marcador (JPG/PNG)
+        public string url_modelo; // URL del AssetBundle 3D (para precarga)
     }
 
     [Serializable]
@@ -35,9 +39,13 @@ public class GestorMarcadoresDinamicos : MonoBehaviour
     // --- NUEVO: SISTEMA DE APUNTADO CENTRADO ---
     private Dictionary<string, Transform> marcadoresVisibles = new Dictionary<string, Transform>();
     private string idTargetActivo = "";
+    private ulong totalBytesCargados = 0; 
+    private LectorApiAR lectorApi; // Caché para el comunicador de modelos
 
     void Start()
     {
+        lectorApi = FindObjectOfType<LectorApiAR>();
+        
         // Esperamos a que Vuforia esté inicializado antes de inyectar
         VuforiaApplication.Instance.OnVuforiaStarted += OnVuforiaStarted;
     }
@@ -74,10 +82,16 @@ public class GestorMarcadoresDinamicos : MonoBehaviour
 
             if (targets != null && targets.array != null)
             {
-                Debug.Log($"Vuforia: Se encontraron {targets.array.Length} marcadores dinámicos.");
+                Debug.Log($"Vuforia: Se encontraron {targets.array.Length} marcadores. Iniciando precarga de modelos...");
                 foreach (var t in targets.array)
                 {
                     StartCoroutine(DescargarYAgnadirMarcadorVuforia(t.url, t.name));
+                    
+                    // --- NUEVO: PRECARGAMOS EL MODELO 3D EN EL CACHÉ DEL CELULAR ---
+                    if (lectorApi != null && !string.IsNullOrEmpty(t.url_modelo))
+                    {
+                        lectorApi.SolicitarPrecarga(t.url_modelo);
+                    }
                 }
             }
         }
@@ -93,6 +107,12 @@ public class GestorMarcadoresDinamicos : MonoBehaviour
 
             if (www.result == UnityWebRequest.Result.Success)
             {
+                // Cálculo de peso para la consola
+                totalBytesCargados += www.downloadedBytes;
+                float kb = www.downloadedBytes / 1024f;
+                float totalMb = totalBytesCargados / (1024f * 1024f);
+                Debug.Log($"<color=cyan>[Marcador]</color> '{nombreMarcador}' cargado. Peso: {kb:F2} KB. Acumulado en RAM: {totalMb:F2} MB");
+
                 Texture2D texture = DownloadHandlerTexture.GetContent(www);
                 
                 // --- MAGIA DE VUFORIA ---
@@ -184,18 +204,38 @@ public class GestorMarcadoresDinamicos : MonoBehaviour
                 }
             }
 
-            // Si descubrimos que el que está apuntado con la cámara es DISTINTO al modelo actual, disparamos cambio.
-            if (!string.IsNullOrEmpty(mejorObjetivo) && mejorObjetivo != idTargetActivo)
+            // --- NUEVA LÓGICA: PERMITIR ESCANEAR OTRO AUNQUE HAYA UNO ACTIVO ---
+            bool hayModeloHoy = (lectorApi != null && lectorApi.EstaMostrandoModelo());
+
+            if (!string.IsNullOrEmpty(mejorObjetivo) && minDistancia < distanciaUmbral)
             {
-                idTargetActivo = mejorObjetivo;
-                AccionAlDetectar(mejorObjetivo, mejorTransform);
+                // Si estamos apuntando a un objetivo válido, ocultamos la mira
+                if (reticulaApuntador != null) reticulaApuntador.SetActive(false);
+
+                // Si es un animal DISTINTO al que ya tenemos, lo cargamos
+                if (mejorObjetivo != idTargetActivo)
+                {
+                    idTargetActivo = mejorObjetivo;
+                    AccionAlDetectar(mejorObjetivo, mejorTransform);
+                }
+            }
+            else
+            {
+                // No estamos apuntando a nada en el centro
+                idTargetActivo = "";
+                
+                // Mostramos la mira SOLO si no hay un animal ya cargado en pantalla
+                if (reticulaApuntador != null) 
+                    reticulaApuntador.SetActive(!hayModeloHoy);
             }
         }
         else
         {
-            // Si la cámara no está viendo ningún marcador conocido, mostramos el [ + ] de nuevo para ayudar a apuntar.
-            // Nota: El modelo 3D anterior puede seguir visible enganchado a la cámara (LectorApiAR lo maneja).
-            if (reticulaApuntador != null) reticulaApuntador.SetActive(true);
+            // No hay marcadores visibles para Vuforia
+            idTargetActivo = "";
+            bool hayModeloHoy = (lectorApi != null && lectorApi.EstaMostrandoModelo());
+            if (reticulaApuntador != null) 
+                reticulaApuntador.SetActive(!hayModeloHoy);
         }
     }
 }

@@ -484,12 +484,12 @@ export default function AdminUnityModels() {
                             </div>
 
                             <div className="border rounded-lg p-3 bg-white">
-                                <span className="text-sm font-medium text-gray-700 mb-2 block">Marcador AR 1 (JPG/PNG)</span>
+                                <span className="text-sm font-medium text-gray-700 mb-2 block">Marcador AR(JPG/PNG)</span>
                                 <input type="file" ref={qrInputRef} onChange={(e) => handleFileUpload(e, 'qr')} accept="image/png, image/jpeg" className="hidden" />
                                 <div className="flex flex-col gap-2">
                                     <button type="button" onClick={() => qrInputRef.current?.click()} disabled={uploadingQr} className="flex items-center justify-center gap-2 w-full py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-lg text-sm disabled:opacity-50 transition-colors">
                                         <ArrowUpTrayIcon className="w-4 h-4" />
-                                        {uploadingQr ? 'Subiendo...' : 'Subir Foto QR'}
+                                        {uploadingQr ? 'Subiendo...' : 'Subir Foto'}
                                     </button>
                                     {formData.qr_image_url && (
                                         <div className="flex flex-col items-center justify-center gap-2 mt-2">
@@ -510,7 +510,7 @@ export default function AdminUnityModels() {
                             </div>
                             
                             <div className="border rounded-lg p-3 bg-white">
-                                <span className="text-sm font-medium text-gray-700 mb-2 block">Marcador AR 2(JPG/PNG)</span>
+                                <span className="text-sm font-medium text-gray-700 mb-2 block">Marcador AR(JPG/PNG)</span>
                                 <input type="file" ref={qrInput2Ref} onChange={(e) => handleFileUpload(e, 'qr2')} accept="image/png, image/jpeg" className="hidden" />
                                 <div className="flex flex-col gap-2">
                                     <button type="button" onClick={() => qrInput2Ref.current?.click()} disabled={uploadingQr2} className="flex items-center justify-center gap-2 w-full py-2 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg text-sm disabled:opacity-50 transition-colors">

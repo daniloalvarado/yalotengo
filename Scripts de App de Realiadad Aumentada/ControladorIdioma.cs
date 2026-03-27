@@ -31,6 +31,11 @@ public class ControladorIdioma : MonoBehaviour
     public TextMeshProUGUI txtAjustesTitulo;      // Nuevo: Título del panel Ajustes
     public TextMeshProUGUI txtAjustesLabelIdioma; // Nuevo: Label "Idioma" en Ajustes
 
+    [Header("--- TEXTOS DE CARGA (Loading) ---")]
+    public string msgCargandoTitulo = "Identificando...";
+    public string msgCargandoTaxo = "Sincronizando modelo 3D...";
+    public string msgCargandoDesc = "Por favor, mantén la cámara estable mientras descargamos el modelo...";
+
     void Start()
     {
         string idiomaGuardado = PlayerPrefs.GetString("IdiomaSeleccionado", "es");
@@ -58,8 +63,7 @@ public class ControladorIdioma : MonoBehaviour
 
     private void VerificarReferencias()
     {
-        if (txtArMenuBtn == null) Debug.LogWarning("<color=yellow>ControladorIdioma: ¡Atención! No has arrastrado el componente de texto del BOTÓN MENÚ al script en el Inspector.</color>");
-        if (txtArPlaceholder == null) Debug.LogWarning("<color=yellow>ControladorIdioma: ¡Atención! No has arrastrado el componente de texto de 'ESCANEA UN ANIMAL' al script en el Inspector.</color>");
+        // Eliminamos las advertencias para que no te saturen la consola
     }
 
     // --- MÉTODOS DE COMPATIBILIDAD PARA TUS BOTONES ANTIGUOS ---
@@ -72,8 +76,6 @@ public class ControladorIdioma : MonoBehaviour
 
     private void SetSpanish()
     {
-        if(txtArMenuBtn == null) Debug.LogWarning("ControladorIdioma: Faltan asignar el botón 'Menú' en el Inspector.");
-        if(txtArPlaceholder == null) Debug.LogWarning("ControladorIdioma: Faltan asignar el texto 'Escanea un animal' en el Inspector.");
 
         if(txtLoginTitulo) txtLoginTitulo.text = "INICIAR SESIÓN";
         if(txtLoginBtnGoogle) txtLoginBtnGoogle.text = "Entrar con Google";
@@ -88,9 +90,12 @@ public class ControladorIdioma : MonoBehaviour
         if(txtTemasBtnBiodiversidad) txtTemasBtnBiodiversidad.text = "Biodiversidad";
         if(txtTemasBtnAjustes) txtTemasBtnAjustes.text = "Ajustes";
         if(txtArMenuBtn) txtArMenuBtn.text = "Menú";
-        if(txtArPlaceholder) txtArPlaceholder.text = "Escanea el código QR...";
+        if(txtArPlaceholder) txtArPlaceholder.text = "Apunta al marcador / animal...";
         if(txtAjustesTitulo) txtAjustesTitulo.text = "AJUSTES";
         if(txtAjustesLabelIdioma) txtAjustesLabelIdioma.text = "Idioma";
+        msgCargandoTitulo = "Identificando...";
+        msgCargandoTaxo = "Sincronizando modelo 3D...";
+        msgCargandoDesc = "Por favor, mantén la cámara estable mientras descargamos el modelo...";
     }
 
     private void SetEnglish()
@@ -108,9 +113,13 @@ public class ControladorIdioma : MonoBehaviour
         if(txtTemasBtnBiodiversidad) txtTemasBtnBiodiversidad.text = "Biodiversity";
         if(txtTemasBtnAjustes) txtTemasBtnAjustes.text = "Settings";
         if(txtArMenuBtn) txtArMenuBtn.text = "Menu";
-        if(txtArPlaceholder) txtArPlaceholder.text = "Scan the QR code...";
+        if(txtArPlaceholder) txtArPlaceholder.text = "Aim at the image / animal...";
         if(txtAjustesTitulo) txtAjustesTitulo.text = "SETTINGS";
         if(txtAjustesLabelIdioma) txtAjustesLabelIdioma.text = "Language";
+
+        msgCargandoTitulo = "Identifying...";
+        msgCargandoTaxo = "Synchronizing 3D model...";
+        msgCargandoDesc = "Please hold the camera steady while we download the model...";
     }
 
     private void SetPortuguese()
@@ -128,9 +137,12 @@ public class ControladorIdioma : MonoBehaviour
         if(txtTemasBtnBiodiversidad) txtTemasBtnBiodiversidad.text = "Biodiversidade";
         if(txtTemasBtnAjustes) txtTemasBtnAjustes.text = "Ajustes";
         if(txtArMenuBtn) txtArMenuBtn.text = "Menu";
-        if(txtArPlaceholder) txtArPlaceholder.text = "Escaneie o código QR...";
+        if(txtArPlaceholder) txtArPlaceholder.text = "Aponte para o marcador...";
         if(txtAjustesTitulo) txtAjustesTitulo.text = "AJUSTES";
         if(txtAjustesLabelIdioma) txtAjustesLabelIdioma.text = "Idioma";
+        msgCargandoTitulo = "Identificando...";
+        msgCargandoTaxo = "Sincronizando modelo 3D...";
+        msgCargandoDesc = "Por favor, mantenha a câmera estável enquanto baixamos o modelo...";
     }
 
     private void SetFrench()
@@ -148,9 +160,12 @@ public class ControladorIdioma : MonoBehaviour
         if(txtTemasBtnBiodiversidad) txtTemasBtnBiodiversidad.text = "Biodiversité";
         if(txtTemasBtnAjustes) txtTemasBtnAjustes.text = "Paramètres";
         if(txtArMenuBtn) txtArMenuBtn.text = "Menu";
-        if(txtArPlaceholder) txtArPlaceholder.text = "Scannez le code QR...";
+        if(txtArPlaceholder) txtArPlaceholder.text = "Visez le marqueur...";
         if(txtAjustesTitulo) txtAjustesTitulo.text = "PARAMÈTRES";
         if(txtAjustesLabelIdioma) txtAjustesLabelIdioma.text = "Langue";
+        msgCargandoTitulo = "Identification...";
+        msgCargandoTaxo = "Synchronisation du modèle 3D...";
+        msgCargandoDesc = "Veuillez garder la caméra stable pendant le téléchargement...";
     }
 
     private void SetItalian()
@@ -168,9 +183,12 @@ public class ControladorIdioma : MonoBehaviour
         if(txtTemasBtnBiodiversidad) txtTemasBtnBiodiversidad.text = "Biodiversità";
         if(txtTemasBtnAjustes) txtTemasBtnAjustes.text = "Impostazioni";
         if(txtArMenuBtn) txtArMenuBtn.text = "Menu";
-        if(txtArPlaceholder) txtArPlaceholder.text = "Scansiona il codice QR...";
+        if(txtArPlaceholder) txtArPlaceholder.text = "Inquadra il marcatore...";
         if(txtAjustesTitulo) txtAjustesTitulo.text = "IMPOSTAZIONI";
         if(txtAjustesLabelIdioma) txtAjustesLabelIdioma.text = "Lingua";
+        msgCargandoTitulo = "Identificazione...";
+        msgCargandoTaxo = "Sincronizzazione modello 3D...";
+        msgCargandoDesc = "Si prega di tenere la fotocamera ferma durante il download...";
     }
 
     private void SetGerman()
@@ -188,9 +206,12 @@ public class ControladorIdioma : MonoBehaviour
         if(txtTemasBtnBiodiversidad) txtTemasBtnBiodiversidad.text = "Biodiversität";
         if(txtTemasBtnAjustes) txtTemasBtnAjustes.text = "Einstellungen";
         if(txtArMenuBtn) txtArMenuBtn.text = "Menü";
-        if(txtArPlaceholder) txtArPlaceholder.text = "QR-Code scannen...";
+        if(txtArPlaceholder) txtArPlaceholder.text = "Auf Marker richten...";
         if(txtAjustesTitulo) txtAjustesTitulo.text = "EINSTELLUNGEN";
         if(txtAjustesLabelIdioma) txtAjustesLabelIdioma.text = "Sprache";
+        msgCargandoTitulo = "Identifizierung...";
+        msgCargandoTaxo = "Synchronisierung des 3D-Modells...";
+        msgCargandoDesc = "Bitte halten Sie die Kamera ruhig, während wir das Modell herunterladen...";
     }
 
     public string GetPlaceholderText()
@@ -198,12 +219,12 @@ public class ControladorIdioma : MonoBehaviour
         string codigo = PlayerPrefs.GetString("IdiomaSeleccionado", "es").ToLower();
         switch (codigo)
         {
-            case "en": return "Scan the QR code...";
-            case "pt": return "Escaneie o código QR...";
-            case "fr": return "Scannez le code QR...";
-            case "it": return "Scansiona il codice QR...";
-            case "de": return "QR-Code scannen...";
-            default: return "Escanea el código QR...";
+            case "en": return "Aim at the image...";
+            case "pt": return "Aponte para o marcador...";
+            case "fr": return "Visez l'image...";
+            case "it": return "Inquadra l'immagine...";
+            case "de": return "Auf das Bild richten...";
+            default: return "Apunta al marcador...";
         }
     }
 }

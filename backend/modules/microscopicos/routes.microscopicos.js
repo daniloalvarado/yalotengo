@@ -212,7 +212,7 @@ r.get('/public/targets', async (req, res) => {
       where: {
         estado: 'activo'
       },
-      attributes: ['scientificName', 'qr_image_url', 'qr_image_url2']
+      attributes: ['scientificName', 'qr_image_url', 'qr_image_url2', 'assetBundleFileName']
     })
 
     const baseUrl = `${req.protocol}://${req.get('host')}`
@@ -220,16 +220,20 @@ r.get('/public/targets', async (req, res) => {
     const targets = []
     
     models.forEach(m => {
+      const modelUrl = m.assetBundleFileName ? `${baseUrl}/uploads/microscopicos/${m.assetBundleFileName}` : null
+      
       if (m.qr_image_url) {
         targets.push({
           name: m.scientificName,
-          url: `${baseUrl}/uploads/microscopicos/${m.qr_image_url}`
+          url: `${baseUrl}/uploads/microscopicos/${m.qr_image_url}`,
+          url_modelo: modelUrl
         })
       }
       if (m.qr_image_url2) {
         targets.push({
           name: m.scientificName,
-          url: `${baseUrl}/uploads/microscopicos/${m.qr_image_url2}`
+          url: `${baseUrl}/uploads/microscopicos/${m.qr_image_url2}`,
+          url_modelo: modelUrl
         })
       }
     })
