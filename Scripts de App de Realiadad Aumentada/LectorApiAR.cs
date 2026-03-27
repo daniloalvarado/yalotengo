@@ -98,6 +98,8 @@ public class LectorApiAR : MonoBehaviour
         
         using (UnityWebRequest www = UnityWebRequest.Get(requestUrl))
         {
+            www.certificateHandler = new BypassCertificate();
+            www.timeout = 30;
             yield return www.SendWebRequest();
 
             if (www.result != UnityWebRequest.Result.Success)
@@ -153,6 +155,8 @@ public class LectorApiAR : MonoBehaviour
         // El parámetro 0 (CRC) y Hash128 por defecto permiten caché persistente.
         using (UnityWebRequest www = UnityWebRequestAssetBundle.GetAssetBundle(url))
         {
+            www.certificateHandler = new BypassCertificate();
+            www.timeout = 30; // Tolerancia para internet inestable
             yield return www.SendWebRequest();
 
             if (www.result == UnityWebRequest.Result.Success)
@@ -261,6 +265,8 @@ public class LectorApiAR : MonoBehaviour
         // Al usar GetAssetBundle y dejar que termine, Unity lo guarda en disco automáticamente
         using (UnityWebRequest www = UnityWebRequestAssetBundle.GetAssetBundle(url))
         {
+            www.certificateHandler = new BypassCertificate();
+            www.timeout = 30; // Tiempo para que el servidor responda
             yield return www.SendWebRequest();
             if (www.result == UnityWebRequest.Result.Success)
             {

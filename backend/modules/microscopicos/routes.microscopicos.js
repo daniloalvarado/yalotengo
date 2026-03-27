@@ -215,7 +215,7 @@ r.get('/public/targets', async (req, res) => {
       attributes: ['scientificName', 'qr_image_url', 'qr_image_url2', 'assetBundleFileName']
     })
 
-    const baseUrl = `${req.protocol}://${req.get('host')}`
+    const baseUrl = 'https://yalotengo.onrender.com'
     
     const targets = []
     

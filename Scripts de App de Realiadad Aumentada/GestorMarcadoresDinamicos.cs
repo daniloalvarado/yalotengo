@@ -69,11 +69,19 @@ public class GestorMarcadoresDinamicos : MonoBehaviour
         Debug.Log("Obteniendo lista de marcadores de: " + apiTargetsUrl);
         using (UnityWebRequest www = UnityWebRequest.Get(apiTargetsUrl))
         {
+            www.certificateHandler = new BypassCertificate();
+            www.timeout = 30; // Aumentado para tolerar el arranque en frío de Render
             yield return www.SendWebRequest();
-
+            
             if (www.result != UnityWebRequest.Result.Success)
             {
                 Debug.LogError("Error al conectar con la API de Targets: " + www.error);
+                yield break;
+            }
+
+            if (string.IsNullOrEmpty(www.downloadHandler.text))
+            {
+                Debug.LogWarning("La API devolvió un JSON vacío. Reintentando...");
                 yield break;
             }
 
@@ -82,71 +90,101 @@ public class GestorMarcadoresDinamicos : MonoBehaviour
 
             if (targets != null && targets.array != null)
             {
-                Debug.Log($"Vuforia: Se encontraron {targets.array.Length} marcadores. Iniciando precarga de modelos...");
-                foreach (var t in targets.array)
-                {
-                    StartCoroutine(DescargarYAgnadirMarcadorVuforia(t.url, t.name));
-                    
-                    // --- NUEVO: PRECARGAMOS EL MODELO 3D EN EL CACHÉ DEL CELULAR ---
-                    if (lectorApi != null && !string.IsNullOrEmpty(t.url_modelo))
-                    {
-                        lectorApi.SolicitarPrecarga(t.url_modelo);
-                    }
-                }
+                Debug.Log($"Vuforia: {targets.array.Length} marcadores encontrados. Iniciando descarga ESCALONADA (Alta velocidad)...");
+                StartCoroutine(ProcesarDescargasEscalonadas(targets.array));
             }
         }
     }
 
-    private IEnumerator DescargarYAgnadirMarcadorVuforia(string imageUrl, string nombreMarcador)
+    private IEnumerator ProcesarDescargasEscalonadas(TargetResponse[] listado)
     {
-        string safeUrl = imageUrl.Replace(" ", "%20");
-        
-        using (UnityWebRequest www = UnityWebRequestTexture.GetTexture(safeUrl))
+        // 1. PRIORIDAD: Descargar todos los marcadores para que la cámara pueda escanear pronto
+        foreach (var t in listado)
         {
-            yield return www.SendWebRequest();
+            // Lanzamos en paralelo pero con 0.4s de diferencia para no saturar el servidor
+            StartCoroutine(DescargarYAgnadirMarcadorVuforia(t.url, t.name));
+            yield return new WaitForSeconds(0.4f); 
+        }
 
-            if (www.result == UnityWebRequest.Result.Success)
+        Debug.Log("Vuforia: Marcadores en proceso. Iniciando PRECARGA de modelos 3D con gap de seguridad...");
+
+        // 2. SECUNDARIO: Precargar los modelos 3D (AssetBundles) para cuando el usuario escanee
+        foreach (var t in listado)
+        {
+            if (lectorApi != null && !string.IsNullOrEmpty(t.url_modelo))
             {
-                // Cálculo de peso para la consola
-                totalBytesCargados += www.downloadedBytes;
-                float kb = www.downloadedBytes / 1024f;
-                float totalMb = totalBytesCargados / (1024f * 1024f);
-                Debug.Log($"<color=cyan>[Marcador]</color> '{nombreMarcador}' cargado. Peso: {kb:F2} KB. Acumulado en RAM: {totalMb:F2} MB");
-
-                Texture2D texture = DownloadHandlerTexture.GetContent(www);
-                
-                // --- MAGIA DE VUFORIA ---
-                // Creamos un observador de imagen en tiempo de ejecución de 0.1 metros de ancho
-                var mTarget = VuforiaBehaviour.Instance.ObserverFactory.CreateImageTarget(
-                    texture, 0.1f, nombreMarcador);
-
-                if (mTarget != null)
-                {
-                    // Le añadimos un componente de evento para detectar cuando la cámara lo vea
-                    mTarget.OnTargetStatusChanged += (observer, status) => 
-                    {
-                        if (status.Status == Status.TRACKED || status.Status == Status.EXTENDED_TRACKED)
-                        {
-                            if (!marcadoresVisibles.ContainsKey(nombreMarcador))
-                                marcadoresVisibles.Add(nombreMarcador, mTarget.transform);
-                        }
-                        else
-                        {
-                            if (marcadoresVisibles.ContainsKey(nombreMarcador))
-                                marcadoresVisibles.Remove(nombreMarcador);
-                            
-                            // Opcional: Si perdemos de vista el objetivo actual, podemos "soltarlo" 
-                            // para estar listos para apuntar a otro de inmediato.
-                            if (idTargetActivo == nombreMarcador)
-                                idTargetActivo = "";
-                        }
-                    };
-                    Debug.Log("Vuforia: Marcador inyectado en RAM: " + nombreMarcador);
-                }
+                lectorApi.SolicitarPrecarga(t.url_modelo);
+                // Esperamos 1 segundo entre modelos porque son pesados
+                yield return new WaitForSeconds(1.0f);
             }
-            else
+        }
+        
+        Debug.Log("¡Optimización de red finalizada!");
+    }
+    private IEnumerator DescargarYAgnadirMarcadorVuforia(string url, string targetName)
+    {
+        int intentos = 3;
+        bool exito = false;
+
+        while (intentos > 0 && !exito)
+        {
+            using (UnityWebRequest www = UnityWebRequestTexture.GetTexture(url))
             {
-                Debug.LogError($"Fallo al descargar marcador {nombreMarcador}: {www.error}");
+                // Bypass SSL for this specific request if it fails with SSL errors
+                www.certificateHandler = new BypassCertificate();
+                www.timeout = 30; // Aumentado para estabilidad
+                yield return www.SendWebRequest();
+
+                if (www.result == UnityWebRequest.Result.Success)
+                {
+                    Texture2D textura = DownloadHandlerTexture.GetContent(www);
+                    if (textura != null)
+                    {
+                        // Cálculo de peso para la consola
+                        totalBytesCargados += www.downloadedBytes;
+                        float kb = www.downloadedBytes / 1024f;
+                        float totalMb = totalBytesCargados / (1024f * 1024f);
+                        Debug.Log($"<color=cyan>[Marcador]</color> '{targetName}' cargado ({kb:F2} KB). Total RAM: {totalMb:F2} MB");
+
+                        // --- MAGIA DE VUFORIA ---
+                        var mTarget = VuforiaBehaviour.Instance.ObserverFactory.CreateImageTarget(textura, 0.1f, targetName);
+
+                        if (mTarget != null)
+                        {
+                            mTarget.OnTargetStatusChanged += (observer, status) => 
+                            {
+                                if (status.Status == Status.TRACKED || status.Status == Status.EXTENDED_TRACKED)
+                                {
+                                    if (!marcadoresVisibles.ContainsKey(targetName))
+                                        marcadoresVisibles.Add(targetName, mTarget.transform);
+                                }
+                                else
+                                {
+                                    if (marcadoresVisibles.ContainsKey(targetName))
+                                        marcadoresVisibles.Remove(targetName);
+                                    
+                                    if (idTargetActivo == targetName)
+                                        idTargetActivo = "";
+                                }
+                            };
+                            Debug.Log("Vuforia: Marcador inyectado con éxito: " + targetName);
+                        }
+                        exito = true;
+                    }
+                }
+                else
+                {
+                    intentos--;
+                    if (intentos > 0)
+                    {
+                        Debug.LogWarning($"Reintentando marcador {targetName} ({intentos} intentos restantes)...");
+                        yield return new WaitForSeconds(1.5f);
+                    }
+                    else
+                    {
+                        Debug.LogError($"Fallo DEFINITIVO al descargar marcador {targetName}: {www.error}");
+                    }
+                }
             }
         }
     }
