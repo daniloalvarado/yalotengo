@@ -1,0 +1,88 @@
+services:
+
+  # ─────────────────────────────────────────
+  # MYSQL (base de datos en el VPS)
+  # Datos persistentes en volumen Docker
+  # ─────────────────────────────────────────
+  mysql:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: Root_Yal0t3ng0#2024
+      MYSQL_DATABASE: yalotengo
+      MYSQL_USER: yalotengo_user
+      MYSQL_PASSWORD: Yal0t3ng0_Pass#2024
+    volumes:
+      - mysql_data:/var/lib/mysql
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-pRoot_Yal0t3ng0#2024"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  # ─────────────────────────────────────────
+  # REDIS (interno)
+  # ─────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  # ─────────────────────────────────────────
+  # BACKEND (Node.js API)
+  # MinIO es EXTERNO (VPS Identiarbol)
+  # ─────────────────────────────────────────
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    env_file: .env
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+    expose:
+      - "3000"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "-e",
+        "require('http').get('http://127.0.0.1:3000/health',r=>process.exit(r.statusCode===200?0:1)).on('error',()=>process.exit(1))"]
+      interval: 20s
+      timeout: 5s
+      retries: 5
+
+  # ─────────────────────────────────────────
+  # GATEWAY: Nginx sirve el frontend buildeado
+  # y hace proxy de /api/ al backend
+  # ÚNICO PUERTO PÚBLICO: 8070
+  # ─────────────────────────────────────────
+  gateway:
+    build:
+      context: ..
+      dockerfile: gateway.Dockerfile
+    ports:
+      - "8070:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1/"]
+      interval: 20s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  mysql_data:
+  redis_data:
