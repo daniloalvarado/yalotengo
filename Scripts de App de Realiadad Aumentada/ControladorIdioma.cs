@@ -33,8 +33,8 @@ public class ControladorIdioma : MonoBehaviour
 
     [Header("--- TEXTOS DE CARGA (Loading) ---")]
     public string msgCargandoTitulo = "Identificando...";
-    public string msgCargandoTaxo = "Sincronizando modelo 3D...";
-    public string msgCargandoDesc = "Por favor, mantén la cámara estable mientras descargamos el modelo...";
+    public string msgCargandoTaxo = "Escaneando 3D...";
+    public string msgCargandoDesc = "Por favor, mantenga la imagen centrada...";
 
     void Start()
     {
@@ -90,12 +90,12 @@ public class ControladorIdioma : MonoBehaviour
         if(txtTemasBtnBiodiversidad) txtTemasBtnBiodiversidad.text = "Biodiversidad";
         if(txtTemasBtnAjustes) txtTemasBtnAjustes.text = "Ajustes";
         if(txtArMenuBtn) txtArMenuBtn.text = "Menú";
-        if(txtArPlaceholder) txtArPlaceholder.text = "Apunta al marcador / animal...";
+        if(txtArPlaceholder) txtArPlaceholder.text = "Apunta a la imagen...";
         if(txtAjustesTitulo) txtAjustesTitulo.text = "AJUSTES";
         if(txtAjustesLabelIdioma) txtAjustesLabelIdioma.text = "Idioma";
         msgCargandoTitulo = "Identificando...";
-        msgCargandoTaxo = "Sincronizando modelo 3D...";
-        msgCargandoDesc = "Por favor, mantén la cámara estable mientras descargamos el modelo...";
+        msgCargandoTaxo = "Escaneando 3D...";
+        msgCargandoDesc = "Por favor, mantenga la imagen centrada...";
     }
 
     private void SetEnglish()
@@ -113,13 +113,13 @@ public class ControladorIdioma : MonoBehaviour
         if(txtTemasBtnBiodiversidad) txtTemasBtnBiodiversidad.text = "Biodiversity";
         if(txtTemasBtnAjustes) txtTemasBtnAjustes.text = "Settings";
         if(txtArMenuBtn) txtArMenuBtn.text = "Menu";
-        if(txtArPlaceholder) txtArPlaceholder.text = "Aim at the image / animal...";
+        if(txtArPlaceholder) txtArPlaceholder.text = "Aim at the image...";
         if(txtAjustesTitulo) txtAjustesTitulo.text = "SETTINGS";
         if(txtAjustesLabelIdioma) txtAjustesLabelIdioma.text = "Language";
 
         msgCargandoTitulo = "Identifying...";
-        msgCargandoTaxo = "Synchronizing 3D model...";
-        msgCargandoDesc = "Please hold the camera steady while we download the model...";
+        msgCargandoTaxo = "3D Scanning...";
+        msgCargandoDesc = "Please keep the image centered...";
     }
 
     private void SetPortuguese()
@@ -137,12 +137,12 @@ public class ControladorIdioma : MonoBehaviour
         if(txtTemasBtnBiodiversidad) txtTemasBtnBiodiversidad.text = "Biodiversidade";
         if(txtTemasBtnAjustes) txtTemasBtnAjustes.text = "Ajustes";
         if(txtArMenuBtn) txtArMenuBtn.text = "Menu";
-        if(txtArPlaceholder) txtArPlaceholder.text = "Aponte para o marcador...";
+        if(txtArPlaceholder) txtArPlaceholder.text = "Aponte para a imagem...";
         if(txtAjustesTitulo) txtAjustesTitulo.text = "AJUSTES";
         if(txtAjustesLabelIdioma) txtAjustesLabelIdioma.text = "Idioma";
         msgCargandoTitulo = "Identificando...";
-        msgCargandoTaxo = "Sincronizando modelo 3D...";
-        msgCargandoDesc = "Por favor, mantenha a câmera estável enquanto baixamos o modelo...";
+        msgCargandoTaxo = "Digitalização 3D...";
+        msgCargandoDesc = "Por favor, mantenha a imagem centrada...";
     }
 
     private void SetFrench()
@@ -160,12 +160,12 @@ public class ControladorIdioma : MonoBehaviour
         if(txtTemasBtnBiodiversidad) txtTemasBtnBiodiversidad.text = "Biodiversité";
         if(txtTemasBtnAjustes) txtTemasBtnAjustes.text = "Paramètres";
         if(txtArMenuBtn) txtArMenuBtn.text = "Menu";
-        if(txtArPlaceholder) txtArPlaceholder.text = "Visez le marqueur...";
+        if(txtArPlaceholder) txtArPlaceholder.text = "Visez l'image...";
         if(txtAjustesTitulo) txtAjustesTitulo.text = "PARAMÈTRES";
         if(txtAjustesLabelIdioma) txtAjustesLabelIdioma.text = "Langue";
         msgCargandoTitulo = "Identification...";
-        msgCargandoTaxo = "Synchronisation du modèle 3D...";
-        msgCargandoDesc = "Veuillez garder la caméra stable pendant le téléchargement...";
+        msgCargandoTaxo = "Numérisation 3D...";
+        msgCargandoDesc = "Veuillez garder l'image centrée...";
     }
 
     private void SetItalian()
@@ -183,12 +183,12 @@ public class ControladorIdioma : MonoBehaviour
         if(txtTemasBtnBiodiversidad) txtTemasBtnBiodiversidad.text = "Biodiversità";
         if(txtTemasBtnAjustes) txtTemasBtnAjustes.text = "Impostazioni";
         if(txtArMenuBtn) txtArMenuBtn.text = "Menu";
-        if(txtArPlaceholder) txtArPlaceholder.text = "Inquadra il marcatore...";
+        if(txtArPlaceholder) txtArPlaceholder.text = "Inquadra l'immagine...";
         if(txtAjustesTitulo) txtAjustesTitulo.text = "IMPOSTAZIONI";
         if(txtAjustesLabelIdioma) txtAjustesLabelIdioma.text = "Lingua";
         msgCargandoTitulo = "Identificazione...";
-        msgCargandoTaxo = "Sincronizzazione modello 3D...";
-        msgCargandoDesc = "Si prega di tenere la fotocamera ferma durante il download...";
+        msgCargandoTaxo = "Scansione 3D...";
+        msgCargandoDesc = "Per favore, mantieni l'immagine centrata...";
     }
 
     private void SetGerman()
@@ -206,12 +206,12 @@ public class ControladorIdioma : MonoBehaviour
         if(txtTemasBtnBiodiversidad) txtTemasBtnBiodiversidad.text = "Biodiversität";
         if(txtTemasBtnAjustes) txtTemasBtnAjustes.text = "Einstellungen";
         if(txtArMenuBtn) txtArMenuBtn.text = "Menü";
-        if(txtArPlaceholder) txtArPlaceholder.text = "Auf Marker richten...";
+        if(txtArPlaceholder) txtArPlaceholder.text = "Richten Sie auf das Bild...";
         if(txtAjustesTitulo) txtAjustesTitulo.text = "EINSTELLUNGEN";
         if(txtAjustesLabelIdioma) txtAjustesLabelIdioma.text = "Sprache";
         msgCargandoTitulo = "Identifizierung...";
-        msgCargandoTaxo = "Synchronisierung des 3D-Modells...";
-        msgCargandoDesc = "Bitte halten Sie die Kamera ruhig, während wir das Modell herunterladen...";
+        msgCargandoTaxo = "3D-Scan...";
+        msgCargandoDesc = "Bitte halten Sie das Bild zentriert...";
     }
 
     public string GetPlaceholderText()
@@ -220,11 +220,11 @@ public class ControladorIdioma : MonoBehaviour
         switch (codigo)
         {
             case "en": return "Aim at the image...";
-            case "pt": return "Aponte para o marcador...";
+            case "pt": return "Aponte para a imagem...";
             case "fr": return "Visez l'image...";
             case "it": return "Inquadra l'immagine...";
             case "de": return "Auf das Bild richten...";
-            default: return "Apunta al marcador...";
+            default: return "Apunta a la imagen...";
         }
     }
 }
