@@ -38,6 +38,7 @@ logs/
 *.swo
 *.swn
 *.swm
+Documentación/configurar_servidor.sh
 
 # === Docker ===
 /docker-compose.override.yml
