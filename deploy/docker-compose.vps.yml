@@ -1,8 +1,8 @@
 services:
 
   # ─────────────────────────────────────────
-  # MYSQL (base de datos en el VPS)
-  # Datos persistentes en volumen Docker
+  # MYSQL (nuestro, aislado en Docker)
+  # No toca el MySQL nativo del servidor
   # ─────────────────────────────────────────
   mysql:
     image: mysql:8
@@ -37,7 +37,7 @@ services:
 
   # ─────────────────────────────────────────
   # BACKEND (Node.js API)
-  # MinIO es EXTERNO (VPS Identiarbol)
+  # MinIO: VPS Identiarbol (externo, permanente)
   # ─────────────────────────────────────────
   backend:
     build:
@@ -63,8 +63,7 @@ services:
       retries: 5
 
   # ─────────────────────────────────────────
-  # GATEWAY: Nginx sirve el frontend buildeado
-  # y hace proxy de /api/ al backend
+  # GATEWAY: Nginx + Frontend compilado
   # ÚNICO PUERTO PÚBLICO: 8070
   # ─────────────────────────────────────────
   gateway:
