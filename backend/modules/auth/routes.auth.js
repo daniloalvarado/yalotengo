@@ -277,7 +277,11 @@ r.put('/change-password', async (req, res) => {
     const ok = await bcrypt.compare(currentPassword, u.use_txt_passwordhash)
     if (!ok) return res.status(401).json({ error: 'Contraseña actual incorrecta' })
 
-    // 3. Update password
+    // 3. New password should be different from current
+    const isSame = await bcrypt.compare(newPassword, u.use_txt_passwordhash)
+    if (isSame) return res.status(400).json({ error: 'La nueva contraseña no puede ser la misma que la actual' })
+
+    // 4. Update password
     if (newPassword.length < 8) return res.status(400).json({ error: 'Min 8 chars' })
 
     u.use_txt_passwordhash = await bcrypt.hash(newPassword, 10)

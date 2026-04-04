@@ -16,7 +16,7 @@ public class GestorMarcadoresDinamicos : MonoBehaviour
     public GameObject reticulaApuntador;
 
     [Tooltip("URL base para obtener la lista de marcadores")]
-    public string apiTargetsUrl = "https://yalotengo.onrender.com/microscopicos/public/targets";
+    public string apiTargetsUrl = "http://108.181.191.82.sslip.io:8070/api/microscopicos/public/targets";
 
     [Header("Ajustes de Puntería")]
     [Tooltip("Distancia máxima en píxeles para que se active el marcador. Ajusta esto según el tamaño de tu OverlayQR.")]

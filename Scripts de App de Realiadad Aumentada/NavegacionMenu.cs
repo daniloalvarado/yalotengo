@@ -14,7 +14,7 @@ public class NavegacionMenu : MonoBehaviour
 
     [Header("Configuración de API")]
     [Tooltip("La URL de tu backend Node.js para el login AR")]
-    public string apiUrl = "https://yalotengo.onrender.com/api/auth/ar-login";
+    public string apiUrl = "http://108.181.191.82.sslip.io:8070/api/auth/ar-login";
 
     [Header("Formulario de Registro")]
     public TMP_InputField inputNombre;

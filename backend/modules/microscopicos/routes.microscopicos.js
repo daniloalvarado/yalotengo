@@ -215,7 +215,7 @@ r.get('/public/targets', async (req, res) => {
       attributes: ['scientificName', 'qr_image_url', 'qr_image_url2', 'assetBundleFileName']
     })
 
-    const baseUrl = 'https://yalotengo.onrender.com'
+    const baseUrl = process.env.APP_URL || 'http://108.181.191.82.sslip.io:8070'
     
     const targets = []
     

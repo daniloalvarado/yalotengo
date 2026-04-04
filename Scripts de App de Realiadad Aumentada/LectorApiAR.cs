@@ -11,7 +11,7 @@ public class LectorApiAR : MonoBehaviour
 
     [Header("Configuración de API")]
     [Tooltip("La URL base de tu backend Node.js (Asegúrate de cambiarla al servidor de producción)")]
-    public string apiUrl = "https://yalotengo.onrender.com/microscopicos/public/";
+    public string apiUrl = "http://108.181.191.82.sslip.io:8070/api/microscopicos/public/";
 
     [Header("Elementos Visuales")]
     public GameObject objetoLoading;

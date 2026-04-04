@@ -312,17 +312,17 @@ export default function Profile() {
                                     <label className="block text-sm font-medium text-zinc-700 mb-1">Contraseña Actual</label>
                                     <input
                                         type="password"
-                                        className="w-full px-4 py-2 rounded-lg border-zinc-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent focus:ring-offset-1 transition-shadow"
+                                        className="w-full px-4 py-2 rounded-lg border border-zinc-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent focus:ring-offset-1 transition-shadow"
                                         value={currPass}
                                         onChange={e => setCurrPass(e.target.value)}
                                     />
                                 </div>
                                 <div className="grid sm:grid-cols-2 gap-4">
                                     <div>
-                                        <label className="block text-sm font-medium text-zinc-700 mb-1">Nuva Contraseña (min 8)</label>
+                                        <label className="block text-sm font-medium text-zinc-700 mb-1">Nueva Contraseña (min 8)</label>
                                         <input
                                             type="password"
-                                            className="w-full px-4 py-2 rounded-lg border-zinc-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent focus:ring-offset-1 transition-shadow"
+                                            className="w-full px-4 py-2 rounded-lg border border-zinc-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent focus:ring-offset-1 transition-shadow"
                                             value={newPass}
                                             onChange={e => setNewPass(e.target.value)}
                                         />
@@ -331,7 +331,7 @@ export default function Profile() {
                                         <label className="block text-sm font-medium text-zinc-700 mb-1">Confirmar</label>
                                         <input
                                             type="password"
-                                            className="w-full px-4 py-2 rounded-lg border-zinc-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent focus:ring-offset-1 transition-shadow"
+                                            className="w-full px-4 py-2 rounded-lg border border-zinc-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent focus:ring-offset-1 transition-shadow"
                                             value={confirmPass}
                                             onChange={e => setConfirmPass(e.target.value)}
                                         />
