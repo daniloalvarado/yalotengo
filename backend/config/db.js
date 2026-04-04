@@ -7,10 +7,10 @@ export const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER,
   timezone: '+00:00',
   // Configuración para conexiones más estables
   pool: {
-    max: 2, // Reducido para evitar error 'max_user_connections' en planes gratuitos
+    max: parseInt(process.env.DB_POOL_MAX) || 2, // Dinámico: 2 para Render/Clever, 50 para VPS
     min: 0,
     acquire: 30000,
-    idle: 5000 // Libera conexiones inactivas mas rapido
+    idle: 5000 
   },
   dialectOptions: {
     connectTimeout: 60000  // 60 segundos timeout de conexión
