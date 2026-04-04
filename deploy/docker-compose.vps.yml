@@ -19,6 +19,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 10
+    ports:
+      - "127.0.0.1:3306:3306"
 
   # ─────────────────────────────────────────
   # REDIS (interno)
