@@ -248,7 +248,7 @@ export default function AdminUnityModels() {
                                     <tr>
                                         <th className="px-4 py-3 text-left font-medium text-gray-600">ID / Nombre Científico</th>
                                         <th className="px-4 py-3 text-left font-medium text-gray-600">Taxonomía</th>
-                                        <th className="px-4 py-3 text-left font-medium text-gray-600">Marcadores / Idiomas</th>
+                                        <th className="px-4 py-3 text-left font-medium text-gray-600">Idiomas disponibles</th>
                                         <th className="px-4 py-3 text-left font-medium text-gray-600">Marcador AR</th>
                                         <th className="px-4 py-3 text-left font-medium text-gray-600">Estado</th>
                                         <th className="px-4 py-3 text-right font-medium text-gray-600">Acciones</th>
@@ -266,52 +266,41 @@ export default function AdminUnityModels() {
                                                     {m.class || '?'} &gt; {m.order || '?'} &gt; {m.family || '?'}
                                                 </div>
                                             </td>
-                                            <td className="px-4 py-3">
-                                                <div className="flex flex-col gap-1.5">
-                                                    <div className="flex gap-2">
-                                                        {m.qr_image_url ? (
-                                                            <span className="text-[10px] bg-indigo-50 text-indigo-700 px-1.5 py-0.5 rounded border border-indigo-100 inline-block w-max">Cod QR</span>
-                                                        ) : (
-                                                            <span className="text-[10px] text-gray-400 italic">Sin QR</span>
-                                                        )}
-                                                        {m.qr_image_url2 ? (
-                                                            <span className="text-[10px] bg-blue-50 text-blue-700 px-1.5 py-0.5 rounded border border-blue-100 inline-block w-max">Foto</span>
-                                                        ) : (
-                                                            <span className="text-[10px] text-gray-400 italic">Sin Foto</span>
-                                                        )}
-                                                    </div>
-
-                                                    <div className="flex gap-1 flex-wrap">
-                                                        <span className="text-[10px] bg-sky-50 text-sky-700 px-1.5 py-0.5 rounded border border-sky-100">es</span>
-                                                        {m.translations?.filter(t => t.name || t.descripcion).map(t => (
-                                                            <span key={t.id} className="text-[10px] bg-sky-50 text-sky-700 px-1.5 py-0.5 rounded border border-sky-100">
-                                                                {t.language_code}
-                                                            </span>
-                                                        ))}
-                                                    </div>
+                                            <td className="px-4 py-3 text-center">
+                                                <div className="flex gap-1 flex-wrap justify-center">
+                                                    <span className="text-[10px] bg-sky-50 text-sky-700 px-1.5 py-0.5 rounded border border-sky-100 font-bold">es</span>
+                                                    {m.translations?.filter(t => t.name || t.descripcion).map(t => (
+                                                        <span key={t.id} className="text-[10px] bg-sky-50 text-sky-700 px-1.5 py-0.5 rounded border border-sky-100 font-bold">
+                                                            {t.language_code}
+                                                        </span>
+                                                    ))}
                                                 </div>
                                             </td>
-                                            <td className="px-4 py-3">
-                                                <div className="flex gap-2">
-                                                    {m.qr_image_url ? (
-                                                        <div className="w-10 h-10 rounded-lg border border-gray-200 shadow-sm overflow-hidden bg-gray-50 flex items-center justify-center">
-                                                            <img
-                                                                src={`${API_BASE_URL}/uploads/microscopicos/${m.qr_image_url}`}
-                                                                alt="Marcador"
-                                                                className="w-full h-full object-cover"
-                                                            />
-                                                        </div>
+                                            <td className="px-4 py-3 text-center">
+                                                <div className="flex gap-2 justify-center">
+                                                    {!m.qr_image_url && !m.qr_image_url2 ? (
+                                                        <span className="text-gray-400 text-[10px] italic">Sin marcadores</span>
                                                     ) : (
-                                                        <span className="text-gray-400 text-[10px] italic">No QR</span>
-                                                    )}
-                                                    {m.qr_image_url2 && (
-                                                        <div className="w-10 h-10 rounded-lg border border-gray-200 shadow-sm overflow-hidden bg-gray-50 flex items-center justify-center">
-                                                            <img
-                                                                src={`${API_BASE_URL}/uploads/microscopicos/${m.qr_image_url2}`}
-                                                                alt="Marcador 2"
-                                                                className="w-full h-full object-cover"
-                                                            />
-                                                        </div>
+                                                        <>
+                                                            {m.qr_image_url && (
+                                                                <div className="w-10 h-10 rounded-lg border border-gray-200 shadow-sm overflow-hidden bg-gray-50 flex items-center justify-center">
+                                                                    <img
+                                                                        src={`${API_BASE_URL}/uploads/microscopicos/${m.qr_image_url}`}
+                                                                        alt="Marcador"
+                                                                        className="w-full h-full object-cover"
+                                                                    />
+                                                                </div>
+                                                            )}
+                                                            {m.qr_image_url2 && (
+                                                                <div className="w-10 h-10 rounded-lg border border-gray-200 shadow-sm overflow-hidden bg-gray-50 flex items-center justify-center">
+                                                                    <img
+                                                                        src={`${API_BASE_URL}/uploads/microscopicos/${m.qr_image_url2}`}
+                                                                        alt="Marcador 2"
+                                                                        className="w-full h-full object-cover"
+                                                                    />
+                                                                </div>
+                                                            )}
+                                                        </>
                                                     )}
                                                 </div>
                                             </td>
