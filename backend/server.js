@@ -104,8 +104,13 @@ async function ensureSchema() {
   try {
     const tableInfo = await qi.describeTable('mm_darwin_data')
     if (!tableInfo.fuente) {
-      console.log('--- [MIGRACIÓN] Añadiendo columna "fuente" a mm_darwin_data ---')
       await qi.addColumn('mm_darwin_data', 'fuente', {
+        type: DataTypes.STRING(255),
+        allowNull: true
+      })
+    }
+    if (!tableInfo.panel) {
+      await qi.addColumn('mm_darwin_data', 'panel', {
         type: DataTypes.STRING(255),
         allowNull: true
       })

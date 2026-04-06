@@ -17,9 +17,9 @@ export default function AdminUnityModels() {
     const [loading, setLoading] = useState(true)
     const [isAdmin, setIsAdmin] = useState(false)
 
-    const [showModal, setShowModal] = useState(false)
-    const [editItem, setEditItem] = useState(null)
     const [formData, setFormData] = useState({})
+    const [currentPage, setCurrentPage] = useState(1)
+    const itemsPerPage = 10
     const [uploadingAsset, setUploadingAsset] = useState(false)
     const [uploadingQr, setUploadingQr] = useState(false)
     const [uploadingQr2, setUploadingQr2] = useState(false)
@@ -111,7 +111,7 @@ export default function AdminUnityModels() {
 
         setFormData(item ? { ...item, translations: trans } : {
             scientificName: '', kingdom: 'Animalia', phylum: '', subphylum: '', class: '', subclass: '', order: '', family: '', genus: '', specificEpithet: '',
-            vernacularName: '', taxonRemarks: '', fuente: '', assetBundleFileName: '', qr_image_url: '', qr_image_url2: '',
+            vernacularName: '', taxonRemarks: '', fuente: '', panel: '', assetBundleFileName: '', qr_image_url: '', qr_image_url2: '',
             translations: trans
         })
 
@@ -185,8 +185,24 @@ export default function AdminUnityModels() {
 
     const filteredModels = models.filter(m => {
         const term = searchTerm.toLowerCase()
-        return (m.scientificName?.toLowerCase().includes(term) || m.vernacularName?.toLowerCase().includes(term))
+        return (
+            m.scientificName?.toLowerCase().includes(term) || 
+            m.vernacularName?.toLowerCase().includes(term) ||
+            m.panel?.toLowerCase().includes(term)
+        )
     })
+
+    // Lógica de Paginación
+    const totalPages = Math.ceil(filteredModels.length / itemsPerPage)
+    const paginatedModels = filteredModels.slice(
+        (currentPage - 1) * itemsPerPage,
+        currentPage * itemsPerPage
+    )
+
+    // Resetear a página 1 al buscar
+    useEffect(() => {
+        setCurrentPage(1)
+    }, [searchTerm])
 
     if (!isAdmin) return <div className="p-8 text-center text-gray-500">Verificando permisos...</div>
 
@@ -246,8 +262,10 @@ export default function AdminUnityModels() {
                             <table className="w-full text-sm">
                                 <thead className="bg-gray-50">
                                     <tr>
-                                        <th className="px-4 py-3 text-left font-medium text-gray-600">ID / Nombre Científico</th>
-                                        <th className="px-4 py-3 text-left font-medium text-gray-600">Taxonomía / Fuente</th>
+                                        <th className="px-4 py-3 text-left font-medium text-gray-600 w-12 text-center">N°</th>
+                                        <th className="px-4 py-3 text-left font-medium text-gray-600">ID / Info Especie</th>
+                                        <th className="px-4 py-3 text-left font-medium text-gray-600">Panel</th>
+                                        <th className="px-4 py-3 text-left font-medium text-gray-600">Taxonomía</th>
                                         <th className="px-4 py-3 text-left font-medium text-gray-600">Idiomas</th>
                                         <th className="px-4 py-3 text-left font-medium text-gray-600">Marcador AR</th>
                                         <th className="px-4 py-3 text-left font-medium text-gray-600">Estado</th>
@@ -255,18 +273,21 @@ export default function AdminUnityModels() {
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-gray-100">
-                                    {filteredModels.map(m => (
+                                    {paginatedModels.map((m, idx) => (
                                         <tr key={m.id} className="hover:bg-gray-50 transition-colors">
+                                            <td className="px-4 py-3 text-center text-gray-400 font-mono text-xs">
+                                                {(currentPage - 1) * itemsPerPage + idx + 1}
+                                            </td>
                                             <td className="px-4 py-3">
                                                 <div className="font-bold text-gray-900 italic">{m.scientificName}</div>
                                                 <div className="text-xs text-gray-500">{m.vernacularName || 'Sin nombre común'} (ID: {m.id})</div>
                                             </td>
                                             <td className="px-4 py-3">
+                                                <div className="text-sm text-gray-700">{m.panel || <span className="text-gray-300 italic">No asignado</span>}</div>
+                                            </td>
+                                            <td className="px-4 py-3">
                                                 <div className="text-xs text-gray-600">
                                                     {m.class || '?'} &gt; {m.order || '?'} &gt; {m.family || '?'}
-                                                </div>
-                                                <div className="text-[10px] text-gray-400 mt-1 italic truncate max-w-[150px]">
-                                                    {m.fuente ? `Fuente: ${m.fuente}` : 'Sin fuente'}
                                                 </div>
                                             </td>
                                             <td className="px-4 py-3 text-center">
@@ -338,6 +359,60 @@ export default function AdminUnityModels() {
                             </table>
                         </div>
                     )}
+
+                    {/* Controles de Paginación */}
+                    {!loading && totalPages > 1 && (
+                        <div className="flex items-center justify-between bg-white px-4 py-3 rounded-lg border border-gray-200 mt-4 shadow-sm">
+                            <div className="flex flex-1 justify-between sm:hidden">
+                                <button
+                                    onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                                    disabled={currentPage === 1}
+                                    className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+                                >
+                                    Anterior
+                                </button>
+                                <button
+                                    onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                                    disabled={currentPage === totalPages}
+                                    className="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+                                >
+                                    Siguiente
+                                </button>
+                            </div>
+                            <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+                                <div>
+                                    <p className="text-sm text-gray-700">
+                                        Mostrando <span className="font-medium">{(currentPage - 1) * itemsPerPage + 1}</span> a <span className="font-medium">{Math.min(currentPage * itemsPerPage, filteredModels.length)}</span> de <span className="font-medium">{filteredModels.length}</span> modelos
+                                    </p>
+                                </div>
+                                <div className="flex gap-1">
+                                    <button
+                                        onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                                        disabled={currentPage === 1}
+                                        className="px-3 py-1 border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50 text-sm"
+                                    >
+                                        Anterior
+                                    </button>
+                                    {[...Array(totalPages)].map((_, i) => (
+                                        <button
+                                            key={i + 1}
+                                            onClick={() => setCurrentPage(i + 1)}
+                                            className={`px-3 py-1 border rounded text-sm transition-colors ${currentPage === i + 1 ? 'bg-emerald-600 text-white border-emerald-600' : 'border-gray-300 hover:bg-gray-50'}`}
+                                        >
+                                            {i + 1}
+                                        </button>
+                                    ))}
+                                    <button
+                                        onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                                        disabled={currentPage === totalPages}
+                                        className="px-3 py-1 border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50 text-sm"
+                                    >
+                                        Siguiente
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </>
             )}
 
@@ -345,31 +420,58 @@ export default function AdminUnityModels() {
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <label className="block col-span-1 md:col-span-2">
+                            <span className="text-sm font-medium text-gray-700 block mb-1">Nombre Común</span>
+                            <input 
+                                value={formData.vernacularName || ''} 
+                                onChange={e => setFormData(p => ({ ...p, vernacularName: e.target.value }))} 
+                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all" 
+                                placeholder="Ej: Abeja Melipona"
+                            />
+                        </label>
+
+                        <label className="block col-span-1 md:col-span-2">
                             <span className="text-sm font-medium text-gray-700 block mb-1">Nombre Científico</span>
-                            <input value={formData.scientificName || ''} onChange={e => setFormData(p => ({ ...p, scientificName: e.target.value }))} required className="w-full px-3 py-2 border rounded-lg focus:ring-emerald-500 outline-none" />
+                            <input 
+                                value={formData.scientificName || ''} 
+                                onChange={e => setFormData(p => ({ ...p, scientificName: e.target.value }))} 
+                                required 
+                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all" 
+                                placeholder="Ej: Melipona beecheii"
+                            />
+                        </label>
+
+                        <label className="block col-span-1 md:col-span-2">
+                            <span className="text-sm font-medium text-gray-700 block mb-1">Nombre del Panel (Referencia)</span>
+                            <input 
+                                value={formData.panel || ''} 
+                                onChange={e => setFormData(p => ({ ...p, panel: e.target.value }))} 
+                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all bg-emerald-50/10" 
+                                placeholder="Ej: Panel A - Entomología"
+                            />
                         </label>
 
                         <div className="col-span-1 md:col-span-2 p-3 bg-gray-50 rounded-lg border text-sm grid grid-cols-2 sm:grid-cols-4 gap-3">
                             <p className="col-span-full font-semibold text-gray-600 mb-1 text-xs uppercase tracking-wider">Taxonomía</p>
-                            <label className="block"><span className="text-xs text-gray-500 block mb-1">Reino</span><input value={formData.kingdom || ''} onChange={e => setFormData(p => ({ ...p, kingdom: e.target.value }))} className="w-full px-2 py-1 border rounded text-xs outline-none" /></label>
-                            <label className="block"><span className="text-xs text-gray-500 block mb-1">Filo</span><input value={formData.phylum || ''} onChange={e => setFormData(p => ({ ...p, phylum: e.target.value }))} className="w-full px-2 py-1 border rounded text-xs outline-none" /></label>
-                            <label className="block"><span className="text-xs text-gray-500 block mb-1">Subfilo</span><input value={formData.subphylum || ''} onChange={e => setFormData(p => ({ ...p, subphylum: e.target.value }))} className="w-full px-2 py-1 border rounded text-xs outline-none" /></label>
-                            <label className="block"><span className="text-xs text-gray-500 block mb-1">Clase</span><input value={formData.class || ''} onChange={e => setFormData(p => ({ ...p, class: e.target.value }))} className="w-full px-2 py-1 border rounded text-xs outline-none" /></label>
-                            <label className="block"><span className="text-xs text-gray-500 block mb-1">Subclase</span><input value={formData.subclass || ''} onChange={e => setFormData(p => ({ ...p, subclass: e.target.value }))} className="w-full px-2 py-1 border rounded text-xs outline-none" /></label>
-                            <label className="block"><span className="text-xs text-gray-500 block mb-1">Orden</span><input value={formData.order || ''} onChange={e => setFormData(p => ({ ...p, order: e.target.value }))} className="w-full px-2 py-1 border rounded text-xs outline-none" /></label>
-                            <label className="block"><span className="text-xs text-gray-500 block mb-1">Familia</span><input value={formData.family || ''} onChange={e => setFormData(p => ({ ...p, family: e.target.value }))} className="w-full px-2 py-1 border rounded text-xs outline-none" /></label>
-                            <label className="block"><span className="text-xs text-gray-500 block mb-1">Género</span><input value={formData.genus || ''} onChange={e => setFormData(p => ({ ...p, genus: e.target.value }))} className="w-full px-2 py-1 border rounded text-xs outline-none" /></label>
-                            <label className="block"><span className="text-xs text-gray-500 block mb-1">Epíteto (Especie)</span><input value={formData.specificEpithet || ''} onChange={e => setFormData(p => ({ ...p, specificEpithet: e.target.value }))} className="w-full px-2 py-1 border rounded text-xs outline-none" /></label>
+                            <label className="block"><span className="text-xs text-gray-500 block mb-1">Reino</span><input value={formData.kingdom || ''} onChange={e => setFormData(p => ({ ...p, kingdom: e.target.value }))} className="w-full px-2 py-1 border border-gray-300 rounded text-xs focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all" /></label>
+                            <label className="block"><span className="text-xs text-gray-500 block mb-1">Filo</span><input value={formData.phylum || ''} onChange={e => setFormData(p => ({ ...p, phylum: e.target.value }))} className="w-full px-2 py-1 border border-gray-300 rounded text-xs focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all" /></label>
+                            <label className="block"><span className="text-xs text-gray-500 block mb-1">Subfilo</span><input value={formData.subphylum || ''} onChange={e => setFormData(p => ({ ...p, subphylum: e.target.value }))} className="w-full px-2 py-1 border border-gray-300 rounded text-xs focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all" /></label>
+                            <label className="block"><span className="text-xs text-gray-500 block mb-1">Clase</span><input value={formData.class || ''} onChange={e => setFormData(p => ({ ...p, class: e.target.value }))} className="w-full px-2 py-1 border border-gray-300 rounded text-xs focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all" /></label>
+                            <label className="block"><span className="text-xs text-gray-500 block mb-1">Subclase</span><input value={formData.subclass || ''} onChange={e => setFormData(p => ({ ...p, subclass: e.target.value }))} className="w-full px-2 py-1 border border-gray-300 rounded text-xs focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all" /></label>
+                            <label className="block"><span className="text-xs text-gray-500 block mb-1">Orden</span><input value={formData.order || ''} onChange={e => setFormData(p => ({ ...p, order: e.target.value }))} className="w-full px-2 py-1 border border-gray-300 rounded text-xs focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all" /></label>
+                            <label className="block"><span className="text-xs text-gray-500 block mb-1">Familia</span><input value={formData.family || ''} onChange={e => setFormData(p => ({ ...p, family: e.target.value }))} className="w-full px-2 py-1 border border-gray-300 rounded text-xs focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all" /></label>
+                            <label className="block"><span className="text-xs text-gray-500 block mb-1">Género</span><input value={formData.genus || ''} onChange={e => setFormData(p => ({ ...p, genus: e.target.value }))} className="w-full px-2 py-1 border border-gray-300 rounded text-xs focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all" /></label>
+                            <label className="block"><span className="text-xs text-gray-500 block mb-1">Epíteto (Especie)</span><input value={formData.specificEpithet || ''} onChange={e => setFormData(p => ({ ...p, specificEpithet: e.target.value }))} className="w-full px-2 py-1 border border-gray-300 rounded text-xs focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all" /></label>
                         </div>
 
                         <label className="block col-span-1 md:col-span-2">
-                            <span className="text-sm font-medium text-gray-700 block mb-1">Nombre Común</span>
-                            <input value={formData.vernacularName || ''} onChange={e => setFormData(p => ({ ...p, vernacularName: e.target.value }))} className="w-full px-3 py-2 border rounded-lg focus:ring-emerald-500 outline-none" />
-                        </label>
-
-                        <label className="block col-span-1 md:col-span-2">
                             <span className="text-sm font-medium text-gray-700 block mb-1">Descripción / Notas</span>
-                            <textarea value={formData.taxonRemarks || ''} onChange={e => setFormData(p => ({ ...p, taxonRemarks: e.target.value }))} rows={4} className="w-full px-3 py-2 border rounded-lg focus:ring-emerald-500 outline-none resize-none" placeholder="Descripción general de la especie..." />
+                            <textarea 
+                                value={formData.taxonRemarks || ''} 
+                                onChange={e => setFormData(p => ({ ...p, taxonRemarks: e.target.value }))} 
+                                rows={4} 
+                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none resize-none transition-all" 
+                                placeholder="Descripción general de la especie..." 
+                            />
                         </label>
 
 
@@ -528,22 +630,15 @@ export default function AdminUnityModels() {
                             </div>
                         </div>
 
-                        <label className="block col-span-1 md:col-span-2 pt-2 border-t border-dashed">
-                             <span className="text-xs font-bold text-gray-400 uppercase tracking-widest block mb-2">Créditos de Información</span>
-                             <div className="bg-emerald-50/30 p-4 rounded-xl border border-emerald-100 flex items-center gap-4">
-                                <div className="bg-emerald-500 text-white p-2 rounded-lg">
-                                    <PlusIcon className="w-5 h-5" />
-                                </div>
-                                <div className="flex-1">
-                                    <span className="text-xs font-semibold text-emerald-800 block mb-1">Fuente de Información (Opcional)</span>
-                                    <input 
-                                        value={formData.fuente || ''} 
-                                        onChange={e => setFormData(p => ({ ...p, fuente: e.target.value }))} 
-                                        className="w-full px-3 py-2 border border-emerald-200 rounded-lg focus:ring-2 focus:ring-emerald-500/20 outline-none text-sm" 
-                                        placeholder="Ej: Wikipedia, Enciclopedia, etc." 
-                                    />
-                                </div>
-                             </div>
+                        <label className="block col-span-1 md:col-span-2">
+                             <span className="text-sm font-medium text-gray-700 block mb-1">Fuente de Información</span>
+                             <textarea 
+                                 value={formData.fuente || ''} 
+                                 onChange={e => setFormData(p => ({ ...p, fuente: e.target.value }))} 
+                                 rows={2}
+                                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all shadow-sm resize-y min-h-[60px]" 
+                                 placeholder="Ej: Wikipedia, Universidad de X, etc." 
+                             />
                         </label>
                     </div>
 
