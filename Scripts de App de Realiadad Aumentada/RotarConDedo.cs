@@ -6,12 +6,12 @@ public class RotarConDedo : MonoBehaviour
     [Header("¡ARRASTRA TU MODELO AQUÍ!")]
     public Transform modeloAGirar;
 
-    public float velocidadRotacionPC = 5f;
-    public float velocidadRotacionCelular = 0.4f;
+    public float velocidadRotacionPC = 8f;
+    public float velocidadRotacionCelular = 0.5f;
     
     [Header("Velocidad de Zoom")]
-    public float velocidadZoomCelular = 0.1f;
-    public float velocidadZoomPC = 10f; // NUEVO: Para la ruedita del ratón
+    public float velocidadZoomCelular = 0.2f;
+    public float velocidadZoomPC = 12f; 
 
     void Update()
     {
@@ -20,9 +20,10 @@ public class RotarConDedo : MonoBehaviour
         // EVITAR QUE SE ROTE EL MODELO SI ESTAMOS TOCANDO LA INTERFAZ WEB/UI (Como el Scroll de texto)
         if (EventSystem.current != null)
         {
-            // Bloquea el toque del celular si el dedo 0 está sobre UI
-            if (Input.touchCount > 0 && EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId)) return;
-            // Bloquea el ratón de la PC si el puntero está sobre UI
+            // Bloquea solo si tocamos explícitamente un objeto que NO sea fondo (como botones o scrolls)
+            if (Input.touchCount > 0) {
+                 if (EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId)) return;
+            }
             if (EventSystem.current.IsPointerOverGameObject()) return;
         }
 

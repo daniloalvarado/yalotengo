@@ -36,6 +36,12 @@ public class ControladorIdioma : MonoBehaviour
     public string msgCargandoTaxo = "Escaneando 3D...";
     public string msgCargandoDesc = "Por favor, mantenga la imagen centrada...";
 
+    [Header("--- TEXTOS DE ERROR ---")]
+    public string msgErrNoInternet = "Sin conexión a Internet";
+    public string msgErrServidor = "Error de servidor";
+    public string msgErrDetalleRed = "Revisa tu Wi-Fi o Datos móviles";
+    public string msgErrDetalleServidor = "Reintenta más tarde";
+
     void Start()
     {
         string idiomaGuardado = PlayerPrefs.GetString("IdiomaSeleccionado", "es");
@@ -96,6 +102,11 @@ public class ControladorIdioma : MonoBehaviour
         msgCargandoTitulo = "Identificando...";
         msgCargandoTaxo = "Escaneando 3D...";
         msgCargandoDesc = "Por favor, mantenga la imagen centrada...";
+
+        msgErrNoInternet = "Sin conexión a Internet";
+        msgErrServidor = "Error de servidor";
+        msgErrDetalleRed = "Revisa tu Wi-Fi o Datos móviles";
+        msgErrDetalleServidor = "Reintenta más tarde";
     }
 
     private void SetEnglish()
@@ -120,6 +131,11 @@ public class ControladorIdioma : MonoBehaviour
         msgCargandoTitulo = "Identifying...";
         msgCargandoTaxo = "3D Scanning...";
         msgCargandoDesc = "Please keep the image centered...";
+
+        msgErrNoInternet = "No Internet connection";
+        msgErrServidor = "Server Error";
+        msgErrDetalleRed = "Check your Wi-Fi or Data";
+        msgErrDetalleServidor = "Please try again later";
     }
 
     private void SetPortuguese()
@@ -143,6 +159,11 @@ public class ControladorIdioma : MonoBehaviour
         msgCargandoTitulo = "Identificando...";
         msgCargandoTaxo = "Digitalização 3D...";
         msgCargandoDesc = "Por favor, mantenha a imagem centrada...";
+
+        msgErrNoInternet = "Sem conexão à Internet";
+        msgErrServidor = "Erro de servidor";
+        msgErrDetalleRed = "Verifique o seu Wi-Fi";
+        msgErrDetalleServidor = "Tente mais tarde";
     }
 
     private void SetFrench()
@@ -166,6 +187,11 @@ public class ControladorIdioma : MonoBehaviour
         msgCargandoTitulo = "Identification...";
         msgCargandoTaxo = "Numérisation 3D...";
         msgCargandoDesc = "Veuillez garder l'image centrée...";
+
+        msgErrNoInternet = "Pas de connexion Internet";
+        msgErrServidor = "Erreur de serveur";
+        msgErrDetalleRed = "Vérifiez votre Wi-Fi";
+        msgErrDetalleServidor = "Veuillez réessayer plus tard";
     }
 
     private void SetItalian()
@@ -189,6 +215,11 @@ public class ControladorIdioma : MonoBehaviour
         msgCargandoTitulo = "Identificazione...";
         msgCargandoTaxo = "Scansione 3D...";
         msgCargandoDesc = "Per favore, mantieni l'immagine centrata...";
+
+        msgErrNoInternet = "Nessuna connessione Internet";
+        msgErrServidor = "Errore del server";
+        msgErrDetalleRed = "Controlla il tuo Wi-Fi";
+        msgErrDetalleServidor = "Riprova più tardi";
     }
 
     private void SetGerman()
@@ -212,6 +243,11 @@ public class ControladorIdioma : MonoBehaviour
         msgCargandoTitulo = "Identifizierung...";
         msgCargandoTaxo = "3D-Scan...";
         msgCargandoDesc = "Bitte halten Sie das Bild zentriert...";
+
+        msgErrNoInternet = "Keine Internetverbindung";
+        msgErrServidor = "Serverfehler";
+        msgErrDetalleRed = "Prüfen Sie Ihr Wi-Fi";
+        msgErrDetalleServidor = "Später erneut versuchen";
     }
 
     public string GetPlaceholderText()

@@ -96,6 +96,18 @@ public class LectorApiAR : MonoBehaviour
         // Usamos System.Uri.EscapeDataString para que los espacios sean "%20" y Express los lea sin problemas.
         string requestUrl = apiUrl + System.Uri.EscapeDataString(idAnimal.Trim());
         
+        // --- NUEVO: VALIDACIÓN DE INTERNET ---
+        if (Application.internetReachability == NetworkReachability.NotReachable)
+        {
+            ControladorIdioma ci = FindObjectOfType<ControladorIdioma>();
+            string title = (ci != null) ? ci.msgErrNoInternet : "Sin conexión a Internet";
+            string detail = (ci != null) ? ci.msgErrDetalleRed : "Activa tu Wi-Fi o Datos";
+            
+            if (controladorInfo != null) controladorInfo.MostrarError(title, detail);
+            if (objetoLoading != null) objetoLoading.SetActive(false);
+            yield break;
+        }
+
         using (UnityWebRequest www = UnityWebRequest.Get(requestUrl))
         {
             www.certificateHandler = new BypassCertificate();
@@ -104,8 +116,23 @@ public class LectorApiAR : MonoBehaviour
 
             if (www.result != UnityWebRequest.Result.Success)
             {
-                if (controladorInfo != null) controladorInfo.txtNombre.text = "Error de conexión o modelo no existe";
+                if (controladorInfo != null) {
+                    ControladorIdioma ci = FindObjectOfType<ControladorIdioma>();
+                    if (www.result == UnityWebRequest.Result.ConnectionError)
+                    {
+                        string title = (ci != null) ? ci.msgErrNoInternet : "Sin conexión a Internet";
+                        string detail = (ci != null) ? ci.msgErrDetalleRed : "Error de red local";
+                        controladorInfo.MostrarError(title, detail);
+                    }
+                    else
+                    {
+                        string title = (ci != null) ? ci.msgErrServidor : "Error de servidor";
+                        string detail = (ci != null) ? ci.msgErrDetalleServidor : "Reintenta más tarde";
+                        controladorInfo.MostrarError(title, detail);
+                    }
+                }
                 Debug.LogError("Error al conectar con la API: " + www.error + " | URL: " + requestUrl);
+                if (objetoLoading != null) objetoLoading.SetActive(false);
             }
             else
             {
@@ -218,6 +245,21 @@ public class LectorApiAR : MonoBehaviour
             else
             {
                 if (objetoLoading != null) objetoLoading.SetActive(false);
+                if (controladorInfo != null) {
+                    ControladorIdioma ci = FindObjectOfType<ControladorIdioma>();
+                    if (www.result == UnityWebRequest.Result.ConnectionError)
+                    {
+                        string title = (ci != null) ? ci.msgErrNoInternet : "Sin conexión a Internet";
+                        string detail = (ci != null) ? ci.msgErrDetalleRed : "No se bajó el modelo";
+                        controladorInfo.MostrarError(title, detail);
+                    }
+                    else
+                    {
+                        string title = (ci != null) ? ci.msgErrServidor : "Error de servidor";
+                        string detail = (ci != null) ? ci.msgErrDetalleServidor : "Fallo al bajar 3D";
+                        controladorInfo.MostrarError(title, detail);
+                    }
+                }
                 Debug.LogError("Error al descargar el modelo: " + www.error);
             }
         }

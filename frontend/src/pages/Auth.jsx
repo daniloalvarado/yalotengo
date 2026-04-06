@@ -2,6 +2,8 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api, { setToken } from "../api/client";
 
+import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
+
 function Label({ children, htmlFor, className = "" }) {
   return (
     <label
@@ -47,6 +49,7 @@ export default function Auth() {
   const [nombres, setNombres] = useState("");
   const [apellidos, setApellidos] = useState("");
   const [documento, setDocumento] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const API_BASE = useMemo(() => import.meta.env.VITE_API_BASE || "http://localhost:3000", []);
   const FRONT_REDIRECT = useMemo(() => `${window.location.origin}/auth`, []);
@@ -169,9 +172,28 @@ export default function Auth() {
                   <Label htmlFor="email">Correo</Label>
                   <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
                 </div>
-                <div>
+                <div className="relative">
                   <Label htmlFor="password">Contraseña</Label>
-                  <Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                  <div className="relative">
+                    <Input
+                      type={showPassword ? "text" : "password"}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                      className="pr-10"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600 focus:outline-none"
+                    >
+                      {showPassword ? (
+                        <EyeSlashIcon className="h-5 w-5" />
+                      ) : (
+                        <EyeIcon className="h-5 w-5" />
+                      )}
+                    </button>
+                  </div>
                 </div>
                 <button type="submit" className="w-full rounded-lg bg-emerald-500 py-2.5 font-medium text-white hover:bg-emerald-400">
                   Entrar
@@ -211,9 +233,29 @@ export default function Auth() {
                   <Label htmlFor="email">Correo</Label>
                   <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
                 </div>
-                <div>
+                <div className="relative">
                   <Label htmlFor="password">Contraseña</Label>
-                  <Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={8} />
+                  <div className="relative">
+                    <Input
+                      type={showPassword ? "text" : "password"}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                      minLength={8}
+                      className="pr-10"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600 focus:outline-none"
+                    >
+                      {showPassword ? (
+                        <EyeSlashIcon className="h-5 w-5" />
+                      ) : (
+                        <EyeIcon className="h-5 w-5" />
+                      )}
+                    </button>
+                  </div>
                 </div>
                 <button type="submit" className="w-full rounded-lg bg-emerald-500 py-2.5 font-medium text-white hover:bg-emerald-400">
                   Registrarme

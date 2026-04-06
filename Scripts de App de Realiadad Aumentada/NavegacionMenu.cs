@@ -60,6 +60,16 @@ public class NavegacionMenu : MonoBehaviour
             return; 
         }
 
+        // 1.1 VALIDACIÓN DE INTERNET: ¿El celular tiene señal?
+        if (Application.internetReachability == NetworkReachability.NotReachable)
+        {
+            Debug.LogWarning("Validación fallida: Sin Internet.");
+            ControladorIdioma ci = FindObjectOfType<ControladorIdioma>();
+            string msg = (ci != null) ? ci.msgErrNoInternet : "Sin conexión a Internet";
+            MostrarErrorAnimado(msg);
+            return;
+        }
+
         // 2. VALIDACIÓN DE FORMATO: ¿Es un correo real?
         if (EsCorreoValido(inputCorreo.text) == false)
         {
@@ -83,6 +93,10 @@ public class NavegacionMenu : MonoBehaviour
             request.uploadHandler = new UploadHandlerRaw(bodyRaw);
             request.downloadHandler = new DownloadHandlerBuffer();
             request.SetRequestHeader("Content-Type", "application/json");
+            
+            // Bypass SSL for some mobile devices
+            request.certificateHandler = new BypassCertificate();
+            request.timeout = 20;
 
             // Opcional: Mostrar mensaje de carga
             if(textoError != null) textoError.text = "<color=#ffffff>Iniciando sesión...</color>";
@@ -104,9 +118,20 @@ public class NavegacionMenu : MonoBehaviour
             }
             else
             {
-                // Error de conexión o validación del servidor
-                Debug.LogError("Error en Login AR: " + request.error);
-                MostrarErrorAnimado("Error al conectar con el servidor.");
+                ControladorIdioma ci = FindObjectOfType<ControladorIdioma>();
+                // Diferenciar entre error de red local y error del servidor remoto
+                if (request.result == UnityWebRequest.Result.ConnectionError)
+                {
+                    Debug.LogError("Error de conexión local: " + request.error);
+                    string msg = (ci != null) ? ci.msgErrNoInternet : "Sin conexión a Internet";
+                    MostrarErrorAnimado(msg);
+                }
+                else
+                {
+                    Debug.LogError("Error en Login AR (Servidor): " + request.error + " | " + request.downloadHandler.text);
+                    string msg = (ci != null) ? ci.msgErrServidor : "Error de servidor";
+                    MostrarErrorAnimado(msg);
+                }
             }
         }
     }

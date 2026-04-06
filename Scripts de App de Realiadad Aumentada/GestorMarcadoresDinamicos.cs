@@ -66,6 +66,21 @@ public class GestorMarcadoresDinamicos : MonoBehaviour
 
     private IEnumerator ObtenerMarcadoresDesdeNube()
     {
+        // 0. VALIDACIÓN DE INTERNET
+        if (Application.internetReachability == NetworkReachability.NotReachable)
+        {
+            Debug.LogError("Sin conexión a Internet: No se pudo obtener la lista de marcadores.");
+            ControladorInfo ci = FindObjectOfType<ControladorInfo>();
+            ControladorIdioma id = FindObjectOfType<ControladorIdioma>();
+            if (ci != null) 
+            {
+                string title = (id != null) ? id.msgErrNoInternet : "Sin conexión a Internet";
+                string detail = (id != null) ? id.msgErrDetalleRed : "Los marcadores no se cargaron";
+                ci.MostrarError(title, detail);
+            }
+            yield break;
+        }
+
         Debug.Log("Obteniendo lista de marcadores de: " + apiTargetsUrl);
         using (UnityWebRequest www = UnityWebRequest.Get(apiTargetsUrl))
         {
@@ -76,6 +91,22 @@ public class GestorMarcadoresDinamicos : MonoBehaviour
             if (www.result != UnityWebRequest.Result.Success)
             {
                 Debug.LogError("Error al conectar con la API de Targets: " + www.error);
+                ControladorInfo ci = FindObjectOfType<ControladorInfo>();
+                ControladorIdioma id = FindObjectOfType<ControladorIdioma>();
+                if (ci != null) {
+                    if (www.result == UnityWebRequest.Result.ConnectionError)
+                    {
+                        string title = (id != null) ? id.msgErrNoInternet : "Sin conexión a Internet";
+                        string detail = (id != null) ? id.msgErrDetalleRed : "No se cargaron los marcadores";
+                        ci.MostrarError(title, detail);
+                    }
+                    else
+                    {
+                        string title = (id != null) ? id.msgErrServidor : "Error de servidor";
+                        string detail = (id != null) ? id.msgErrDetalleServidor : "Reintenta más tarde";
+                        ci.MostrarError(title, detail);
+                    }
+                }
                 yield break;
             }
 

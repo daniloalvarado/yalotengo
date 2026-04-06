@@ -22,31 +22,31 @@ public class ControladorInfo : MonoBehaviour
     private readonly Dictionary<string, string> dictEN = new Dictionary<string, string> {
         {"Reino:", "Kingdom:"}, {"Filo:", "Phylum:"}, {"Subfilo:", "Subphylum:"}, {"Clase:", "Class:"}, 
         {"Subclase:", "Subclass:"}, {"Orden:", "Order:"}, {"Familia:", "Family:"}, {"Género:", "Genus:"}, 
-        {"Especie:", "Species:"}, {"Taxonomía", "Taxonomy"}
+        {"Especie:", "Species:"}, {"Taxonomía", "Taxonomy"}, {"Fuente:", "Source:"}
     };
 
     private readonly Dictionary<string, string> dictPT = new Dictionary<string, string> {
         {"Reino:", "Reino:"}, {"Filo:", "Filo:"}, {"Subfilo:", "Subfilo:"}, {"Clase:", "Classe:"}, 
         {"Subclase:", "Subclasse:"}, {"Orden:", "Ordem:"}, {"Familia:", "Família:"}, {"Género:", "Gênero:"}, 
-        {"Especie:", "Espécie:"}, {"Taxonomía", "Taxonomia"}
+        {"Especie:", "Espécie:"}, {"Taxonomía", "Taxonomia"}, {"Fuente:", "Fonte:"}
     };
 
     private readonly Dictionary<string, string> dictFR = new Dictionary<string, string> {
         {"Reino:", "Règne:"}, {"Filo:", "Phylum:"}, {"Subfilo:", "Sous-embranchement:"}, {"Clase:", "Classe:"}, 
         {"Subclase:", "Sous-classe:"}, {"Orden:", "Ordre:"}, {"Familia:", "Famille:"}, {"Género:", "Genre:"}, 
-        {"Especie:", "Espèce:"}, {"Taxonomía", "Taxonomie"}
+        {"Especie:", "Espèce:"}, {"Taxonomía", "Taxonomie"}, {"Fuente:", "Source:"}
     };
 
     private readonly Dictionary<string, string> dictIT = new Dictionary<string, string> {
         {"Reino:", "Regno:"}, {"Filo:", "Phylum:"}, {"Subfilo:", "Subphylum:"}, {"Clase:", "Classe:"}, 
         {"Subclase:", "Sottoclasse:"}, {"Orden:", "Ordine:"}, {"Familia:", "Famiglia:"}, {"Género:", "Genere:"}, 
-        {"Especie:", "Specie:"}, {"Taxonomía", "Tassonomia"}
+        {"Especie:", "Specie:"}, {"Taxonomía", "Tassonomia"}, {"Fuente:", "Fonte:"}
     };
 
     private readonly Dictionary<string, string> dictDE = new Dictionary<string, string> {
         {"Reino:", "Reich:"}, {"Filo:", "Stamm:"}, {"Subfilo:", "Unterstamm:"}, {"Clase:", "Klasse:"}, 
         {"Subclase:", "Unterklasse:"}, {"Orden:", "Ordnung:"}, {"Familia:", "Familie:"}, {"Género:", "Gattung:"}, 
-        {"Especie:", "Art:"}, {"Taxonomía", "Taxonomie"}
+        {"Especie:", "Art:"}, {"Taxonomía", "Taxonomie"}, {"Fuente:", "Quelle:"}
     };
 
     void Start()
@@ -161,6 +161,22 @@ public class ControladorInfo : MonoBehaviour
             RestaurarBoton();
             if (btnAgrandar != null) btnAgrandar.gameObject.SetActive(true);
         }
+    }
+
+    /// <summary>
+    /// NUEVO: Muestra un mensaje de error claro en el panel de información
+    /// </summary>
+    public void MostrarError(string titulo, string detalle)
+    {
+        StopAllCoroutines();
+        if (panelInformacion != null) panelInformacion.SetActive(true);
+        if (panelCanvasGroup != null) panelCanvasGroup.alpha = 1f;
+
+        if (txtNombre != null) txtNombre.text = $"<color=#FF4D4D>{titulo}</color>";
+        if (txtTaxonomia != null) txtTaxonomia.text = detalle;
+        if (txtDescripcion != null) txtDescripcion.text = "";
+
+        if (btnAgrandar != null) btnAgrandar.gameObject.SetActive(false);
     }
 
     private IEnumerator TypewriterSecuencial(string textoNombre, string textoTaxonomia, string textoDescripcion)

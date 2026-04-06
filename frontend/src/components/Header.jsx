@@ -175,7 +175,7 @@ export default function Header() {
               to="/admin-microscopicos"
               className={({ isActive }) => `${linkBase} ${isActive ? linkActive : linkIdle}`}
             >
-              Unity AR
+              Gestión Micromuseo
             </NavLink>
           )}
 
@@ -270,7 +270,7 @@ export default function Header() {
               to="/admin-microscopicos"
               className={({ isActive }) => `${isActive ? "text-white font-medium" : "text-zinc-300 hover:text-white"}`}
             >
-              Unity AR
+              Gestión Micromuseo
             </NavLink>
           )}
 

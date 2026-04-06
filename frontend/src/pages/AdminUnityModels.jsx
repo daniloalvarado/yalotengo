@@ -111,7 +111,7 @@ export default function AdminUnityModels() {
 
         setFormData(item ? { ...item, translations: trans } : {
             scientificName: '', kingdom: 'Animalia', phylum: '', subphylum: '', class: '', subclass: '', order: '', family: '', genus: '', specificEpithet: '',
-            vernacularName: '', taxonRemarks: '', assetBundleFileName: '', qr_image_url: '', qr_image_url2: '',
+            vernacularName: '', taxonRemarks: '', fuente: '', assetBundleFileName: '', qr_image_url: '', qr_image_url2: '',
             translations: trans
         })
 
@@ -247,7 +247,7 @@ export default function AdminUnityModels() {
                                 <thead className="bg-gray-50">
                                     <tr>
                                         <th className="px-4 py-3 text-left font-medium text-gray-600">ID / Nombre Científico</th>
-                                        <th className="px-4 py-3 text-left font-medium text-gray-600">Taxonomía</th>
+                                        <th className="px-4 py-3 text-left font-medium text-gray-600">Taxonomía / Fuente</th>
                                         <th className="px-4 py-3 text-left font-medium text-gray-600">Idiomas</th>
                                         <th className="px-4 py-3 text-left font-medium text-gray-600">Marcador AR</th>
                                         <th className="px-4 py-3 text-left font-medium text-gray-600">Estado</th>
@@ -264,6 +264,9 @@ export default function AdminUnityModels() {
                                             <td className="px-4 py-3">
                                                 <div className="text-xs text-gray-600">
                                                     {m.class || '?'} &gt; {m.order || '?'} &gt; {m.family || '?'}
+                                                </div>
+                                                <div className="text-[10px] text-gray-400 mt-1 italic truncate max-w-[150px]">
+                                                    {m.fuente ? `Fuente: ${m.fuente}` : 'Sin fuente'}
                                                 </div>
                                             </td>
                                             <td className="px-4 py-3 text-center">
@@ -366,8 +369,12 @@ export default function AdminUnityModels() {
 
                         <label className="block col-span-1 md:col-span-2">
                             <span className="text-sm font-medium text-gray-700 block mb-1">Descripción / Notas</span>
-                            <textarea value={formData.taxonRemarks || ''} onChange={e => setFormData(p => ({ ...p, taxonRemarks: e.target.value }))} rows={4} className="w-full px-3 py-2 border rounded-lg focus:ring-emerald-500 outline-none resize-none" />
-                            <p className="text-[10px] text-gray-400 mt-1">Texto base en Español que verá el usuario en la app de Unity.</p>
+                            <textarea value={formData.taxonRemarks || ''} onChange={e => setFormData(p => ({ ...p, taxonRemarks: e.target.value }))} rows={4} className="w-full px-3 py-2 border rounded-lg focus:ring-emerald-500 outline-none resize-none" placeholder="Descripción general de la especie..." />
+                        </label>
+
+                        <label className="block col-span-1 md:col-span-2">
+                            <span className="text-sm font-medium text-gray-700 block mb-1">Fuente de Información</span>
+                            <input value={formData.fuente || ''} onChange={e => setFormData(p => ({ ...p, fuente: e.target.value }))} className="w-full px-3 py-2 border rounded-lg focus:ring-emerald-500 outline-none" placeholder="Ej: Wikipedia, Enciclopedia, etc." />
                         </label>
 
                         {/* TRADUCCIONES DINÁMICAS (TABS) */}
