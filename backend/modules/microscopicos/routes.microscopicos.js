@@ -73,6 +73,7 @@ r.get('/admin/:id', adminAuth, async (req, res) => {
 r.post('/admin', adminAuth, async (req, res) => {
   try {
     const { translations, ...modelData } = req.body
+    console.log('[DEBUG] Guardando modelo con fuente:', modelData.fuente)
     const model = await Microscopico.create(modelData)
     
     if (translations && Array.isArray(translations)) {
@@ -96,6 +97,7 @@ r.put('/admin/:id', adminAuth, async (req, res) => {
     if (!model) return res.status(404).json({ error: 'No encontrado' })
     
     const { translations, ...modelData } = req.body
+    console.log('[DEBUG] Actualizando modelo ID:', req.params.id, 'con fuente:', modelData.fuente)
 
     // Si el usuario subió un nuevo .molde (y había uno antiguo), borrar el antiguo de MinIO
     if (modelData.assetBundleFileName && model.assetBundleFileName && modelData.assetBundleFileName !== model.assetBundleFileName) {

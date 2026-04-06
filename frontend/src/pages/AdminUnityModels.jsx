@@ -372,10 +372,6 @@ export default function AdminUnityModels() {
                             <textarea value={formData.taxonRemarks || ''} onChange={e => setFormData(p => ({ ...p, taxonRemarks: e.target.value }))} rows={4} className="w-full px-3 py-2 border rounded-lg focus:ring-emerald-500 outline-none resize-none" placeholder="Descripción general de la especie..." />
                         </label>
 
-                        <label className="block col-span-1 md:col-span-2">
-                            <span className="text-sm font-medium text-gray-700 block mb-1">Fuente de Información</span>
-                            <input value={formData.fuente || ''} onChange={e => setFormData(p => ({ ...p, fuente: e.target.value }))} className="w-full px-3 py-2 border rounded-lg focus:ring-emerald-500 outline-none" placeholder="Ej: Wikipedia, Enciclopedia, etc." />
-                        </label>
 
                         {/* TRADUCCIONES DINÁMICAS (TABS) */}
                         <div className="col-span-1 md:col-span-2 p-4 bg-gray-50 rounded-xl border border-gray-200">
@@ -531,6 +527,24 @@ export default function AdminUnityModels() {
                                 </div>
                             </div>
                         </div>
+
+                        <label className="block col-span-1 md:col-span-2 pt-2 border-t border-dashed">
+                             <span className="text-xs font-bold text-gray-400 uppercase tracking-widest block mb-2">Créditos de Información</span>
+                             <div className="bg-emerald-50/30 p-4 rounded-xl border border-emerald-100 flex items-center gap-4">
+                                <div className="bg-emerald-500 text-white p-2 rounded-lg">
+                                    <PlusIcon className="w-5 h-5" />
+                                </div>
+                                <div className="flex-1">
+                                    <span className="text-xs font-semibold text-emerald-800 block mb-1">Fuente de Información (Opcional)</span>
+                                    <input 
+                                        value={formData.fuente || ''} 
+                                        onChange={e => setFormData(p => ({ ...p, fuente: e.target.value }))} 
+                                        className="w-full px-3 py-2 border border-emerald-200 rounded-lg focus:ring-2 focus:ring-emerald-500/20 outline-none text-sm" 
+                                        placeholder="Ej: Wikipedia, Enciclopedia, etc." 
+                                    />
+                                </div>
+                             </div>
+                        </label>
                     </div>
 
                     <div className="flex justify-end gap-3 pt-4 border-t">

@@ -101,6 +101,18 @@ const PORT = process.env.PORT || 3000
 
 async function ensureSchema() {
   const qi = sequelize.getQueryInterface()
+  try {
+    const tableInfo = await qi.describeTable('mm_darwin_data')
+    if (!tableInfo.fuente) {
+      console.log('--- [MIGRACIÓN] Añadiendo columna "fuente" a mm_darwin_data ---')
+      await qi.addColumn('mm_darwin_data', 'fuente', {
+        type: DataTypes.STRING(255),
+        allowNull: true
+      })
+    }
+  } catch (e) {
+    console.error('Error verificando esquema:', e.message)
+  }
 }
 
 
