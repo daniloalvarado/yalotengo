@@ -24,7 +24,7 @@ export const Microscopico = sequelize.define('mm_darwin_data', {
   
   vernacularName: { type: DataTypes.STRING },
   taxonRemarks: { type: DataTypes.TEXT },
-  fuente: { type: DataTypes.STRING(255) },
+  fuente: { type: DataTypes.TEXT },
   panel: { type: DataTypes.STRING },
   
   assetBundleFileName: { type: DataTypes.STRING },

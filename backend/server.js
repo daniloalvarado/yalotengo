@@ -105,15 +105,24 @@ async function ensureSchema() {
     const tableInfo = await qi.describeTable('mm_darwin_data')
     if (!tableInfo.fuente) {
       await qi.addColumn('mm_darwin_data', 'fuente', {
-        type: DataTypes.STRING(255),
+        type: DataTypes.TEXT,
         allowNull: true
       })
+      console.log('[Schema] Columna fuente creada como TEXT')
+    } else if (tableInfo.fuente.type === 'VARCHAR(255)' || tableInfo.fuente.type === 'CHARACTER VARYING(255)') {
+      // Migrar de VARCHAR(255) a TEXT para soportar fuentes largas
+      await qi.changeColumn('mm_darwin_data', 'fuente', {
+        type: DataTypes.TEXT,
+        allowNull: true
+      })
+      console.log('[Schema] Columna fuente migrada de VARCHAR(255) a TEXT')
     }
     if (!tableInfo.panel) {
       await qi.addColumn('mm_darwin_data', 'panel', {
         type: DataTypes.STRING(255),
         allowNull: true
       })
+      console.log('[Schema] Columna panel creada')
     }
   } catch (e) {
     console.error('Error verificando esquema:', e.message)

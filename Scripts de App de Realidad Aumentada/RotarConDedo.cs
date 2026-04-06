@@ -1,46 +1,49 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.EnhancedTouch;
+using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
 
 public class RotarConDedo : MonoBehaviour
 {
     [Header("¡ARRASTRA TU MODELO AQUÍ!")]
     public Transform modeloAGirar;
 
-    public float velocidadRotacionPC = 2f;
+    [Header("Velocidad de Rotación")]
+    public float velocidadRotacionPC = 0.3f;
     public float velocidadRotacionCelular = 0.2f;
     
     [Header("Velocidad de Zoom")]
     public float velocidadZoomCelular = 0.5f;
-    public float velocidadZoomPC = 10f; 
+    public float velocidadZoomPC = 0.15f; 
+
+    void OnEnable()
+    {
+        EnhancedTouchSupport.Enable();
+    }
+
+    void OnDisable()
+    {
+        EnhancedTouchSupport.Disable();
+    }
 
     void Update()
     {
         if (modeloAGirar == null) return; 
 
         // EVITAR QUE SE ROTE EL MODELO SI ESTAMOS TOCANDO LA INTERFAZ WEB/UI
-        if (EventSystem.current != null)
-        {
-            // Táctil
-            if (Touchscreen.current != null && Touchscreen.current.touches.Count > 0)
-            {
-                if (EventSystem.current.IsPointerOverGameObject(Touchscreen.current.touches[0].touchId.ReadValue())) return;
-            }
-            // Mouse
-            if (Mouse.current != null && EventSystem.current.IsPointerOverGameObject()) return;
-        }
+        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject()) return;
 
-        // --- 1. MODO CELULAR / TÁCTIL (New Input System) ---
-        if (Touchscreen.current != null && Touchscreen.current.touches.Count > 0)
+        // --- 1. MODO CELULAR / TÁCTIL (EnhancedTouch) ---
+        if (Touch.activeTouches.Count > 0)
         {
-            var touch0 = Touchscreen.current.touches[0];
-
-            if (Touchscreen.current.touches.Count == 1)
+            if (Touch.activeTouches.Count == 1)
             {
                 // ROTAR CON 1 DEDO
-                if (touch0.phase.ReadValue() == UnityEngine.InputSystem.TouchPhase.Moved)
+                var toque = Touch.activeTouches[0];
+                if (toque.phase == UnityEngine.InputSystem.TouchPhase.Moved)
                 {
-                    Vector2 delta = touch0.delta.ReadValue();
+                    Vector2 delta = toque.delta;
                     float rotX = delta.x * velocidadRotacionCelular;
                     float rotY = delta.y * velocidadRotacionCelular;
                     
@@ -48,20 +51,21 @@ public class RotarConDedo : MonoBehaviour
                     modeloAGirar.Rotate(Camera.main.transform.right, rotY, Space.World);
                 }
             }
-            else if (Touchscreen.current.touches.Count == 2)
+            else if (Touch.activeTouches.Count == 2)
             {
                 // ZOOM CON 2 DEDOS (Pellizco)
-                var touch1 = Touchscreen.current.touches[1];
+                var t0 = Touch.activeTouches[0];
+                var t1 = Touch.activeTouches[1];
 
-                if (touch0.phase.ReadValue() == UnityEngine.InputSystem.TouchPhase.Moved || 
-                    touch1.phase.ReadValue() == UnityEngine.InputSystem.TouchPhase.Moved)
+                if (t0.phase == UnityEngine.InputSystem.TouchPhase.Moved || 
+                    t1.phase == UnityEngine.InputSystem.TouchPhase.Moved)
                 {
-                    Vector2 t0Pos = touch0.position.ReadValue();
-                    Vector2 t1Pos = touch1.position.ReadValue();
-                    Vector2 t0Delta = touch0.delta.ReadValue();
-                    Vector2 t1Delta = touch1.delta.ReadValue();
+                    Vector2 t0Pos = t0.screenPosition;
+                    Vector2 t1Pos = t1.screenPosition;
+                    Vector2 t0Prev = t0Pos - t0.delta;
+                    Vector2 t1Prev = t1Pos - t1.delta;
 
-                    float prevDist = (t0Pos - t0Delta - (t1Pos - t1Delta)).magnitude;
+                    float prevDist = (t0Prev - t1Prev).magnitude;
                     float actualDist = (t0Pos - t1Pos).magnitude;
 
                     if (prevDist > 0.1f)
@@ -79,33 +83,34 @@ public class RotarConDedo : MonoBehaviour
             }
         }
         
-        // --- 2. MODO COMPUTADORA (New Input System Mouse) ---
+        // --- 2. MODO COMPUTADORA / TOUCHPAD (Mouse del New Input System) ---
         else if (Mouse.current != null)
         {
             // ROTAR CON CLIC IZQUIERDO
             if (Mouse.current.leftButton.isPressed)
             {
                 Vector2 delta = Mouse.current.delta.ReadValue();
-                float rotX = delta.x * velocidadRotacionPC * 0.1f;
-                float rotY = delta.y * velocidadRotacionPC * 0.1f;
+                float rotX = delta.x * velocidadRotacionPC;
+                float rotY = delta.y * velocidadRotacionPC;
                 
                 modeloAGirar.Rotate(Camera.main.transform.up, -rotX, Space.World);
                 modeloAGirar.Rotate(Camera.main.transform.right, rotY, Space.World);
             }
 
-            // ZOOM CON RUEDITA
-            float scroll = Mouse.current.scroll.ReadValue().y * 0.001f;
+            // ZOOM CON SCROLL (funciona con ruedita de ratón Y con touchpad de dos dedos)
+            float scrollY = Mouse.current.scroll.ReadValue().y;
+            float scroll = scrollY * velocidadZoomPC;
 
             // Soporte teclado (+ y -)
             if (Keyboard.current != null)
             {
-                if (Keyboard.current.numpadPlusKey.isPressed || Keyboard.current.equalsKey.isPressed) scroll = 0.02f;
-                if (Keyboard.current.numpadMinusKey.isPressed || Keyboard.current.minusKey.isPressed) scroll = -0.02f;
+                if (Keyboard.current.numpadPlusKey.isPressed || Keyboard.current.equalsKey.isPressed) scroll = 0.05f;
+                if (Keyboard.current.numpadMinusKey.isPressed || Keyboard.current.minusKey.isPressed) scroll = -0.05f;
             }
 
             if (Mathf.Abs(scroll) > 0.0001f)
             {
-                float factor = 1f + (scroll * velocidadZoomPC);
+                float factor = 1f + scroll;
                 Vector3 newScale = modeloAGirar.localScale * factor;
                 newScale.x = Mathf.Clamp(newScale.x, 0.001f, 1000f);
                 newScale.y = Mathf.Clamp(newScale.y, 0.001f, 1000f);

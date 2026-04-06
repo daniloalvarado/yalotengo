@@ -21,7 +21,7 @@ export default function AdminUnityModels() {
     const [editItem, setEditItem] = useState(null)
     const [formData, setFormData] = useState({})
     const [currentPage, setCurrentPage] = useState(1)
-    const itemsPerPage = 15
+    const itemsPerPage = 10
     const [uploadingAsset, setUploadingAsset] = useState(false)
     const [uploadingQr, setUploadingQr] = useState(false)
     const [uploadingQr2, setUploadingQr2] = useState(false)
