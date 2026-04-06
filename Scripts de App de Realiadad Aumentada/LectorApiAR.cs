@@ -52,6 +52,7 @@ public class LectorApiAR : MonoBehaviour
         public string taxonomia;
         public string descripcion;
         public string url_modelo;
+        public string fuente;
         public Traduccion[] traducciones;
     }
 

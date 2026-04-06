@@ -284,7 +284,6 @@ r.get('/public/:idAnimal', async (req, res) => {
     if (finalModel.family) taxList.push(`Familia: ${finalModel.family}`)
     if (finalModel.genus) taxList.push(`Género: ${finalModel.genus}`)
     if (finalModel.scientificName) taxList.push(`Especie: ${finalModel.scientificName}`)
-    if (finalModel.fuente) taxList.push(`\nFuente: ${finalModel.fuente}`)
     
     res.json({
         nombre: finalModel.vernacularName || finalModel.scientificName,
@@ -297,6 +296,7 @@ r.get('/public/:idAnimal', async (req, res) => {
             : null,
         // Mandamos las traducciones dinámicas
         traducciones: finalModel.translations || [],
+        fuente: finalModel.fuente,
         // Mandar el resto de info Darwin Core por si la necesita
         darwinCore: finalModel
     })

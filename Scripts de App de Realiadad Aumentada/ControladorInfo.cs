@@ -119,6 +119,27 @@ public class ControladorInfo : MonoBehaviour
                 if (!string.IsNullOrEmpty(traduccion.descripcion)) descripcionDefinitiva = traduccion.descripcion;
             }
 
+            // --- AGREGAR FUENTE AL FINAL DE TODO ---
+            if (!string.IsNullOrEmpty(datos.fuente))
+            {
+                string tagFuente = "Fuente:";
+                // Traducir la etiqueta "Fuente:" si es necesario (ya tenemos los diccionarios actualizados)
+                if (idiomaActual != "es")
+                {
+                    switch (idiomaActual)
+                    {
+                        case "en": tagFuente = "Source:"; break;
+                        case "pt": tagFuente = "Fonte:"; break;
+                        case "fr": tagFuente = "Source:"; break;
+                        case "it": tagFuente = "Fonte:"; break;
+                        case "de": tagFuente = "Quelle:"; break;
+                    }
+                }
+                
+                // Lo añadimos con doble salto de línea al final de la descripción
+                descripcionDefinitiva += $"\n\n<i>{tagFuente} {datos.fuente}</i>";
+            }
+
             // --- TRADUCCIÓN DE TAXONOMÍA (ETIQUETAS) ---
             if (idiomaActual != "es")
             {
