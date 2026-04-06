@@ -21,7 +21,7 @@ export default function AdminUnityModels() {
     const [editItem, setEditItem] = useState(null)
     const [formData, setFormData] = useState({})
     const [currentPage, setCurrentPage] = useState(1)
-    const itemsPerPage = 10
+    const itemsPerPage = 15
     const [uploadingAsset, setUploadingAsset] = useState(false)
     const [uploadingQr, setUploadingQr] = useState(false)
     const [uploadingQr2, setUploadingQr2] = useState(false)
@@ -188,9 +188,9 @@ export default function AdminUnityModels() {
     const filteredModels = models.filter(m => {
         const term = searchTerm.toLowerCase()
         return (
-            m.scientificName?.toLowerCase().includes(term) || 
-            m.vernacularName?.toLowerCase().includes(term) ||
-            m.panel?.toLowerCase().includes(term)
+            (m.scientificName || '').toLowerCase().includes(term) || 
+            (m.vernacularName || '').toLowerCase().includes(term) ||
+            (m.panel || '').toLowerCase().includes(term)
         )
     })
 
@@ -389,7 +389,10 @@ export default function AdminUnityModels() {
                                 </div>
                                 <div className="flex gap-1">
                                     <button
-                                        onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                                        onClick={() => {
+                                            setCurrentPage(p => Math.max(1, p - 1));
+                                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                                        }}
                                         disabled={currentPage === 1}
                                         className="px-3 py-1 border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50 text-sm"
                                     >
@@ -398,14 +401,20 @@ export default function AdminUnityModels() {
                                     {[...Array(totalPages)].map((_, i) => (
                                         <button
                                             key={i + 1}
-                                            onClick={() => setCurrentPage(i + 1)}
+                                            onClick={() => {
+                                                setCurrentPage(i + 1);
+                                                window.scrollTo({ top: 0, behavior: 'smooth' });
+                                            }}
                                             className={`px-3 py-1 border rounded text-sm transition-colors ${currentPage === i + 1 ? 'bg-emerald-600 text-white border-emerald-600' : 'border-gray-300 hover:bg-gray-50'}`}
                                         >
                                             {i + 1}
                                         </button>
                                     ))}
                                     <button
-                                        onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                                        onClick={() => {
+                                            setCurrentPage(p => Math.min(totalPages, p + 1));
+                                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                                        }}
                                         disabled={currentPage === totalPages}
                                         className="px-3 py-1 border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50 text-sm"
                                     >
