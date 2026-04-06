@@ -137,7 +137,12 @@ public class ControladorInfo : MonoBehaviour
                 }
                 
                 // Lo añadimos con doble salto de línea al final de la descripción
+                Debug.Log("[AR] Fuente detectada: " + datos.fuente);
                 descripcionDefinitiva += $"\n\n<i>{tagFuente} {datos.fuente}</i>";
+            }
+            else
+            {
+                Debug.Log("[AR] No se recibió fuente para este modelo.");
             }
 
             // --- TRADUCCIÓN DE TAXONOMÍA (ETIQUETAS) ---
