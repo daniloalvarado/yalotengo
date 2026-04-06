@@ -17,6 +17,8 @@ export default function AdminUnityModels() {
     const [loading, setLoading] = useState(true)
     const [isAdmin, setIsAdmin] = useState(false)
 
+    const [showModal, setShowModal] = useState(false)
+    const [editItem, setEditItem] = useState(null)
     const [formData, setFormData] = useState({})
     const [currentPage, setCurrentPage] = useState(1)
     const itemsPerPage = 10
