@@ -31,9 +31,6 @@ public class GestorAnaliticas : MonoBehaviour
         // Lo disparamos a tu tablero en internet
         AnalyticsService.Instance.RecordEvent(evento);
         
-        // Forzamos el envío
-        AnalyticsService.Instance.Flush(); 
-        
         Debug.Log("El usuario vio al " + nombreDelAnimal);
     }
 }

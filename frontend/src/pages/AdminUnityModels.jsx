@@ -249,8 +249,8 @@ export default function AdminUnityModels() {
                 <AdminUnityDashboard />
             ) : (
                 <>
-                    <div className="mb-4 flex flex-wrap items-center gap-4">
-                        <div className="relative flex-1 max-w-md">
+                    <div className="mb-4">
+                        <div className="relative max-w-md">
                             <input
                                 type="text"
                                 placeholder="Buscar por nombre científico o común..."
@@ -258,13 +258,6 @@ export default function AdminUnityModels() {
                                 onChange={(e) => setSearchTerm(e.target.value)}
                                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none text-sm transition-all shadow-sm hover:border-emerald-300"
                             />
-                        </div>
-                        <div className="text-xs font-medium text-gray-500 bg-gray-50 border border-gray-200 rounded-md px-3 py-1.5 flex gap-3">
-                            <span>BBDD: <b className="text-gray-700">{models.length}</b></span>
-                            <span className="text-gray-300">|</span>
-                            <span>Mostrados: <b className="text-emerald-700">{filteredModels.length}</b></span>
-                            <span className="text-gray-300">|</span>
-                            <span>Páginas: <b className="text-blue-700">{totalPages}</b></span>
                         </div>
                     </div>
 

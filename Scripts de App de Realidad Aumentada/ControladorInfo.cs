@@ -12,6 +12,7 @@ public class ControladorInfo : MonoBehaviour
     public GameObject panelInformacion; 
     public float margenBordes = 50f; 
     
+    
     // Variables de control interno
     private bool vistaInmersiva = false;
     private RectTransform rectBoton;
@@ -76,6 +77,9 @@ public class ControladorInfo : MonoBehaviour
         // 1. SI LLEGAN DATOS DE TEXTO (Paso 1 del LectorApi)
         if (datos != null)
         {
+            // === DEBUG CRÍTICO: ¿Llega la fuente desde el JSON? ===
+            Debug.Log($"[AR-DEBUG] nombre={datos.nombre}, fuente={(datos.fuente ?? "NULL")}, desc_len={datos.descripcion?.Length}");
+            
             string nombreDefinitivo = datos.nombre;
             string taxonomiaDefinitiva = datos.taxonomia;
             string descripcionDefinitiva = datos.descripcion;
@@ -119,11 +123,10 @@ public class ControladorInfo : MonoBehaviour
                 if (!string.IsNullOrEmpty(traduccion.descripcion)) descripcionDefinitiva = traduccion.descripcion;
             }
 
-            // --- AGREGAR FUENTE AL FINAL DE TODO ---
+            // --- AGREGAR FUENTE AL FINAL DE LA DESCRIPCIÓN ---
             if (!string.IsNullOrEmpty(datos.fuente))
             {
                 string tagFuente = "Fuente:";
-                // Traducir la etiqueta "Fuente:" si es necesario (ya tenemos los diccionarios actualizados)
                 if (idiomaActual != "es")
                 {
                     switch (idiomaActual)
@@ -135,8 +138,7 @@ public class ControladorInfo : MonoBehaviour
                         case "de": tagFuente = "Quelle:"; break;
                     }
                 }
-                
-                // Lo añadimos con doble salto de línea al final de la descripción
+                // Añadimos la fuente al final de la descripción en itálica
                 descripcionDefinitiva += $"\n\n<i>{tagFuente} {datos.fuente}</i>";
             }
 
@@ -207,7 +209,7 @@ public class ControladorInfo : MonoBehaviour
         if (txtTaxonomia != null) { txtTaxonomia.text = textoTaxonomia; txtTaxonomia.maxVisibleCharacters = 0; }
         if (txtDescripcion != null) { txtDescripcion.text = textoDescripcion; txtDescripcion.maxVisibleCharacters = 0; }
         
-        yield return new WaitForSeconds(0.3f); // Esperar a que el panel casi termine de aparecer, solo 1 vez
+        yield return new WaitForSeconds(0.3f);
         
         // 2. Animamos en orden: Nombre -> Taxonomía -> Descripción
         if (txtNombre) { txtNombre.ForceMeshUpdate(); yield return AnimarTexto(txtNombre); }

@@ -13,9 +13,9 @@ public class RotarConDedo : MonoBehaviour
     public float velocidadRotacionPC = 0.3f;
     public float velocidadRotacionCelular = 0.2f;
     
-    [Header("Velocidad de Zoom")]
+    [Header("Velocidad de Zoom (Agrandar/Achicar)")]
     public float velocidadZoomCelular = 0.5f;
-    public float velocidadZoomPC = 0.15f; 
+    public float velocidadZoomPC = 0.05f; // Ajustado para ser más suave en touchpad
 
     void OnEnable()
     {
@@ -35,6 +35,7 @@ public class RotarConDedo : MonoBehaviour
         if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject()) return;
 
         // --- 1. MODO CELULAR / TÁCTIL (EnhancedTouch) ---
+        // Esto ya permite agrandar/achicar con dos dedos en el celular
         if (Touch.activeTouches.Count > 0)
         {
             if (Touch.activeTouches.Count == 1)
@@ -63,17 +64,19 @@ public class RotarConDedo : MonoBehaviour
                     Vector2 t0Pos = t0.screenPosition;
                     Vector2 t1Pos = t1.screenPosition;
                     Vector2 t0Prev = t0Pos - t0.delta;
-                    Vector2 t1Prev = t1Pos - t1.delta;
+                    Vector2 t2Prev = t1Pos - t1.delta;
 
-                    float prevDist = (t0Prev - t1Prev).magnitude;
+                    float prevDist = (t0Prev - t2Prev).magnitude;
                     float actualDist = (t0Pos - t1Pos).magnitude;
 
                     if (prevDist > 0.1f)
                     {
                         float factor = actualDist / prevDist;
+                        // Suavizamos el factor de zoom
                         float percent = 1f + (factor - 1f) * velocidadZoomCelular;
 
                         Vector3 newScale = modeloAGirar.localScale * percent;
+                        // Límites de seguridad
                         newScale.x = Mathf.Clamp(newScale.x, 0.001f, 1000f);
                         newScale.y = Mathf.Clamp(newScale.y, 0.001f, 1000f);
                         newScale.z = Mathf.Clamp(newScale.z, 0.001f, 1000f);
@@ -83,7 +86,7 @@ public class RotarConDedo : MonoBehaviour
             }
         }
         
-        // --- 2. MODO COMPUTADORA / TOUCHPAD (Mouse del New Input System) ---
+        // --- 2. MODO COMPUTADORA / TOUCHPAD ---
         else if (Mouse.current != null)
         {
             // ROTAR CON CLIC IZQUIERDO
@@ -97,11 +100,18 @@ public class RotarConDedo : MonoBehaviour
                 modeloAGirar.Rotate(Camera.main.transform.right, rotY, Space.World);
             }
 
-            // ZOOM CON SCROLL (funciona con ruedita de ratón Y con touchpad de dos dedos)
-            float scrollY = Mouse.current.scroll.ReadValue().y;
-            float scroll = scrollY * velocidadZoomPC;
+            // ZOOM CON SCROLL / TOUCHPAD (Dos dedos vertical)
+            // Se normaliza el valor del scroll ya que los touchpads envían valores variables
+            float scrollRaw = Mouse.current.scroll.ReadValue().y;
+            float scroll = 0f;
 
-            // Soporte teclado (+ y -)
+            if (Mathf.Abs(scrollRaw) > 0)
+            {
+                // Muchos touchpads envían valores pequeños como 1-10, otros 120. Normalizamos.
+                scroll = Mathf.Sign(scrollRaw) * velocidadZoomPC;
+            }
+
+            // Soporte teclado (+ y -) como respaldo total
             if (Keyboard.current != null)
             {
                 if (Keyboard.current.numpadPlusKey.isPressed || Keyboard.current.equalsKey.isPressed) scroll = 0.05f;
