@@ -14,6 +14,7 @@ export default function AdminUnityModels() {
     const navigate = useNavigate()
     const [models, setModels] = useState([])
     const [searchTerm, setSearchTerm] = useState('')
+    const [selectedPanel, setSelectedPanel] = useState('')
     const [loading, setLoading] = useState(true)
     const [isAdmin, setIsAdmin] = useState(false)
 
@@ -185,13 +186,16 @@ export default function AdminUnityModels() {
         }
     }
 
+    const uniquePanels = [...new Set(models.map(m => m.panel).filter(Boolean))].sort()
+
     const filteredModels = models.filter(m => {
         const term = searchTerm.toLowerCase()
-        return (
-            (m.scientificName || '').toLowerCase().includes(term) || 
-            (m.vernacularName || '').toLowerCase().includes(term) ||
-            (m.panel || '').toLowerCase().includes(term)
-        )
+        const matchText = (m.scientificName || '').toLowerCase().includes(term) || 
+                          (m.vernacularName || '').toLowerCase().includes(term)
+        
+        const matchPanel = selectedPanel === '' || m.panel === selectedPanel
+
+        return matchText && matchPanel
     })
 
     // Lógica de Paginación
@@ -201,10 +205,10 @@ export default function AdminUnityModels() {
         currentPage * itemsPerPage
     )
 
-    // Resetear a página 1 al buscar
+    // Resetear a página 1 al buscar o filtrar
     useEffect(() => {
         setCurrentPage(1)
-    }, [searchTerm])
+    }, [searchTerm, selectedPanel])
 
     if (!isAdmin) return <div className="p-8 text-center text-gray-500">Verificando permisos...</div>
 
@@ -250,14 +254,28 @@ export default function AdminUnityModels() {
             ) : (
                 <>
                     <div className="mb-4">
-                        <div className="relative max-w-md">
-                            <input
-                                type="text"
-                                placeholder="Buscar por nombre científico o común..."
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none text-sm transition-all shadow-sm hover:border-emerald-300"
-                            />
+                        <div className="flex flex-col sm:flex-row gap-3 items-center">
+                            <div className="relative w-full sm:max-w-md">
+                                <input
+                                    type="text"
+                                    placeholder="Buscar por nombre científico o común..."
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none text-sm transition-all shadow-sm hover:border-emerald-300"
+                                />
+                            </div>
+                            <div className="w-full sm:w-auto min-w-[200px]">
+                                <select
+                                    value={selectedPanel}
+                                    onChange={(e) => setSelectedPanel(e.target.value)}
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none text-sm transition-all shadow-sm hover:border-emerald-300 bg-white cursor-pointer"
+                                >
+                                    <option value="">Todos los Paneles</option>
+                                    {uniquePanels.map((panel, idx) => (
+                                        <option key={idx} value={panel}>{panel}</option>
+                                    ))}
+                                </select>
+                            </div>
                         </div>
                     </div>
 
@@ -429,7 +447,7 @@ export default function AdminUnityModels() {
                 </>
             )}
 
-            <AnimatedModal isOpen={showModal} onClose={() => setShowModal(false)} title={editItem ? 'Editar Especie' : 'Nueva Especie'} maxWidth="max-w-2xl">
+            <AnimatedModal isOpen={showModal} onClose={() => setShowModal(false)} title={editItem ? 'Editar Especie' : 'Nueva Especie'} maxWidth="max-w-2xl" closeOnOutsideClick={false}>
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <label className="block col-span-1 md:col-span-2">

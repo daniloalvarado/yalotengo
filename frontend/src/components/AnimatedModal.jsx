@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 
-export default function AnimatedModal({ isOpen, onClose, title, subtitle, children, maxWidth = 'max-w-lg' }) {
+export default function AnimatedModal({ isOpen, onClose, title, subtitle, children, maxWidth = 'max-w-lg', closeOnOutsideClick = true }) {
     const [isVisible, setIsVisible] = useState(false);
     const [shouldRender, setShouldRender] = useState(false);
 
@@ -23,7 +23,7 @@ export default function AnimatedModal({ isOpen, onClose, title, subtitle, childr
     return (
         <div
             className={`fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 transition-opacity duration-500 ${isVisible ? 'opacity-100' : 'opacity-0'}`}
-            onClick={onClose}
+            onClick={closeOnOutsideClick ? onClose : undefined}
         >
             <div
                 className={`bg-white rounded-2xl w-full ${maxWidth} max-h-[90vh] flex flex-col shadow-2xl ${isVisible ? 'animate-slide-down' : 'animate-slide-up'}`}
