@@ -2,6 +2,8 @@ using UnityEngine;
 using UnityEngine.Networking;
 using System.Collections;
 using System;
+using System.Threading.Tasks;
+using GLTFast;
 
 public class LectorApiAR : MonoBehaviour
 {
@@ -175,68 +177,44 @@ public class LectorApiAR : MonoBehaviour
         }
     }
 
+    // DISPATCHER: Según la extensión decide qué método usar
     private IEnumerator DescargarYConstruirModelo(string url, Transform padre)
     {
+        if (url.ToLower().EndsWith(".glb"))
+        {
+            DescargarYConstruirGLB(url, padre);
+            yield break;
+        }
+
+        // LÓGICA ORIGINAL DE ASSETBUNDLE (para los .molde)
         Debug.Log("Intentando descargar (con CACHÉ) modelo desde: " + url);
 
-        // Usamos GetAssetBundle para que Unity guarde los archivos en el disco del celular
-        // El parámetro 0 (CRC) y Hash128 por defecto permiten caché persistente.
         using (UnityWebRequest www = UnityWebRequestAssetBundle.GetAssetBundle(url))
         {
             www.certificateHandler = new BypassCertificate();
-            www.timeout = 30; // Tolerancia para internet inestable
+            www.timeout = 30;
             yield return www.SendWebRequest();
 
             if (www.result == UnityWebRequest.Result.Success)
             {
                 totalBytesModelos += www.downloadedBytes;
-                float kb = www.downloadedBytes / 1024f;
                 float totalMb = totalBytesModelos / (1024f * 1024f);
-                Debug.Log($"<color=orange>[Modelo 3D]</color> descargado ({kb:F2} KB). Acumulado en RAM: {totalMb:F2} MB");
+                Debug.Log($"<color=orange>[AssetBundle]</color> descargado. Acumulado en RAM: {totalMb:F2} MB");
 
-                // --- OPTIMIZACIÓN: GetContent es mucho más rápido que LoadFromMemory ---
                 AssetBundle bundle = DownloadHandlerAssetBundle.GetContent(www);
                 if (bundle != null)
                 {
-                    // --- NUEVO: OCULTAR LOADING YA QUE LLEGÓ EL MODELO ---
                     if (objetoLoading != null) objetoLoading.SetActive(false);
-
                     string[] assets = bundle.GetAllAssetNames();
                     GameObject prefab = bundle.LoadAsset<GameObject>(assets[0]);
                     
                     if (modeloCargadoEnEscena != null) Destroy(modeloCargadoEnEscena);
 
-                    // LO EMPARENTAMOS A LA CÁMARA PARA QUE SE QUEDE PEGADO A LA PANTALLA
                     modeloCargadoEnEscena = Instantiate(prefab, Camera.main.transform);
-                    
-                    // REINICIO DE POSICIÓN: 50cm al frente de la cámara y 5cm hacia ARRIBA
-                    modeloCargadoEnEscena.transform.localPosition = new Vector3(0f, 0.05f, 0.5f);
-                    
-                    // ROTACIÓN INICIAL: Mirando a la cámara (180) con perfil a la izquierda (-20) = 160
-                    // Nota: Los valores 250f y 200f son los que mejor funcionan para tus modelos de Meshy
-                    modeloCargadoEnEscena.transform.localEulerAngles = new Vector3(250f, 0f, 200f);
-                    
-                    // ESCALA INICIAL: Fuerza a ser 1 antes de normalizar
-                    modeloCargadoEnEscena.transform.localScale = Vector3.one;
-
-                    // 1. Verificamos si ya tiene un Collider, si no, le ponemos uno para que tenga "cuerpo"
-                    if (modeloCargadoEnEscena.GetComponent<Collider>() == null)
-                    {
-                        modeloCargadoEnEscena.AddComponent<BoxCollider>();
-                    }
-                    
-                    RotarConDedo scriptTacto = modeloCargadoEnEscena.AddComponent<RotarConDedo>();
-                    scriptTacto.modeloAGirar = modeloCargadoEnEscena.transform;
-
-                    NormalizarTamaño(modeloCargadoEnEscena);
-
-                    // --- NUEVISSIMO: OCULTAR LOADING AL FINAL DE TODO ---
-                    if (objetoLoading != null) objetoLoading.SetActive(false);
-
-                    controladorInfo.MostrarDatosFirebase(null, modeloCargadoEnEscena);
+                    ConfigurarModeloRecienCargado(modeloCargadoEnEscena);
                     
                     bundle.Unload(false);
-                    Debug.Log("¡Modelo normalizado y cargado con éxito!");
+                    Debug.Log("¡Modelo AssetBundle normalizado y cargado con éxito!");
                 }
                 else
                 {
@@ -245,25 +223,102 @@ public class LectorApiAR : MonoBehaviour
             }
             else
             {
-                if (objetoLoading != null) objetoLoading.SetActive(false);
-                if (controladorInfo != null) {
-                    ControladorIdioma ci = FindObjectOfType<ControladorIdioma>();
-                    if (www.result == UnityWebRequest.Result.ConnectionError)
-                    {
-                        string title = (ci != null) ? ci.msgErrNoInternet : "Sin conexión a Internet";
-                        string detail = (ci != null) ? ci.msgErrDetalleRed : "No se bajó el modelo";
-                        controladorInfo.MostrarError(title, detail);
-                    }
-                    else
-                    {
-                        string title = (ci != null) ? ci.msgErrServidor : "Error de servidor";
-                        string detail = (ci != null) ? ci.msgErrDetalleServidor : "Fallo al bajar 3D";
-                        controladorInfo.MostrarError(title, detail);
-                    }
-                }
-                Debug.LogError("Error al descargar el modelo: " + www.error);
+                ManejarErrorDescarga(www);
             }
         }
+    }
+
+    // NUEVO MÉTODO ASÍNCRONO PARA LEER TEXTURA GLB EN TIEMPO REAL
+    private async void DescargarYConstruirGLB(string url, Transform padre)
+    {
+        Debug.Log("Intentando descargar modelo ultraligero GLB desde: " + url);
+        
+        var gltf = new GltfImport();
+        
+        // glTFast hace el request web de forma interna
+        bool success = await gltf.Load(url);
+
+        if (success)
+        {
+            if (objetoLoading != null) objetoLoading.SetActive(false);
+            if (modeloCargadoEnEscena != null) Destroy(modeloCargadoEnEscena);
+
+            // Contenedor principal que anclamos a la cámara
+            modeloCargadoEnEscena = new GameObject("ModeloGLB");
+            modeloCargadoEnEscena.transform.SetParent(Camera.main.transform, false);
+
+            var instantiator = new GameObjectInstantiator(gltf, modeloCargadoEnEscena.transform);
+            success = await gltf.InstantiateMainSceneAsync(instantiator);
+
+            if (success)
+            {
+                ConfigurarModeloRecienCargado(modeloCargadoEnEscena);
+                Debug.Log("¡Modelo GLB normalizado y cargado con éxito!");
+            }
+            else
+            {
+                Debug.LogError("Error instanciando la malla del archivo GLB.");
+            }
+        }
+        else
+        {
+            Debug.LogError("Error descargando el archivo GLB o es inválido.");
+            // Manejamos un fallo de red genérico para el glb
+            if (objetoLoading != null) objetoLoading.SetActive(false);
+            if (controladorInfo != null) {
+                ControladorIdioma ci = FindObjectOfType<ControladorIdioma>();
+                string title = (ci != null) ? ci.msgErrServidor : "Error de red";
+                string detail = (ci != null) ? ci.msgErrDetalleServidor : "Fallo al bajar 3D ultraligero";
+                controladorInfo.MostrarError(title, detail);
+            }
+        }
+    }
+
+    // LÓGICA COMPARTIDA DE POSICIONAMIENTO, COLISIÓN Y GIRO
+    private void ConfigurarModeloRecienCargado(GameObject modeloObj)
+    {
+        // REINICIO DE POSICIÓN
+        modeloObj.transform.localPosition = new Vector3(0f, 0.05f, 0.5f);
+        
+        // ROTACIÓN INICIAL
+        modeloObj.transform.localEulerAngles = new Vector3(250f, 0f, 200f);
+        
+        // ESCALA INICIAL
+        modeloObj.transform.localScale = Vector3.one;
+
+        if (modeloObj.GetComponent<Collider>() == null)
+        {
+            modeloObj.AddComponent<BoxCollider>();
+        }
+        
+        RotarConDedo scriptTacto = modeloObj.AddComponent<RotarConDedo>();
+        scriptTacto.modeloAGirar = modeloObj.transform;
+
+        NormalizarTamaño(modeloObj);
+
+        if (objetoLoading != null) objetoLoading.SetActive(false);
+        if (controladorInfo != null) controladorInfo.MostrarDatosFirebase(null, modeloObj);
+    }
+
+    private void ManejarErrorDescarga(UnityWebRequest www)
+    {
+        if (objetoLoading != null) objetoLoading.SetActive(false);
+        if (controladorInfo != null) {
+            ControladorIdioma ci = FindObjectOfType<ControladorIdioma>();
+            if (www.result == UnityWebRequest.Result.ConnectionError)
+            {
+                string title = (ci != null) ? ci.msgErrNoInternet : "Sin conexión a Internet";
+                string detail = (ci != null) ? ci.msgErrDetalleRed : "No se bajó el modelo";
+                controladorInfo.MostrarError(title, detail);
+            }
+            else
+            {
+                string title = (ci != null) ? ci.msgErrServidor : "Error de servidor";
+                string detail = (ci != null) ? ci.msgErrDetalleServidor : "Fallo al bajar 3D";
+                controladorInfo.MostrarError(title, detail);
+            }
+        }
+        Debug.LogError("Error al descargar el modelo: " + www.error);
     }
 
     private void NormalizarTamaño(GameObject objeto)
@@ -305,6 +360,13 @@ public class LectorApiAR : MonoBehaviour
 
     private IEnumerator PrecargarModeloEnCache(string url)
     {
+        if (url.ToLower().EndsWith(".glb"))
+        {
+            // Omitimos la precarga fuerte de AssetBundle para GLB (ya que glTFast usa su propia API para parsear)
+            // Podríamos hacer un GET rápido para cachear, pero GLTFast es tan rápido que no vale la pena sobrecargar.
+            yield break;
+        }
+
         // Al usar GetAssetBundle y dejar que termine, Unity lo guarda en disco automáticamente
         using (UnityWebRequest www = UnityWebRequestAssetBundle.GetAssetBundle(url))
         {

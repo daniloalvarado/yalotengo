@@ -254,7 +254,7 @@ export default function AdminUnityModels() {
             ) : (
                 <>
                     <div className="mb-4">
-                        <div className="flex flex-col sm:flex-row gap-3 items-center">
+                        <div className="flex flex-col sm:flex-row gap-3 items-center justify-between">
                             <div className="relative w-full sm:max-w-md">
                                 <input
                                     type="text"
@@ -592,12 +592,12 @@ export default function AdminUnityModels() {
 
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 col-span-1 md:col-span-2">
                             <div className="border rounded-lg p-3 bg-white">
-                                <span className="text-sm font-medium text-gray-700 mb-2 block">Archivo 3D (.molde)</span>
-                                <input type="file" ref={fileInputRef} onChange={(e) => handleFileUpload(e, 'asset')} className="hidden" />
+                                <span className="text-sm font-medium text-gray-700 mb-2 block">Archivo 3D (.molde / .glb)</span>
+                                <input type="file" ref={fileInputRef} onChange={(e) => handleFileUpload(e, 'asset')} accept=".molde,.glb" className="hidden" />
                                 <div className="flex flex-col gap-2">
                                     <button type="button" onClick={() => fileInputRef.current?.click()} disabled={uploadingAsset} className="flex items-center justify-center gap-2 w-full py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm disabled:opacity-50 transition-colors">
                                         <ArrowUpTrayIcon className="w-4 h-4" />
-                                        {uploadingAsset ? 'Subiendo...' : 'Subir AssetBundle'}
+                                        {uploadingAsset ? 'Subiendo...' : 'Subir Modelo 3D'}
                                     </button>
                                     {formData.assetBundleFileName && (
                                         <div className="flex items-center justify-center gap-1 text-[11px] text-emerald-600 bg-emerald-50 px-2 py-1 rounded">
