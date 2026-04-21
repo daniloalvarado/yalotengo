@@ -9,10 +9,10 @@ public class ControladorInfo : MonoBehaviour
     [Header("UI")]
     public TextMeshProUGUI txtNombre, txtTaxonomia, txtDescripcion, txtFlechitaBoton;
     public Button btnAgrandar;
+    public Button btnDescargar;
     public GameObject panelInformacion; 
-    public float margenBordes = 50f; 
-    
-    
+    public GameObject modalExitoDescarga; // Animación o Pop-up visual cuando la descarga termina
+    public float margenBordes = 50f;
     // Variables de control interno
     private bool vistaInmersiva = false;
     private RectTransform rectBoton;
@@ -55,8 +55,6 @@ public class ControladorInfo : MonoBehaviour
         if (btnAgrandar != null)
         {
             rectBoton = btnAgrandar.GetComponent<RectTransform>();
-            
-            // "Fotografiamos" cómo pusiste el botón en el editor de Unity
             posOriginal = rectBoton.anchoredPosition;
             anchorMinOriginal = rectBoton.anchorMin;
             anchorMaxOriginal = rectBoton.anchorMax;
@@ -64,6 +62,16 @@ public class ControladorInfo : MonoBehaviour
 
             btnAgrandar.onClick.AddListener(AlternarVista);
             btnAgrandar.gameObject.SetActive(false);
+        }
+
+        if (btnDescargar != null)
+        {
+            btnDescargar.onClick.AddListener(() => {
+                if (GestorColeccionLocal.Instancia != null) {
+                    GestorColeccionLocal.Instancia.BotonUI_DescargarModelo();
+                }
+            });
+            btnDescargar.gameObject.SetActive(false);
         }
         
         if (panelInformacion != null && !panelInformacion.TryGetComponent(out panelCanvasGroup))
@@ -183,6 +191,33 @@ public class ControladorInfo : MonoBehaviour
             
             RestaurarBoton();
             if (btnAgrandar != null) btnAgrandar.gameObject.SetActive(true);
+
+            // NUEVO: Activamos y mostramos SIEMPRE el botón de descarga
+            if (btnDescargar == null) 
+            {
+                Debug.LogError("[CRÍTICO] ¡El botón Descargar no aparece porque olvidaste arrastrarlo a la casilla 'Btn Descargar' en el Inspector de ControladorInfo!");
+            }
+            else if (datos == null) 
+            {
+                Debug.LogError("[CRÍTICO] Los metadatos son nulos. El botón no puede activar.");
+            }
+            else 
+            {
+                Debug.Log("¡Activando el botón de descargar por código!");
+                btnDescargar.gameObject.SetActive(true); // Forzamos a que aparezca siempre sí o sí
+                
+                string idCheck = datos.nombre_cientifico;
+                if (string.IsNullOrEmpty(idCheck)) idCheck = datos.nombre;
+
+                if (GestorColeccionLocal.Instancia != null && GestorColeccionLocal.Instancia.YaEstaDescargado(idCheck))
+                {
+                    btnDescargar.interactable = false; // Ya lo tiene, así que lo mostramos gris
+                }
+                else
+                {
+                    btnDescargar.interactable = true; // Lo puede clickear
+                }
+            }
         }
     }
 
@@ -200,6 +235,24 @@ public class ControladorInfo : MonoBehaviour
         if (txtDescripcion != null) txtDescripcion.text = "";
 
         if (btnAgrandar != null) btnAgrandar.gameObject.SetActive(false);
+        if (btnDescargar != null) btnDescargar.gameObject.SetActive(false);
+    }
+
+    public void MostrarExitoDescarga()
+    {
+        if (btnDescargar != null) {
+            btnDescargar.interactable = false;
+        }
+
+        // Activamos un modal/pop-up flotante que felicite al usuario
+        if (modalExitoDescarga != null) {
+            modalExitoDescarga.SetActive(true);
+        }
+    }
+
+    public void OcultarBotonDescarga()
+    {
+        if (btnDescargar != null) btnDescargar.gameObject.SetActive(false);
     }
 
     private IEnumerator TypewriterSecuencial(string textoNombre, string textoTaxonomia, string textoDescripcion)
@@ -337,6 +390,8 @@ public class ControladorInfo : MonoBehaviour
         }
         
         if (btnAgrandar != null) btnAgrandar.gameObject.SetActive(false);
+        if (btnDescargar != null) btnDescargar.gameObject.SetActive(false);
+        
         if (panelInformacion != null)
         {
             panelInformacion.SetActive(true);

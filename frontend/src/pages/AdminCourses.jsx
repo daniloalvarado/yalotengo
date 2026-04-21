@@ -351,7 +351,9 @@ export default function AdminCourses() {
             <AnimatedModal
                 isOpen={showModal}
                 onClose={() => setShowModal(false)}
-                title={`${editItem ? 'Editar' : 'Nuevo'} Curso`}
+                title={editItem ? 'Editar Curso' : 'Nuevo Curso'}
+                maxWidth="max-w-2xl"
+                closeOnOutsideClick={false}
             >
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <label className="block">

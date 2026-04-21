@@ -49,12 +49,15 @@ public class LectorApiAR : MonoBehaviour
     [Serializable]
     public class ModeloResponse
     {
+        public int id;
         public string nombre;
         public string nombre_cientifico;
         public string taxonomia;
         public string descripcion;
         public string url_modelo;
         public string fuente;
+        public string tematica;
+        public string qr_image_url;
         public Traduccion[] traducciones;
     }
 
@@ -162,7 +165,7 @@ public class LectorApiAR : MonoBehaviour
 
                     if (!string.IsNullOrEmpty(datos.url_modelo))
                     {
-                        StartCoroutine(DescargarYConstruirModelo(datos.url_modelo, padreAR));
+                        StartCoroutine(DescargarYConstruirModelo(datos, padreAR));
                     }
                     else
                     {
@@ -178,11 +181,12 @@ public class LectorApiAR : MonoBehaviour
     }
 
     // DISPATCHER: Según la extensión decide qué método usar
-    private IEnumerator DescargarYConstruirModelo(string url, Transform padre)
+    private IEnumerator DescargarYConstruirModelo(ModeloResponse datos, Transform padre)
     {
+        string url = datos.url_modelo;
         if (url.ToLower().EndsWith(".glb"))
         {
-            DescargarYConstruirGLB(url, padre);
+            DescargarYConstruirGLB(datos, padre);
             yield break;
         }
 
@@ -211,10 +215,15 @@ public class LectorApiAR : MonoBehaviour
                     if (modeloCargadoEnEscena != null) Destroy(modeloCargadoEnEscena);
 
                     modeloCargadoEnEscena = Instantiate(prefab, Camera.main.transform);
-                    ConfigurarModeloRecienCargado(modeloCargadoEnEscena);
+                    ConfigurarModeloRecienCargado(modeloCargadoEnEscena, null); // Pasando null ya que no hay gltf
                     
                     bundle.Unload(false);
                     Debug.Log("¡Modelo AssetBundle normalizado y cargado con éxito!");
+
+                    if (controladorInfo != null)
+                    {
+                        controladorInfo.MostrarDatosFirebase(datos, modeloCargadoEnEscena);
+                    }
                 }
                 else
                 {
@@ -229,54 +238,77 @@ public class LectorApiAR : MonoBehaviour
     }
 
     // NUEVO MÉTODO ASÍNCRONO PARA LEER TEXTURA GLB EN TIEMPO REAL
-    private async void DescargarYConstruirGLB(string url, Transform padre)
+    private async void DescargarYConstruirGLB(ModeloResponse datos, Transform padre)
     {
+        string url = datos.url_modelo;
         Debug.Log("Intentando descargar modelo ultraligero GLB desde: " + url);
         
-        var gltf = new GltfImport();
-        
-        // glTFast hace el request web de forma interna
-        bool success = await gltf.Load(url);
-
-        if (success)
+        using (UnityWebRequest www = UnityWebRequest.Get(url))
         {
-            if (objetoLoading != null) objetoLoading.SetActive(false);
-            if (modeloCargadoEnEscena != null) Destroy(modeloCargadoEnEscena);
-
-            // Contenedor principal que anclamos a la cámara
-            modeloCargadoEnEscena = new GameObject("ModeloGLB");
-            modeloCargadoEnEscena.transform.SetParent(Camera.main.transform, false);
-
-            var instantiator = new GameObjectInstantiator(gltf, modeloCargadoEnEscena.transform);
-            success = await gltf.InstantiateMainSceneAsync(instantiator);
-
-            if (success)
+            www.certificateHandler = new BypassCertificate();
+            www.timeout = 30;
+            
+            var req = www.SendWebRequest();
+            while (!req.isDone) await Task.Yield();
+            
+            if (www.result == UnityWebRequest.Result.Success)
             {
-                ConfigurarModeloRecienCargado(modeloCargadoEnEscena);
-                Debug.Log("¡Modelo GLB normalizado y cargado con éxito!");
+                byte[] glbBytes = www.downloadHandler.data;
+
+                // --- NUEVO: Registramos en memoria para permitir su guardado offline ---
+                if (GestorColeccionLocal.Instancia != null) {
+                    GestorColeccionLocal.Instancia.RegistrarModeloEnPantalla(datos, glbBytes);
+                }
+
+                var gltf = new GltfImport();
+                bool success = await gltf.Load(glbBytes, new Uri(url));
+
+                if (success)
+                {
+                    if (objetoLoading != null) objetoLoading.SetActive(false);
+                    if (modeloCargadoEnEscena != null) Destroy(modeloCargadoEnEscena);
+
+                    // Contenedor principal que anclamos a la cámara
+                    modeloCargadoEnEscena = new GameObject("ModeloGLB");
+                    modeloCargadoEnEscena.transform.SetParent(Camera.main.transform, false);
+
+                    var instantiator = new GameObjectInstantiator(gltf, modeloCargadoEnEscena.transform);
+                    success = await gltf.InstantiateMainSceneAsync(instantiator);
+
+                    if (success)
+                    {
+                        ConfigurarModeloRecienCargado(modeloCargadoEnEscena, gltf);
+                        Debug.Log("¡Modelo GLB normalizado y cargado con éxito!");
+
+                        if (controladorInfo != null)
+                        {
+                            controladorInfo.MostrarDatosFirebase(datos, modeloCargadoEnEscena);
+                        }
+                    }
+                    else
+                    {
+                        Debug.LogError("Error instanciando la malla del archivo GLB.");
+                    }
+                }
+                else
+                {
+                    Debug.LogError("Error en glTFast parseando el archivo GLB.");
+                }
             }
             else
             {
-                Debug.LogError("Error instanciando la malla del archivo GLB.");
-            }
-        }
-        else
-        {
-            Debug.LogError("Error descargando el archivo GLB o es inválido.");
-            // Manejamos un fallo de red genérico para el glb
-            if (objetoLoading != null) objetoLoading.SetActive(false);
-            if (controladorInfo != null) {
-                ControladorIdioma ci = FindObjectOfType<ControladorIdioma>();
-                string title = (ci != null) ? ci.msgErrServidor : "Error de red";
-                string detail = (ci != null) ? ci.msgErrDetalleServidor : "Fallo al bajar 3D ultraligero";
-                controladorInfo.MostrarError(title, detail);
+                Debug.LogError("Error descargando el archivo GLB o es inválido: " + www.error);
+                ManejarErrorDescarga(www);
             }
         }
     }
 
     // LÓGICA COMPARTIDA DE POSICIONAMIENTO, COLISIÓN Y GIRO
-    private void ConfigurarModeloRecienCargado(GameObject modeloObj)
+    private void ConfigurarModeloRecienCargado(GameObject modeloObj, GltfImport gltf = null)
     {
+        // RESCATE DE MATERIALES MORADOS DE glTFast
+        RepararMaterialesMorados(modeloObj, gltf);
+
         // REINICIO DE POSICIÓN
         modeloObj.transform.localPosition = new Vector3(0f, 0.05f, 0.5f);
         
@@ -294,10 +326,66 @@ public class LectorApiAR : MonoBehaviour
         RotarConDedo scriptTacto = modeloObj.AddComponent<RotarConDedo>();
         scriptTacto.modeloAGirar = modeloObj.transform;
 
+        // Normalizamos el tamaño de visualizacion
         NormalizarTamaño(modeloObj);
-
+        
         if (objetoLoading != null) objetoLoading.SetActive(false);
-        if (controladorInfo != null) controladorInfo.MostrarDatosFirebase(null, modeloObj);
+    }
+
+    private void RepararMaterialesMorados(GameObject modelo, GltfImport gltf)
+    {
+        Renderer[] renderers = modelo.GetComponentsInChildren<Renderer>();
+        
+        Shader shaderStandard = Shader.Find("Standard"); 
+        Shader shaderURP = Shader.Find("Universal Render Pipeline/Lit"); 
+        Shader shaderOptimo = shaderStandard != null ? shaderStandard : shaderURP;
+
+        if (shaderOptimo == null) shaderOptimo = Shader.Find("Mobile/Diffuse");
+
+        // [NUEVO] Rescate brutal directo de la memoria del glTFast
+        Texture texturaFuerzaBruta = null;
+        if (gltf != null)
+        {
+            try {
+                // Sacamos la primera textura decodificada con éxito de todo el modelo
+                texturaFuerzaBruta = gltf.GetTexture(0);
+                if (texturaFuerzaBruta != null) Debug.Log("Tengo la textura directo de memoria GLB.");
+            } catch {
+                Debug.Log("No hay texturas disponibles en la memoria glTFast.");
+            }
+        }
+
+        foreach (Renderer ren in renderers)
+        {
+            foreach (Material mat in ren.materials)
+            {
+                Texture texturaBase = texturaFuerzaBruta; // Usar rescate de memoria GLB primero
+
+                if (texturaBase == null) {
+                    if (mat.HasProperty("_MainTex")) texturaBase = mat.GetTexture("_MainTex");
+                    if (mat.HasProperty("_BaseMap") && texturaBase == null) texturaBase = mat.GetTexture("_BaseMap");
+                    if (texturaBase == null) texturaBase = mat.mainTexture;
+                }
+
+                Color colorBase = Color.white;
+                if (mat.HasProperty("_Color")) colorBase = mat.GetColor("_Color");
+                if (mat.HasProperty("_BaseColor")) colorBase = mat.GetColor("_BaseColor");
+
+                if (shaderOptimo != null)
+                {
+                    mat.shader = shaderOptimo;
+                    
+                    if (texturaBase != null)
+                    {
+                        if (mat.HasProperty("_MainTex")) mat.SetTexture("_MainTex", texturaBase);
+                        if (mat.HasProperty("_BaseMap")) mat.SetTexture("_BaseMap", texturaBase);
+                    }
+                    
+                    if (mat.HasProperty("_Color")) mat.SetColor("_Color", colorBase);
+                    if (mat.HasProperty("_BaseColor")) mat.SetColor("_BaseColor", colorBase);
+                }
+            }
+        }
     }
 
     private void ManejarErrorDescarga(UnityWebRequest www)

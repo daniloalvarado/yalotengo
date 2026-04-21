@@ -11,6 +11,7 @@ public class NavegacionMenu : MonoBehaviour
     public GameObject panelLogin;
     public GameObject panelBienvenida;
     public GameObject panelTematicas;
+    public GameObject panelGaleria; // NUEVO: Panel de Galería Offline
 
     [Header("Configuración de API")]
     [Tooltip("La URL de tu backend Node.js para el login AR")]
@@ -174,25 +175,36 @@ public class NavegacionMenu : MonoBehaviour
     // --- FUNCIONES DE NAVEGACIÓN ---
     private void MostrarSoloLogin()
     {
-        panelLogin.SetActive(true);
-        panelBienvenida.SetActive(false);
-        panelTematicas.SetActive(false);
+        if (panelLogin != null) panelLogin.SetActive(true);
+        if (panelBienvenida != null) panelBienvenida.SetActive(false);
+        if (panelTematicas != null) panelTematicas.SetActive(false);
+        if (panelGaleria != null) panelGaleria.SetActive(false);
     }
 
     public void IrABienvenida()
     {
         if(textoError != null) textoError.text = ""; 
 
-        panelLogin.SetActive(false);
-        panelBienvenida.SetActive(true);
-        panelTematicas.SetActive(false);
+        if (panelLogin != null) panelLogin.SetActive(false);
+        if (panelBienvenida != null) panelBienvenida.SetActive(true);
+        if (panelTematicas != null) panelTematicas.SetActive(false);
+        if (panelGaleria != null) panelGaleria.SetActive(false);
     }
 
     public void IrATematicas()
     {
-        panelLogin.SetActive(false);
-        panelBienvenida.SetActive(false);
-        panelTematicas.SetActive(true);
+        if (panelLogin != null) panelLogin.SetActive(false);
+        if (panelBienvenida != null) panelBienvenida.SetActive(false);
+        if (panelTematicas != null) panelTematicas.SetActive(true);
+        if (panelGaleria != null) panelGaleria.SetActive(false);
+    }
+
+    public void IrAGaleria()
+    {
+        if (panelLogin != null) panelLogin.SetActive(false);
+        if (panelBienvenida != null) panelBienvenida.SetActive(false);
+        if (panelTematicas != null) panelTematicas.SetActive(false);
+        if (panelGaleria != null) panelGaleria.SetActive(true);
     }
 
     public void IrARealidadAumentada()

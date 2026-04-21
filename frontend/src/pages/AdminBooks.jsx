@@ -374,15 +374,12 @@ export default function AdminBooks() {
                 onClose={() => setDetailItem(null)}
                 type="Libro"
             />
-
-
-
-
-
             <AnimatedModal
                 isOpen={showModal}
                 onClose={() => setShowModal(false)}
-                title={`${editItem ? 'Editar' : 'Nuevo'} Libro`}
+                title={editItem ? 'Editar Libro' : 'Nuevo Libro'}
+                maxWidth="max-w-2xl"
+                closeOnOutsideClick={false}
             >
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <label className="block">

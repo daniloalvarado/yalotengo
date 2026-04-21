@@ -19,7 +19,14 @@ public class ControladorIdioma : MonoBehaviour
     [Header("--- PANEL TEMATICAS ---")]
     public TextMeshProUGUI txtTemasTitulo;
     public TextMeshProUGUI txtTemasBtnBiodiversidad;
+    public TextMeshProUGUI txtTemasBtnGaleria; // NUEVO
     public TextMeshProUGUI txtTemasBtnAjustes;
+
+    [Header("--- PANEL GALERIA ---")]
+    public TextMeshProUGUI txtGaleriaPlaceholderBuscador; // NUEVO
+    public string msgNombreComun = "Nombre Común"; // NUEVO
+    public string msgNombreCientifico = "Nombre Científico"; // NUEVO
+    public string msgTodos = "Todos"; // NUEVO
 
     [Header("--- ESCENA AR ---")]
     public TextMeshProUGUI txtArMenuBtn;   // Botón "Menú" arriba a la izquierda
@@ -95,6 +102,8 @@ public class ControladorIdioma : MonoBehaviour
         if(txtTemasTitulo) txtTemasTitulo.text = "TEMÁTICAS";
         if(txtTemasBtnBiodiversidad) txtTemasBtnBiodiversidad.text = "Biodiversidad";
         if(txtTemasBtnAjustes) txtTemasBtnAjustes.text = "Ajustes";
+        if(txtTemasBtnGaleria) txtTemasBtnGaleria.text = "Galería";
+        if(txtGaleriaPlaceholderBuscador) txtGaleriaPlaceholderBuscador.text = "Buscar por nombre común o científico...";
         if(txtArMenuBtn) txtArMenuBtn.text = "Menú";
         if(txtArPlaceholder) txtArPlaceholder.text = "Apunta a la imagen...";
         if(txtAjustesTitulo) txtAjustesTitulo.text = "AJUSTES";
@@ -102,6 +111,9 @@ public class ControladorIdioma : MonoBehaviour
         msgCargandoTitulo = "Identificando...";
         msgCargandoTaxo = "Escaneando 3D...";
         msgCargandoDesc = "Por favor, mantenga la imagen centrada...";
+        msgNombreComun = "Nombre Común";
+        msgNombreCientifico = "Nombre Científico";
+        msgTodos = "Todos";
 
         msgErrNoInternet = "Sin conexión a Internet";
         msgErrServidor = "Error de servidor";
@@ -123,6 +135,8 @@ public class ControladorIdioma : MonoBehaviour
         if(txtTemasTitulo) txtTemasTitulo.text = "TOPICS";
         if(txtTemasBtnBiodiversidad) txtTemasBtnBiodiversidad.text = "Biodiversity";
         if(txtTemasBtnAjustes) txtTemasBtnAjustes.text = "Settings";
+        if(txtTemasBtnGaleria) txtTemasBtnGaleria.text = "Gallery";
+        if(txtGaleriaPlaceholderBuscador) txtGaleriaPlaceholderBuscador.text = "Search by common or scientific name...";
         if(txtArMenuBtn) txtArMenuBtn.text = "Menu";
         if(txtArPlaceholder) txtArPlaceholder.text = "Aim at the image...";
         if(txtAjustesTitulo) txtAjustesTitulo.text = "SETTINGS";
@@ -131,6 +145,9 @@ public class ControladorIdioma : MonoBehaviour
         msgCargandoTitulo = "Identifying...";
         msgCargandoTaxo = "3D Scanning...";
         msgCargandoDesc = "Please keep the image centered...";
+        msgNombreComun = "Common Name";
+        msgNombreCientifico = "Scientific Name";
+        msgTodos = "All";
 
         msgErrNoInternet = "No Internet connection";
         msgErrServidor = "Server Error";
@@ -152,6 +169,8 @@ public class ControladorIdioma : MonoBehaviour
         if(txtTemasTitulo) txtTemasTitulo.text = "TEMÁTICAS";
         if(txtTemasBtnBiodiversidad) txtTemasBtnBiodiversidad.text = "Biodiversidade";
         if(txtTemasBtnAjustes) txtTemasBtnAjustes.text = "Ajustes";
+        if(txtTemasBtnGaleria) txtTemasBtnGaleria.text = "Galeria";
+        if(txtGaleriaPlaceholderBuscador) txtGaleriaPlaceholderBuscador.text = "Pesquisar por nome comum ou científico...";
         if(txtArMenuBtn) txtArMenuBtn.text = "Menu";
         if(txtArPlaceholder) txtArPlaceholder.text = "Aponte para a imagem...";
         if(txtAjustesTitulo) txtAjustesTitulo.text = "AJUSTES";
@@ -159,6 +178,9 @@ public class ControladorIdioma : MonoBehaviour
         msgCargandoTitulo = "Identificando...";
         msgCargandoTaxo = "Digitalização 3D...";
         msgCargandoDesc = "Por favor, mantenha a imagem centrada...";
+        msgNombreComun = "Nome Comum";
+        msgNombreCientifico = "Nome Científico";
+        msgTodos = "Todos";
 
         msgErrNoInternet = "Sem conexão à Internet";
         msgErrServidor = "Erro de servidor";
@@ -180,6 +202,8 @@ public class ControladorIdioma : MonoBehaviour
         if(txtTemasTitulo) txtTemasTitulo.text = "THÉMATIQUES";
         if(txtTemasBtnBiodiversidad) txtTemasBtnBiodiversidad.text = "Biodiversité";
         if(txtTemasBtnAjustes) txtTemasBtnAjustes.text = "Paramètres";
+        if(txtTemasBtnGaleria) txtTemasBtnGaleria.text = "Galerie";
+        if(txtGaleriaPlaceholderBuscador) txtGaleriaPlaceholderBuscador.text = "Recherche par nom commun ou scientifique...";
         if(txtArMenuBtn) txtArMenuBtn.text = "Menu";
         if(txtArPlaceholder) txtArPlaceholder.text = "Visez l'image...";
         if(txtAjustesTitulo) txtAjustesTitulo.text = "PARAMÈTRES";
@@ -187,6 +211,9 @@ public class ControladorIdioma : MonoBehaviour
         msgCargandoTitulo = "Identification...";
         msgCargandoTaxo = "Numérisation 3D...";
         msgCargandoDesc = "Veuillez garder l'image centrée...";
+        msgNombreComun = "Nom Commun";
+        msgNombreCientifico = "Nom Scientifique";
+        msgTodos = "Tous";
 
         msgErrNoInternet = "Pas de connexion Internet";
         msgErrServidor = "Erreur de serveur";
@@ -208,6 +235,8 @@ public class ControladorIdioma : MonoBehaviour
         if(txtTemasTitulo) txtTemasTitulo.text = "TEMATICHE";
         if(txtTemasBtnBiodiversidad) txtTemasBtnBiodiversidad.text = "Biodiversità";
         if(txtTemasBtnAjustes) txtTemasBtnAjustes.text = "Impostazioni";
+        if(txtTemasBtnGaleria) txtTemasBtnGaleria.text = "Galleria";
+        if(txtGaleriaPlaceholderBuscador) txtGaleriaPlaceholderBuscador.text = "Cerca per nome comune o scientifico...";
         if(txtArMenuBtn) txtArMenuBtn.text = "Menu";
         if(txtArPlaceholder) txtArPlaceholder.text = "Inquadra l'immagine...";
         if(txtAjustesTitulo) txtAjustesTitulo.text = "IMPOSTAZIONI";
@@ -215,6 +244,9 @@ public class ControladorIdioma : MonoBehaviour
         msgCargandoTitulo = "Identificazione...";
         msgCargandoTaxo = "Scansione 3D...";
         msgCargandoDesc = "Per favore, mantieni l'immagine centrata...";
+        msgNombreComun = "Nome Comune";
+        msgNombreCientifico = "Nome Scientifico";
+        msgTodos = "Tutti";
 
         msgErrNoInternet = "Nessuna connessione Internet";
         msgErrServidor = "Errore del server";
@@ -236,6 +268,8 @@ public class ControladorIdioma : MonoBehaviour
         if(txtTemasTitulo) txtTemasTitulo.text = "THEMEN";
         if(txtTemasBtnBiodiversidad) txtTemasBtnBiodiversidad.text = "Biodiversität";
         if(txtTemasBtnAjustes) txtTemasBtnAjustes.text = "Einstellungen";
+        if(txtTemasBtnGaleria) txtTemasBtnGaleria.text = "Galerie";
+        if(txtGaleriaPlaceholderBuscador) txtGaleriaPlaceholderBuscador.text = "Nach Trivial- oder wissenschaftlichem Namen suchen...";
         if(txtArMenuBtn) txtArMenuBtn.text = "Menü";
         if(txtArPlaceholder) txtArPlaceholder.text = "Richten Sie auf das Bild...";
         if(txtAjustesTitulo) txtAjustesTitulo.text = "EINSTELLUNGEN";
@@ -243,6 +277,9 @@ public class ControladorIdioma : MonoBehaviour
         msgCargandoTitulo = "Identifizierung...";
         msgCargandoTaxo = "3D-Scan...";
         msgCargandoDesc = "Bitte halten Sie das Bild zentriert...";
+        msgNombreComun = "Trivialname";
+        msgNombreCientifico = "Wissenschaftlicher Name";
+        msgTodos = "Alle";
 
         msgErrNoInternet = "Keine Internetverbindung";
         msgErrServidor = "Serverfehler";

@@ -117,12 +117,19 @@ async function ensureSchema() {
       })
       console.log('[Schema] Columna fuente migrada de VARCHAR(255) a TEXT')
     }
-    if (!tableInfo.panel) {
-      await qi.addColumn('mm_darwin_data', 'panel', {
+    if (tableInfo.panel) {
+      try {
+        await qi.renameColumn('mm_darwin_data', 'panel', 'tematica')
+        console.log('[Schema] Columna panel renombrada a tematica')
+      } catch (e) {
+        console.warn('Nota: Ignorar si dice que no existe la columna durante renombrado múltiple.')
+      }
+    } else if (!tableInfo.tematica) {
+      await qi.addColumn('mm_darwin_data', 'tematica', {
         type: DataTypes.STRING(255),
         allowNull: true
       })
-      console.log('[Schema] Columna panel creada')
+      console.log('[Schema] Columna tematica creada')
     }
   } catch (e) {
     console.error('Error verificando esquema:', e.message)

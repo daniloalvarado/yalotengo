@@ -297,6 +297,10 @@ r.get('/public/:idAnimal', async (req, res) => {
         // Mandamos las traducciones dinámicas
         traducciones: finalModel.translations || [],
         fuente: finalModel.fuente,
+        tematica: finalModel.tematica,
+        qr_image_url: finalModel.qr_image_url,
+        qr_image_url2: finalModel.qr_image_url2,
+        
         // Mandar el resto de info Darwin Core por si la necesita
         darwinCore: finalModel
     })

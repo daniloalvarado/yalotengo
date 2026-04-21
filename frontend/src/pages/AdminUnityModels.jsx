@@ -114,7 +114,7 @@ export default function AdminUnityModels() {
 
         setFormData(item ? { ...item, translations: trans } : {
             scientificName: '', kingdom: 'Animalia', phylum: '', subphylum: '', class: '', subclass: '', order: '', family: '', genus: '', specificEpithet: '',
-            vernacularName: '', taxonRemarks: '', fuente: '', panel: '', assetBundleFileName: '', qr_image_url: '', qr_image_url2: '',
+            vernacularName: '', taxonRemarks: '', fuente: '', tematica: '', assetBundleFileName: '', qr_image_url: '', qr_image_url2: '',
             translations: trans
         })
 
@@ -186,14 +186,14 @@ export default function AdminUnityModels() {
         }
     }
 
-    const uniquePanels = [...new Set(models.map(m => m.panel).filter(Boolean))].sort()
+    const uniquePanels = [...new Set(models.map(m => m.tematica).filter(Boolean))].sort()
 
     const filteredModels = models.filter(m => {
         const term = searchTerm.toLowerCase()
         const matchText = (m.scientificName || '').toLowerCase().includes(term) || 
                           (m.vernacularName || '').toLowerCase().includes(term)
         
-        const matchPanel = selectedPanel === '' || m.panel === selectedPanel
+        const matchPanel = selectedPanel === '' || m.tematica === selectedPanel
 
         return matchText && matchPanel
     })
@@ -253,8 +253,8 @@ export default function AdminUnityModels() {
                 <AdminUnityDashboard />
             ) : (
                 <>
-                    <div className="mb-4">
-                        <div className="flex flex-col sm:flex-row gap-3 items-center justify-between">
+                    <div className="mb-4 mt-2">
+                        <div className="flex flex-row flex-wrap xs:flex-nowrap gap-3 items-center justify-between w-full">
                             <div className="relative w-full sm:max-w-md">
                                 <input
                                     type="text"
@@ -270,9 +270,9 @@ export default function AdminUnityModels() {
                                     onChange={(e) => setSelectedPanel(e.target.value)}
                                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none text-sm transition-all shadow-sm hover:border-emerald-300 bg-white cursor-pointer"
                                 >
-                                    <option value="">Todos los Paneles</option>
-                                    {uniquePanels.map((panel, idx) => (
-                                        <option key={idx} value={panel}>{panel}</option>
+                                    <option value="">Todas las Temáticas</option>
+                                    {uniquePanels.map((tematica, idx) => (
+                                        <option key={idx} value={tematica}>{tematica}</option>
                                     ))}
                                 </select>
                             </div>
@@ -286,7 +286,7 @@ export default function AdminUnityModels() {
                                     <tr>
                                         <th className="px-4 py-3 text-left font-medium text-gray-600 w-12 text-center">N°</th>
                                         <th className="px-4 py-3 text-left font-medium text-gray-600">ID / Info Especie</th>
-                                        <th className="px-4 py-3 text-left font-medium text-gray-600">Panel</th>
+                                        <th className="px-4 py-3 text-left font-medium text-gray-600">Temática</th>
                                         <th className="px-4 py-3 text-left font-medium text-gray-600">Taxonomía</th>
                                         <th className="px-4 py-3 text-left font-medium text-gray-600">Idiomas</th>
                                         <th className="px-4 py-3 text-left font-medium text-gray-600">Marcador AR</th>
@@ -305,7 +305,7 @@ export default function AdminUnityModels() {
                                                 <div className="text-xs text-gray-500">{m.vernacularName || 'Sin nombre común'} (ID: {m.id})</div>
                                             </td>
                                             <td className="px-4 py-3">
-                                                <div className="text-sm text-gray-700">{m.panel || <span className="text-gray-300 italic">No asignado</span>}</div>
+                                                <div className="text-sm text-gray-700">{m.tematica || <span className="text-gray-300 italic">No asignada</span>}</div>
                                             </td>
                                             <td className="px-4 py-3">
                                                 <div className="text-xs text-gray-600">
@@ -472,12 +472,12 @@ export default function AdminUnityModels() {
                         </label>
 
                         <label className="block col-span-1 md:col-span-2">
-                            <span className="text-sm font-medium text-gray-700 block mb-1">Nombre del Panel (Referencia)</span>
+                            <span className="text-sm font-medium text-gray-700 block mb-1">Temática (Para Filtros en Galería)</span>
                             <input 
-                                value={formData.panel || ''} 
-                                onChange={e => setFormData(p => ({ ...p, panel: e.target.value }))} 
+                                value={formData.tematica || ''} 
+                                onChange={e => setFormData(p => ({ ...p, tematica: e.target.value }))} 
                                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all bg-emerald-50/10" 
-                                placeholder="Ej: Panel A - Entomología"
+                                placeholder="Ej: Insectos, Cultura, Microscopio"
                             />
                         </label>
 

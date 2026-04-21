@@ -177,8 +177,16 @@ public class GestorMarcadoresDinamicos : MonoBehaviour
                         float totalMb = totalBytesCargados / (1024f * 1024f);
                         Debug.Log($"<color=cyan>[Marcador]</color> '{targetName}' cargado ({kb:F2} KB). Total RAM: {totalMb:F2} MB");
 
+                        // SANITIZAR NOMBRE PARA VUFORIA (Evitar acentos y caracteres raros que causan el error INTERNAL)
+                        string safeTargetName = System.Text.RegularExpressions.Regex.Replace(targetName, @"[^a-zA-Z0-9_\- ]", "_");
+
+                        // COPIA DE TEXTURA SEGURA (Vuforia a veces exige formato específico legible)
+                        Texture2D textSegura = new Texture2D(textura.width, textura.height, TextureFormat.RGB24, false);
+                        textSegura.SetPixels(textura.GetPixels());
+                        textSegura.Apply();
+
                         // --- MAGIA DE VUFORIA ---
-                        var mTarget = VuforiaBehaviour.Instance.ObserverFactory.CreateImageTarget(textura, 0.1f, targetName);
+                        var mTarget = VuforiaBehaviour.Instance.ObserverFactory.CreateImageTarget(textSegura, 0.1f, safeTargetName);
 
                         if (mTarget != null)
                         {
@@ -186,15 +194,15 @@ public class GestorMarcadoresDinamicos : MonoBehaviour
                             {
                                 if (status.Status == Status.TRACKED || status.Status == Status.EXTENDED_TRACKED)
                                 {
-                                    if (!marcadoresVisibles.ContainsKey(targetName))
-                                        marcadoresVisibles.Add(targetName, mTarget.transform);
+                                    if (!marcadoresVisibles.ContainsKey(safeTargetName))
+                                        marcadoresVisibles.Add(safeTargetName, mTarget.transform);
                                 }
                                 else
                                 {
-                                    if (marcadoresVisibles.ContainsKey(targetName))
-                                        marcadoresVisibles.Remove(targetName);
+                                    if (marcadoresVisibles.ContainsKey(safeTargetName))
+                                        marcadoresVisibles.Remove(safeTargetName);
                                     
-                                    if (idTargetActivo == targetName)
+                                    if (idTargetActivo == safeTargetName)
                                         idTargetActivo = "";
                                 }
                             };
