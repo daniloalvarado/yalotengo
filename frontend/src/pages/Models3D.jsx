@@ -197,28 +197,31 @@ export default function Models3D() {
                 {activeTab === 'MIS_COTIZACIONES' && (
                     <button 
                         onClick={() => setIsQuoteModalOpen(true)}
-                        className="px-4 py-2 bg-emerald-100 text-emerald-700 font-bold rounded-xl hover:bg-emerald-200 transition-colors shadow-sm"
+                        className="px-4 py-2 bg-emerald-100 text-emerald-700 font-bold rounded-xl hover:bg-emerald-200 transition-colors shadow-sm shrink-0"
                     >
                         Cotización Personalizada
                     </button>
                 )}
+
+                {/* Filtro Subcategorías trasladado a la misma fila */}
+                {activeTab === 'DIGITALIZADO' && availableSubcategories.length > 1 && (
+                    <div className="flex items-center gap-2 bg-white px-3 py-1.5 rounded-xl border border-gray-100 shadow-sm shrink-0">
+                        <span className="text-sm font-medium text-gray-500">Filtrar:</span>
+                        <select
+                            value={modelSubcategory}
+                            onChange={(e) => setModelSubcategory(e.target.value)}
+                            className="text-sm bg-transparent border-none focus:ring-0 font-medium text-gray-700 outline-none cursor-pointer py-1 pl-1 pr-6"
+                        >
+                            {availableSubcategories.map(sub => (
+                                <option key={sub} value={sub}>{sub}</option>
+                            ))}
+                        </select>
+                    </div>
+                )}
             </div>
 
             {/* Filtro Subcategorías (Solo Digitales) */}
-            {activeTab === 'DIGITALIZADO' && availableSubcategories.length > 1 && (
-                <div className="flex items-center gap-3 mb-6 bg-white p-3 rounded-xl border border-gray-100 shadow-sm w-fit">
-                    <span className="text-sm font-medium text-gray-500">Filtrar por:</span>
-                    <select
-                        value={modelSubcategory}
-                        onChange={(e) => setModelSubcategory(e.target.value)}
-                        className="px-4 py-2 text-sm bg-gray-50 border-none rounded-lg focus:ring-2 focus:ring-emerald-500 font-medium text-gray-700 outline-none cursor-pointer"
-                    >
-                        {availableSubcategories.map(sub => (
-                            <option key={sub} value={sub}>{sub}</option>
-                        ))}
-                    </select>
-                </div>
-            )}
+
 
             {/* Grid de modelos */}
             {activeTab === 'MIS_COTIZACIONES' ? (
