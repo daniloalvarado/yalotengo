@@ -193,7 +193,10 @@ public class LectorApiAR : MonoBehaviour
         // LÓGICA ORIGINAL DE ASSETBUNDLE (para los .molde)
         Debug.Log("Intentando descargar (con CACHÉ) modelo desde: " + url);
 
-        using (UnityWebRequest www = UnityWebRequestAssetBundle.GetAssetBundle(url))
+        // --- NUEVO: Limpieza preventiva para evitar error de 'ya cargado' ---
+        AssetBundle.UnloadAllAssetBundles(false);
+
+        using (UnityWebRequest www = UnityWebRequest.Get(url))
         {
             www.certificateHandler = new BypassCertificate();
             www.timeout = 30;
@@ -201,11 +204,14 @@ public class LectorApiAR : MonoBehaviour
 
             if (www.result == UnityWebRequest.Result.Success)
             {
-                totalBytesModelos += www.downloadedBytes;
-                float totalMb = totalBytesModelos / (1024f * 1024f);
-                Debug.Log($"<color=orange>[AssetBundle]</color> descargado. Acumulado en RAM: {totalMb:F2} MB");
+                byte[] rawData = www.downloadHandler.data;
+                totalBytesModelos += (ulong)rawData.Length;
+                
+                // Cargar el bundle desde los Bytes en memoria (esto permite copiar los bytes al GestorColeccionLocal)
+                AssetBundleCreateRequest bundleRequest = AssetBundle.LoadFromMemoryAsync(rawData);
+                yield return bundleRequest;
 
-                AssetBundle bundle = DownloadHandlerAssetBundle.GetContent(www);
+                AssetBundle bundle = bundleRequest.assetBundle;
                 if (bundle != null)
                 {
                     if (objetoLoading != null) objetoLoading.SetActive(false);
@@ -215,8 +221,13 @@ public class LectorApiAR : MonoBehaviour
                     if (modeloCargadoEnEscena != null) Destroy(modeloCargadoEnEscena);
 
                     modeloCargadoEnEscena = Instantiate(prefab, Camera.main.transform);
-                    ConfigurarModeloRecienCargado(modeloCargadoEnEscena, null); // Pasando null ya que no hay gltf
+                    ConfigurarModeloRecienCargado(modeloCargadoEnEscena, null); 
                     
+                    // --- Registrar los bytes para que el botón de descarga tenga qué guardar ---
+                    if (GestorColeccionLocal.Instancia != null) {
+                        GestorColeccionLocal.Instancia.RegistrarModeloEnPantalla(datos, rawData);
+                    }
+
                     bundle.Unload(false);
                     Debug.Log("¡Modelo AssetBundle normalizado y cargado con éxito!");
 
@@ -312,8 +323,8 @@ public class LectorApiAR : MonoBehaviour
         // REINICIO DE POSICIÓN
         modeloObj.transform.localPosition = new Vector3(0f, 0.05f, 0.5f);
         
-        // ROTACIÓN INICIAL
-        modeloObj.transform.localEulerAngles = new Vector3(250f, 0f, 200f);
+        // ROTACIÓN INICIAL (Ajustada para que no salgan 'parados', sino de perfil)
+        modeloObj.transform.localEulerAngles = new Vector3(0f, -45f, 0f);
         
         // ESCALA INICIAL
         modeloObj.transform.localScale = Vector3.one;

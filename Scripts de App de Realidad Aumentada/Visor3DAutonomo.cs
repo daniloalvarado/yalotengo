@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.IO;
 using System.Threading.Tasks;
 using GLTFast;
@@ -10,37 +11,153 @@ public class Visor3DAutonomo : MonoBehaviour
 
     [Header("Conexiones de UI")]
     public ControladorInfo controladorInfo;
-    public GameObject panelVisor3D; // El panel que oscurece el fondo
+    public GameObject panelVisor3D; // El panel que muestra la ficha informativa
     public Transform anclaObjeto3D; // Donde va a aparecer el modelo flotando
 
     private GameObject modeloCargadoEnVisor;
+    private GameObject panelGaleriaRef;  // Para ocultar la galería al abrir el visor
+    private GameObject fondoGeneralRef;  // Para ocultar el fondo de la selva y dejar ver el 3D
+    private GameObject btnCerrarRef;     // Botón cerrar del visor
+    private GameObject btnMenuRef;       // Botón Volver que el usuario clonó
 
     void Awake()
     {
         if (Instancia != null && Instancia != this) { Destroy(gameObject); return; }
         Instancia = this;
+        DontDestroyOnLoad(gameObject);
     }
 
     public async void CargarModeloLocal(ResumenColeccion modeloData)
     {
+        Debug.Log("[VISOR3D] === INICIO CargarModeloLocal === Modelo: " + modeloData.nombre);
+        
         if (!File.Exists(modeloData.rutaModeloLocal))
         {
-            Debug.LogError("Error: No se encontró el archivo físico del modelo en: " + modeloData.rutaModeloLocal);
+            Debug.LogError("[VISOR3D] No se encontró el archivo físico del modelo en: " + modeloData.rutaModeloLocal);
             return;
         }
+        Debug.Log("[VISOR3D] Archivo encontrado: " + modeloData.rutaModeloLocal);
 
-        // 1. Mostrar Panel Inmersivo
-        if (panelVisor3D != null) panelVisor3D.SetActive(true);
+        // 0. Primero buscamos el contenedor principal ("PanelDescargados" o "Panel Informativo")
+        if (panelVisor3D == null)
+        {
+            panelVisor3D = BuscarObjetoIncluyendoInactivos("PanelDescargados");
+            if (panelVisor3D == null) panelVisor3D = BuscarObjetoIncluyendoInactivos("Panel Informativo");
+        }
+
+        // 0.1 Buscar referencias ESTRICTAMENTE DENTRO del panelVisor3D para no agarrar cosas de la Galería
+        if (panelVisor3D != null)
+        {
+            if (controladorInfo == null) controladorInfo = panelVisor3D.GetComponentInChildren<ControladorInfo>(true);
+            
+            if (btnMenuRef == null)
+            {
+                foreach (Transform hijo in panelVisor3D.GetComponentsInChildren<Transform>(true))
+                {
+                    if (hijo.name == "Btn_Volver")
+                    {
+                        btnMenuRef = hijo.gameObject;
+                        break;
+                    }
+                }
+            }
+        }
+
+        // Fallbacks por si acaso no estaban adentro
+        if (controladorInfo == null) controladorInfo = BuscarComponenteIncluyendoInactivos<ControladorInfo>();
+        if (btnMenuRef == null) btnMenuRef = BuscarObjetoIncluyendoInactivos("Btn_Volver");
+        if (btnCerrarRef == null) btnCerrarRef = BuscarObjetoIncluyendoInactivos("Btn_Cerrar");
+
+        // Auto-buscar PanelGalería para ocultarlo
+        if (panelGaleriaRef == null)
+        {
+            panelGaleriaRef = BuscarObjetoIncluyendoInactivos("PanelGalería");
+            if (panelGaleriaRef == null) panelGaleriaRef = BuscarObjetoIncluyendoInactivos("PanelGaleria");
+        }
+
+        // Auto-buscar FondoGeneral para ocultarlo (y dejar ver el 3D)
+        if (fondoGeneralRef == null)
+        {
+            fondoGeneralRef = BuscarObjetoIncluyendoInactivos("FondoGeneral");
+            if (fondoGeneralRef == null) fondoGeneralRef = BuscarObjetoIncluyendoInactivos("Fondo General");
+            
+            // CRÍTICO: Desactivar Raycast Target para que no bloquee los toques a la pantalla
+            if (fondoGeneralRef != null)
+            {
+                UnityEngine.UI.Image img = fondoGeneralRef.GetComponent<UnityEngine.UI.Image>();
+                if (img != null) img.raycastTarget = false;
+            }
+        }
+
+        // 1. Ocultar Galería y mostrar el Visor
+        if (panelGaleriaRef != null)
+        {
+            panelGaleriaRef.SetActive(false);
+            Debug.Log("[VISOR3D] PanelGalería ocultado.");
+        }
+
+        if (panelVisor3D != null)
+        {
+            panelVisor3D.SetActive(true);
+            Debug.Log("[VISOR3D] Panel Informativo activado.");
+        }
+        else
+        {
+            Debug.LogWarning("[VISOR3D] panelVisor3D sigue NULL.");
+        }
+
+        if (btnCerrarRef != null)
+        {
+            btnCerrarRef.SetActive(true);
+            // Conectar el botón cerrar al visor si no está conectado
+            UnityEngine.UI.Button btnComp = btnCerrarRef.GetComponent<UnityEngine.UI.Button>();
+            if (btnComp != null)
+            {
+                btnComp.onClick.RemoveAllListeners();
+                btnComp.onClick.AddListener(CerrarVisor);
+            }
+        }
+
+        if (btnMenuRef != null)
+        {
+            btnMenuRef.SetActive(true);
+            UnityEngine.UI.Button btnMenuComp = btnMenuRef.GetComponent<UnityEngine.UI.Button>();
+            if (btnMenuComp != null)
+            {
+                btnMenuComp.onClick.RemoveAllListeners();
+                // Redirigimos al cierre del visor, que a su vez reactiva la galería
+                btnMenuComp.onClick.AddListener(CerrarVisor); 
+            }
+        }
 
         // 2. Limpiar modelo anterior
         if (modeloCargadoEnVisor != null) Destroy(modeloCargadoEnVisor);
 
-        // 3. Crear ancla si no existe (la ponemos frente a la cámara principal)
-        if (anclaObjeto3D == null)
+        // 3. Crear ancla si no existe o si fue destruida al cambiar de escena
+        if (anclaObjeto3D == null || anclaObjeto3D.gameObject == null)
         {
-            anclaObjeto3D = new GameObject("AnclaVisor3D").transform;
-            anclaObjeto3D.SetParent(Camera.main.transform, false);
-            anclaObjeto3D.localPosition = new Vector3(0, 0, 1.5f); // 1.5 mts frente a la cámara
+            Camera cam = Camera.main;
+            if (cam == null)
+            {
+                cam = FindObjectOfType<Camera>();
+                Debug.LogWarning("[VISOR3D] Camera.main es NULL (escena sin MainCamera tag). Usando: " + (cam != null ? cam.name : "NINGUNA"));
+            }
+
+            if (cam != null)
+            {
+                anclaObjeto3D = new GameObject("AnclaVisor3D").transform;
+                anclaObjeto3D.SetParent(cam.transform, false);
+                // Lo alejamos de nuevo para evitar que se corte y lo subimos aún más (0.3f)
+                anclaObjeto3D.localPosition = new Vector3(0f, 0.3f, 1.2f);
+                anclaObjeto3D.localEulerAngles = Vector3.zero;
+            }
+            else
+            {
+                // Último recurso: crear ancla en el mundo sin padre
+                Debug.LogError("[VISOR3D] No hay NINGUNA cámara. Creando ancla en posición mundial.");
+                anclaObjeto3D = new GameObject("AnclaVisor3D").transform;
+                anclaObjeto3D.position = new Vector3(0, 0, 3f);
+            }
         }
 
         // 4. Transformar los metadatos locales en la misma estructura que espera ControladorInfo
@@ -57,47 +174,155 @@ public class Visor3DAutonomo : MonoBehaviour
         // 5. Mostrar la Data en la UI lateral
         if (controladorInfo != null)
         {
-            // Ocultamos el botón Descargar puesto que ya estamos en la Galería Local
+            // CRÍTICO: Encender el sub-panel de información ANTES de mandar los datos, 
+            // de lo contrario la corrutina de texto falla porque el Canvas está apagado.
+            if (controladorInfo.panelInformacion != null)
+            {
+                controladorInfo.panelInformacion.SetActive(true);
+            }
+
             controladorInfo.OcultarBotonDescarga();
-            // Llenamos el texto
             controladorInfo.MostrarDatosFirebase(pseudoRespuesta, null);
+            Debug.Log("[VISOR3D] Info del modelo enviada al panel de texto.");
         }
 
-        // 6. Cargar físicamente con glTFast desde el DISCO DURO (No hay gastó de internet)
-        byte[] bytes = File.ReadAllBytes(modeloData.rutaModeloLocal);
-        var gltf = new GltfImport();
-        
-        bool success = await gltf.Load(bytes, new Uri("file:///" + modeloData.rutaModeloLocal));
-
-        if (success)
+        // 6. Cargar físicamente según el tipo de archivo (.glb vs .molde)
+        try
         {
-            modeloCargadoEnVisor = new GameObject("GLB_Local");
-            modeloCargadoEnVisor.transform.SetParent(anclaObjeto3D, false);
-
-            var instantiator = new GameObjectInstantiator(gltf, modeloCargadoEnVisor.transform);
-            success = await gltf.InstantiateMainSceneAsync(instantiator);
-
-            if (success)
+            if (modeloData.rutaModeloLocal.EndsWith(".glb", StringComparison.OrdinalIgnoreCase))
             {
-                // Reutilizamos el script de reparación de materiales para garantizar el color
-                RepararMaterialesLocales(modeloCargadoEnVisor, gltf);
-                
-                // Rotación táctil o automática
-                modeloCargadoEnVisor.AddComponent<RotarLento>();
-                RotarConDedo scriptTacto = modeloCargadoEnVisor.AddComponent<RotarConDedo>();
-                scriptTacto.modeloAGirar = modeloCargadoEnVisor.transform;
-                
-                // Finalizamos indicándole a la UI que ya hay modelo 3D para revelar información inmersiva
-                if (controladorInfo != null) controladorInfo.MostrarDatosFirebase(pseudoRespuesta, modeloCargadoEnVisor);
+                Debug.Log("[VISOR3D] Cargando archivo GLB...");
+                byte[] bytes = File.ReadAllBytes(modeloData.rutaModeloLocal);
+                var gltf = new GltfImport();
+                bool success = await gltf.Load(bytes, new Uri("file:///" + modeloData.rutaModeloLocal));
+
+                if (success)
+                {
+                    modeloCargadoEnVisor = new GameObject("GLB_Local");
+                    modeloCargadoEnVisor.transform.SetParent(anclaObjeto3D, false);
+
+                    var instantiator = new GameObjectInstantiator(gltf, modeloCargadoEnVisor.transform);
+                    success = await gltf.InstantiateMainSceneAsync(instantiator);
+
+                    if (success)
+                    {
+                        RepararMaterialesLocales(modeloCargadoEnVisor, gltf);
+                        ConfigurarInteraccionModelo();
+                        if (controladorInfo != null) controladorInfo.MostrarDatosFirebase(null, modeloCargadoEnVisor);
+                        Debug.Log("[VISOR3D] ¡Modelo GLB cargado con éxito!");
+                    }
+                    else
+                    {
+                        Debug.LogError("[VISOR3D] Error al instanciar la malla GLB.");
+                    }
+                }
+                else
+                {
+                    Debug.LogError("[VISOR3D] Error al parsear el archivo GLB.");
+                }
             }
+            else // Es un .molde / AssetBundle
+            {
+                Debug.Log("[VISOR3D] Cargando AssetBundle (.molde)...");
+                AssetBundle.UnloadAllAssetBundles(false); // Prevenir error de 'ya cargado'
+                
+                var bundleRequest = AssetBundle.LoadFromFileAsync(modeloData.rutaModeloLocal);
+                while (!bundleRequest.isDone) {
+                    await Task.Yield();
+                }
+                
+                AssetBundle bundle = bundleRequest.assetBundle;
+                if (bundle != null)
+                {
+                    string[] assets = bundle.GetAllAssetNames();
+                    GameObject prefab = bundle.LoadAsset<GameObject>(assets[0]);
+                    
+                    modeloCargadoEnVisor = Instantiate(prefab, anclaObjeto3D);
+                    bundle.Unload(false);
+
+                    ConfigurarInteraccionModelo();
+                    if (controladorInfo != null) controladorInfo.MostrarDatosFirebase(null, modeloCargadoEnVisor);
+                    Debug.Log("[VISOR3D] ¡Modelo AssetBundle cargado con éxito!");
+                }
+                else
+                {
+                    Debug.LogError("[VISOR3D] No se pudo cargar el AssetBundle offline desde: " + modeloData.rutaModeloLocal);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError("[VISOR3D] EXCEPCIÓN al cargar modelo: " + ex.Message + "\n" + ex.StackTrace);
+        }
+    }
+
+    private void ConfigurarInteraccionModelo()
+    {
+        // POSICIÓN EN EL ANCLA
+        modeloCargadoEnVisor.transform.localPosition = Vector3.zero;
+
+        // ROTACIÓN INICIAL: Rotado 210 grados para que quede ladeado a la izquierda
+        modeloCargadoEnVisor.transform.localEulerAngles = new Vector3(0f, 210f, 0f);
+
+        // ESCALA INICIAL
+        modeloCargadoEnVisor.transform.localScale = Vector3.one;
+
+        if (modeloCargadoEnVisor.GetComponent<Collider>() == null)
+        {
+            modeloCargadoEnVisor.AddComponent<BoxCollider>();
+        }
+
+        // Normalizar su tamaño exacto a 0.15 como en AR
+        NormalizarTamaño(modeloCargadoEnVisor);
+
+        // Quitamos RotarLento para que no gire solo, pero mantenemos RotarConDedo
+        RotarConDedo scriptTacto = modeloCargadoEnVisor.AddComponent<RotarConDedo>();
+        scriptTacto.modeloAGirar = modeloCargadoEnVisor.transform;
+    }
+
+    private void NormalizarTamaño(GameObject objeto)
+    {
+        MeshRenderer[] renderers = objeto.GetComponentsInChildren<MeshRenderer>();
+        if (renderers.Length == 0) return;
+
+        Bounds totalBounds = renderers[0].bounds;
+        foreach (MeshRenderer r in renderers)
+        {
+            totalBounds.Encapsulate(r.bounds);
+        }
+
+        float tamañoActual = Mathf.Max(totalBounds.size.x, totalBounds.size.y, totalBounds.size.z);
+        if (tamañoActual > 0)
+        {
+            // Tamaño grande (0.8) ideal para pantalla 2D
+            float factorEscala = 0.8f / tamañoActual; 
+            objeto.transform.localScale *= factorEscala;
         }
     }
 
     public void CerrarVisor()
     {
+        Debug.Log("[VISOR3D] Cerrando visor...");
+        
         if (modeloCargadoEnVisor != null) Destroy(modeloCargadoEnVisor);
         if (panelVisor3D != null) panelVisor3D.SetActive(false);
         if (controladorInfo != null) controladorInfo.LimpiarPanel();
+        if (btnCerrarRef != null) btnCerrarRef.SetActive(false);
+        if (btnMenuRef != null) btnMenuRef.SetActive(false);
+
+        // Volver a mostrar la Galería
+        if (panelGaleriaRef != null)
+        {
+            panelGaleriaRef.SetActive(true);
+            Debug.Log("[VISOR3D] PanelGalería reactivado.");
+        }
+        else
+        {
+            // Intentar encontrarla de nuevo (podría estar inactiva)
+            panelGaleriaRef = BuscarObjetoIncluyendoInactivos("PanelGalería");
+            if (panelGaleriaRef == null) panelGaleriaRef = BuscarObjetoIncluyendoInactivos("PanelGaleria");
+            if (panelGaleriaRef != null) panelGaleriaRef.SetActive(true);
+        }
     }
 
     // Copia exacta de rescate de texturas para Offline
@@ -141,5 +366,45 @@ public class Visor3DAutonomo : MonoBehaviour
                 }
             }
         }
+    }
+
+    // Busca un GameObject por nombre incluyendo objetos INACTIVOS (GameObject.Find solo busca activos)
+    private GameObject BuscarObjetoIncluyendoInactivos(string nombre)
+    {
+        // Buscar en los root objects de la escena activa (incluye inactivos)
+        Scene escenaActiva = SceneManager.GetActiveScene();
+        GameObject[] raices = escenaActiva.GetRootGameObjects();
+        
+        foreach (GameObject raiz in raices)
+        {
+            if (raiz.name == nombre) return raiz;
+            
+            // También buscar en hijos (para paneles dentro del Canvas)
+            Transform encontrado = raiz.transform.Find(nombre);
+            if (encontrado != null) return encontrado.gameObject;
+            
+            // Búsqueda recursiva en hijos
+            foreach (Transform hijo in raiz.GetComponentsInChildren<Transform>(true))
+            {
+                if (hijo.name == nombre) return hijo.gameObject;
+            }
+        }
+        
+        Debug.LogWarning($"[VISOR3D] No se encontró '{nombre}' en la escena (ni activo ni inactivo).");
+        return null;
+    }
+
+    // Busca un componente incluyendo los inactivos
+    private T BuscarComponenteIncluyendoInactivos<T>() where T : Component
+    {
+        Scene escenaActiva = SceneManager.GetActiveScene();
+        GameObject[] raices = escenaActiva.GetRootGameObjects();
+        
+        foreach (GameObject raiz in raices)
+        {
+            T componente = raiz.GetComponentInChildren<T>(true);
+            if (componente != null) return componente;
+        }
+        return null;
     }
 }

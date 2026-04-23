@@ -144,6 +144,8 @@ export default function AdminUnityModels() {
             formDataUpload.append('qrImageFile2', file)
         }
 
+        const toastId = toast.info(`Subiendo archivo: ${file.name}. Por favor espera...`, { autoClose: false });
+
         try {
             const { data } = await api.post('/microscopicos/admin/upload', formDataUpload, {
                 headers: { 'Content-Type': 'multipart/form-data' }
@@ -161,8 +163,10 @@ export default function AdminUnityModels() {
                 toast.success('Imagen Secundaria subida correctamente')
             }
         } catch (err) {
+            toast.dismiss(toastId);
             toast.error('Error al subir archivo')
         } finally {
+            toast.dismiss(toastId);
             if (type === 'asset') setUploadingAsset(false)
             else if (type === 'qr') setUploadingQr(false)
             else setUploadingQr2(false)
@@ -285,7 +289,7 @@ export default function AdminUnityModels() {
                                 <thead className="bg-gray-50">
                                     <tr>
                                         <th className="px-4 py-3 text-left font-medium text-gray-600 w-12 text-center">N°</th>
-                                        <th className="px-4 py-3 text-left font-medium text-gray-600">ID / Info Especie</th>
+                                        <th className="px-4 py-3 text-left font-medium text-gray-600">Especie</th>
                                         <th className="px-4 py-3 text-left font-medium text-gray-600">Temática</th>
                                         <th className="px-4 py-3 text-left font-medium text-gray-600">Taxonomía</th>
                                         <th className="px-4 py-3 text-left font-medium text-gray-600">Idiomas</th>

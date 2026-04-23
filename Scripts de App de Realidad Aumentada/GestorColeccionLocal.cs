@@ -40,6 +40,7 @@ public class GestorColeccionLocal : MonoBehaviour
     {
         if (Instancia != null && Instancia != this) { Destroy(gameObject); return; }
         Instancia = this;
+        DontDestroyOnLoad(gameObject);
         
         DirectorioBase = Path.Combine(Application.persistentDataPath, "ColeccionOffline");
         if (!Directory.Exists(DirectorioBase)) Directory.CreateDirectory(DirectorioBase);
@@ -86,9 +87,12 @@ public class GestorColeccionLocal : MonoBehaviour
 
         if (!Directory.Exists(rutaDirectorio)) Directory.CreateDirectory(rutaDirectorio);
 
-        // 1. Escribir el 3D
-        string rutaGLB = Path.Combine(rutaDirectorio, "modelo.glb");
-        File.WriteAllBytes(rutaGLB, glbBytes);
+        // 1. Escribir el 3D (Detectando extensión original .glb o .molde)
+        string extension = ".glb";
+        if (!string.IsNullOrEmpty(datos.url_modelo) && datos.url_modelo.ToLower().Contains(".molde")) extension = ".molde";
+        
+        string rutaModeloFinal = Path.Combine(rutaDirectorio, "modelo" + extension);
+        File.WriteAllBytes(rutaModeloFinal, glbBytes);
 
         // 2. Descargar la foto miniatura
         string urlFoto = datos.qr_image_url;
@@ -123,7 +127,7 @@ public class GestorColeccionLocal : MonoBehaviour
             fuente = datos.fuente,
             tematica = datos.tematica, // Obtenemos la tematica enviada desde NodeJS
             rutaFotoLocal = rutaFoto,
-            rutaModeloLocal = rutaGLB
+            rutaModeloLocal = rutaModeloFinal
         };
 
         // 4. Actualizar el Gran Índice (El JSON Maestro de la Galería)

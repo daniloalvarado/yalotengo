@@ -50,7 +50,7 @@ public class ControladorInfo : MonoBehaviour
         {"Especie:", "Art:"}, {"Taxonomía", "Taxonomie"}, {"Fuente:", "Quelle:"}
     };
 
-    void Start()
+    void Awake()
     {
         if (btnAgrandar != null)
         {
@@ -195,7 +195,7 @@ public class ControladorInfo : MonoBehaviour
             // NUEVO: Activamos y mostramos SIEMPRE el botón de descarga
             if (btnDescargar == null) 
             {
-                Debug.LogError("[CRÍTICO] ¡El botón Descargar no aparece porque olvidaste arrastrarlo a la casilla 'Btn Descargar' en el Inspector de ControladorInfo!");
+                Debug.Log("[INFO] Botón de descargar no asignado (normal en galería).");
             }
             else if (datos == null) 
             {
