@@ -128,48 +128,51 @@ export default function AdminUnityModels() {
     }
 
     const handleFileUpload = async (e, type = 'asset') => {
-        const file = e.target.files?.[0]
-        if (!file) return
+        const file = e.target.files?.[0];
+        if (!file) return;
 
-        if (type === 'asset') setUploadingAsset(true)
-        else if (type === 'qr') setUploadingQr(true)
-        else setUploadingQr2(true)
+        console.log(`[FRONTEND] INICIANDO SUBIDA: ${file.name} (Tipo: ${type}, Tamaño: ${file.size} bytes)`);
 
-        const formDataUpload = new FormData()
-        if (type === 'asset') {
-            formDataUpload.append('assetBundleFile', file)
-        } else if (type === 'qr') {
-            formDataUpload.append('qrImageFile', file)
-        } else {
-            formDataUpload.append('qrImageFile2', file)
-        }
+        if (type === 'asset') setUploadingAsset(true);
+        else if (type === 'qr') setUploadingQr(true);
+        else setUploadingQr2(true);
 
-        const toastId = toast.info(`Subiendo archivo: ${file.name}. Por favor espera...`, { autoClose: false });
+        const formDataUpload = new FormData();
+        formDataUpload.append(type === 'asset' ? 'assetBundleFile' : (type === 'qr' ? 'qrImageFile' : 'qrImageFile2'), file);
+
+        // Si ya hay un archivo, avisamos para que el servidor lo borre
+        const oldFile = type === 'asset' ? formData.assetBundleFileName : (type === 'qr' ? formData.qr_image_url : formData.qr_image_url2);
+        if (oldFile) formDataUpload.append('oldFile', oldFile);
+
+        const toastId = toast.info(`Subiendo ${file.name}...`, { autoClose: false });
 
         try {
-            const { data } = await api.post('/microscopicos/admin/upload', formDataUpload)
+            console.log("[FRONTEND] Enviando petición POST a /microscopicos/admin/upload...");
+            const { data } = await api.post('/microscopicos/admin/upload', formDataUpload);
+            console.log("[FRONTEND] Respuesta del servidor recibida:", data);
+
             if (type === 'asset' && data.assetBundleFileName) {
-                setFormData(prev => ({ ...prev, assetBundleFileName: data.assetBundleFileName }))
-                toast.success('AssetBundle subido correctamente')
-            }
-            if (type === 'qr' && data.qr_image_url) {
-                setFormData(prev => ({ ...prev, qr_image_url: data.qr_image_url }))
-                toast.success('Imagen Marcador QR subida correctamente')
-            }
-            if (type === 'qr2' && data.qr_image_url2) {
-                setFormData(prev => ({ ...prev, qr_image_url2: data.qr_image_url2 }))
-                toast.success('Imagen Secundaria subida correctamente')
+                setFormData(prev => ({ ...prev, assetBundleFileName: data.assetBundleFileName }));
+                toast.success('Archivo 3D actualizado');
+            } else if (type === 'qr' && data.qr_image_url) {
+                setFormData(prev => ({ ...prev, qr_image_url: data.qr_image_url }));
+                toast.success('Marcador AR actualizado');
+            } else if (type === 'qr2' && data.qr_image_url2) {
+                setFormData(prev => ({ ...prev, qr_image_url2: data.qr_image_url2 }));
+                toast.success('Marcador Secundario actualizado');
             }
         } catch (err) {
-            toast.dismiss(toastId);
-            toast.error('Error al subir archivo')
+            console.error("[FRONTEND] ERROR CRÍTICO EN SUBIDA:", err);
+            toast.error('Fallo en la comunicación con el servidor');
         } finally {
+            console.log("[FRONTEND] Proceso de subida finalizado.");
+            setUploadingAsset(false);
+            setUploadingQr(false);
+            setUploadingQr2(true); // Esto lo corrijo a false en el siguiente paso si es necesario
+            setUploadingQr2(false); 
             toast.dismiss(toastId);
-            if (type === 'asset') setUploadingAsset(false)
-            else if (type === 'qr') setUploadingQr(false)
-            else setUploadingQr2(false)
         }
-    }
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -192,9 +195,9 @@ export default function AdminUnityModels() {
 
     const filteredModels = models.filter(m => {
         const term = searchTerm.toLowerCase()
-        const matchText = (m.scientificName || '').toLowerCase().includes(term) || 
-                          (m.vernacularName || '').toLowerCase().includes(term)
-        
+        const matchText = (m.scientificName || '').toLowerCase().includes(term) ||
+            (m.vernacularName || '').toLowerCase().includes(term)
+
         const matchPanel = selectedPanel === '' || m.tematica === selectedPanel
 
         return matchText && matchPanel
@@ -454,31 +457,31 @@ export default function AdminUnityModels() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <label className="block col-span-1 md:col-span-2">
                             <span className="text-sm font-medium text-gray-700 block mb-1">Nombre Común</span>
-                            <input 
-                                value={formData.vernacularName || ''} 
-                                onChange={e => setFormData(p => ({ ...p, vernacularName: e.target.value }))} 
-                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all" 
+                            <input
+                                value={formData.vernacularName || ''}
+                                onChange={e => setFormData(p => ({ ...p, vernacularName: e.target.value }))}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all"
                                 placeholder="Ej: Abeja Melipona"
                             />
                         </label>
 
                         <label className="block col-span-1 md:col-span-2">
                             <span className="text-sm font-medium text-gray-700 block mb-1">Nombre Científico</span>
-                            <input 
-                                value={formData.scientificName || ''} 
-                                onChange={e => setFormData(p => ({ ...p, scientificName: e.target.value }))} 
-                                required 
-                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all" 
+                            <input
+                                value={formData.scientificName || ''}
+                                onChange={e => setFormData(p => ({ ...p, scientificName: e.target.value }))}
+                                required
+                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all"
                                 placeholder="Ej: Melipona beecheii"
                             />
                         </label>
 
                         <label className="block col-span-1 md:col-span-2">
                             <span className="text-sm font-medium text-gray-700 block mb-1">Temática (Para Filtros en Galería)</span>
-                            <input 
-                                value={formData.tematica || ''} 
-                                onChange={e => setFormData(p => ({ ...p, tematica: e.target.value }))} 
-                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all bg-emerald-50/10" 
+                            <input
+                                value={formData.tematica || ''}
+                                onChange={e => setFormData(p => ({ ...p, tematica: e.target.value }))}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all bg-emerald-50/10"
                                 placeholder="Ej: Insectos, Cultura, Microscopio"
                             />
                         </label>
@@ -498,12 +501,12 @@ export default function AdminUnityModels() {
 
                         <label className="block col-span-1 md:col-span-2">
                             <span className="text-sm font-medium text-gray-700 block mb-1">Descripción / Notas</span>
-                            <textarea 
-                                value={formData.taxonRemarks || ''} 
-                                onChange={e => setFormData(p => ({ ...p, taxonRemarks: e.target.value }))} 
-                                rows={4} 
-                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none resize-none transition-all" 
-                                placeholder="Descripción general de la especie..." 
+                            <textarea
+                                value={formData.taxonRemarks || ''}
+                                onChange={e => setFormData(p => ({ ...p, taxonRemarks: e.target.value }))}
+                                rows={4}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none resize-none transition-all"
+                                placeholder="Descripción general de la especie..."
                             />
                         </label>
 
@@ -635,7 +638,7 @@ export default function AdminUnityModels() {
                                     )}
                                 </div>
                             </div>
-                            
+
                             <div className="border rounded-lg p-3 bg-white">
                                 <span className="text-sm font-medium text-gray-700 mb-2 block">Marcador AR(JPG/PNG)</span>
                                 <input type="file" ref={qrInput2Ref} onChange={(e) => handleFileUpload(e, 'qr2')} accept="image/png, image/jpeg" className="hidden" />
@@ -664,14 +667,14 @@ export default function AdminUnityModels() {
                         </div>
 
                         <label className="block col-span-1 md:col-span-2">
-                             <span className="text-sm font-medium text-gray-700 block mb-1">Fuente de Información</span>
-                             <textarea 
-                                 value={formData.fuente || ''} 
-                                 onChange={e => setFormData(p => ({ ...p, fuente: e.target.value }))} 
-                                 rows={2}
-                                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all shadow-sm resize-y min-h-[60px]" 
-                                 placeholder="Ej: Wikipedia, Universidad de X, etc." 
-                             />
+                            <span className="text-sm font-medium text-gray-700 block mb-1">Fuente de Información</span>
+                            <textarea
+                                value={formData.fuente || ''}
+                                onChange={e => setFormData(p => ({ ...p, fuente: e.target.value }))}
+                                rows={2}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all shadow-sm resize-y min-h-[60px]"
+                                placeholder="Ej: Wikipedia, Universidad de X, etc."
+                            />
                         </label>
                     </div>
 

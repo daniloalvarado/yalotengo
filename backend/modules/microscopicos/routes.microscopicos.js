@@ -74,12 +74,12 @@ r.post('/admin', adminAuth, async (req, res) => {
   try {
     const { translations, ...modelData } = req.body
     const model = await Microscopico.create(modelData)
-    
+
     if (translations && Array.isArray(translations)) {
       const transToCreate = translations.map(t => ({ ...t, microscopico_id: model.id }))
       await Translation.bulkCreate(transToCreate)
     }
-    
+
     // Devolvemos el modelo con las traducciones
     const newModel = await Microscopico.findByPk(model.id, { include: [{ model: Translation, as: 'translations' }] })
     res.status(201).json(newModel)
@@ -94,14 +94,14 @@ r.put('/admin/:id', adminAuth, async (req, res) => {
   try {
     const model = await Microscopico.findByPk(req.params.id)
     if (!model) return res.status(404).json({ error: 'No encontrado' })
-    
+
     const { translations, ...modelData } = req.body
 
     // Si el usuario subió un nuevo .molde (y había uno antiguo), borrar el antiguo de MinIO
     if (modelData.assetBundleFileName && model.assetBundleFileName && modelData.assetBundleFileName !== model.assetBundleFileName) {
       await deleteFile('microscopicos', model.assetBundleFileName)
     }
-    
+
     // Lo mismo para qr_image_url y qr_image_url2
     if (modelData.qr_image_url && model.qr_image_url && modelData.qr_image_url !== model.qr_image_url) {
       await deleteFile('microscopicos', model.qr_image_url)
@@ -132,7 +132,7 @@ r.delete('/admin/:id', adminAuth, async (req, res) => {
   try {
     const model = await Microscopico.findByPk(req.params.id)
     if (!model) return res.status(404).json({ error: 'No encontrado' })
-    
+
     // Eliminar los archivos de almacenamiento físico en MinIO
     if (model.assetBundleFileName) {
       await deleteFile('microscopicos', model.assetBundleFileName)
@@ -153,29 +153,26 @@ r.delete('/admin/:id', adminAuth, async (req, res) => {
 })
 
 // POST Upload AssetBundle a MinIO
-r.post('/admin/upload', (req, res, next) => {
-  console.log(`[ROUTE] Petición recibida en /admin/upload - Método: ${req.method} - IP: ${req.ip}`);
-  next();
-}, adminAuth, upload.fields([{ name: 'assetBundleFile', maxCount: 1 }, { name: 'qrImageFile', maxCount: 1 }, { name: 'qrImageFile2', maxCount: 1 }]), async (req, res) => {
+r.post('/admin/upload', adminAuth, upload.fields([{ name: 'assetBundleFile', maxCount: 1 }, { name: 'qrImageFile', maxCount: 1 }, { name: 'qrImageFile2', maxCount: 1 }]), async (req, res) => {
   try {
     if (!req.files || (!req.files.assetBundleFile && !req.files.qrImageFile && !req.files.qrImageFile2)) {
       return res.status(400).json({ error: 'No se enviaron archivos' })
     }
-    
+
     const response = {}
 
     if (req.files.assetBundleFile) {
       const assetFile = req.files.assetBundleFile[0]
       console.log(`[UPLOAD] Recibido archivo 3D: ${assetFile.originalname} (${assetFile.size} bytes)`);
       console.log(`[UPLOAD] Iniciando subida a MinIO en carpeta 'microscopicos'...`);
-      
+
       const filename = await uploadFile(
-          assetFile.buffer, 
-          'microscopicos', 
-          assetFile.originalname, 
-          assetFile.mimetype || 'application/octet-stream'
+        assetFile.buffer,
+        'microscopicos',
+        assetFile.originalname,
+        assetFile.mimetype || 'application/octet-stream'
       )
-      
+
       console.log(`[UPLOAD] ¡Subida a MinIO completada! Nombre final: ${filename}`);
       response.assetBundleFileName = filename
     }
@@ -184,10 +181,10 @@ r.post('/admin/upload', (req, res, next) => {
       const qrFile = req.files.qrImageFile[0]
       console.log(`[UPLOAD] Recibido Marcador AR: ${qrFile.originalname} (${qrFile.size} bytes)`);
       const filename = await uploadFile(
-          qrFile.buffer, 
-          'microscopicos', 
-          qrFile.originalname, 
-          qrFile.mimetype
+        qrFile.buffer,
+        'microscopicos',
+        qrFile.originalname,
+        qrFile.mimetype
       )
       console.log(`[UPLOAD] Marcador AR subido: ${filename}`);
       response.qr_image_url = filename
@@ -197,10 +194,10 @@ r.post('/admin/upload', (req, res, next) => {
       const qrFile2 = req.files.qrImageFile2[0]
       console.log(`[UPLOAD] Recibido Marcador Secundario: ${qrFile2.originalname} (${qrFile2.size} bytes)`);
       const filename = await uploadFile(
-          qrFile2.buffer, 
-          'microscopicos', 
-          qrFile2.originalname, 
-          qrFile2.mimetype
+        qrFile2.buffer,
+        'microscopicos',
+        qrFile2.originalname,
+        qrFile2.mimetype
       )
       console.log(`[UPLOAD] Marcador Secundario subido: ${filename}`);
       response.qr_image_url2 = filename
@@ -228,12 +225,12 @@ r.get('/public/targets', async (req, res) => {
     })
 
     const baseUrl = process.env.APP_URL || 'http://108.181.191.82.sslip.io:8070'
-    
+
     const targets = []
-    
+
     models.forEach(m => {
       const modelUrl = m.assetBundleFileName ? `${baseUrl}/uploads/microscopicos/${m.assetBundleFileName}` : null
-      
+
       if (m.qr_image_url) {
         targets.push({
           name: m.scientificName,
@@ -284,7 +281,7 @@ r.get('/public/:idAnimal', async (req, res) => {
     // Devolvemos el JSON compatible con (o mapeable fácilmente) en Unity
     // Creamos la URL absoluta del modelo 3D usando MinIO Proxy (ej: /uploads/microscopicos/file.bundle)
     const baseUrl = `${req.protocol}://${req.get('host')}`
-    
+
     // Taxonomía estructurada con etiquetas y saltos de línea (\n) para mejor lectura en Unity
     const taxList = []
     if (finalModel.kingdom) taxList.push(`Reino: ${finalModel.kingdom}`)
@@ -296,25 +293,25 @@ r.get('/public/:idAnimal', async (req, res) => {
     if (finalModel.family) taxList.push(`Familia: ${finalModel.family}`)
     if (finalModel.genus) taxList.push(`Género: ${finalModel.genus}`)
     if (finalModel.scientificName) taxList.push(`Especie: ${finalModel.scientificName}`)
-    
+
     res.json({
-        nombre: finalModel.vernacularName || finalModel.scientificName,
-        nombre_cientifico: finalModel.scientificName,
-        taxonomia: `Taxonomía\n${taxList.join('\n')}`,
-        descripcion: finalModel.taxonRemarks,
-        // Construimos la URL al archivo guardado en el storage
-        url_modelo: finalModel.assetBundleFileName 
-            ? `${baseUrl}/uploads/microscopicos/${finalModel.assetBundleFileName}` 
-            : null,
-        // Mandamos las traducciones dinámicas
-        traducciones: finalModel.translations || [],
-        fuente: finalModel.fuente,
-        tematica: finalModel.tematica,
-        qr_image_url: finalModel.qr_image_url,
-        qr_image_url2: finalModel.qr_image_url2,
-        
-        // Mandar el resto de info Darwin Core por si la necesita
-        darwinCore: finalModel
+      nombre: finalModel.vernacularName || finalModel.scientificName,
+      nombre_cientifico: finalModel.scientificName,
+      taxonomia: `Taxonomía\n${taxList.join('\n')}`,
+      descripcion: finalModel.taxonRemarks,
+      // Construimos la URL al archivo guardado en el storage
+      url_modelo: finalModel.assetBundleFileName
+        ? `${baseUrl}/uploads/microscopicos/${finalModel.assetBundleFileName}`
+        : null,
+      // Mandamos las traducciones dinámicas
+      traducciones: finalModel.translations || [],
+      fuente: finalModel.fuente,
+      tematica: finalModel.tematica,
+      qr_image_url: finalModel.qr_image_url,
+      qr_image_url2: finalModel.qr_image_url2,
+
+      // Mandar el resto de info Darwin Core por si la necesita
+      darwinCore: finalModel
     })
   } catch (error) {
     console.error(error)
