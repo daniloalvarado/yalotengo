@@ -153,7 +153,10 @@ r.delete('/admin/:id', adminAuth, async (req, res) => {
 })
 
 // POST Upload AssetBundle a MinIO
-r.post('/admin/upload', adminAuth, upload.fields([{ name: 'assetBundleFile', maxCount: 1 }, { name: 'qrImageFile', maxCount: 1 }, { name: 'qrImageFile2', maxCount: 1 }]), async (req, res) => {
+r.post('/admin/upload', (req, res, next) => {
+  console.log(`[ROUTE] Petición recibida en /admin/upload - Método: ${req.method} - IP: ${req.ip}`);
+  next();
+}, adminAuth, upload.fields([{ name: 'assetBundleFile', maxCount: 1 }, { name: 'qrImageFile', maxCount: 1 }, { name: 'qrImageFile2', maxCount: 1 }]), async (req, res) => {
   try {
     if (!req.files || (!req.files.assetBundleFile && !req.files.qrImageFile && !req.files.qrImageFile2)) {
       return res.status(400).json({ error: 'No se enviaron archivos' })
