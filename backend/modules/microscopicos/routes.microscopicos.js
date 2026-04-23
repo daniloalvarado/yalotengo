@@ -277,25 +277,26 @@ r.get('/public/:idAnimal', async (req, res) => {
 
     const baseUrl = `${req.protocol}://${req.get('host')}`
 
-    // --- MEJORA: Taxonomía inteligente ---
+    // --- MEJORA: Taxonomía inteligente con limpieza de espacios ---
     const taxList = []
-    if (finalModel.kingdom) taxList.push(`Reino: ${finalModel.kingdom}`)
-    if (finalModel.phylum) taxList.push(`Filo: ${finalModel.phylum}`)
-    if (finalModel.subphylum) taxList.push(`Subfilo: ${finalModel.subphylum}`)
-    if (finalModel.class) taxList.push(`Clase: ${finalModel.class}`)
-    if (finalModel.subclass) taxList.push(`Subclase: ${finalModel.subclass}`)
-    if (finalModel.order) taxList.push(`Orden: ${finalModel.order}`)
-    if (finalModel.family) taxList.push(`Familia: ${finalModel.family}`)
-    if (finalModel.genus) taxList.push(`Género: ${finalModel.genus}`)
-    if (finalModel.scientificName) taxList.push(`Especie: ${finalModel.scientificName}`)
+    if (finalModel.kingdom?.trim()) taxList.push(`Reino: ${finalModel.kingdom.trim()}`)
+    if (finalModel.phylum?.trim()) taxList.push(`Filo: ${finalModel.phylum.trim()}`)
+    if (finalModel.subphylum?.trim()) taxList.push(`Subfilo: ${finalModel.subphylum.trim()}`)
+    if (finalModel.class?.trim()) taxList.push(`Clase: ${finalModel.class.trim()}`)
+    if (finalModel.subclass?.trim()) taxList.push(`Subclase: ${finalModel.subclass.trim()}`)
+    if (finalModel.order?.trim()) taxList.push(`Orden: ${finalModel.order.trim()}`)
+    if (finalModel.family?.trim()) taxList.push(`Familia: ${finalModel.family.trim()}`)
+    if (finalModel.genus?.trim()) taxList.push(`Género: ${finalModel.genus.trim()}`)
+    if (finalModel.scientificName?.trim()) taxList.push(`Especie: ${finalModel.scientificName.trim()}`)
 
-    // Si no hay campos biológicos, no mostramos el encabezado "Taxonomía"
+    // Si no hay campos biológicos reales, mandamos taxonomía vacía
     const taxHeader = taxList.length > 0 ? "Taxonomía\n" : ""
+    const taxonomiaFinal = taxList.length > 0 ? `${taxHeader}${taxList.join('\n')}` : ""
 
     res.json({
       nombre: finalModel.vernacularName || finalModel.scientificName || "Sin nombre",
       nombre_cientifico: finalModel.scientificName || "",
-      taxonomia: `${taxHeader}${taxList.join('\n')}`,
+      taxonomia: taxonomiaFinal,
       descripcion: finalModel.taxonRemarks,
       url_modelo: finalModel.assetBundleFileName
         ? `${baseUrl}/uploads/microscopicos/${finalModel.assetBundleFileName}`

@@ -269,14 +269,24 @@ public class ControladorInfo : MonoBehaviour
     {
         // 1. Limpiamos y preparamos los 3 campos
         if (txtNombre != null) { txtNombre.text = textoNombre; txtNombre.maxVisibleCharacters = 0; }
-        if (txtTaxonomia != null) { txtTaxonomia.text = textoTaxonomia; txtTaxonomia.maxVisibleCharacters = 0; }
+        
+        // --- DINÁMICO: Si no hay taxonomía, ocultamos el objeto para que no ocupe espacio ---
+        if (txtTaxonomia != null) { 
+            bool tieneTax = !string.IsNullOrEmpty(textoTaxonomia.Trim());
+            txtTaxonomia.gameObject.SetActive(tieneTax);
+            if (tieneTax) {
+                txtTaxonomia.text = textoTaxonomia; 
+                txtTaxonomia.maxVisibleCharacters = 0; 
+            }
+        }
+
         if (txtDescripcion != null) { txtDescripcion.text = textoDescripcion; txtDescripcion.maxVisibleCharacters = 0; }
         
         yield return new WaitForSeconds(0.3f);
         
-        // 2. Animamos en orden: Nombre -> Taxonomía -> Descripción
+        // 2. Animamos en orden: Nombre -> Taxonomía (si existe) -> Descripción
         if (txtNombre) { txtNombre.ForceMeshUpdate(); yield return AnimarTexto(txtNombre); }
-        if (txtTaxonomia) { txtTaxonomia.ForceMeshUpdate(); yield return AnimarTexto(txtTaxonomia); }
+        if (txtTaxonomia && txtTaxonomia.gameObject.activeSelf) { txtTaxonomia.ForceMeshUpdate(); yield return AnimarTexto(txtTaxonomia); }
         if (txtDescripcion) { txtDescripcion.ForceMeshUpdate(); yield return AnimarTexto(txtDescripcion); }
     }
 
