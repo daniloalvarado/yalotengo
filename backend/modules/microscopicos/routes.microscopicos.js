@@ -218,29 +218,29 @@ r.post('/admin/upload', adminAuth, upload.fields([{ name: 'assetBundleFile', max
 r.get('/public/targets', async (req, res) => {
   try {
     const models = await Microscopico.findAll({
-      where: {
-        estado: 'activo'
-      },
-      attributes: ['scientificName', 'qr_image_url', 'qr_image_url2', 'assetBundleFileName']
+      where: { estado: 'activo' },
+      attributes: ['id', 'qr_image_url', 'qr_image_url2', 'assetBundleFileName']
     })
 
     const baseUrl = process.env.APP_URL || 'http://108.181.191.82.sslip.io:8070'
-
     const targets = []
 
     models.forEach(m => {
       const modelUrl = m.assetBundleFileName ? `${baseUrl}/uploads/microscopicos/${m.assetBundleFileName}` : null
+      
+      // Usamos el ID como identificador único y seguro
+      const targetIdentifier = m.id.toString()
 
       if (m.qr_image_url) {
         targets.push({
-          name: m.scientificName,
+          name: targetIdentifier,
           url: `${baseUrl}/uploads/microscopicos/${m.qr_image_url}`,
           url_modelo: modelUrl
         })
       }
       if (m.qr_image_url2) {
         targets.push({
-          name: m.scientificName,
+          name: targetIdentifier,
           url: `${baseUrl}/uploads/microscopicos/${m.qr_image_url2}`,
           url_modelo: modelUrl
         })
@@ -254,21 +254,18 @@ r.get('/public/targets', async (req, res) => {
   }
 })
 
-// GET modelo por ID para Unity (o por scientificName si se prefiere)
-// La app de Unity espera el JSON para leerlo, justo como lo hacía con Firebase
+// GET modelo por ID para Unity
 r.get('/public/:idAnimal', async (req, res) => {
   try {
-    // Replace + with space because UnityWebRequest.EscapeURL uses + for spaces
     const idParam = req.params.idAnimal.replace(/\+/g, ' ')
 
-    // Buscamos por nombre científico exacto, nombre común (parcial) o ID numérico
     const finalModel = await Microscopico.findOne({
       where: {
         estado: 'activo',
         [Op.or]: [
+          { id: isNaN(parseInt(idParam)) ? 0 : parseInt(idParam) },
           { scientificName: idParam },
-          { vernacularName: { [Op.like]: `%${idParam}%` } },
-          { id: isNaN(parseInt(idParam)) ? 0 : parseInt(idParam) }
+          { vernacularName: { [Op.like]: `%${idParam}%` } }
         ]
       },
       include: [{ model: Translation, as: 'translations' }]
@@ -278,11 +275,9 @@ r.get('/public/:idAnimal', async (req, res) => {
       return res.status(404).json({ error: 'Modelo no encontrado' })
     }
 
-    // Devolvemos el JSON compatible con (o mapeable fácilmente) en Unity
-    // Creamos la URL absoluta del modelo 3D usando MinIO Proxy (ej: /uploads/microscopicos/file.bundle)
     const baseUrl = `${req.protocol}://${req.get('host')}`
 
-    // Taxonomía estructurada con etiquetas y saltos de línea (\n) para mejor lectura en Unity
+    // --- MEJORA: Taxonomía inteligente ---
     const taxList = []
     if (finalModel.kingdom) taxList.push(`Reino: ${finalModel.kingdom}`)
     if (finalModel.phylum) taxList.push(`Filo: ${finalModel.phylum}`)
@@ -294,23 +289,22 @@ r.get('/public/:idAnimal', async (req, res) => {
     if (finalModel.genus) taxList.push(`Género: ${finalModel.genus}`)
     if (finalModel.scientificName) taxList.push(`Especie: ${finalModel.scientificName}`)
 
+    // Si no hay campos biológicos, no mostramos el encabezado "Taxonomía"
+    const taxHeader = taxList.length > 0 ? "Taxonomía\n" : ""
+
     res.json({
-      nombre: finalModel.vernacularName || finalModel.scientificName,
-      nombre_cientifico: finalModel.scientificName,
-      taxonomia: `Taxonomía\n${taxList.join('\n')}`,
+      nombre: finalModel.vernacularName || finalModel.scientificName || "Sin nombre",
+      nombre_cientifico: finalModel.scientificName || "",
+      taxonomia: `${taxHeader}${taxList.join('\n')}`,
       descripcion: finalModel.taxonRemarks,
-      // Construimos la URL al archivo guardado en el storage
       url_modelo: finalModel.assetBundleFileName
         ? `${baseUrl}/uploads/microscopicos/${finalModel.assetBundleFileName}`
         : null,
-      // Mandamos las traducciones dinámicas
       traducciones: finalModel.translations || [],
       fuente: finalModel.fuente,
       tematica: finalModel.tematica,
       qr_image_url: finalModel.qr_image_url,
       qr_image_url2: finalModel.qr_image_url2,
-
-      // Mandar el resto de info Darwin Core por si la necesita
       darwinCore: finalModel
     })
   } catch (error) {
