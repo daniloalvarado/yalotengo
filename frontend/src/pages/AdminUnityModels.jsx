@@ -147,9 +147,7 @@ export default function AdminUnityModels() {
         const toastId = toast.info(`Subiendo archivo: ${file.name}. Por favor espera...`, { autoClose: false });
 
         try {
-            const { data } = await api.post('/microscopicos/admin/upload', formDataUpload, {
-                headers: { 'Content-Type': 'multipart/form-data' }
-            })
+            const { data } = await api.post('/microscopicos/admin/upload', formDataUpload)
             if (type === 'asset' && data.assetBundleFileName) {
                 setFormData(prev => ({ ...prev, assetBundleFileName: data.assetBundleFileName }))
                 toast.success('AssetBundle subido correctamente')
