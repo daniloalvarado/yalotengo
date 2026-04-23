@@ -163,43 +163,43 @@ r.post('/admin/upload', adminAuth, upload.fields([{ name: 'assetBundleFile', max
 
     if (req.files.assetBundleFile) {
       const assetFile = req.files.assetBundleFile[0]
-      console.log(`[UPLOAD] Recibido archivo 3D: ${assetFile.originalname} (${assetFile.size} bytes)`);
-      console.log(`[UPLOAD] Iniciando subida a MinIO en carpeta 'microscopicos'...`);
-
+      if (req.body.oldFile) {
+        await deleteFile('microscopicos', req.body.oldFile);
+      }
       const filename = await uploadFile(
         assetFile.buffer,
         'microscopicos',
         assetFile.originalname,
         assetFile.mimetype || 'application/octet-stream'
       )
-
-      console.log(`[UPLOAD] ¡Subida a MinIO completada! Nombre final: ${filename}`);
       response.assetBundleFileName = filename
     }
 
     if (req.files.qrImageFile) {
       const qrFile = req.files.qrImageFile[0]
-      console.log(`[UPLOAD] Recibido Marcador AR: ${qrFile.originalname} (${qrFile.size} bytes)`);
+      if (req.body.oldFile) {
+        await deleteFile('microscopicos', req.body.oldFile);
+      }
       const filename = await uploadFile(
         qrFile.buffer,
         'microscopicos',
         qrFile.originalname,
         qrFile.mimetype
       )
-      console.log(`[UPLOAD] Marcador AR subido: ${filename}`);
       response.qr_image_url = filename
     }
 
     if (req.files.qrImageFile2) {
       const qrFile2 = req.files.qrImageFile2[0]
-      console.log(`[UPLOAD] Recibido Marcador Secundario: ${qrFile2.originalname} (${qrFile2.size} bytes)`);
+      if (req.body.oldFile) {
+        await deleteFile('microscopicos', req.body.oldFile);
+      }
       const filename = await uploadFile(
         qrFile2.buffer,
         'microscopicos',
         qrFile2.originalname,
         qrFile2.mimetype
       )
-      console.log(`[UPLOAD] Marcador Secundario subido: ${filename}`);
       response.qr_image_url2 = filename
     }
 

@@ -131,8 +131,6 @@ export default function AdminUnityModels() {
         const file = e.target.files?.[0];
         if (!file) return;
 
-        console.log(`[FRONTEND] INICIANDO SUBIDA: ${file.name} (Tipo: ${type}, Tamaño: ${file.size} bytes)`);
-
         if (type === 'asset') setUploadingAsset(true);
         else if (type === 'qr') setUploadingQr(true);
         else setUploadingQr2(true);
@@ -147,9 +145,7 @@ export default function AdminUnityModels() {
         const toastId = toast(`Subiendo ${file.name}...`, { icon: '⏳' });
 
         try {
-            console.log("[FRONTEND] Enviando petición POST a /microscopicos/admin/upload...");
             const { data } = await api.post('/microscopicos/admin/upload', formDataUpload);
-            console.log("[FRONTEND] Respuesta del servidor recibida:", data);
 
             if (type === 'asset' && data.assetBundleFileName) {
                 setFormData(prev => ({ ...prev, assetBundleFileName: data.assetBundleFileName }));
@@ -162,10 +158,8 @@ export default function AdminUnityModels() {
                 toast.success('Marcador Secundario actualizado');
             }
         } catch (err) {
-            console.error("[FRONTEND] ERROR CRÍTICO EN SUBIDA:", err);
-            toast.error('Fallo en la comunicación con el servidor');
+            toast.error('Fallo en la comunicación');
         } finally {
-            console.log("[FRONTEND] Proceso de subida finalizado.");
             setUploadingAsset(false);
             setUploadingQr(false);
             setUploadingQr2(false); 
@@ -599,7 +593,7 @@ export default function AdminUnityModels() {
                                 <span className="text-sm font-medium text-gray-700 mb-2 block">Archivo 3D (.molde / .glb)</span>
                                 <input type="file" ref={fileInputRef} onChange={(e) => handleFileUpload(e, 'asset')} accept=".molde,.glb" className="hidden" />
                                 <div className="flex flex-col gap-2">
-                                    <button type="button" onClick={() => fileInputRef.current?.click()} disabled={uploadingAsset} className="flex items-center justify-center gap-2 w-full py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm disabled:opacity-50 transition-colors">
+                                    <button type="button" onClick={() => fileInputRef.current?.click()} disabled={uploadingAsset} className={`flex items-center justify-center gap-2 w-full py-2 rounded-lg text-sm transition-colors ${uploadingAsset ? 'upload-loading' : 'bg-gray-100 hover:bg-gray-200'}`}>
                                         <ArrowUpTrayIcon className="w-4 h-4" />
                                         {uploadingAsset ? 'Subiendo...' : 'Subir Modelo 3D'}
                                     </button>
@@ -616,7 +610,7 @@ export default function AdminUnityModels() {
                                 <span className="text-sm font-medium text-gray-700 mb-2 block">Marcador AR(JPG/PNG)</span>
                                 <input type="file" ref={qrInputRef} onChange={(e) => handleFileUpload(e, 'qr')} accept="image/png, image/jpeg" className="hidden" />
                                 <div className="flex flex-col gap-2">
-                                    <button type="button" onClick={() => qrInputRef.current?.click()} disabled={uploadingQr} className="flex items-center justify-center gap-2 w-full py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-lg text-sm disabled:opacity-50 transition-colors">
+                                    <button type="button" onClick={() => qrInputRef.current?.click()} disabled={uploadingQr} className={`flex items-center justify-center gap-2 w-full py-2 rounded-lg text-sm transition-colors ${uploadingQr ? 'upload-loading' : 'bg-indigo-50 hover:bg-indigo-100 text-indigo-700'}`}>
                                         <ArrowUpTrayIcon className="w-4 h-4" />
                                         {uploadingQr ? 'Subiendo...' : 'Subir Foto'}
                                     </button>
@@ -642,7 +636,7 @@ export default function AdminUnityModels() {
                                 <span className="text-sm font-medium text-gray-700 mb-2 block">Marcador AR(JPG/PNG)</span>
                                 <input type="file" ref={qrInput2Ref} onChange={(e) => handleFileUpload(e, 'qr2')} accept="image/png, image/jpeg" className="hidden" />
                                 <div className="flex flex-col gap-2">
-                                    <button type="button" onClick={() => qrInput2Ref.current?.click()} disabled={uploadingQr2} className="flex items-center justify-center gap-2 w-full py-2 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg text-sm disabled:opacity-50 transition-colors">
+                                    <button type="button" onClick={() => qrInput2Ref.current?.click()} disabled={uploadingQr2} className={`flex items-center justify-center gap-2 w-full py-2 rounded-lg text-sm transition-colors ${uploadingQr2 ? 'upload-loading' : 'bg-blue-50 hover:bg-blue-100 text-blue-700'}`}>
                                         <ArrowUpTrayIcon className="w-4 h-4" />
                                         {uploadingQr2 ? 'Subiendo...' : 'Subir Foto'}
                                     </button>
@@ -685,6 +679,20 @@ export default function AdminUnityModels() {
                     </div>
                 </form>
             </AnimatedModal>
+
+            <style>{`
+                @keyframes upload-shimmer {
+                    0% { background-position: -200% 0; }
+                    100% { background-position: 200% 0; }
+                }
+                .upload-loading {
+                    background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
+                    background-size: 200% 100%;
+                    animation: upload-shimmer 1.5s infinite linear;
+                    color: #9ca3af !important;
+                    cursor: not-allowed;
+                }
+            `}</style>
         </div>
     )
 }
