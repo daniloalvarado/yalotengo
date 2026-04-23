@@ -144,7 +144,7 @@ export default function AdminUnityModels() {
         const oldFile = type === 'asset' ? formData.assetBundleFileName : (type === 'qr' ? formData.qr_image_url : formData.qr_image_url2);
         if (oldFile) formDataUpload.append('oldFile', oldFile);
 
-        const toastId = toast.info(`Subiendo ${file.name}...`, { autoClose: false });
+        const toastId = toast(`Subiendo ${file.name}...`, { icon: '⏳' });
 
         try {
             console.log("[FRONTEND] Enviando petición POST a /microscopicos/admin/upload...");
@@ -168,7 +168,6 @@ export default function AdminUnityModels() {
             console.log("[FRONTEND] Proceso de subida finalizado.");
             setUploadingAsset(false);
             setUploadingQr(false);
-            setUploadingQr2(true); // Esto lo corrijo a false en el siguiente paso si es necesario
             setUploadingQr2(false); 
             toast.dismiss(toastId);
         }
