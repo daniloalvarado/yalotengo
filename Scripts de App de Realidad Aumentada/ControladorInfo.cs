@@ -164,7 +164,17 @@ public class ControladorInfo : MonoBehaviour
             }
 
             // --- PREPARACIÓN DE TEXTOS PARA EL EFECTO ---
-            string tituloCompleto = nombreDefinitivo;
+            string tituloCompleto = "";
+
+            // --- CHIP DE TEMÁTICA ---
+            if (!string.IsNullOrEmpty(datos.tematica))
+            {
+                // Formato de "chip" verde esmeralda usando etiquetas de TextMeshPro
+                // <size=50%>\n</size> crea un espaciado extra similar a un margin-bottom
+                tituloCompleto += $"<mark=#10b98150><color=#064e3b><b> {datos.tematica.ToUpper()} </b></color></mark>\n<size=50%>\n</size>";
+            }
+
+            tituloCompleto += nombreDefinitivo;
             
             // Verificamos que tenga nombre científico y no sea exactamente igual al nombre común
             if (!string.IsNullOrEmpty(datos.nombre_cientifico) && nombreDefinitivo.ToLower() != datos.nombre_cientifico.ToLower())

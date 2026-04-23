@@ -323,8 +323,9 @@ public class LectorApiAR : MonoBehaviour
         // REINICIO DE POSICIÓN
         modeloObj.transform.localPosition = new Vector3(0f, 0.05f, 0.5f);
         
-        // ROTACIÓN INICIAL (Ajustada para que no salgan 'parados', sino de perfil)
-        modeloObj.transform.localEulerAngles = new Vector3(0f, -45f, 0f);
+        // ROTACIÓN INICIAL (Unificada para que miren a la cámara ladeados a la izquierda)
+        // Usamos 210 en Y, que es la rotación que confirmó el usuario que funciona para GLB
+        modeloObj.transform.localEulerAngles = new Vector3(0f, 210f, 0f);
         
         // ESCALA INICIAL
         modeloObj.transform.localScale = Vector3.one;
