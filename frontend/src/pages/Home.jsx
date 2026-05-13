@@ -22,18 +22,13 @@ export default function Home() {
   return (
     <div className="fixed inset-0 w-full h-screen overflow-hidden bg-black">
 
-      {/* --- VIDEO DE FONDO --- */}
+      {/* --- IMAGEN DE PORTADA --- */}
       <div className="absolute inset-0 z-0">
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
+        <img
+          src="/portada.jpg"
+          alt="Portada"
           className="w-full h-full object-cover"
-          preload="auto"
-        >
-          <source src="/banner.mp4" type="video/mp4" />
-        </video>
+        />
         <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/65 to-black/80"></div>
       </div>
 
