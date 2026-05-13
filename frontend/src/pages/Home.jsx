@@ -25,7 +25,7 @@ export default function Home() {
       {/* --- IMAGEN DE PORTADA --- */}
       <div className="absolute inset-0 z-0">
         <img
-          src="/portada.jpg"
+          src="/portada.webp"
           alt="Portada"
           className="w-full h-full object-cover"
         />
