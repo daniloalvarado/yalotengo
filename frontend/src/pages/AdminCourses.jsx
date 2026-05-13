@@ -32,6 +32,7 @@ export default function AdminCourses() {
     const [formData, setFormData] = useState({})
     const [attemptedSubmit, setAttemptedSubmit] = useState(false)
     const [uploadingImage, setUploadingImage] = useState(false)
+    const [isSaving, setIsSaving] = useState(false)
     const imageInputRef = useRef(null)
 
     useEffect(() => {
@@ -165,6 +166,7 @@ export default function AdminCourses() {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
+        if (isSaving) return;
         setAttemptedSubmit(true)
 
         // Validation fields
@@ -179,6 +181,7 @@ export default function AdminCourses() {
             return
         }
 
+        setIsSaving(true)
         try {
             const payload = { ...formData, cou_int_seats: Number(formData.seats) }
 
@@ -193,6 +196,8 @@ export default function AdminCourses() {
             fetchCourses()
         } catch (e) {
             toast.error(e.response?.data?.error || 'Error al guardar')
+        } finally {
+            setIsSaving(false)
         }
     }
 
@@ -444,11 +449,11 @@ export default function AdminCourses() {
                         <button type="button" onClick={() => setShowModal(false)} className="flex-1 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">Cancelar</button>
                         <button
                             type="submit"
-                            disabled={uploadingImage}
+                            disabled={uploadingImage || isSaving}
                             className="flex-1 px-4 py-2 text-white rounded-lg hover:opacity-90 disabled:opacity-50"
                             style={{ backgroundColor: THEME.primary }}
                         >
-                            {editItem ? 'Guardar' : 'Crear'}
+                            {isSaving ? 'Guardando...' : (editItem ? 'Guardar' : 'Crear')}
                         </button>
                     </div>
                 </form>

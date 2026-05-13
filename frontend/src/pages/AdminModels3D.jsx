@@ -34,6 +34,7 @@ export default function AdminModels3D() {
     const [formData, setFormData] = useState({})
     const [attemptedSubmit, setAttemptedSubmit] = useState(false)
     const [uploading, setUploading] = useState(false)
+    const [isSaving, setIsSaving] = useState(false)
     const fileInputRef = useRef(null)
     const imageInputRef = useRef(null)
 
@@ -146,6 +147,8 @@ export default function AdminModels3D() {
 
     const handleStatusSubmit = async (e) => {
         e.preventDefault()
+        if (isSaving) return;
+        setIsSaving(true)
         try {
             await api.put(`/admin/models3d/purchase/${statusEditItem.id}/status`, {
                 status: statusForm.status,
@@ -156,6 +159,8 @@ export default function AdminModels3D() {
             fetchPurchases()
         } catch (e) {
             toast.error('Error al actualizar estado')
+        } finally {
+            setIsSaving(false)
         }
     }
 
@@ -244,6 +249,7 @@ export default function AdminModels3D() {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
+        if (isSaving) return;
         setAttemptedSubmit(true)
 
         const currentCat = formData.category || modelCategory
@@ -264,6 +270,7 @@ export default function AdminModels3D() {
             payload.printedImage = formData.glbFilename
         }
 
+        setIsSaving(true)
         try {
             if (editItem) {
                 await api.put(`/admin/models3d/${editItem.mod_int_id}`, payload)
@@ -276,6 +283,8 @@ export default function AdminModels3D() {
             fetchModels()
         } catch (e) {
             toast.error(e.response?.data?.error || 'Error al guardar')
+        } finally {
+            setIsSaving(false)
         }
     }
 
@@ -627,11 +636,11 @@ export default function AdminModels3D() {
                         <button type="button" onClick={() => setShowModal(false)} className="flex-1 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">Cancelar</button>
                         <button
                             type="submit"
-                            disabled={uploading}
+                            disabled={uploading || isSaving}
                             className="flex-1 px-4 py-2 text-white rounded-lg hover:opacity-90 disabled:opacity-50"
                             style={{ backgroundColor: THEME.primary }}
                         >
-                            {editItem ? 'Guardar' : 'Crear'}
+                            {isSaving ? 'Guardando...' : (editItem ? 'Guardar' : 'Crear')}
                         </button>
                     </div>
                 </form>
@@ -671,8 +680,8 @@ export default function AdminModels3D() {
                     </label>
 
                     <div className="pt-2">
-                        <button type="submit" className="w-full py-2 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 transition-colors shadow">
-                            Actualizar Estado
+                        <button type="submit" disabled={isSaving} className="w-full py-2 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 disabled:opacity-50 transition-colors shadow">
+                            {isSaving ? 'Actualizando...' : 'Actualizar Estado'}
                         </button>
                     </div>
                 </form>

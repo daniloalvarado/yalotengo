@@ -40,6 +40,7 @@ public class GestorMarcadoresDinamicos : MonoBehaviour
     private Dictionary<string, Transform> marcadoresVisibles = new Dictionary<string, Transform>();
     private string idTargetActivo = "";
     private ulong totalBytesCargados = 0; 
+    private HashSet<string> marcadoresCreados = new HashSet<string>(); // Control de duplicados
     private LectorApiAR lectorApi; // Caché para el comunicador de modelos
 
     void Start()
@@ -180,34 +181,71 @@ public class GestorMarcadoresDinamicos : MonoBehaviour
                         // SANITIZAR NOMBRE PARA VUFORIA (Evitar acentos y caracteres raros que causan el error INTERNAL)
                         string safeTargetName = System.Text.RegularExpressions.Regex.Replace(targetName, @"[^a-zA-Z0-9_\- ]", "_");
 
-                        // COPIA DE TEXTURA SEGURA (Vuforia a veces exige formato específico legible)
-                        Texture2D textSegura = new Texture2D(textura.width, textura.height, TextureFormat.RGB24, false);
+                        // 1. PREVENCIÓN DE DUPLICADOS: Vuforia crashea si le das un nombre que ya existe
+                        if (marcadoresCreados.Contains(safeTargetName))
+                        {
+                            Debug.LogWarning($"[Vuforia] El marcador '{safeTargetName}' ya existe. Ignorando duplicado para evitar crash.");
+                            exito = true;
+                            continue;
+                        }
+
+                        // 2. PREVENCIÓN DE IMÁGENES CORRUPTAS: Si la URL devuelve un error 404 HTML, 
+                        // Unity crea una textura genérica de 8x8. Vuforia rechaza texturas tan pequeñas con error INTERNAL.
+                        if (textura.width < 32 || textura.height < 32)
+                        {
+                            Debug.LogError($"[Vuforia] Error crítico: La imagen de '{safeTargetName}' es diminuta ({textura.width}x{textura.height}). Probablemente el link está roto o devolvió un 404.");
+                            intentos--;
+                            if (intentos > 0)
+                            {
+                                yield return new WaitForSeconds(1.5f);
+                                continue;
+                            }
+                            else
+                            {
+                                exito = true; // Salimos del bucle gracefully
+                                continue;
+                            }
+                        }
+
+                        // 3. COPIA DE TEXTURA SEGURA: Usar RGBA32 es más seguro en móviles
+                        Texture2D textSegura = new Texture2D(textura.width, textura.height, TextureFormat.RGBA32, false);
                         textSegura.SetPixels(textura.GetPixels());
                         textSegura.Apply();
 
-                        // --- MAGIA DE VUFORIA ---
-                        var mTarget = VuforiaBehaviour.Instance.ObserverFactory.CreateImageTarget(textSegura, 0.1f, safeTargetName);
-
-                        if (mTarget != null)
+                        try
                         {
-                            mTarget.OnTargetStatusChanged += (observer, status) => 
+                            // --- MAGIA DE VUFORIA ---
+                            var mTarget = VuforiaBehaviour.Instance.ObserverFactory.CreateImageTarget(textSegura, 0.1f, safeTargetName);
+
+                            if (mTarget != null)
                             {
-                                if (status.Status == Status.TRACKED || status.Status == Status.EXTENDED_TRACKED)
+                                marcadoresCreados.Add(safeTargetName); // Marcamos como creado con éxito
+                                
+                                mTarget.OnTargetStatusChanged += (observer, status) => 
                                 {
-                                    if (!marcadoresVisibles.ContainsKey(safeTargetName))
-                                        marcadoresVisibles.Add(safeTargetName, mTarget.transform);
-                                }
-                                else
-                                {
-                                    if (marcadoresVisibles.ContainsKey(safeTargetName))
-                                        marcadoresVisibles.Remove(safeTargetName);
-                                    
-                                    if (idTargetActivo == safeTargetName)
-                                        idTargetActivo = "";
-                                }
-                            };
-                            Debug.Log("Vuforia: Marcador inyectado con éxito: " + targetName);
+                                    if (status.Status == Status.TRACKED || status.Status == Status.EXTENDED_TRACKED)
+                                    {
+                                        if (!marcadoresVisibles.ContainsKey(safeTargetName))
+                                            marcadoresVisibles.Add(safeTargetName, mTarget.transform);
+                                    }
+                                    else
+                                    {
+                                        if (marcadoresVisibles.ContainsKey(safeTargetName))
+                                            marcadoresVisibles.Remove(safeTargetName);
+                                        
+                                        if (idTargetActivo == safeTargetName)
+                                            idTargetActivo = "";
+                                    }
+                                };
+                                Debug.Log("Vuforia: Marcador inyectado con éxito: " + targetName);
+                            }
                         }
+                        catch (System.Exception e)
+                        {
+                            Debug.LogError($"[Vuforia] CRASH INTERNO al crear el marcador '{safeTargetName}': {e.Message}");
+                        }
+                        
+                        // Si llegamos aquí, haya funcionado o no, marcamos éxito para no reintentar un error de Vuforia
                         exito = true;
                     }
                 }

@@ -33,6 +33,7 @@ export default function AdminBooks() {
     const [attemptedSubmit, setAttemptedSubmit] = useState(false)
     const [uploadingPdf, setUploadingPdf] = useState(false)
     const [uploadingCover, setUploadingCover] = useState(false)
+    const [isSaving, setIsSaving] = useState(false)
     const pdfInputRef = useRef(null)
     const coverInputRef = useRef(null)
 
@@ -190,6 +191,7 @@ export default function AdminBooks() {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
+        if (isSaving) return;
         setAttemptedSubmit(true)
 
         // Validation fields
@@ -214,6 +216,7 @@ export default function AdminBooks() {
             return
         }
 
+        setIsSaving(true)
         try {
             if (editItem) {
                 await api.put(`/admin/books/${editItem.boo_int_id}`, formData)
@@ -226,6 +229,8 @@ export default function AdminBooks() {
             fetchBooks()
         } catch (e) {
             toast.error(e.response?.data?.error || 'Error al guardar')
+        } finally {
+            setIsSaving(false)
         }
     }
 
@@ -486,11 +491,11 @@ export default function AdminBooks() {
                         <button type="button" onClick={() => setShowModal(false)} className="flex-1 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">Cancelar</button>
                         <button
                             type="submit"
-                            disabled={uploadingPdf || uploadingCover}
+                            disabled={uploadingPdf || uploadingCover || isSaving}
                             className="flex-1 px-4 py-2 text-white rounded-lg hover:opacity-90 disabled:opacity-50"
                             style={{ backgroundColor: THEME.primary }}
                         >
-                            {editItem ? 'Guardar' : 'Crear'}
+                            {isSaving ? 'Guardando...' : (editItem ? 'Guardar' : 'Crear')}
                         </button>
                     </div>
                 </form>

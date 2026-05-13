@@ -208,4 +208,37 @@ public class GestorColeccionLocal : MonoBehaviour
 
         return lista.items.Exists(x => x.id == idModelo);
     }
+
+    /// <summary>
+    /// Elimina un modelo descargado permanentemente (archivos + índice)
+    /// </summary>
+    public bool EliminarModeloLocal(string idModelo)
+    {
+        if (string.IsNullOrEmpty(idModelo)) return false;
+
+        string rutaIndice = Path.Combine(DirectorioBase, "indice.json");
+        if (!File.Exists(rutaIndice)) return false;
+
+        string json = File.ReadAllText(rutaIndice);
+        ListaColecciones lista = JsonUtility.FromJson<ListaColecciones>(json);
+        if (lista == null) return false;
+
+        int index = lista.items.FindIndex(x => x.id == idModelo);
+        if (index < 0) return false;
+
+        // 1. Borrar la carpeta física con todos sus archivos (modelo, foto, etc.)
+        string carpetaModelo = Path.Combine(DirectorioBase, idModelo);
+        if (Directory.Exists(carpetaModelo))
+        {
+            Directory.Delete(carpetaModelo, true);
+            Debug.Log("[COLECCIÓN] Carpeta eliminada: " + carpetaModelo);
+        }
+
+        // 2. Quitar del índice JSON
+        lista.items.RemoveAt(index);
+        File.WriteAllText(rutaIndice, JsonUtility.ToJson(lista, true));
+        Debug.Log("[COLECCIÓN] Modelo '" + idModelo + "' eliminado del índice.");
+
+        return true;
+    }
 }

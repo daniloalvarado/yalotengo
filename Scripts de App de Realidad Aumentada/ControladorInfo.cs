@@ -18,6 +18,10 @@ public class ControladorInfo : MonoBehaviour
     private RectTransform rectBoton;
     private Vector2 posOriginal, anchorMinOriginal, anchorMaxOriginal, pivotOriginal;
     private CanvasGroup panelCanvasGroup;
+    
+    // UI Dinámica para descarga
+    private GameObject objDescargandoDinamico;
+    private Coroutine rutinaDescargando;
 
     // --- DICCIONARIOS DE TRADUCCIÓN ---
     private readonly Dictionary<string, string> dictEN = new Dictionary<string, string> {
@@ -80,11 +84,18 @@ public class ControladorInfo : MonoBehaviour
         LimpiarPanel();
     }
 
-    public void MostrarDatosFirebase(LectorApiAR.ModeloResponse datos, GameObject modelo3DEscaneado)
+    public void MostrarDatosFirebase(LectorApiAR.ModeloResponse datos, GameObject modelo3DEscaneado, bool animarTexto = true)
     {
         // 1. SI LLEGAN DATOS DE TEXTO (Paso 1 del LectorApi)
-        if (datos != null)
+        if (datos != null && animarTexto)
         {
+            // --- NUEVO: Forzar reseteo del Scroll siempre que lleguen nuevos datos ---
+            if (panelInformacion != null)
+            {
+                ScrollRect scroll = panelInformacion.GetComponentInChildren<ScrollRect>();
+                if (scroll != null) scroll.verticalNormalizedPosition = 1f;
+            }
+
             // === DEBUG CRÍTICO: ¿Llega la fuente desde el JSON? ===
             Debug.Log($"[AR-DEBUG] nombre={datos.nombre}, fuente={(datos.fuente ?? "NULL")}, desc_len={datos.descripcion?.Length}");
             
@@ -169,9 +180,19 @@ public class ControladorInfo : MonoBehaviour
             // --- CHIP DE TEMÁTICA ---
             if (!string.IsNullOrEmpty(datos.tematica))
             {
-                // Formato de "chip" verde esmeralda usando etiquetas de TextMeshPro
-                // <size=50%>\n</size> crea un espaciado extra similar a un margin-bottom
-                tituloCompleto += $"<mark=#10b98150><color=#064e3b><b> {datos.tematica.ToUpper()} </b></color></mark>\n<size=50%>\n</size>";
+                string[] palabras = datos.tematica.ToUpper().Split(' ');
+                string tematicaChips = "";
+                
+                for (int i = 0; i < palabras.Length; i++)
+                {
+                    // Truco definitivo 4.0: Eliminar los guiones transparentes que causan problemas en móviles.
+                    // En su lugar, usamos el atributo nativo 'padding' de TextMeshPro y reducimos levemente el tamaño.
+                    tematicaChips += $"<size=85%><nobr><mark=#10b98150 padding=\"30,30,0,0\"><color=#064e3b><b>{palabras[i]}</b></color></mark></nobr></size>";
+                    
+                    if (i < palabras.Length - 1) tematicaChips += "\n"; // Bajamos de renglón cada palabra para simetría total
+                }
+                
+                tituloCompleto += $"<align=center>{tematicaChips}</align>\n<size=50%>\n</size>";
             }
 
             tituloCompleto += nombreDefinitivo;
@@ -250,8 +271,12 @@ public class ControladorInfo : MonoBehaviour
 
     public void MostrarExitoDescarga()
     {
+        if (rutinaDescargando != null) StopCoroutine(rutinaDescargando);
+        if (objDescargandoDinamico != null) objDescargandoDinamico.SetActive(false);
+
         if (btnDescargar != null) {
-            btnDescargar.interactable = false;
+            btnDescargar.gameObject.SetActive(true); // Reaparece
+            btnDescargar.interactable = false;       // Bloqueado
         }
 
         // Activamos un modal/pop-up flotante que felicite al usuario
@@ -263,6 +288,58 @@ public class ControladorInfo : MonoBehaviour
     public void OcultarBotonDescarga()
     {
         if (btnDescargar != null) btnDescargar.gameObject.SetActive(false);
+    }
+
+    public void DesactivarBotonDescargaTemporalmente()
+    {
+        if (btnDescargar != null) btnDescargar.gameObject.SetActive(false); // Desaparece
+        
+        if (rutinaDescargando != null) StopCoroutine(rutinaDescargando);
+        rutinaDescargando = StartCoroutine(RutinaMostrarDescargando());
+    }
+
+    private IEnumerator RutinaMostrarDescargando()
+    {
+        // Esperamos medio segundo. Si la descarga es rápida, esto nunca se mostrará.
+        yield return new WaitForSeconds(0.5f);
+
+        if (objDescargandoDinamico == null && btnDescargar != null)
+        {
+            // Creamos un texto por código para no tener que modificar los Prefabs en el editor
+            objDescargandoDinamico = new GameObject("Txt_Descargando_Auto");
+            objDescargandoDinamico.transform.SetParent(btnDescargar.transform.parent, false);
+
+            TextMeshProUGUI txt = objDescargandoDinamico.AddComponent<TextMeshProUGUI>();
+            
+            string idiomaActual = PlayerPrefs.GetString("IdiomaSeleccionado", "es").ToLower();
+            string texto = "Descargando...";
+            if (idiomaActual == "en") texto = "Downloading...";
+            else if (idiomaActual == "pt") texto = "Baixando...";
+            else if (idiomaActual == "it") texto = "Scaricando...";
+            else if (idiomaActual == "fr") texto = "Téléchargement...";
+
+            // Mark negro semitransparente de fondo para que se lea siempre
+            txt.text = $"<mark=#000000AA><color=#FFFFFF> {texto} </color></mark>";
+            txt.fontSize = 45;
+            txt.alignment = TextAlignmentOptions.MidlineRight;
+
+            RectTransform rtBoton = btnDescargar.GetComponent<RectTransform>();
+            RectTransform rtTexto = objDescargandoDinamico.GetComponent<RectTransform>();
+            
+            rtTexto.anchorMin = rtBoton.anchorMin;
+            rtTexto.anchorMax = rtBoton.anchorMax;
+            rtTexto.pivot = new Vector2(1f, 0.5f); // Crece hacia la izquierda
+            rtTexto.anchoredPosition = rtBoton.anchoredPosition;
+            rtTexto.sizeDelta = new Vector2(400f, 100f); 
+        }
+
+        if (objDescargandoDinamico != null) objDescargandoDinamico.SetActive(true);
+    }
+
+    public void ForzarMostrarPanel()
+    {
+        if (panelInformacion != null) panelInformacion.SetActive(true);
+        if (panelCanvasGroup != null) panelCanvasGroup.alpha = 1f;
     }
 
     private IEnumerator TypewriterSecuencial(string textoNombre, string textoTaxonomia, string textoDescripcion)
@@ -393,6 +470,9 @@ public class ControladorInfo : MonoBehaviour
 
     public void LimpiarPanel()
     {
+        if (rutinaDescargando != null) StopCoroutine(rutinaDescargando);
+        if (objDescargandoDinamico != null) objDescargandoDinamico.SetActive(false);
+
         if (txtNombre != null) 
         {
             ControladorIdioma ci = FindObjectOfType<ControladorIdioma>();
@@ -416,6 +496,14 @@ public class ControladorInfo : MonoBehaviour
         {
             panelInformacion.SetActive(true);
             if (panelCanvasGroup != null) panelCanvasGroup.alpha = 1f;
+            
+            // --- NUEVO: Resetear la posición del Scroll al inicio ---
+            ScrollRect scroll = panelInformacion.GetComponentInChildren<ScrollRect>();
+            if (scroll != null)
+            {
+                // 1f significa "arriba de todo"
+                scroll.verticalNormalizedPosition = 1f;
+            }
         }
         
         RestaurarBoton();

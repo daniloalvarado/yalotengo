@@ -22,6 +22,7 @@ public class GestorGaleria : MonoBehaviour
     private List<ResumenColeccion> todosLosModelos = new List<ResumenColeccion>();
     private string tematicaActiva = "";
     private List<GameObject> chipsTematicaInstancias = new List<GameObject>();
+    private GameObject objMensajeVacio; // Para mostrar mensaje cuando la galería está vacía
 
     // Colores de Biodiversidad para los chips
     private readonly Color colorChipActivo = new Color(0.18f, 0.49f, 0.20f, 1f);    // Verde bosque #2E7D32
@@ -166,6 +167,24 @@ public class GestorGaleria : MonoBehaviour
         chip.GetComponentInChildren<TextMeshProUGUI>().text = etiquetaVisiva;
         chip.name = "Chip_" + valorTematica; // Para identificar cuál es cuál
         
+        // --- PULIDO: Fuente grande + caja adaptable al texto ---
+        TextMeshProUGUI txtChipRef = chip.GetComponentInChildren<TextMeshProUGUI>();
+        if (txtChipRef != null) 
+        { 
+            txtChipRef.fontSize = 46; 
+            txtChipRef.enableAutoSizing = false;
+        }
+        // Calcular el ancho real que necesita el texto + padding
+        RectTransform rtChip = chip.GetComponent<RectTransform>();
+        if (rtChip != null && txtChipRef != null)
+        {
+            txtChipRef.ForceMeshUpdate(); // Forzar cálculo del tamaño del texto
+            float anchoTexto = txtChipRef.GetPreferredValues(etiquetaVisiva).x;
+            float anchoFinal = anchoTexto + 50f; // 25px de padding a cada lado
+            if (anchoFinal < 160f) anchoFinal = 160f; // Mínimo 160px
+            rtChip.sizeDelta = new Vector2(anchoFinal, 80);
+        }
+
         chipsTematicaInstancias.Add(chip);
 
         Button btn = chip.GetComponent<Button>();
@@ -215,6 +234,44 @@ public class GestorGaleria : MonoBehaviour
             (m.nombre.ToLower().Contains(termLower) || m.nombre_cientifico.ToLower().Contains(termLower))
         ).ToList();
 
+        // Limpiar mensaje vacío anterior si existe
+        if (objMensajeVacio != null) Destroy(objMensajeVacio);
+
+        // Si está vacía, mostramos mensaje
+        if (filtrados.Count == 0)
+        {
+            objMensajeVacio = new GameObject("TxtMensajeVacio");
+            // Lo anclamos al padre del grid (usualmente el Viewport o ScrollRect) para que no sea afectado por el LayoutGroup
+            objMensajeVacio.transform.SetParent(contenedorTarjetas.parent, false);
+            
+            TextMeshProUGUI txtMsg = objMensajeVacio.AddComponent<TextMeshProUGUI>();
+            
+            if (todosLosModelos.Count == 0)
+            {
+                txtMsg.text = "¡Aún no hay modelos descargados!";
+            }
+            else
+            {
+                txtMsg.text = "No se encontraron modelos con esa búsqueda";
+            }
+
+            txtMsg.fontSize = 45;
+            txtMsg.color = Color.white; // Blanco brillante para que resalte sobre el fondo oscuro
+            txtMsg.fontStyle = FontStyles.Bold; // Negrita para mayor legibilidad
+            txtMsg.alignment = TextAlignmentOptions.Center;
+            txtMsg.enableWordWrapping = true;
+            
+            RectTransform rtMsg = objMensajeVacio.GetComponent<RectTransform>();
+            // Anclamos al centro horizontal (0.5) y bastante más arriba de la mitad (0.75)
+            rtMsg.anchorMin = new Vector2(0.5f, 0.75f);
+            rtMsg.anchorMax = new Vector2(0.5f, 0.75f);
+            rtMsg.pivot = new Vector2(0.5f, 0.5f);
+            // Le damos un tamaño fijo de ancho para que el texto salte de línea si es necesario
+            rtMsg.sizeDelta = new Vector2(900, 300);
+            rtMsg.anchoredPosition = Vector2.zero;
+            return;
+        }
+
         // 3. Crear Tarjetas
         foreach (var modelo in filtrados)
         {
@@ -230,6 +287,7 @@ public class GestorGaleria : MonoBehaviour
                 if (nombreObj.Contains("común") || nombreObj.Contains("comun") || nombreObj.Contains("tmp") || nombreObj == "text" || nombreObj == "titulo")
                 {
                     txt.text = modelo.nombre;
+                    txt.fontSize = 44; // Fuente grande para el nombre común
                     txt.enableWordWrapping = true;
                     txt.overflowMode = TextOverflowModes.Ellipsis;
                     txt.maxVisibleLines = 2;
@@ -239,6 +297,7 @@ public class GestorGaleria : MonoBehaviour
                 if (nombreObj.Contains("científico") || nombreObj.Contains("cientifico") || nombreObj == "subtitulo")
                 {
                     txt.text = $"<i>{modelo.nombre_cientifico}</i>";
+                    txt.fontSize = 40; // Fuente para el nombre científico
                     txt.enableWordWrapping = true;
                     txt.overflowMode = TextOverflowModes.Ellipsis;
                     txt.maxVisibleLines = 1;
@@ -284,6 +343,159 @@ public class GestorGaleria : MonoBehaviour
                     }
                 });
             }
+
+            // --- BOTÓN ELIMINAR en esquina superior derecha ---
+            CrearBotonEliminar(tarjeta, modelo);
         }
+    }
+
+    private void CrearBotonEliminar(GameObject tarjeta, ResumenColeccion modelo)
+    {
+        // Crear botón como ÚLTIMO hijo (se dibuja encima de todo)
+        GameObject btnObj = new GameObject("BtnEliminar");
+        btnObj.transform.SetParent(tarjeta.transform, false);
+
+        // Añadir RectTransform
+        RectTransform rt = btnObj.AddComponent<RectTransform>();
+        rt.anchorMin = new Vector2(1, 1); // Esquina superior derecha
+        rt.anchorMax = new Vector2(1, 1);
+        rt.pivot = new Vector2(1, 1);
+        rt.anchoredPosition = new Vector2(-8, -8);
+        rt.sizeDelta = new Vector2(70, 70);
+
+        // Fondo rojo
+        Image imgBg = btnObj.AddComponent<Image>();
+        imgBg.color = new Color(0.85f, 0.15f, 0.15f, 0.9f);
+        imgBg.raycastTarget = true; // Importante: captura el toque
+
+        // Texto "X"
+        GameObject txtObj = new GameObject("TxtX");
+        txtObj.transform.SetParent(btnObj.transform, false);
+        RectTransform rtTxt = txtObj.AddComponent<RectTransform>();
+        rtTxt.anchorMin = Vector2.zero;
+        rtTxt.anchorMax = Vector2.one;
+        rtTxt.offsetMin = Vector2.zero;
+        rtTxt.offsetMax = Vector2.zero;
+        
+        TextMeshProUGUI txtX = txtObj.AddComponent<TextMeshProUGUI>();
+        txtX.text = "X";
+        txtX.fontSize = 36;
+        txtX.fontStyle = TMPro.FontStyles.Bold;
+        txtX.color = Color.white;
+        txtX.alignment = TMPro.TextAlignmentOptions.Center;
+        txtX.enableAutoSizing = false;
+        txtX.raycastTarget = false; // El fondo captura, no el texto
+
+        // Click -> Mostrar modal de confirmación
+        Button btnElim = btnObj.AddComponent<Button>();
+        btnElim.targetGraphic = imgBg;
+        
+        var modeloCap = modelo;
+        btnElim.onClick.AddListener(() => {
+            MostrarModalConfirmacion(modeloCap);
+        });
+    }
+
+    private void MostrarModalConfirmacion(ResumenColeccion modelo)
+    {
+        // --- FONDO OSCURO que cubre toda la pantalla ---
+        GameObject modal = new GameObject("ModalConfirmacion");
+        Canvas canvasRaiz = GetComponentInParent<Canvas>();
+        if (canvasRaiz == null) canvasRaiz = FindObjectOfType<Canvas>();
+        modal.transform.SetParent(canvasRaiz.transform, false);
+
+        RectTransform rtModal = modal.AddComponent<RectTransform>();
+        rtModal.anchorMin = Vector2.zero;
+        rtModal.anchorMax = Vector2.one;
+        rtModal.offsetMin = Vector2.zero;
+        rtModal.offsetMax = Vector2.zero;
+
+        Image fondoOscuro = modal.AddComponent<Image>();
+        fondoOscuro.color = new Color(0, 0, 0, 0.7f);
+        fondoOscuro.raycastTarget = true;
+
+        // --- CAJA BLANCA CENTRAL ---
+        GameObject caja = new GameObject("CajaModal");
+        caja.transform.SetParent(modal.transform, false);
+        RectTransform rtCaja = caja.AddComponent<RectTransform>();
+        rtCaja.anchorMin = new Vector2(0.5f, 0.5f);
+        rtCaja.anchorMax = new Vector2(0.5f, 0.5f);
+        rtCaja.pivot = new Vector2(0.5f, 0.5f);
+        rtCaja.sizeDelta = new Vector2(700, 400);
+        Image imgCaja = caja.AddComponent<Image>();
+        imgCaja.color = new Color(0.15f, 0.15f, 0.15f, 0.95f);
+
+        // --- TEXTO DE PREGUNTA ---
+        GameObject txtPregObj = new GameObject("TxtPregunta");
+        txtPregObj.transform.SetParent(caja.transform, false);
+        RectTransform rtPreg = txtPregObj.AddComponent<RectTransform>();
+        rtPreg.anchorMin = new Vector2(0.05f, 0.5f);
+        rtPreg.anchorMax = new Vector2(0.95f, 0.95f);
+        rtPreg.offsetMin = Vector2.zero;
+        rtPreg.offsetMax = Vector2.zero;
+        TextMeshProUGUI txtPreg = txtPregObj.AddComponent<TextMeshProUGUI>();
+        txtPreg.text = "¿Eliminar <b>" + modelo.nombre + "</b> permanentemente?";
+        txtPreg.fontSize = 44; // Aumentado para mejor legibilidad
+        txtPreg.color = Color.white;
+        txtPreg.alignment = TMPro.TextAlignmentOptions.Center;
+        txtPreg.enableAutoSizing = false;
+        txtPreg.enableWordWrapping = true;
+
+        // --- BOTÓN "SÍ" (rojo) ---
+        CrearBotonModal(caja, "Sí, eliminar", new Color(0.85f, 0.15f, 0.15f, 1f), 
+            new Vector2(-160, -130), () => {
+                GestorColeccionLocal gestor = GestorColeccionLocal.Instancia;
+                if (gestor == null) gestor = FindObjectOfType<GestorColeccionLocal>();
+                
+                if (gestor != null)
+                {
+                    string idModelo = modelo.nombre_cientifico;
+                    if (string.IsNullOrEmpty(idModelo)) idModelo = modelo.nombre;
+                    gestor.EliminarModeloLocal(idModelo);
+                    CargarColeccionLocales();
+                }
+                Destroy(modal);
+            });
+
+        // --- BOTÓN "NO" (gris) ---
+        CrearBotonModal(caja, "Cancelar", new Color(0.4f, 0.4f, 0.4f, 1f), 
+            new Vector2(160, -130), () => {
+                Destroy(modal);
+            });
+    }
+
+    private void CrearBotonModal(GameObject padre, string texto, Color color, Vector2 posicion, UnityEngine.Events.UnityAction accion)
+    {
+        GameObject btnObj = new GameObject("Btn_" + texto);
+        btnObj.transform.SetParent(padre.transform, false);
+        RectTransform rt = btnObj.AddComponent<RectTransform>();
+        rt.anchorMin = new Vector2(0.5f, 0.5f);
+        rt.anchorMax = new Vector2(0.5f, 0.5f);
+        rt.pivot = new Vector2(0.5f, 0.5f);
+        rt.anchoredPosition = posicion;
+        rt.sizeDelta = new Vector2(280, 80);
+
+        Image img = btnObj.AddComponent<Image>();
+        img.color = color;
+
+        GameObject txtObj = new GameObject("Txt");
+        txtObj.transform.SetParent(btnObj.transform, false);
+        RectTransform rtTxt = txtObj.AddComponent<RectTransform>();
+        rtTxt.anchorMin = Vector2.zero;
+        rtTxt.anchorMax = Vector2.one;
+        rtTxt.offsetMin = Vector2.zero;
+        rtTxt.offsetMax = Vector2.zero;
+        TextMeshProUGUI tmp = txtObj.AddComponent<TextMeshProUGUI>();
+        tmp.text = texto;
+        tmp.fontSize = 38; // Textos de "Sí" y "Cancelar" más grandes
+        tmp.fontStyle = TMPro.FontStyles.Bold;
+        tmp.color = Color.white;
+        tmp.alignment = TMPro.TextAlignmentOptions.Center;
+        tmp.enableAutoSizing = false;
+        tmp.raycastTarget = false;
+
+        Button btn = btnObj.AddComponent<Button>();
+        btn.targetGraphic = img;
+        btn.onClick.AddListener(accion);
     }
 }

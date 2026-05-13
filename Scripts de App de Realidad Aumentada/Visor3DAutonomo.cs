@@ -19,6 +19,7 @@ public class Visor3DAutonomo : MonoBehaviour
     private GameObject fondoGeneralRef;  // Para ocultar el fondo de la selva y dejar ver el 3D
     private GameObject btnCerrarRef;     // Botón cerrar del visor
     private GameObject btnMenuRef;       // Botón Volver que el usuario clonó
+    private int versionCarga = 0;        // Para cancelar cargas asíncronas si el usuario sale rápido
 
     void Awake()
     {
@@ -29,6 +30,9 @@ public class Visor3DAutonomo : MonoBehaviour
 
     public async void CargarModeloLocal(ResumenColeccion modeloData)
     {
+        versionCarga++;
+        int miVersion = versionCarga;
+
         Debug.Log("[VISOR3D] === INICIO CargarModeloLocal === Modelo: " + modeloData.nombre);
         
         if (!File.Exists(modeloData.rutaModeloLocal))
@@ -75,7 +79,7 @@ public class Visor3DAutonomo : MonoBehaviour
             if (panelGaleriaRef == null) panelGaleriaRef = BuscarObjetoIncluyendoInactivos("PanelGaleria");
         }
 
-        // Auto-buscar FondoGeneral para ocultarlo (y dejar ver el 3D)
+        // Auto-buscar FondoGeneral para asegurar que no bloquee clics
         if (fondoGeneralRef == null)
         {
             fondoGeneralRef = BuscarObjetoIncluyendoInactivos("FondoGeneral");
@@ -100,10 +104,28 @@ public class Visor3DAutonomo : MonoBehaviour
         {
             panelVisor3D.SetActive(true);
             Debug.Log("[VISOR3D] Panel Informativo activado.");
+            
+            // --- HACK DEFINITIVO DE PROFUNDIDADES ---
+            // Obligamos a los Canvas a adoptar las distancias correctas por código
+            Canvas canvasUI = panelVisor3D.GetComponentInParent<Canvas>();
+            if (canvasUI != null && canvasUI.renderMode == RenderMode.ScreenSpaceCamera)
+            {
+                canvasUI.planeDistance = 1f; // UI pegada a la cámara (adelante del todo)
+            }
         }
         else
         {
             Debug.LogWarning("[VISOR3D] panelVisor3D sigue NULL.");
+        }
+
+        // Obligamos al fondo a irse bien atrás
+        if (fondoGeneralRef != null)
+        {
+            Canvas canvasDelFondo = fondoGeneralRef.GetComponentInParent<Canvas>();
+            if (canvasDelFondo != null && canvasDelFondo.renderMode == RenderMode.ScreenSpaceCamera)
+            {
+                canvasDelFondo.planeDistance = 100f; // Fondo allá a lo lejos
+            }
         }
 
         if (btnCerrarRef != null)
@@ -147,8 +169,8 @@ public class Visor3DAutonomo : MonoBehaviour
             {
                 anclaObjeto3D = new GameObject("AnclaVisor3D").transform;
                 anclaObjeto3D.SetParent(cam.transform, false);
-                // Lo alejamos de nuevo para evitar que se corte y lo subimos aún más (0.3f)
-                anclaObjeto3D.localPosition = new Vector3(0f, 0.3f, 1.2f);
+                // Lo alejamos significativamente (2.5f) para que quede físicamente DETRÁS de la UI
+                anclaObjeto3D.localPosition = new Vector3(0f, 0.2f, 2.5f);
                 anclaObjeto3D.localEulerAngles = Vector3.zero;
             }
             else
@@ -174,13 +196,12 @@ public class Visor3DAutonomo : MonoBehaviour
         // 5. Mostrar la Data en la UI lateral
         if (controladorInfo != null)
         {
-            // CRÍTICO: Encender el sub-panel de información ANTES de mandar los datos, 
-            // de lo contrario la corrutina de texto falla porque el Canvas está apagado.
-            if (controladorInfo.panelInformacion != null)
-            {
-                controladorInfo.panelInformacion.SetActive(true);
-            }
+            // Aseguramos que el panel principal esté ACTIVO y sea VISIBLE
+            if (panelVisor3D != null) panelVisor3D.SetActive(true);
+            if (btnMenuRef != null) btnMenuRef.SetActive(true);
 
+            // Forzamos visibilidad en el controlador
+            controladorInfo.ForzarMostrarPanel(); 
             controladorInfo.OcultarBotonDescarga();
             controladorInfo.MostrarDatosFirebase(pseudoRespuesta, null);
             Debug.Log("[VISOR3D] Info del modelo enviada al panel de texto.");
@@ -195,6 +216,7 @@ public class Visor3DAutonomo : MonoBehaviour
                 byte[] bytes = File.ReadAllBytes(modeloData.rutaModeloLocal);
                 var gltf = new GltfImport();
                 bool success = await gltf.Load(bytes, new Uri("file:///" + modeloData.rutaModeloLocal));
+                if (miVersion != versionCarga) return;
 
                 if (success)
                 {
@@ -203,12 +225,17 @@ public class Visor3DAutonomo : MonoBehaviour
 
                     var instantiator = new GameObjectInstantiator(gltf, modeloCargadoEnVisor.transform);
                     success = await gltf.InstantiateMainSceneAsync(instantiator);
+                    if (miVersion != versionCarga) 
+                    {
+                        if (modeloCargadoEnVisor != null) Destroy(modeloCargadoEnVisor);
+                        return;
+                    }
 
                     if (success)
                     {
                         RepararMaterialesLocales(modeloCargadoEnVisor, gltf);
-                        ConfigurarInteraccionModelo();
-                        if (controladorInfo != null) controladorInfo.MostrarDatosFirebase(null, modeloCargadoEnVisor);
+                        ConfigurarInteraccionModelo(modeloData);
+                        if (controladorInfo != null) controladorInfo.MostrarDatosFirebase(null, modeloCargadoEnVisor, false);
                         Debug.Log("[VISOR3D] ¡Modelo GLB cargado con éxito!");
                     }
                     else
@@ -229,6 +256,7 @@ public class Visor3DAutonomo : MonoBehaviour
                 var bundleRequest = AssetBundle.LoadFromFileAsync(modeloData.rutaModeloLocal);
                 while (!bundleRequest.isDone) {
                     await Task.Yield();
+                    if (miVersion != versionCarga) return;
                 }
                 
                 AssetBundle bundle = bundleRequest.assetBundle;
@@ -240,8 +268,8 @@ public class Visor3DAutonomo : MonoBehaviour
                     modeloCargadoEnVisor = Instantiate(prefab, anclaObjeto3D);
                     bundle.Unload(false);
 
-                    ConfigurarInteraccionModelo();
-                    if (controladorInfo != null) controladorInfo.MostrarDatosFirebase(null, modeloCargadoEnVisor);
+                    ConfigurarInteraccionModelo(modeloData);
+                    if (controladorInfo != null) controladorInfo.MostrarDatosFirebase(null, modeloCargadoEnVisor, false);
                     Debug.Log("[VISOR3D] ¡Modelo AssetBundle cargado con éxito!");
                 }
                 else
@@ -256,13 +284,34 @@ public class Visor3DAutonomo : MonoBehaviour
         }
     }
 
-    private void ConfigurarInteraccionModelo()
+    private void ConfigurarInteraccionModelo(ResumenColeccion datos)
     {
-        // POSICIÓN EN EL ANCLA
-        modeloCargadoEnVisor.transform.localPosition = Vector3.zero;
+        // REINICIO DE POSICIÓN DINÁMICO
+        float offsetY = 0f;
+        float offsetZ = 0f;
 
-        // ROTACIÓN INICIAL: Rotado 210 grados para que quede ladeado a la izquierda
-        modeloCargadoEnVisor.transform.localEulerAngles = new Vector3(0f, 210f, 0f);
+        // Si es personaje histórico, lo bajamos un poco para que el panel no tape su cara
+        if (datos != null && !string.IsNullOrEmpty(datos.tematica))
+        {
+            if (datos.tematica.ToLower().Contains("personajes") || datos.tematica.ToLower().Contains("históricos"))
+            {
+                offsetY = -0.2f; // Lo subimos un poco (antes -0.4f)
+                offsetZ = 0f;    
+            }
+        }
+
+        modeloCargadoEnVisor.transform.localPosition = new Vector3(0f, offsetY, offsetZ);
+
+        // ROTACIÓN INICIAL
+        float rotacionY = 210f; // Por defecto: ladeados a la izquierda (para bichos/insectos)
+        if (datos != null && !string.IsNullOrEmpty(datos.tematica))
+        {
+            if (datos.tematica.ToLower().Contains("personajes") || datos.tematica.ToLower().Contains("históricos"))
+            {
+                rotacionY = 265f; // Personajes históricos: perfil hacia la izquierda (330 grados)
+            }
+        }
+        modeloCargadoEnVisor.transform.localEulerAngles = new Vector3(0f, rotacionY, 0f);
 
         // ESCALA INICIAL
         modeloCargadoEnVisor.transform.localScale = Vector3.one;
@@ -272,15 +321,15 @@ public class Visor3DAutonomo : MonoBehaviour
             modeloCargadoEnVisor.AddComponent<BoxCollider>();
         }
 
-        // Normalizar su tamaño exacto a 0.15 como en AR
-        NormalizarTamaño(modeloCargadoEnVisor);
+        // Normalizar su tamaño según temática
+        NormalizarTamaño(modeloCargadoEnVisor, datos);
 
         // Quitamos RotarLento para que no gire solo, pero mantenemos RotarConDedo
         RotarConDedo scriptTacto = modeloCargadoEnVisor.AddComponent<RotarConDedo>();
         scriptTacto.modeloAGirar = modeloCargadoEnVisor.transform;
     }
 
-    private void NormalizarTamaño(GameObject objeto)
+    private void NormalizarTamaño(GameObject objeto, ResumenColeccion datos)
     {
         MeshRenderer[] renderers = objeto.GetComponentsInChildren<MeshRenderer>();
         if (renderers.Length == 0) return;
@@ -294,14 +343,26 @@ public class Visor3DAutonomo : MonoBehaviour
         float tamañoActual = Mathf.Max(totalBounds.size.x, totalBounds.size.y, totalBounds.size.z);
         if (tamañoActual > 0)
         {
-            // Tamaño grande (0.8) ideal para pantalla 2D
-            float factorEscala = 0.8f / tamañoActual; 
+            // Tamaño base (0.8) ideal para pantalla 2D
+            float targetSize = 1.8f;
+
+            // Si es personaje histórico, lo hacemos mucho más grande (2.2) para que ocupe más pantalla
+            if (datos != null && !string.IsNullOrEmpty(datos.tematica))
+            {
+                if (datos.tematica.ToLower().Contains("personajes") || datos.tematica.ToLower().Contains("históricos"))
+                {
+                    targetSize = 2.2f; 
+                }
+            }
+
+            float factorEscala = targetSize / tamañoActual; 
             objeto.transform.localScale *= factorEscala;
         }
     }
 
     public void CerrarVisor()
     {
+        versionCarga++; // Cancela cualquier carga de modelo en progreso
         Debug.Log("[VISOR3D] Cerrando visor...");
         
         if (modeloCargadoEnVisor != null) Destroy(modeloCargadoEnVisor);

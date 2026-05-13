@@ -11,6 +11,7 @@ export default function AdminQuotes3D() {
     const [selectedQuote, setSelectedQuote] = useState(null)
     const [adminResponse, setAdminResponse] = useState('')
     const [statusEdit, setStatusEdit] = useState('')
+    const [isSaving, setIsSaving] = useState(false)
 
     const parseImages = (imgs) => {
         if (!imgs) return []
@@ -52,6 +53,8 @@ export default function AdminQuotes3D() {
 
     const handleResponseSubmit = async (e) => {
         e.preventDefault()
+        if (isSaving) return;
+        setIsSaving(true)
         try {
             await api.patch(`/cotizaciones3d/admin/${selectedQuote.cot_int_id}`, {
                 status: statusEdit,
@@ -62,6 +65,8 @@ export default function AdminQuotes3D() {
             loadQuotes()
         } catch (error) {
             toast.error('Error al guardar respuesta')
+        } finally {
+            setIsSaving(false)
         }
     }
 
@@ -238,7 +243,9 @@ export default function AdminQuotes3D() {
 
                             <div className="mt-6 flex justify-end gap-3 pt-4 border-t">
                                 <button type="button" onClick={closeResponseModal} className="px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-lg">Cancelar</button>
-                                <button type="submit" className="px-5 py-2 text-sm bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-lg">Guardar Respuesta</button>
+                                <button type="submit" disabled={isSaving} className="px-5 py-2 text-sm bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-lg disabled:opacity-50">
+                                    {isSaving ? 'Guardando...' : 'Guardar Respuesta'}
+                                </button>
                             </div>
                         </form>
                     </div>

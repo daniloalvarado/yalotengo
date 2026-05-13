@@ -120,6 +120,7 @@ export default function AdminReservations() {
         .reduce((sum, r) => sum + Number(r.guests), 0);
 
     const handleWalkIn = async () => {
+        if (loading) return;
         if (!selectedSlot) { toast.error('Selecciona un horario'); return }
         const result = await Swal.fire({
             title: '¿Registrar Venta?',
@@ -159,21 +160,27 @@ export default function AdminReservations() {
     }, [])
 
     const handleValidate = async (id) => {
+        if (loading) return;
+        setLoading(true)
         try {
             await api.post(`/admin/reservations/${id}/validate`)
             toast.success('Entrada validada')
             loadReservations(); loadStats()
         } catch (err) { toast.error(err.response?.data?.error || 'Error al validar') }
+        finally { setLoading(false) }
     }
 
     const handleCancel = async (id) => {
+        if (loading) return;
         const result = await Swal.fire({ title: '¿Cancelar reserva?', text: "Esta acción no se puede deshacer.", icon: 'warning', showCancelButton: true, confirmButtonColor: THEME.danger, cancelButtonColor: THEME.gray, confirmButtonText: 'Sí, cancelar' });
         if (result.isConfirmed) {
+            setLoading(true)
             try {
                 await api.delete(`/admin/reservations/${id}`)
                 Swal.fire({ title: 'Cancelada', text: 'La reserva ha sido eliminada.', icon: 'success', confirmButtonColor: THEME.primary });
                 loadReservations(); loadStats()
             } catch (err) { toast.error(err.response?.data?.error || 'Error al cancelar') }
+            finally { setLoading(false) }
         }
     }
 

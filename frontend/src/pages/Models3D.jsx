@@ -244,7 +244,7 @@ export default function Models3D() {
                                 {activeTab === 'DIGITALIZADO' ? (
                                     <>
                                         <Model3DViewer
-                                            glbUrl={`${import.meta.env.VITE_API_BASE || 'http://localhost:3000'}/uploads/models/${model.mod_txt_glb_filename}`}
+                                            glbUrl={`${api.defaults.baseURL?.replace(/\/api\/?$/, '')}/uploads/models/${model.mod_txt_glb_filename}`}
                                             height="100%"
                                         />
                                         <div className="absolute top-3 right-3 bg-emerald-500 text-white text-xs font-bold px-2 py-1 rounded-full">
@@ -254,7 +254,7 @@ export default function Models3D() {
                                 ) : (
                                     <div className="w-full h-full">
                                         <img
-                                            src={`${import.meta.env.VITE_API_BASE || 'http://localhost:3000'}/uploads/impresos/${model.mod_txt_glb_filename}`}
+                                            src={`${api.defaults.baseURL?.replace(/\/api\/?$/, '')}/uploads/impresos/${model.mod_txt_glb_filename}`}
                                             alt={model.mod_txt_name}
                                             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                                             onError={(e) => e.target.src = 'https://placehold.co/400?text=No+Image'}

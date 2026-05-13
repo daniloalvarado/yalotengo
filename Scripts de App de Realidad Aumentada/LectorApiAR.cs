@@ -117,7 +117,7 @@ public class LectorApiAR : MonoBehaviour
         using (UnityWebRequest www = UnityWebRequest.Get(requestUrl))
         {
             www.certificateHandler = new BypassCertificate();
-            www.timeout = 30;
+            www.timeout = 120; // Aumentado para conexiones lentas
             yield return www.SendWebRequest();
 
             if (www.result != UnityWebRequest.Result.Success)
@@ -199,7 +199,7 @@ public class LectorApiAR : MonoBehaviour
         using (UnityWebRequest www = UnityWebRequest.Get(url))
         {
             www.certificateHandler = new BypassCertificate();
-            www.timeout = 30;
+            www.timeout = 120; // Aumentado para modelos pesados (4MB+)
             yield return www.SendWebRequest();
 
             if (www.result == UnityWebRequest.Result.Success)
@@ -221,7 +221,7 @@ public class LectorApiAR : MonoBehaviour
                     if (modeloCargadoEnEscena != null) Destroy(modeloCargadoEnEscena);
 
                     modeloCargadoEnEscena = Instantiate(prefab, Camera.main.transform);
-                    ConfigurarModeloRecienCargado(modeloCargadoEnEscena, null); 
+                    ConfigurarModeloRecienCargado(modeloCargadoEnEscena, datos, null); 
                     
                     // --- Registrar los bytes para que el botón de descarga tenga qué guardar ---
                     if (GestorColeccionLocal.Instancia != null) {
@@ -233,7 +233,7 @@ public class LectorApiAR : MonoBehaviour
 
                     if (controladorInfo != null)
                     {
-                        controladorInfo.MostrarDatosFirebase(datos, modeloCargadoEnEscena);
+                        controladorInfo.MostrarDatosFirebase(datos, modeloCargadoEnEscena, false); // false = NO reiniciar animación de texto
                     }
                 }
                 else
@@ -257,7 +257,7 @@ public class LectorApiAR : MonoBehaviour
         using (UnityWebRequest www = UnityWebRequest.Get(url))
         {
             www.certificateHandler = new BypassCertificate();
-            www.timeout = 30;
+            www.timeout = 120; // Aumentado para modelos pesados
             
             var req = www.SendWebRequest();
             while (!req.isDone) await Task.Yield();
@@ -288,12 +288,12 @@ public class LectorApiAR : MonoBehaviour
 
                     if (success)
                     {
-                        ConfigurarModeloRecienCargado(modeloCargadoEnEscena, gltf);
+                        ConfigurarModeloRecienCargado(modeloCargadoEnEscena, datos, gltf);
                         Debug.Log("¡Modelo GLB normalizado y cargado con éxito!");
 
                         if (controladorInfo != null)
                         {
-                            controladorInfo.MostrarDatosFirebase(datos, modeloCargadoEnEscena);
+                            controladorInfo.MostrarDatosFirebase(datos, modeloCargadoEnEscena, false); // false = NO reiniciar animación
                         }
                     }
                     else
@@ -315,17 +315,37 @@ public class LectorApiAR : MonoBehaviour
     }
 
     // LÓGICA COMPARTIDA DE POSICIONAMIENTO, COLISIÓN Y GIRO
-    private void ConfigurarModeloRecienCargado(GameObject modeloObj, GltfImport gltf = null)
+    private void ConfigurarModeloRecienCargado(GameObject modeloObj, ModeloResponse datos, GltfImport gltf = null)
     {
         // RESCATE DE MATERIALES MORADOS DE glTFast
         RepararMaterialesMorados(modeloObj, gltf);
 
-        // REINICIO DE POSICIÓN
-        modeloObj.transform.localPosition = new Vector3(0f, 0.05f, 0.5f);
+        // REINICIO DE POSICIÓN DINÁMICO
+        float offsetY = 0.05f; // Altura estándar para bichos
+        float offsetZ = 0.5f;  // Distancia estándar
+
+        // Si es personaje histórico, lo bajamos y alejamos un poco más
+        if (datos != null && !string.IsNullOrEmpty(datos.tematica))
+        {
+            if (datos.tematica.ToLower().Contains("personajes") || datos.tematica.ToLower().Contains("históricos"))
+            {
+                offsetY = 0.0f; // Lo bajamos para que no se corte la cabeza
+                offsetZ = 0.5f;  // Lo alejamos un poco para que entre en pantalla
+            }
+        }
+
+        modeloObj.transform.localPosition = new Vector3(0f, offsetY, offsetZ);
         
-        // ROTACIÓN INICIAL (Unificada para que miren a la cámara ladeados a la izquierda)
-        // Usamos 210 en Y, que es la rotación que confirmó el usuario que funciona para GLB
-        modeloObj.transform.localEulerAngles = new Vector3(0f, 210f, 0f);
+        // ROTACIÓN INICIAL
+        float rotacionY = 210f; // Por defecto: ladeados a la izquierda (para bichos/insectos)
+        if (datos != null && !string.IsNullOrEmpty(datos.tematica))
+        {
+            if (datos.tematica.ToLower().Contains("personajes") || datos.tematica.ToLower().Contains("históricos"))
+            {
+                rotacionY = 265f; // Personajes históricos: perfil hacia la izquierda (330 grados)
+            }
+        }
+        modeloObj.transform.localEulerAngles = new Vector3(0f, rotacionY, 0f);
         
         // ESCALA INICIAL
         modeloObj.transform.localScale = Vector3.one;
@@ -339,7 +359,7 @@ public class LectorApiAR : MonoBehaviour
         scriptTacto.modeloAGirar = modeloObj.transform;
 
         // Normalizamos el tamaño de visualizacion
-        NormalizarTamaño(modeloObj);
+        NormalizarTamaño(modeloObj, datos);
         
         if (objetoLoading != null) objetoLoading.SetActive(false);
     }
@@ -421,7 +441,7 @@ public class LectorApiAR : MonoBehaviour
         Debug.LogError("Error al descargar el modelo: " + www.error);
     }
 
-    private void NormalizarTamaño(GameObject objeto)
+    private void NormalizarTamaño(GameObject objeto, ModeloResponse datos)
     {
         // 1. Obtenemos todos los MeshRenderers del modelo (hijos incluidos)
         MeshRenderer[] renderers = objeto.GetComponentsInChildren<MeshRenderer>();
@@ -439,9 +459,20 @@ public class LectorApiAR : MonoBehaviour
         
         if (tamañoActual > 0)
         {
-            // 4. Calculamos cuánto hay que multiplicar para que mida exactamente lo que dice 'escalaInicial'
-            // Si escalaInicial es 0.15f, el bicho medirá 15cm sin importar qué tan grande venía.
-            float factorEscala = escalaInicial / tamañoActual;
+            // 4. Determinar el tamaño objetivo según la temática
+            float targetSize = escalaInicial * 1.2f; 
+
+            if (datos != null && !string.IsNullOrEmpty(datos.tematica))
+            {
+                // Personaje histórico
+                if (datos.tematica.ToLower().Contains("personajes") || datos.tematica.ToLower().Contains("históricos"))
+                {
+                    targetSize = escalaInicial * 1.5f; 
+                }
+            }
+
+            // 5. Calculamos cuánto hay que multiplicar para que mida exactamente lo que dice targetSize
+            float factorEscala = targetSize / tamañoActual;
             objeto.transform.localScale *= factorEscala;
         }
     }
@@ -471,7 +502,7 @@ public class LectorApiAR : MonoBehaviour
         using (UnityWebRequest www = UnityWebRequestAssetBundle.GetAssetBundle(url))
         {
             www.certificateHandler = new BypassCertificate();
-            www.timeout = 30; // Tiempo para que el servidor responda
+            www.timeout = 120; // Tiempo extendido para precarga
             yield return www.SendWebRequest();
             if (www.result == UnityWebRequest.Result.Success)
             {
