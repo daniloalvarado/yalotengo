@@ -1,5 +1,6 @@
 import Card from '../../components/ui/Card'
 import { Tag, fmt } from './purchasesUtils'
+import api from '../../api/client'
 
 // Steps configs
 const STEPS = [
@@ -63,6 +64,7 @@ function StatusTimeline({ status, estimate }) {
 }
 
 export default function PrintedModelsTab({ printedModels = [], loading }) {
+    const API_BASE = (api.defaults.baseURL || 'http://localhost:3000').replace(/\/api\/?$/, '')
     if (loading) {
         return <div className="text-sm opacity-60">Cargando...</div>
     }
@@ -94,7 +96,7 @@ export default function PrintedModelsTab({ printedModels = [], loading }) {
                             <div className="flex items-center gap-2">
                                 <div className="w-12 h-12 rounded bg-gray-100 overflow-hidden shrink-0">
                                     <img
-                                        src={`http://localhost:3000/uploads/impresos/${model.mod_txt_glb_filename}`} // Hardcoded base for now, ideal to pass base url
+                                        src={`${API_BASE}/uploads/impresos/${model.mod_txt_glb_filename}`}
                                         alt={name}
                                         className="w-full h-full object-cover"
                                         onError={(e) => e.target.src = 'https://placehold.co/100?text=IMG'}

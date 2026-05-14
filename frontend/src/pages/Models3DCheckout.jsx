@@ -16,6 +16,7 @@ export default function Models3DCheckout() {
     const location = useLocation()
     const navigate = useNavigate()
     const model = location.state?.model
+    const API_BASE = (api.defaults.baseURL || 'http://localhost:3000').replace(/\/api\/?$/, '')
 
     const [step, setStep] = useState('payment') // 'payment' | 'success'
     const [processing, setProcessing] = useState(false)
@@ -202,7 +203,7 @@ export default function Models3DCheckout() {
                     {model.mod_txt_category === 'IMPRESO' || model.mod_txt_glb_filename?.match(/\.(jpg|jpeg|png|webp)$/i) ? (
                         <div className="aspect-[4/3] bg-gray-100">
                             <img
-                                src={`${api.defaults.baseURL || 'http://localhost:3000'}/uploads/impresos/${model.mod_txt_glb_filename}`}
+                                src={`${API_BASE}/uploads/impresos/${model.mod_txt_glb_filename}`}
                                 alt={model.mod_txt_name}
                                 className="w-full h-full object-cover"
                                 onError={(e) => e.target.src = 'https://placehold.co/400?text=No+Image'}
@@ -210,7 +211,7 @@ export default function Models3DCheckout() {
                         </div>
                     ) : (
                         <Model3DViewer
-                            glbUrl={`${api.defaults.baseURL || 'http://localhost:3000'}/uploads/models/${model.mod_txt_glb_filename}`}
+                            glbUrl={`${API_BASE}/uploads/models/${model.mod_txt_glb_filename}`}
                             height="300px"
                         />
                     )}

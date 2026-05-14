@@ -118,7 +118,7 @@ export default function Models3D() {
             if (isPrinted) {
                 toast.success(`Modelo añadido. Tienes ${qty} unidad${qty > 1 ? 'es' : ''} en el carrito`)
             } else {
-                toast.success('Modelo digital añadido al carrito')
+                toast.success('Modelo 3D añadido al carrito')
             }
 
             window.dispatchEvent(new Event('cart:update'))
