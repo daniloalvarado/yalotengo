@@ -107,7 +107,7 @@ export default function AdminModels3D() {
             fetchPurchases() // 🔄 Update purchases list immediately
             Swal.fire({
                 title: '¡Eliminado!',
-                text: 'El libro ha sido eliminado.',
+                text: 'El modelo 3D ha sido eliminado.',
                 imageUrl: '/favicon.png',
                 imageWidth: 100,
                 imageHeight: 100,

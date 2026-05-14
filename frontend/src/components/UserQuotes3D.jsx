@@ -15,6 +15,7 @@ const UserQuotes3D = forwardRef((props, ref) => {
     const [editNewImages, setEditNewImages] = useState([])
     const [editNotifyWhatsapp, setEditNotifyWhatsapp] = useState(false)
     const [editNotifyEmail, setEditNotifyEmail] = useState(false)
+    const API_BASE = (import.meta.env.VITE_API_BASE || api.defaults.baseURL || 'http://localhost:3000').replace(/\/api\/?$/, '')
 
     const parseImages = (imgs) => {
         if (!imgs) return []
@@ -230,7 +231,7 @@ const UserQuotes3D = forwardRef((props, ref) => {
                                             {editRetainedImages.map((img, i) => (
                                                 <div key={`ret-${i}`} className="relative w-16 h-16 rounded-lg overflow-hidden border group">
                                                     <img 
-                                                        src={`${import.meta.env.VITE_API_BASE || 'http://localhost:3000'}/uploads/cotizaciones/${img.filename}`} 
+                                                        src={`${API_BASE}/uploads/cotizaciones/${img.filename}`} 
                                                         className="w-full h-full object-cover" 
                                                         alt="ret"
                                                     />
@@ -296,12 +297,12 @@ const UserQuotes3D = forwardRef((props, ref) => {
                                                         {images.map((img, i) => (
                                                             <a 
                                                                 key={i} 
-                                                                href={`${import.meta.env.VITE_API_BASE || 'http://localhost:3000'}/uploads/cotizaciones/${img.filename}`}
+                                                                href={`${API_BASE}/uploads/cotizaciones/${img.filename}`}
                                                                 target="_blank" rel="noreferrer"
                                                                 className="w-12 h-12 rounded-lg overflow-hidden border block hover:opacity-80 transition-opacity"
                                                             >
                                                                 <img 
-                                                                    src={`${import.meta.env.VITE_API_BASE || 'http://localhost:3000'}/uploads/cotizaciones/${img.filename}`} 
+                                                                    src={`${API_BASE}/uploads/cotizaciones/${img.filename}`} 
                                                                     alt="ref" 
                                                                     className="w-full h-full object-cover" 
                                                                 />

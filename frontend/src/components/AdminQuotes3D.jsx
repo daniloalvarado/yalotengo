@@ -12,6 +12,7 @@ export default function AdminQuotes3D() {
     const [adminResponse, setAdminResponse] = useState('')
     const [statusEdit, setStatusEdit] = useState('')
     const [isSaving, setIsSaving] = useState(false)
+    const API_BASE = (import.meta.env.VITE_API_BASE || api.defaults.baseURL || 'http://localhost:3000').replace(/\/api\/?$/, '')
 
     const parseImages = (imgs) => {
         if (!imgs) return []
@@ -83,7 +84,7 @@ export default function AdminQuotes3D() {
             const folder = zip.folder(`cotizacion_${quote.cot_int_id}`)
 
             for (const img of images) {
-                const imgUrl = `${import.meta.env.VITE_API_BASE || 'http://localhost:3000'}/uploads/cotizaciones/${img.filename}`
+                const imgUrl = `${API_BASE}/uploads/cotizaciones/${img.filename}`
                 const response = await fetch(imgUrl)
                 const blob = await response.blob()
                 folder.file(img.originalName || img.filename, blob)
@@ -186,12 +187,12 @@ export default function AdminQuotes3D() {
                                             {images.map((img, i) => (
                                                 <a 
                                                     key={i} 
-                                                    href={`${import.meta.env.VITE_API_BASE || 'http://localhost:3000'}/uploads/cotizaciones/${img.filename}`} 
+                                                    href={`${API_BASE}/uploads/cotizaciones/${img.filename}`} 
                                                     target="_blank" rel="noreferrer"
                                                     className="shrink-0"
                                                 >
                                                     <img 
-                                                        src={`${import.meta.env.VITE_API_BASE || 'http://localhost:3000'}/uploads/cotizaciones/${img.filename}`} 
+                                                        src={`${API_BASE}/uploads/cotizaciones/${img.filename}`} 
                                                         alt="ref" 
                                                         className="w-16 h-16 rounded border object-cover hover:opacity-80 transition-opacity" 
                                                     />
