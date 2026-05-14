@@ -325,7 +325,7 @@ export default function AdminModels3D() {
                         style={{ backgroundColor: THEME.primary }}
                     >
                         <PlusIcon className="w-5 h-5" />
-                        <span>Agregar {modelCategory === 'IMPRESO' ? 'Impreso' : 'Digital'}</span>
+                        <span>{modelCategory === 'IMPRESO' ? 'Agregar Impreso' : 'Modelo 3D'}</span>
                     </button>
                 )}
             </div>
@@ -523,7 +523,7 @@ export default function AdminModels3D() {
             <AnimatedModal
                 isOpen={showModal}
                 onClose={() => setShowModal(false)}
-                title={`${editItem ? 'Editar' : 'Nuevo'} ${modelCategory === 'IMPRESO' ? 'Modelo Impreso' : 'Modelo Digital'}`}
+                title={`${editItem ? 'Editar' : 'Nuevo'} ${modelCategory === 'IMPRESO' ? 'Modelo Impreso' : 'Modelo 3D'}`}
             >
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <label className="block">
