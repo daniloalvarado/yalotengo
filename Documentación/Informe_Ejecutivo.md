@@ -45,7 +45,7 @@ Se eligió Scrum por su capacidad de gestión iterativa e incremental, ideal par
 | Nombre | Rol | Responsabilidades | Contacto |
 | :--- | :--- | :--- | :--- |
 | Alvarado Silvano, Danilo | Scrum Master / Desarrollador Fullstack | Liderar el proceso ágil y desarrollo integral del sistema. | daniloalvarado2002@gmail.com |
-| Rengifo Pinedo, Brittany Ariana | Product Owner / Líder de Proyecto | Gestión del Product Backlog y coordinación del proyecto. | brittanyrengifo@gmail.com |
+| Rengifo Pinedo, Brittany Ariana | Product Owner / Líder de Proyecto | Coordinación general, toma de decisiones, planificación y supervisión del progreso. | brittanyrengifo@gmail.com |
 | Mozombite Gastón, Fabrizio Gael | Desarrollador Backend | Desarrollo de la lógica del lado del servidor y APIs. | fabriziomozombite@gmail.com |
 | Rengifo Teagua, Axel Andre | Desarrollador Frontend | Implementación de interfaces de usuario interactivas. | axelrengifo@gmail.com |
 | Torres Flores, Julio Adrian | Analista de Sistemas | Análisis de requerimientos y documentación técnica. | juliotorres@gmail.com |
@@ -62,12 +62,12 @@ El Product Backlog contiene **36 Requisitos Funcionales** organizados por módul
 
 ### 3.2. Sprints Planificados
 
-| Sprint | Duración | Objetivo | Estado |
-| :--- | :--- | :--- | :--- |
-| **Sprint 1** | Semanas 1-2 | Levantamiento de requerimientos, análisis del sistema, definición de requisitos funcionales y casos de uso. | ✅ Completado |
-| **Sprint 2** | Semanas 3-4 | Definición de la arquitectura del sistema. Diseño del modelo de base de datos y flujos de proceso. | ✅ Completado |
-| **Sprint 3** | Semanas 5-6 | **Diseño de Interfaces Gráficas de Usuario.** Elaboración de prototipos y mockups de las pantallas principales del e-commerce y del panel administrativo. | 🔄 En curso |
-| **Sprint 4** | Semanas 7-8 | Desarrollo e implementación del sistema. Codificación de módulos, integración de componentes, pruebas y despliegue en producción. | ⏳ Pendiente |
+| Sprint | Fecha | Duración | Objetivo | Estado |
+| :--- | :--- | :--- | :--- | :--- |
+| **Sprint 1** | 14 abr – 25 abr | 2 semanas | Levantamiento de requerimientos, análisis del sistema, definición de requisitos funcionales y casos de uso. | ✅ Completado |
+| **Sprint 2** | 28 abr – 2 may | 1 semana | Definición de la arquitectura del sistema. Diseño del modelo de base de datos y flujos de proceso. | ✅ Completado |
+| **Sprint 3** | 5 may – 16 may | 2 semanas | Diseño de Interfaces Gráficas de Usuario. Elaboración de prototipos y mockups de las pantallas principales del e-commerce y del panel administrativo. | ✅ Completado |
+| **Sprint 4** | 19 may – 4 jul | 7 semanas | Desarrollo e implementación del sistema. Codificación de módulos, integración de componentes, pruebas y despliegue en producción. | ⏳ Pendiente |
 
 ---
 
@@ -81,9 +81,9 @@ A continuación se describe el diseño planificado de cada módulo del sistema, 
 - Edición de perfil con subida de avatar a MinIO.
 - Cambio de contraseña: el sistema verifica que la contraseña actual sea correcta antes de permitir el cambio, exige un mínimo de 8 caracteres para la nueva contraseña, y bloquea la opción para usuarios que se registraron vía Google OAuth.
 
-### 4.2. Módulo de Modelos 3D (RF-06 a RF-14)
+### 4.2. Módulo de Modelos 3D (RF-06 a RF-14, RF-27, RF-28)
 - Catálogo público con filtros por categoría: Digitalizado e Impreso.
-- Carrito con prevención de duplicados para digitalizados. No se puede agregar el mismo modelo si ya está en el carrito o ya fue comprado.
+- Carrito con prevención de duplicados para digitalizados.
 - Carrito con cantidad variable para modelos impresos.
 - Pasarela de pagos MercadoPago integrada.
 - Descarga segura de archivos .glb post-pago, solo para modelos digitalizados.
@@ -91,13 +91,13 @@ A continuación se describe el diseño planificado de cada módulo del sistema, 
 - Módulo de cotizaciones personalizadas con hasta 5 imágenes referenciales.
 - Panel admin: CRUD completo de modelos con subida de archivos a MinIO.
 
-### 4.3. Módulo de Libros (RF-15 a RF-17)
+### 4.3. Módulo de Libros (RF-15 a RF-17, RF-33)
 - Catálogo de libros con imagen de portada, autor y descripción.
 - Carrito con prevención de compra repetida. Si el libro ya fue comprado o ya está en el carrito, el sistema rechaza la operación para evitar cobros innecesarios.
 - Descarga automática de PDF tras confirmación de pago.
 - Panel admin: CRUD de libros con subida de imagen de portada y archivo PDF.
 
-### 4.4. Módulo de Cursos (RF-18 a RF-20)
+### 4.4. Módulo de Cursos (RF-18 a RF-20, RF-34)
 - Catálogo con cupos disponibles en tiempo real.
 - Control de cupos al momento del pago.
 - Inscripción automática post-pago.
@@ -133,59 +133,74 @@ A continuación se describe el diseño planificado de cada módulo del sistema, 
 
 El diseño de las interfaces se ha realizado siguiendo principios de **UX/UI modernos**, priorizando:
 
-- **Estética Premium:** Paleta de colores con modo claro y acentos en verde esmeralda para transmitir innovación tecnológica.
+- **Estética:** Paleta de colores con modo claro y acentos en verde esmeralda para transmitir innovación tecnológica.
 - **Responsividad:** Todas las interfaces son adaptativas a desktop, tablet y móvil.
 - **Accesibilidad:** Contraste adecuado, tipografía legible y navegación intuitiva.
 - **Feedback visual:** Animaciones de carga, toasts de confirmación, estados de botones activo/deshabilitado.
 
 ### 5.2. Principales Pantallas Diseñadas
 
-#### 5.2.1. Página de Inicio
-- Hero section con imagen de portada a pantalla completa.
-- Degradado oscuro sobre la imagen para legibilidad del texto.
-- Título "YA LO TENGO" con tipografía Black y animaciones de entrada.
-- Badge de "Tecnología e Innovación" con estilo glassmorphism.
-- Subtítulo con acentos en verde esmeralda: "INVESTIGACIÓN. DESARROLLO. INNOVACIÓN."
+A continuación se detallan las 20 interfaces principales diseñadas, describiendo las capacidades del usuario en cada una:
 
-#### 5.2.2. Página de Autenticación
-- Diseño dividido en dos columnas en escritorio: mensaje de bienvenida y formulario.
-- Tabs para alternar entre "Iniciar sesión" y "Crear cuenta".
-- Integración visual de botón "Continuar con Google".
-- Icono de ojo para mostrar/ocultar contraseña.
+#### 5.2.1. Autenticación
+Como usuario, necesito poder registrarme en la plataforma y acceder al sistema de forma segura. En esta pantalla, tengo la opción de crear una cuenta nueva o iniciar sesión ingresando mi correo electrónico y contraseña local. Alternativamente, si prefiero no recordar nuevas credenciales, puedo utilizar el botón de acceso rápido para registrarme o autenticarme de manera segura y en un solo paso mediante mi cuenta de Google.
 
-#### 5.2.3. Catálogo de Productos
-- Grid responsivo de tarjetas con imagen, título, descripción y precio.
-- Filtros por categoría: Digitalizados, Impresos y Libros.
-- Modal de vista ampliada de imagen al hacer clic.
-- Botón "Agregar al carrito" con feedback visual.
+#### 5.2.2. Página de Inicio
+Como usuario que ingresa por primera vez a Yalotengo, quiero ser recibido por una interfaz moderna e intuitiva que me invite a explorar. En esta pantalla principal, puedo visualizar un eslogan dinámico ("INVESTIGACIÓN. DESARROLLO. INNOVACIÓN.") acompañado de un diseño limpio que me permite identificar rápidamente la propuesta de valor. Desde aquí, utilizando la barra de navegación superior, puedo dirigirme de inmediato a los catálogos de Modelos 3D, Libros, Cursos o Reservas, o dirigirme directamente a mi carrito de compras mediante el botón principal.
 
-#### 5.2.4. Panel Administrativo — Modelos 3D
-- Tabla con listado de modelos: nombre, categoría, precio y estado.
-- Modal de creación/edición con formulario completo.
-- Subida de archivos con indicador de progreso: imagen de preview, modelo .glb e imágenes adicionales.
+#### 5.2.3. Módulos de los Modelos 3D - Cliente (Digitalizados)
+Como cliente interesado en visualización 3D y Realidad Aumentada, quiero explorar un catálogo específico de modelos digitales listos para descargar. En esta interfaz, navego a través de una cuadrícula de productos identificados con la etiqueta "GLB", donde puedo observar el nombre común, la taxonomía científica y el precio de cada modelo (por ejemplo, el "Ácaro de Cardo"). Desde aquí mismo, puedo tomar la decisión de añadir el archivo a mi carrito o comprarlo directamente sin tener que dar múltiples clics.
 
-#### 5.2.5. Panel Administrativo — Libros
-- Listado de libros con imagen miniatura, título y autor.
-- Formulario modal para crear/editar con subida de PDF e imagen de portada del libro.
+#### 5.2.4. Módulos de los Modelos 3D - Cliente (Impresos)
+Como cliente que desea adquirir réplicas físicas de alta calidad, necesito un espacio diferenciado del catálogo digital. En esta vista, al seleccionar la pestaña de "Impresos", encuentro las figuras físicas disponibles para envío. Puedo evaluar el costo del "Impreso 3" y proceder a añadir la figura a mi carrito de compras para que el equipo de Yalotengo gestione su producción y entrega a mi domicilio.
 
-#### 5.2.6. Panel Administrativo — Cursos
-- Gestión de cursos con control visual de cupos vendidos vs. disponibles.
-- Formulario con campos de título, descripción, precio, cupos y duración.
+#### 5.2.5. Módulos de los Modelos 3D - Cliente (Cotizaciones)
+Como cliente con necesidades específicas, quiero encargar la creación de un diseño 3D que no se encuentra en el catálogo. Al presionar el botón "Cotización Personalizada", puedo redactar mis requerimientos detallados (indicando texturas, posturas y acabados deseados) y adjuntar fotografías reales de mi familia o mascotas como referencia. Además, esta misma pantalla me permite hacer seguimiento continuo al estado de mis solicitudes previas (si están pendientes o en revisión) y elegir si deseo que el equipo me contacte por WhatsApp o por correo electrónico.
 
-#### 5.2.7. Panel Administrativo — Unity AR (Micromuseo)
-- Formulario avanzado con metadata taxonómica Darwin Core.
-- Tabs de idiomas para traducciones multilenguaje.
-- Subida de AssetBundles .unity3d, .glb y marcadores AR con preview de imagen.
+#### 5.2.6. Módulos de los Modelos 3D - Admin (Gestión de Productos)
+Como administrador del sistema, necesito mantener actualizado el catálogo de modelos 3D que ven los clientes. En este panel de gestión, tengo el control total para registrar nuevos modelos (tanto físicos como digitales en formato .glb), asignándoles un precio y subiendo las miniaturas representativas. También puedo utilizar herramientas de acción rápida para ocultar temporalmente productos agotados, editar su información o eliminar registros de la base de datos de manera intuitiva.
 
-#### 5.2.8. Panel de Reservas
-- **Venta en Taquilla:** Grid de slots horarios con estados disponible, lleno y cerrado. Panel lateral de cobro con cálculo automático del total.
-- **Escáner QR:** Visor de cámara integrado para escanear tickets en la entrada del museo.
-- **Gestión:** Tabla con filtros por fecha, estado y buscador por cliente. Estadísticas de ingresos, visitantes y aforo.
+#### 5.2.7. Módulos de los Modelos 3D - Admin (Gestión de Ventas)
+Como administrador a cargo de la logística, quiero llevar un control riguroso de las ventas de modelos 3D físicos. En esta tabla de compras, puedo visualizar qué cliente (nombre y correo) realizó un pedido, qué modelo adquirió, el monto total pagado y la fecha exacta de la transacción. Mediante el botón de gestión, puedo actualizar en tiempo real el estado del envío para que pase de "Pagado" a "Aceptado" y finalmente a "Entregado", manteniendo un flujo ordenado.
 
-#### 5.2.9. Cotizaciones 3D (Admin)
-- Listado de cotizaciones con datos del cliente, estado y preferencias de notificación.
-- Galería de imágenes referenciales con descarga en ZIP.
-- Modal de respuesta con selector de estado y campo de texto para la oferta.
+#### 5.2.8. Módulos de los Modelos 3D - Admin (Gestión de Cotizaciones)
+Como administrador encargado de ventas personalizadas, necesito revisar detalladamente los encargos de los clientes. En esta vista de atención, puedo leer las especificaciones exactas solicitadas por el cliente, descargar de una sola vez (en un archivo ZIP) todas las fotos de referencia que adjuntó, y proceder a calcular el presupuesto. Esta interfaz me proporciona los datos de contacto del cliente (teléfono y correo) para poder responder y enviarle mi propuesta económica.
+
+#### 5.2.9. Módulo de Libros - Cliente
+Como usuario en busca de material bibliográfico, quiero poder adquirir libros digitales optimizados para mis dispositivos. En este catálogo, visualizo las portadas de los libros con un efecto de profundidad 3D, el nombre del autor y una breve reseña de la obra. Al elegir un libro de mi interés, como "El Infierno Amazónico", puedo comprarlo sabiendo que el sistema validará mi perfil para evitar que compre el mismo documento PDF dos veces por error.
+
+#### 5.2.10. Módulo de Libros - Admin
+Como administrador de la biblioteca virtual, necesito herramientas eficientes para subir nuevos títulos. En el panel de control de libros, visualizo todo el inventario activo de literatura. Desde aquí puedo invocar un formulario para cargar el archivo PDF y la portada, ingresar el título, autor y precio, y controlar en cualquier momento qué libros están disponibles al público.
+
+#### 5.2.11. Módulos de los Cursos - Cliente
+Como estudiante interesado en la robótica y la impresión 3D, quiero informarme sobre los cursos disponibles e inscribirme rápidamente. En esta pantalla, analizo los banners promocionales de los cursos, reviso a quién están dirigidos (ej. "Robótica 12-15 años"), verifico la duración del curso en semanas y su precio final. Si estoy conforme, utilizo el botón directo para asegurar mi cupo añadiendo la inscripción a mi carrito.
+
+#### 5.2.12. Módulos de los Cursos - Admin
+Como coordinador educativo, requiero gestionar la oferta de cursos y monitorear la ocupación de las aulas. En el panel de gestión académica, además de poder crear y editar la información de los cursos (fechas, temarios, precios), dispongo de un indicador vital que me muestra visualmente cuántos "Cupos" totales tiene la clase y cuántos han sido "Vendidos", permitiéndome tomar decisiones de marketing o cerrar inscripciones.
+
+#### 5.2.13. Pago mediante MercadoPago
+Como cliente que está finalizando su compra, exijo un proceso de pago seguro y flexible. En esta interfaz de checkout, encuentro un resumen del producto que estoy por adquirir y el total a pagar. Puedo optar por pagar mediante Tarjeta de Crédito/Débito llenando un formulario seguro integrado por MercadoPago (con validación de número de tarjeta, vencimiento, CVV y DNI) o seleccionar Yape, todo sin salir de la plataforma y garantizando la protección de mis datos.
+
+#### 5.2.14. Panel Administrativo - Gestión Micromuseo (AR)
+Como administrador científico del Micromuseo, necesito poblar la base de datos que consumirá la aplicación móvil de Realidad Aumentada. En este panel avanzado, registro detalladamente cada especie ingresando su taxonomía formal (Darwin Core), seleccionando la temática (insectos, microscópicos) y configurando los idiomas disponibles. También cargo los marcadores de imagen objetivo y códigos QR que permitirán a la app de Unity superponer los modelos 3D en la pantalla del usuario.
+
+#### 5.2.15. Módulo de Reservas - Cliente
+Como visitante que planea asistir al micromuseo, quiero comprar mis entradas de forma anticipada. Utilizando esta interfaz de reservas, selecciono un día específico en un calendario interactivo y visualizo qué horarios (ej. 10:30 AM) tienen disponibilidad. Luego, ajusto el número de personas con los controles interactivos, lo cual calcula automáticamente el precio total (mostrando opciones referenciales si pago con tarjeta o Yape) para que proceda al pago y obtenga mis pases virtuales.
+
+#### 5.2.16. Módulo de Reservas - Admin (Taquilla)
+Como personal de taquilla en el museo, necesito una herramienta rápida para atender a los visitantes sin reserva previa y validar accesos. En este panel dual, utilizo la sección de venta presencial para registrar cobros en efectivo seleccionando el horario actual y el número de personas. Simultáneamente, puedo cambiar al modo "Escáner QR" y utilizar la cámara web de la computadora para leer los boletos digitales en los celulares de los visitantes, permitiendo su ingreso al recinto.
+
+#### 5.2.17. Carrito de Compras
+Como cliente que ha explorado toda la plataforma, quiero revisar mi pedido consolidado antes de pagar. En esta página, observo una lista clara de todos mis productos digitales e impresos. Puedo ajustar la cantidad de impresiones 3D que deseo o eliminar un curso si cambié de opinión, viendo cómo se actualiza el resumen del pedido en tiempo real. Finalmente, procedo a realizar el pago en la misma ventana usando el widget lateral cifrado de MercadoPago.
+
+#### 5.2.18. Historial de Compras
+Como usuario frecuente, necesito un espacio centralizado para acceder a todo lo que he comprado. En la sección "Mis compras", mis adquisiciones están prolijamente categorizadas en pestañas. Desde aquí, puedo entrar a la pestaña de "Modelos 3D" o "Libros" y hacer clic en el botón de descarga para guardar los archivos GLB y PDF en mi dispositivo en cualquier momento.
+
+#### 5.2.19. Edición de Perfil
+Como usuario registrado, requiero mantener mi información personal actualizada. En este formulario de perfil, puedo cambiar mi foto de avatar, actualizar mis nombres, apellidos y correo electrónico, y modificar mi contraseña local, asegurando que mis comunicaciones y recibos lleguen al lugar correcto.
+
+#### 5.2.20. Dashboard Administrativo
+Como dueño del proyecto "Yalotengo", necesito observar métricas clave para medir el éxito del negocio. Al ingresar al sistema, lo primero que veo es un dashboard interactivo que recopila toda la data en un solo lugar: observo gráficas de ingresos mensuales, y tarjetas informativas que me indican el volumen de modelos vendidos, alumnos en los cursos e ingresos del micromuseo en tiempo real.
 
 ---
 
@@ -217,35 +232,58 @@ El diseño de las interfaces se ha realizado siguiendo principios de **UX/UI mod
 
 ---
 
-## 8. RIESGOS IDENTIFICADOS Y MITIGACIÓN
-
-| Riesgo | Impacto | Mitigación |
-| :--- | :--- | :--- |
-| Caída del servicio de MercadoPago | Alto | Manejo de errores con reintentos y notificaciones al admin. |
-| Archivos grandes de AssetBundles saturan el almacenamiento | Medio | MinIO con política de retención y monitoreo de uso de disco. |
-| Acceso no autorizado a recursos administrativos | Alto | Middleware de autenticación JWT + verificación de rol en cada ruta protegida. |
-
----
-
-## 9. CONCLUSIONES
+## 8. CONCLUSIONES
 
 1. El proyecto "Yalotengo" se encuentra avanzando conforme al cronograma establecido bajo la metodología Scrum.
 2. Se han completado exitosamente los Sprints 1 y 2, cubriendo el análisis de requerimientos y la definición de la arquitectura del sistema.
-3. El Sprint 3, actualmente en curso, se enfoca en el diseño de las interfaces gráficas de usuario mediante prototipos y mockups.
+3. El Sprint 3 se enfoca en el diseño de las interfaces gráficas de usuario mediante prototipos y mockups.
 4. Las interfaces diseñadas cumplen con estándares modernos de UX/UI, priorizando la responsividad, la accesibilidad y la experiencia del usuario.
 5. El desarrollo e implementación del código está planificado para el Sprint 4, una vez aprobados los diseños por el Product Owner.
 
 ---
 
-## 10. PRÓXIMOS PASOS — SPRINT 4
+## 9. PRÓXIMOS PASOS — SPRINT 4
 
-- [ ] Desarrollo e implementación del Backend.
-- [ ] Desarrollo del Frontend basado en los diseños aprobados.
-- [ ] Integración de la pasarela de pagos MercadoPago.
-- [ ] Pruebas integrales de todos los módulos.
-- [ ] Despliegue en el VPS de producción.
+### 9.1. Arquitectura y Configuración Inicial (Backend & Frontend)
+- [ ] **Estructura Base:** Configuración del servidor en Node.js/Express con manejo de variables de entorno, CORS y manejo de errores globales.
+- [ ] **Base de Datos:** Conexión a la base de datos MySQL usando Sequelize y configuración de migraciones/seeders iniciales.
+- [ ] **Estado Frontend:** Implementación de la gestión de estado global en React (Context API o Zustand) para el manejo de la sesión de usuario y el carrito de compras.
+- [ ] **Cliente HTTP:** Configuración de Axios con interceptores para inyección automática de tokens JWT en las cabeceras.
+
+### 9.2. Desarrollo del Módulo de Autenticación y Usuarios
+- [ ] **APIs de Acceso:** Desarrollo de endpoints de registro, inicio de sesión (JWT) y cambio de contraseña seguro (bcrypt).
+- [ ] **Autenticación Externa:** Integración de Google OAuth 2.0 en el backend y frontend para inicio de sesión unificado ("Continuar con Google").
+- [ ] **Gestión de Perfil:** Creación del panel de usuario para edición de datos y subida de avatar a S3.
+- [ ] **Seguridad:** Implementación de roles (Usuario/Administrador) y protección de rutas en ambos entornos.
+
+### 9.3. Desarrollo del Backend Core e Integración de Almacenamiento
+- [ ] **Almacenamiento S3:** Configuración del cliente MinIO y middlewares de Multer para la subida concurrente de archivos pesados (.glb, .pdf) e imágenes.
+- [ ] **Modelado de Datos:** Definición de entidades relacionales para Productos (Modelos 3D, Libros, Cursos), Órdenes, Cotizaciones y Reservas.
+- [ ] **APIs Administrativas:** Desarrollo de controladores CRUD completos y paginados para cada entidad del sistema (Panel Admin).
+
+### 9.4. Desarrollo de Interfaces de Catálogo y Cliente (Frontend)
+- [ ] **Vistas de Catálogo:** Construcción de grids responsivos y lógicas de filtrado por categoría (Digitalizados, Impresos, Libros).
+- [ ] **Visor 3D:** Integración del componente `<model-viewer>` para la previsualización interactiva de modelos digitales en el navegador.
+- [ ] **Formularios Dinámicos:** Desarrollo de la vista de cotizaciones personalizadas con capacidades de carga de múltiples imágenes adjuntas.
+- [ ] **Lógica de Carrito:** Programación del carrito unificado (agregar, quitar, sumar cantidades físicas y prevención estricta de duplicados digitales).
+
+### 9.5. Integración de Pasarela de Pagos (MercadoPago)
+- [ ] **Checkout:** Creación de la preferencia de pago dinámica en el backend integrando el SDK oficial de MercadoPago.
+- [ ] **Frontend Widget:** Inserción y configuración del formulario seguro de pago dentro de la vista del carrito.
+- [ ] **Webhooks:** Implementación de endpoints seguros para recibir notificaciones asíncronas de pagos (IPN) y actualizar el estado de los pedidos automáticamente.
+- [ ] **Entregables Post-Pago:** Lógica para habilitar las URLs de descarga de archivos (GLB, PDF) y confirmar cupos de cursos únicamente tras el pago exitoso.
+
+### 9.6. Módulo de Reservas y Gestión de Micromuseo (AR)
+- [ ] **Lógica de Aforo:** Algoritmos para generación dinámica de slots horarios disponibles por fecha, respetando la capacidad máxima del micromuseo.
+- [ ] **Generación de Tickets:** Integración de librería para la creación automática de códigos QR con la información de la reserva encriptada.
+- [ ] **Escáner Web:** Implementación del lector QR en el panel administrativo usando la cámara del dispositivo para control de acceso (Taquilla).
+- [ ] **APIs para Unity:** Configuración del CRUD del Micromuseo (metadata Darwin Core) y apertura de endpoints de sólo lectura para consumo de la App de Realidad Aumentada.
+
+### 9.7. Calidad, Pruebas y Despliegue
+- [ ] **Testing:** Realización de pruebas End-to-End (E2E) simulando el flujo crítico de "Registro -> Compra -> Pago -> Descarga".
+- [ ] **Dockerización:** Construcción de los `Dockerfiles` para las aplicaciones y definición de la red interna en `docker-compose.yml`.
+- [ ] **Infraestructura:** Despliegue en el VPS de producción (Linux/Ubuntu), configuración de Nginx como Reverse Proxy, asignación de dominios y provisión de certificados SSL.
 
 ---
 
 *Elaborado por el Equipo de Desarrollo Yalotengo — Invéntalo, 2026.*
-*Integrantes: Alvarado Silvano Danilo, Mozombite Gastón Fabrizio Gael, Rengifo Pinedo Brittany Ariana, Rengifo Teagua Axel Andre, Torres Flores Julio Adrian, Reátegui Piña Fressia Nicolle, Li Xuan.*
