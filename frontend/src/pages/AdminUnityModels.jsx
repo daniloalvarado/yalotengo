@@ -547,22 +547,64 @@ export default function AdminUnityModels() {
                                             const { value: formValues } = await Swal.fire({
                                                 title: 'Crear Idioma Global',
                                                 html:
-                                                    '<input id="swal-input1" class="swal2-input" placeholder="Código (ej. en, pt, de)">' +
-                                                    '<input id="swal-input2" class="swal2-input" placeholder="Nombre (ej. Inglés)">',
+                                                    '<select id="swal-input1" class="swal2-select" style="width: 80%; font-size: 16px; margin-bottom: 10px;">' +
+                                                    '<option value="">-- Selecciona el idioma --</option>' +
+                                                    '<option value="en">Inglés</option>' +
+                                                    '<option value="pt">Portugués</option>' +
+                                                    '<option value="fr">Francés</option>' +
+                                                    '<option value="de">Alemán</option>' +
+                                                    '<option value="it">Italiano</option>' +
+                                                    '<option value="zh">Chino</option>' +
+                                                    '<option value="ja">Japonés</option>' +
+                                                    '<option value="qu">Quechua</option>' +
+                                                    '<option value="ay">Aymara</option>' +
+                                                    '<option value="ru">Ruso</option>' +
+                                                    '<option value="ar">Árabe</option>' +
+                                                    '<option value="ko">Coreano</option>' +
+                                                    '<option value="hi">Hindi</option>' +
+                                                    '<option value="otro">Otro (Lengua Amazónica o Personalizada)</option>' +
+                                                    '</select>' +
+                                                    '<input id="swal-iso" class="swal2-input" placeholder="Cód. ISO (ej. awj)" style="display:none; width: 80%; margin-bottom: 5px;" maxlength="4">' +
+                     '<p id="swal-hint" style="display:none; font-size: 11px; color: #888; width: 80%; margin: 0 auto 10px auto; text-align: left;">*Si el idioma no es reconocido por la IA, se creará vacío para que lo traduzcas manualmente.</p>' +
+                                                    '<input id="swal-input2" class="swal2-input" placeholder="Nombre (Editable) Ej. Ruso" style="width: 80%;">',
                                                 focusConfirm: false,
                                                 showCancelButton: true,
                                                 confirmButtonColor: '#059669',
+                                                didOpen: () => {
+                                                    const select = document.getElementById('swal-input1');
+                                                    const inputIso = document.getElementById('swal-iso');
+                                                    const inputName = document.getElementById('swal-input2');
+                                                    select.addEventListener('change', (e) => {
+                                                        if (e.target.value === 'otro') {
+                                                            inputIso.style.display = 'none';
+                                                            document.getElementById('swal-hint').style.display = 'block';
+                                                            inputIso.value = '';
+                                                            inputName.value = '';
+                                                        } else {
+                                                            inputIso.style.display = 'none';
+                                                            document.getElementById('swal-hint').style.display = 'none';
+                                                            if (e.target.value) {
+                                                                inputIso.value = e.target.value;
+                                                                inputName.value = e.target.options[e.target.selectedIndex].text;
+                                                            } else {
+                                                                inputIso.value = '';
+                                                                inputName.value = '';
+                                                            }
+                                                        }
+                                                    });
+                                                },
                                                 preConfirm: () => {
-                                                    const code = document.getElementById('swal-input1').value.trim().toLowerCase();
+                                                    const selectVal = document.getElementById('swal-input1').value;
+                                                    const isoVal = document.getElementById('swal-iso').value.trim().toLowerCase();
                                                     const name = document.getElementById('swal-input2').value.trim();
+                                                    
+                                                    const code = selectVal === 'otro' ? name.trim().substring(0,3).toLowerCase().padEnd(3, 'a') : selectVal;
+
                                                     if (!code || !name) {
-                                                        Swal.showValidationMessage('Ambos campos son obligatorios');
+                                                        Swal.showValidationMessage('Debes seleccionar un idioma y revisar su nombre');
                                                         return false;
                                                     }
-                                                    if (code.length !== 2) {
-                                                        Swal.showValidationMessage('El código debe tener exactamente 2 letras (ej. en)');
-                                                        return false;
-                                                    }
+                                                    
                                                     return { code, name };
                                                 }
                                             });

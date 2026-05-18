@@ -9,6 +9,7 @@ export default function AdminIdiomas() {
   const [isAdding, setIsAdding] = useState(false)
   const [newCode, setNewCode] = useState('')
   const [newName, setNewName] = useState('')
+  const [isOtro, setIsOtro] = useState(false)
   
   // Para editar traducciones UI
   const [editingLang, setEditingLang] = useState(null) // El idioma seleccionado para editar UI
@@ -32,11 +33,15 @@ export default function AdminIdiomas() {
 
   const handleAddIdioma = async (e) => {
     e.preventDefault()
-    if (!newCode || !newName) return toast.error('Llene código y nombre')
+    let finalCode = newCode;
+    if (isOtro) {
+        finalCode = newName.trim().substring(0, 3).toLowerCase().padEnd(3, 'a');
+    }
+    if (!finalCode || !newName) return toast.error('Llene todos los campos')
     
     const loadingToast = toast.loading('Creando idioma y autotraduciendo interfaz...')
     try {
-      await api.post('/languages', { code: newCode.toLowerCase(), name: newName })
+      await api.post('/languages', { code: finalCode, name: newName })
       toast.success('Idioma creado con éxito', { id: loadingToast })
       setIsAdding(false)
       setNewCode('')
@@ -75,8 +80,11 @@ export default function AdminIdiomas() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8 space-y-8 min-h-screen pb-20">
+    <div className="relative max-w-6xl mx-auto p-4 sm:p-6 lg:p-8 space-y-8 min-h-screen pb-20">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-gradient-to-r from-emerald-600 to-teal-700 p-6 rounded-2xl shadow-lg text-white">
+        <button onClick={() => window.history.back()} className="absolute top-4 left-4 bg-white/20 hover:bg-white/30 p-2 rounded-full backdrop-blur-sm transition" title="Volver">
+          <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+        </button>
         <div>
           <h1 className="text-3xl font-black flex items-center gap-3">
             <LanguageIcon className="w-8 h-8 opacity-90" />
@@ -95,24 +103,48 @@ export default function AdminIdiomas() {
       {isAdding && (
         <form onSubmit={handleAddIdioma} className="bg-white p-6 rounded-2xl shadow-sm border border-emerald-100 flex flex-col sm:flex-row gap-4 items-end animate-fadeIn">
           <div className="w-full sm:w-1/3">
-            <label className="block text-sm font-semibold text-gray-700 mb-1">Código ISO (ej. en, qu, zh)</label>
-            <input 
-              type="text" 
-              value={newCode} 
-              onChange={e => setNewCode(e.target.value)} 
-              maxLength="5"
-              className="w-full p-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none" 
-              placeholder="es" 
-            />
+            <label className="block text-sm font-semibold text-gray-700 mb-1">Idioma Oficial</label>
+            <select 
+              value={isOtro ? 'otro' : newCode} 
+              onChange={e => {
+                  if (e.target.value === 'otro') {
+                      setIsOtro(true);
+                      setNewCode('');
+                      setNewName('');
+                  } else {
+                      setIsOtro(false);
+                      setNewCode(e.target.value);
+                      if(e.target.value) setNewName(e.target.options[e.target.selectedIndex].text);
+                  }
+              }}
+              className="w-full p-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none bg-white" 
+            >
+              <option value="">-- Selecciona un idioma --</option>
+              <option value="en">Inglés</option>
+              <option value="pt">Portugués</option>
+              <option value="fr">Francés</option>
+              <option value="de">Alemán</option>
+              <option value="it">Italiano</option>
+              <option value="zh">Chino</option>
+              <option value="ja">Japonés</option>
+              <option value="qu">Quechua</option>
+              <option value="ay">Aymara</option>
+              <option value="ru">Ruso</option>
+              <option value="ar">Árabe</option>
+              <option value="ko">Coreano</option>
+              <option value="hi">Hindi</option>
+              <option value="otro">Otro (Lengua Amazónica / Personalizada)</option>
+            </select>
           </div>
+          
           <div className="w-full sm:w-1/3">
-            <label className="block text-sm font-semibold text-gray-700 mb-1">Nombre (ej. Alemán)</label>
+            <label className="block text-sm font-semibold text-gray-700 mb-1">Nombre (Editable)</label>
             <input 
               type="text" 
               value={newName} 
               onChange={e => setNewName(e.target.value)} 
-              className="w-full p-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none" 
-              placeholder="Español" 
+              className="w-full p-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none bg-gray-50" 
+              placeholder="Ej. Holandés" 
             />
           </div>
           <div className="flex gap-2 w-full sm:w-auto">

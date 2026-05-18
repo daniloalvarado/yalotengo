@@ -52,7 +52,7 @@ async function autotranslate(text, sourceLang, targetLang) {
     const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${sourceLang}|${targetLang}`
     const response = await fetch(url)
     const data = await response.json()
-    if (data.responseData && data.responseData.translatedText) {
+    if (data.responseStatus === 200 && data.responseData && data.responseData.translatedText) {
       return data.responseData.translatedText
     }
     return text // fallback a original
