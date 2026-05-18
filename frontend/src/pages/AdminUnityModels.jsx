@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import api from '../api/client'
 import toast from 'react-hot-toast'
 import Swal from 'sweetalert2'
-import { PlusIcon, PencilIcon, TrashIcon, EyeIcon, EyeSlashIcon, ArrowUpTrayIcon, CheckCircleIcon, ChartBarSquareIcon, CircleStackIcon } from '@heroicons/react/24/outline'
+import { PlusIcon, PencilIcon, TrashIcon, EyeIcon, EyeSlashIcon, ArrowUpTrayIcon, CheckCircleIcon, ChartBarSquareIcon, CircleStackIcon , LanguageIcon } from '@heroicons/react/24/outline'
 import AnimatedModal from '../components/AnimatedModal'
 import AdminUnityDashboard from './AdminUnityDashboard'
 
@@ -287,6 +287,12 @@ export default function AdminUnityModels() {
                                     ))}
                                 </select>
                             </div>
+                            <button
+                                onClick={() => navigate('/admin-idiomas')}
+                                className="w-full sm:w-auto px-4 py-2 bg-emerald-100 text-emerald-700 font-bold rounded-lg hover:bg-emerald-200 transition-all shadow-sm flex items-center justify-center gap-2"
+                            >
+                                <LanguageIcon className="w-5 h-5" /> APP AR
+                            </button>
                         </div>
                     </div>
 
