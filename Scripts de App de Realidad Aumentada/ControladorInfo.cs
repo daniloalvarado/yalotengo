@@ -24,36 +24,11 @@ public class ControladorInfo : MonoBehaviour
     private Coroutine rutinaDescargando;
 
     // --- DICCIONARIOS DE TRADUCCIÓN ---
-    private readonly Dictionary<string, string> dictEN = new Dictionary<string, string> {
-        {"Reino:", "Kingdom:"}, {"Filo:", "Phylum:"}, {"Subfilo:", "Subphylum:"}, {"Clase:", "Class:"}, 
-        {"Subclase:", "Subclass:"}, {"Orden:", "Order:"}, {"Familia:", "Family:"}, {"Género:", "Genus:"}, 
-        {"Especie:", "Species:"}, {"Taxonomía", "Taxonomy"}, {"Fuente:", "Source:"}
-    };
-
-    private readonly Dictionary<string, string> dictPT = new Dictionary<string, string> {
-        {"Reino:", "Reino:"}, {"Filo:", "Filo:"}, {"Subfilo:", "Subfilo:"}, {"Clase:", "Classe:"}, 
-        {"Subclase:", "Subclasse:"}, {"Orden:", "Ordem:"}, {"Familia:", "Família:"}, {"Género:", "Gênero:"}, 
-        {"Especie:", "Espécie:"}, {"Taxonomía", "Taxonomia"}, {"Fuente:", "Fonte:"}
-    };
-
-    private readonly Dictionary<string, string> dictFR = new Dictionary<string, string> {
-        {"Reino:", "Règne:"}, {"Filo:", "Phylum:"}, {"Subfilo:", "Sous-embranchement:"}, {"Clase:", "Classe:"}, 
-        {"Subclase:", "Sous-classe:"}, {"Orden:", "Ordre:"}, {"Familia:", "Famille:"}, {"Género:", "Genre:"}, 
-        {"Especie:", "Espèce:"}, {"Taxonomía", "Taxonomie"}, {"Fuente:", "Source:"}
-    };
-
-    private readonly Dictionary<string, string> dictIT = new Dictionary<string, string> {
-        {"Reino:", "Regno:"}, {"Filo:", "Phylum:"}, {"Subfilo:", "Subphylum:"}, {"Clase:", "Classe:"}, 
-        {"Subclase:", "Sottoclasse:"}, {"Orden:", "Ordine:"}, {"Familia:", "Famiglia:"}, {"Género:", "Genere:"}, 
-        {"Especie:", "Specie:"}, {"Taxonomía", "Tassonomia"}, {"Fuente:", "Fonte:"}
-    };
-
-    private readonly Dictionary<string, string> dictDE = new Dictionary<string, string> {
-        {"Reino:", "Reich:"}, {"Filo:", "Stamm:"}, {"Subfilo:", "Unterstamm:"}, {"Clase:", "Klasse:"}, 
-        {"Subclase:", "Unterklasse:"}, {"Orden:", "Ordnung:"}, {"Familia:", "Familie:"}, {"Género:", "Gattung:"}, 
-        {"Especie:", "Art:"}, {"Taxonomía", "Taxonomie"}, {"Fuente:", "Quelle:"}
-    };
-
+    
+    
+    
+    
+    
     void Awake()
     {
         if (btnAgrandar != null)

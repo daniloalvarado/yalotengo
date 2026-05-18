@@ -82,6 +82,10 @@ r.use('/admin/stats', adminStatsRoutes)
 // So we mount it at the root of the microscopicos path.
 r.use('/microscopicos', microscopicosRoutes)
 
+// --- IDIOMAS ---
+import idiomasRoutes from '../modules/idiomas/routes.idiomas.js'
+r.use('/languages', idiomasRoutes)
+
 // --- COTIZACIONES 3D ---
 r.use('/cotizaciones3d', cotizaciones3dRoutes)
 

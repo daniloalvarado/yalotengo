@@ -28,6 +28,7 @@ export default function AdminUnityModels() {
     const [uploadingQr2, setUploadingQr2] = useState(false)
     const [isSaving, setIsSaving] = useState(false)
     const [tabIdiomaActivo, setTabIdiomaActivo] = useState(null)
+    const [availableLanguages, setAvailableLanguages] = useState([])
     const fileInputRef = useRef(null)
     const qrInputRef = useRef(null)
     const qrInput2Ref = useRef(null)
@@ -41,6 +42,13 @@ export default function AdminUnityModels() {
                 // Hacemos el fetch inicial aquí mismo para verificar si es admin
                 const { data } = await api.get('/microscopicos/admin')
                 setModels(Array.isArray(data) ? data : [])
+                
+                // Fetch dynamic languages
+                try {
+                    const langRes = await api.get('/languages')
+                    setAvailableLanguages(langRes.data)
+                } catch(e) { console.error('Error fetching languages', e) }
+
                 setIsAdmin(true)
                 setLoading(false)
             } catch (e) {
@@ -516,20 +524,68 @@ export default function AdminUnityModels() {
                                     Traducciones e Idiomas
                                 </h3>
                                 <button type="button" onClick={async () => {
-                                    const { value: lang } = await Swal.fire({
-                                        title: 'Añadir Idioma',
-                                        input: 'select',
-                                        inputOptions: { 'en': 'Inglés', 'pt': 'Portugués', 'fr': 'Francés', 'de': 'Alemán', 'it': 'Italiano' },
-                                        inputPlaceholder: 'Selecciona uno...',
-                                        showCancelButton: true,
-                                        confirmButtonColor: '#059669'
-                                    });
+                                    const langOptions = {};
+                                      availableLanguages.forEach(l => { langOptions[l.code] = l.name; });
+                                      langOptions['NEW_LANG'] = '🌍 + Crear un nuevo idioma';
+
+                                      const { value: lang } = await Swal.fire({
+                                          title: 'Añadir Idioma',
+                                          input: 'select',
+                                          inputOptions: langOptions,
+                                          inputPlaceholder: 'Selecciona uno...',
+                                          showCancelButton: true,
+                                          confirmButtonColor: '#059669'
+                                      });
                                     if (lang) {
-                                        if (formData.translations?.find(t => t.language_code === lang)) return toast.error('Este idioma ya existe');
-                                        const newTrans = [...(formData.translations || []), { language_code: lang, name: '', descripcion: '' }];
-                                        setFormData(p => ({ ...p, translations: newTrans }));
-                                        setTabIdiomaActivo(lang); // Cambiar automáticamente a la nueva pestaña
-                                    }
+                                          if (lang === 'NEW_LANG') {
+                                              const { value: newLangName } = await Swal.fire({
+                                                  title: 'Crear Idioma Global',
+                                                  text: 'Escribe el nombre del idioma (ej. Ruso)',
+                                                  input: 'text',
+                                                  showCancelButton: true,
+                                                  confirmButtonColor: '#059669'
+                                              });
+                                              if (!newLangName) return;
+                                              const newCode = newLangName.substring(0, 2).toLowerCase();
+                                              try {
+                                                  toast.loading('Creando idioma global...', { id: 'lang' });
+                                                  const res = await api.post('/languages', { code: newCode, name: newLangName });
+                                                  toast.success('Idioma creado globalmente', { id: 'lang' });
+                                                  const newAvailable = [...availableLanguages, res.data.idioma];
+                                                  setAvailableLanguages(newAvailable);
+
+                                                  toast.loading('Auto-traduciendo...', { id: 'trans' });
+                                                  let transDesc = '';
+                                                  if (formData.taxonRemarks) {
+                                                      const transRes = await api.post('/languages/autotranslate', { text: formData.taxonRemarks, target_lang: newCode });
+                                                      transDesc = transRes.data.translatedText;
+                                                  }
+                                                  toast.success('¡Traducción completada!', { id: 'trans' });
+
+                                                  const newTrans = [...(formData.translations || []), { language_code: newCode, name: formData.vernacularName, descripcion: transDesc }];
+                                                  setFormData(p => ({ ...p, translations: newTrans }));
+                                                  setTabIdiomaActivo(newCode);
+                                              } catch (e) {
+                                                  toast.error('Error al crear el idioma', { id: 'lang' });
+                                              }
+                                          } else {
+                                              if (formData.translations?.find(t => t.language_code === lang)) return toast.error('Este idioma ya existe en el modelo');
+                                              
+                                              toast.loading('Auto-traduciendo descripción...', { id: 'trans' });
+                                              let transDesc = '';
+                                              if (formData.taxonRemarks) {
+                                                  try {
+                                                      const transRes = await api.post('/languages/autotranslate', { text: formData.taxonRemarks, target_lang: lang });
+                                                      transDesc = transRes.data.translatedText;
+                                                  } catch (e) { console.error(e) }
+                                              }
+                                              toast.success('¡Traducción completada!', { id: 'trans' });
+
+                                              const newTrans = [...(formData.translations || []), { language_code: lang, name: formData.vernacularName, descripcion: transDesc }];
+                                              setFormData(p => ({ ...p, translations: newTrans }));
+                                              setTabIdiomaActivo(lang);
+                                          }
+                                      }
                                 }} className="text-xs bg-white border border-emerald-200 text-emerald-600 px-3 py-1.5 rounded-lg hover:bg-emerald-50 transition-colors font-semibold flex items-center gap-1 shadow-sm">
                                     <PlusIcon className="w-4 h-4" /> Añadir Idioma
                                 </button>
@@ -541,7 +597,7 @@ export default function AdminUnityModels() {
                                     <p className="text-xs text-gray-400 italic py-2">No hay traducciones adicionales agregadas.</p>
                                 ) : (
                                     formData.translations.map((t) => {
-                                        const nombres = { en: 'Inglés', pt: 'Portugués', fr: 'Francés', de: 'Alemán', it: 'Italiano' };
+                                        const nombres = {}; availableLanguages.forEach(l => { nombres[l.code] = l.name });
                                         const isActive = tabIdiomaActivo === t.language_code;
                                         return (
                                             <button
@@ -562,7 +618,7 @@ export default function AdminUnityModels() {
                                 tabIdiomaActivo === t.language_code && (
                                     <div key={idx} className="bg-white rounded-xl p-4 border border-emerald-100 shadow-inner space-y-4 animate-fadeIn">
                                         <div className="flex justify-between items-center pb-2 border-b border-gray-100">
-                                            <span className="text-xs font-black text-emerald-700 uppercase">Editando: {({ en: 'Inglés', pt: 'Portugués', fr: 'Francés', de: 'Alemán', it: 'Italiano' }[t.language_code])}</span>
+                                            <span className="text-xs font-black text-emerald-700 uppercase">Editando: { availableLanguages.find(l => l.code === t.language_code)?.name || t.language_code }</span>
                                             <button type="button" onClick={() => {
                                                 const newTrans = formData.translations.filter((_, i) => i !== idx);
                                                 setFormData({ ...formData, translations: newTrans });

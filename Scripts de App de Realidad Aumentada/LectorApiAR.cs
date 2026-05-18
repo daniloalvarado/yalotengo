@@ -7,6 +7,15 @@ using GLTFast;
 
 public class LectorApiAR : MonoBehaviour
 {
+    [Serializable]
+    public class UIIdiomaText { public string key; public string value; }
+    [Serializable]
+    public class UIIdioma { public string code; public string name; public UIIdiomaText[] textos; }
+    [Serializable]
+    public class UIDictResponse { public UIIdioma[] idiomas; }
+
+    public static System.Collections.Generic.Dictionary<string, System.Collections.Generic.Dictionary<string, string>> DiccionarioUI = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.Dictionary<string, string>>();
+
     [Header("Conexiones Principales")]
     public ControladorInfo controladorInfo;
     public GestorAnaliticas analiticas;
@@ -28,6 +37,7 @@ public class LectorApiAR : MonoBehaviour
 
     void Start()
     {
+        StartCoroutine(DescargarDiccionarioUI());
         // --- NUEVO: ASEGURAR QUE EL LOADING EMPIEZA OCULTO ---
         if (objetoLoading != null) objetoLoading.SetActive(false);
 
@@ -509,6 +519,39 @@ public class LectorApiAR : MonoBehaviour
                 // Solo lo descargamos, no lo abrimos ni lo usamos. Ya queda en el Caché del celular.
                 AssetBundle bundle = DownloadHandlerAssetBundle.GetContent(www);
                 if (bundle != null) bundle.Unload(true); // Liberamos RAM pero queda en DISCO
+            }
+        }
+    }
+
+    IEnumerator DescargarDiccionarioUI()
+    {
+        string url = apiUrl.Replace("microscopicos/public/", "languages/public/ui-dict");
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
+        {
+            yield return webRequest.SendWebRequest();
+            if (webRequest.result == UnityWebRequest.Result.Success)
+            {
+                UIDictResponse response = JsonUtility.FromJson<UIDictResponse>(webRequest.downloadHandler.text);
+                if (response != null && response.idiomas != null)
+                {
+                    DiccionarioUI.Clear();
+                    foreach (var idm in response.idiomas)
+                    {
+                        var dict = new System.Collections.Generic.Dictionary<string, string>();
+                        if (idm.textos != null)
+                        {
+                            foreach (var txt in idm.textos)
+                            {
+                                dict[txt.key] = txt.value;
+                            }
+                        }
+                        DiccionarioUI[idm.code] = dict;
+                    }
+                    if (controladorIdioma != null)
+                    {
+                        controladorIdioma.RefrescarTextosActuales();
+                    }
+                }
             }
         }
     }
