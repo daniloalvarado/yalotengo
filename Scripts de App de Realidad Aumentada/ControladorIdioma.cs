@@ -38,6 +38,12 @@ public class ControladorIdioma : MonoBehaviour
     public TextMeshProUGUI txtModalAjustesBtn; 
     public TextMeshProUGUI txtAjustesTitulo;
     public TextMeshProUGUI txtAjustesLabelIdioma;
+    
+    [Header("--- MODALES DE ALERTAS ---")]
+    public TextMeshProUGUI txtEliminarTitulo;
+    public TextMeshProUGUI txtEliminarSi;
+    public TextMeshProUGUI txtEliminarNo;
+    public TextMeshProUGUI txtExitoDescarga;
 
     [Header("--- TEXTOS DE CARGA (Loading) ---")]
     public string msgCargandoTitulo = "Identificando...";
@@ -117,6 +123,11 @@ public class ControladorIdioma : MonoBehaviour
         if(d.ContainsKey("msgErrNoInternet")) msgErrNoInternet = d["msgErrNoInternet"];
         if(d.ContainsKey("msgErrServidor")) msgErrServidor = d["msgErrServidor"];
         if(d.ContainsKey("msgErrDetalleRed")) msgErrDetalleRed = d["msgErrDetalleRed"];
+        
+        if(txtEliminarTitulo && d.ContainsKey("txtEliminarTitulo")) txtEliminarTitulo.text = d["txtEliminarTitulo"];
+        if(txtEliminarSi && d.ContainsKey("txtEliminarSi")) txtEliminarSi.text = d["txtEliminarSi"];
+        if(txtEliminarNo && d.ContainsKey("txtEliminarNo")) txtEliminarNo.text = d["txtEliminarNo"];
+        if(txtExitoDescarga && d.ContainsKey("txtExitoDescarga")) txtExitoDescarga.text = d["txtExitoDescarga"];
         if(d.ContainsKey("msgErrDetalleServidor")) msgErrDetalleServidor = d["msgErrDetalleServidor"];
     }
 

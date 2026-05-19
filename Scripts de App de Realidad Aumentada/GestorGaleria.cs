@@ -434,7 +434,13 @@ public class GestorGaleria : MonoBehaviour
         rtPreg.offsetMin = Vector2.zero;
         rtPreg.offsetMax = Vector2.zero;
         TextMeshProUGUI txtPreg = txtPregObj.AddComponent<TextMeshProUGUI>();
-        txtPreg.text = "¿Eliminar <b>" + modelo.nombre + "</b> permanentemente?";
+        string strTitulo = "¿Eliminar <b>" + modelo.nombre + "</b> permanentemente?";
+        string codigo = PlayerPrefs.GetString("IdiomaSeleccionado", "es").ToLower();
+        if (LectorApiAR.DiccionarioUI != null && LectorApiAR.DiccionarioUI.ContainsKey(codigo)) {
+            var d = LectorApiAR.DiccionarioUI[codigo];
+            if (d.ContainsKey("txtEliminarTitulo")) strTitulo = d["txtEliminarTitulo"].Replace("este modelo", "<b>" + modelo.nombre + "</b>");
+        }
+        txtPreg.text = strTitulo;
         txtPreg.fontSize = 44; // Aumentado para mejor legibilidad
         txtPreg.color = Color.white;
         txtPreg.alignment = TMPro.TextAlignmentOptions.Center;
@@ -442,7 +448,16 @@ public class GestorGaleria : MonoBehaviour
         txtPreg.enableWordWrapping = true;
 
         // --- BOTÓN "SÍ" (rojo) ---
-        CrearBotonModal(caja, "Sí, eliminar", new Color(0.85f, 0.15f, 0.15f, 1f), 
+        string strSi = "Sí, eliminar";
+        string strNo = "Cancelar";
+        if (LectorApiAR.DiccionarioUI != null && LectorApiAR.DiccionarioUI.ContainsKey(codigo)) {
+            var d = LectorApiAR.DiccionarioUI[codigo];
+            if (d.ContainsKey("txtEliminarSi")) strSi = d["txtEliminarSi"];
+            if (d.ContainsKey("txtEliminarNo")) strNo = d["txtEliminarNo"];
+        }
+
+        // --- BOTÓN "SÍ" (rojo) ---
+        CrearBotonModal(caja, strSi, new Color(0.85f, 0.15f, 0.15f, 1f), 
             new Vector2(-160, -130), () => {
                 GestorColeccionLocal gestor = GestorColeccionLocal.Instancia;
                 if (gestor == null) gestor = FindObjectOfType<GestorColeccionLocal>();
@@ -458,7 +473,7 @@ public class GestorGaleria : MonoBehaviour
             });
 
         // --- BOTÓN "NO" (gris) ---
-        CrearBotonModal(caja, "Cancelar", new Color(0.4f, 0.4f, 0.4f, 1f), 
+        CrearBotonModal(caja, strNo, new Color(0.4f, 0.4f, 0.4f, 1f), 
             new Vector2(160, -130), () => {
                 Destroy(modal);
             });
