@@ -275,7 +275,8 @@ export default function AdminUnityModels() {
                                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none text-sm transition-all shadow-sm hover:border-emerald-300"
                                 />
                             </div>
-                            <div className="w-full sm:w-auto min-w-[200px]">
+                            <div className="flex flex-row gap-3 w-full sm:w-auto">
+                              <div className="w-full sm:w-auto min-w-[200px]">
                                 <select
                                     value={selectedPanel}
                                     onChange={(e) => setSelectedPanel(e.target.value)}
@@ -293,6 +294,7 @@ export default function AdminUnityModels() {
                             >
                                 <LanguageIcon className="w-5 h-5" /> APP AR
                             </button>
+                          </div>
                         </div>
                     </div>
 

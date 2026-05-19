@@ -232,7 +232,7 @@ function TranslationItem({ trans, onSave }) {
   return (
     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-3 rounded-lg border border-gray-100 hover:border-emerald-200 hover:bg-emerald-50/50 transition-colors group gap-2">
       <div className="w-full sm:w-1/3">
-        <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">{trans.key}</span>
+        <span className="text-xs font-bold text-gray-400 uppercase tracking-wider break-all">{trans.key}</span>
       </div>
       <div className="w-full sm:w-2/3 flex items-center gap-2">
         {isEditing ? (

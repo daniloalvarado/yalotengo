@@ -15,6 +15,7 @@ public class LectorApiAR : MonoBehaviour
     public class UIDictResponse { public UIIdioma[] idiomas; }
 
     public static System.Collections.Generic.Dictionary<string, System.Collections.Generic.Dictionary<string, string>> DiccionarioUI = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.Dictionary<string, string>>();
+    public static System.Collections.Generic.List<UIIdioma> IdiomasDisponibles = new System.Collections.Generic.List<UIIdioma>();
 
     [Header("Conexiones Principales")]
     public ControladorInfo controladorInfo;
@@ -535,8 +536,10 @@ public class LectorApiAR : MonoBehaviour
                 if (response != null && response.idiomas != null)
                 {
                     DiccionarioUI.Clear();
+                      IdiomasDisponibles.Clear();
                     foreach (var idm in response.idiomas)
-                    {
+                      {
+                          IdiomasDisponibles.Add(idm);
                         var dict = new System.Collections.Generic.Dictionary<string, string>();
                         if (idm.textos != null)
                         {

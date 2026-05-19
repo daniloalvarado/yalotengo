@@ -127,4 +127,15 @@ public class ControladorIdioma : MonoBehaviour
     public void CambiarAFrances()   => CambiarIdioma("fr");
     public void CambiarAItaliano()  => CambiarIdioma("it");
     public void CambiarAAleman()    => CambiarIdioma("de");
+
+    public string GetPlaceholderText()
+    {
+        string codigo = PlayerPrefs.GetString("IdiomaSeleccionado", "es").ToLower();
+        if (LectorApiAR.DiccionarioUI != null && LectorApiAR.DiccionarioUI.ContainsKey(codigo))
+        {
+            var d = LectorApiAR.DiccionarioUI[codigo];
+            if (d.ContainsKey("txtArPlaceholder")) return d["txtArPlaceholder"];
+        }
+        return "Escanea un animal...";
+    }
 }

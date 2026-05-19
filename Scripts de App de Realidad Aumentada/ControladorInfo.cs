@@ -119,35 +119,18 @@ public class ControladorInfo : MonoBehaviour
 
             // --- AGREGAR FUENTE AL FINAL DE LA DESCRIPCIÓN ---
             if (!string.IsNullOrEmpty(datos.fuente))
-            {
-                string tagFuente = "Fuente:";
-                if (idiomaActual != "es")
-                {
-                    switch (idiomaActual)
-                    {
-                        case "en": tagFuente = "Source:"; break;
-                        case "pt": tagFuente = "Fonte:"; break;
-                        case "fr": tagFuente = "Source:"; break;
-                        case "it": tagFuente = "Fonte:"; break;
-                        case "de": tagFuente = "Quelle:"; break;
-                    }
-                }
-                // Añadimos la fuente al final de la descripción en itálica
+              {
+                  string tagFuente = "Fuente:";
+                  if (idiomaActual != "es" && LectorApiAR.DiccionarioUI != null && LectorApiAR.DiccionarioUI.ContainsKey(idiomaActual)) {
+                      var d = LectorApiAR.DiccionarioUI[idiomaActual];
+                      if (d.ContainsKey("lbl_fuente")) tagFuente = d["lbl_fuente"];
+                  }
+                  // Añadimos la fuente al final de la descripción en itálica
                 descripcionDefinitiva += $"\n\n<i>{tagFuente} {datos.fuente}</i>";
             }
 
-            // --- TRADUCCIÓN DE TAXONOMÍA (ETIQUETAS) ---
-            if (idiomaActual != "es")
-            {
-                switch (idiomaActual)
-                {
-                    case "en": taxonomiaDefinitiva = TraducirMulti(taxonomiaDefinitiva, dictEN); break;
-                    case "pt": taxonomiaDefinitiva = TraducirMulti(taxonomiaDefinitiva, dictPT); break;
-                    case "fr": taxonomiaDefinitiva = TraducirMulti(taxonomiaDefinitiva, dictFR); break;
-                    case "it": taxonomiaDefinitiva = TraducirMulti(taxonomiaDefinitiva, dictIT); break;
-                    case "de": taxonomiaDefinitiva = TraducirMulti(taxonomiaDefinitiva, dictDE); break;
-                }
-            }
+            // --- TRADUCCIÓN DE TAXONOMÍA DINÁMICA ---
+              taxonomiaDefinitiva = TraducirTaxonomiaDinamica(taxonomiaDefinitiva);
 
             // --- PREPARACIÓN DE TEXTOS PARA EL EFECTO ---
             string tituloCompleto = "";
@@ -353,11 +336,25 @@ public class ControladorInfo : MonoBehaviour
         txt.maxVisibleCharacters = 99999;
     }
 
-    // --- TRADUCCIÓN OPTIMIZADA ESTÁTICA ---
-    private string TraducirMulti(string texto, Dictionary<string, string> dict)
+    
+
+    // --- TRADUCCIÓN OPTIMIZADA DINÁMICA ---
+    private string TraducirTaxonomiaDinamica(string texto)
     {
         if (string.IsNullOrEmpty(texto)) return texto;
-        foreach (var par in dict) texto = texto.Replace(par.Key, par.Value);
+        string codigo = PlayerPrefs.GetString("IdiomaSeleccionado", "es").ToLower();
+        if (codigo == "es" || LectorApiAR.DiccionarioUI == null || !LectorApiAR.DiccionarioUI.ContainsKey(codigo)) return texto;
+
+        var d = LectorApiAR.DiccionarioUI[codigo];
+        
+        // Extraemos las etiquetas de la base de datos
+        if (d.ContainsKey("lbl_reino")) texto = texto.Replace("Reino:", d["lbl_reino"]);
+        if (d.ContainsKey("lbl_filo")) texto = texto.Replace("Filo:", d["lbl_filo"]);
+        if (d.ContainsKey("lbl_clase")) texto = texto.Replace("Clase:", d["lbl_clase"]);
+        if (d.ContainsKey("lbl_orden")) texto = texto.Replace("Orden:", d["lbl_orden"]);
+        if (d.ContainsKey("lbl_familia")) texto = texto.Replace("Familia:", d["lbl_familia"]);
+        if (d.ContainsKey("lbl_genero")) texto = texto.Replace("Género:", d["lbl_genero"]);
+
         return texto;
     }
 
