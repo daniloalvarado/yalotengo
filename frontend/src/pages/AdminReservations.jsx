@@ -190,10 +190,10 @@ export default function AdminReservations() {
     // --- ESTILOS CORREGIDOS ---
     const styles = {
         container: { maxWidth: '1200px', margin: '1rem auto', padding: '1rem', fontFamily: 'system-ui, -apple-system, sans-serif' },
-        header: { display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '1rem', marginBottom: '1.5rem' },
+        header: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' },
         title: { fontSize: '1.75rem', fontWeight: 'bold', color: THEME.textDark, margin: 0 },
 
-        tabs: { display: 'flex', gap: '0.8rem', marginBottom: '2rem', flexWrap: 'wrap', justifyContent: 'flex-start' },
+        tabs: { display: 'flex', gap: '0.8rem', marginBottom: '2rem', flexWrap: 'nowrap', overflowX: 'auto', paddingBottom: '0.5rem' },
         tab: (active) => ({
             display: 'flex', alignItems: 'center', gap: '8px',
             padding: '0.75rem 1.25rem', fontSize: '0.95rem', fontWeight: '600',
@@ -243,33 +243,29 @@ export default function AdminReservations() {
         <div style={styles.container}>
             <div style={styles.header}>
                 <h1 style={styles.title}>Panel de Reservas</h1>
+            </div>
+
+            {/* TABS CON ICONOS */}
+            <div style={styles.tabs} className="hide-scrollbar">
+                <button style={styles.tab(activeTab === 'sales')} onClick={() => setActiveTab('sales')} style={{...styles.tab(activeTab === 'sales'), whiteSpace: 'nowrap'}}>
+                    <TicketIcon style={{ width: '20px' }} /> Venta Taquilla
+                </button>
+                <button style={styles.tab(activeTab === 'scanner')} onClick={() => setActiveTab('scanner')} style={{...styles.tab(activeTab === 'scanner'), whiteSpace: 'nowrap'}}>
+                    <QrCodeIcon style={{ width: '20px' }} /> Escáner QR
+                </button>
+                <button style={styles.tab(activeTab === 'table')} onClick={() => setActiveTab('table')} style={{...styles.tab(activeTab === 'table'), whiteSpace: 'nowrap'}}>
+                    <ClipboardDocumentListIcon style={{ width: '20px' }} /> Gestión
+                </button>
+                
+                {/* Botón de configuración movido aquí como un tab más */}
                 <button 
                     onClick={() => setIsConfigOpen(true)}
-                    style={{
-                        display: 'flex', alignItems: 'center', gap: '8px',
-                        padding: '0.6rem 1rem', backgroundColor: '#fff',
-                        border: `1px solid ${THEME.gray}`, borderRadius: '8px',
-                        color: THEME.textDark, fontWeight: '600', cursor: 'pointer',
-                        boxShadow: '0 1px 2px rgba(0,0,0,0.05)', transition: 'all 0.2s'
-                    }}
+                    style={{...styles.tab(false), whiteSpace: 'nowrap'}}
                     onMouseEnter={e => e.currentTarget.style.backgroundColor = THEME.primaryLight}
                     onMouseLeave={e => e.currentTarget.style.backgroundColor = '#fff'}
                 >
                     <Cog6ToothIcon style={{ width: '20px' }} />
                     Configuración
-                </button>
-            </div>
-
-            {/* TABS CON ICONOS */}
-            <div style={styles.tabs}>
-                <button style={styles.tab(activeTab === 'sales')} onClick={() => setActiveTab('sales')}>
-                    <TicketIcon style={{ width: '20px' }} /> Venta Taquilla
-                </button>
-                <button style={styles.tab(activeTab === 'scanner')} onClick={() => setActiveTab('scanner')}>
-                    <QrCodeIcon style={{ width: '20px' }} /> Escáner QR
-                </button>
-                <button style={styles.tab(activeTab === 'table')} onClick={() => setActiveTab('table')}>
-                    <ClipboardDocumentListIcon style={{ width: '20px' }} /> Gestión
                 </button>
             </div>
 

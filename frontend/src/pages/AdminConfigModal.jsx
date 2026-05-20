@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import api from '../api/client';
 import toast from 'react-hot-toast';
 import { XMarkIcon } from '@heroicons/react/24/outline';
@@ -14,6 +14,7 @@ export default function AdminConfigModal({ isOpen, onClose, theme }) {
         RESERVATION_CLOSED_WEEKDAYS: ''
     });
     const [loading, setLoading] = useState(false);
+    const datePickerRef = useRef(null);
 
     useEffect(() => {
         if (isOpen) {
@@ -230,20 +231,31 @@ export default function AdminConfigModal({ isOpen, onClose, theme }) {
                             Haz clic para abrir el calendario y selecciona todas las fechas que quieras (puedes elegir varias de golpe).
                         </p>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                            {/* Convertir strings a objetos Date para el picker */}
-                            <DatePicker
-                                multiple
-                                value={closedDatesArr.map(d => new Date(d + 'T00:00:00'))}
-                                onChange={handleDatesChange}
-                                format="DD/MM/YYYY"
-                                placeholder="Haz clic aquí para seleccionar fechas"
-                                containerStyle={{ width: '100%' }}
-                                style={{
-                                    ...styles.input,
-                                    width: '100%',
-                                    cursor: 'pointer'
-                                }}
-                            />
+                            <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                                {/* Convertir strings a objetos Date para el picker */}
+                                <div style={{ flex: 1 }}>
+                                    <DatePicker
+                                        ref={datePickerRef}
+                                        multiple
+                                        value={closedDatesArr.map(d => new Date(d + 'T00:00:00'))}
+                                        onChange={handleDatesChange}
+                                        format="DD/MM/YYYY"
+                                        placeholder="Haz clic aquí para seleccionar fechas"
+                                        containerStyle={{ width: '100%' }}
+                                        style={{
+                                            ...styles.input,
+                                            width: '100%',
+                                            cursor: 'pointer'
+                                        }}
+                                    />
+                                </div>
+                                <button 
+                                    onClick={() => datePickerRef.current?.closeCalendar()} 
+                                    style={{ ...styles.btnSave, padding: '0 1rem', height: '42px' }}
+                                >
+                                    Listo
+                                </button>
+                            </div>
                             
                             {/* Lista visual de fechas seleccionadas para quitarlas rápidamente */}
                             {closedDatesArr.length > 0 && (
