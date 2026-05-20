@@ -38,6 +38,9 @@ import microscopicosRoutes from '../modules/microscopicos/routes.microscopicos.j
 // ✅ COTIZACIONES 3D
 import cotizaciones3dRoutes from '../modules/cotizaciones3d/routes.cotizaciones3d.js'
 
+// ✅ CONFIGURACIÓN DEL SISTEMA
+import configRoutes from '../modules/config/routes.config.js'
+
 const r = Router()
 
 // Estado y salud
@@ -88,5 +91,8 @@ r.use('/languages', idiomasRoutes)
 
 // --- COTIZACIONES 3D ---
 r.use('/cotizaciones3d', cotizaciones3dRoutes)
+
+// --- CONFIGURACIÓN DEL SISTEMA ---
+r.use('/config', configRoutes)
 
 export default r

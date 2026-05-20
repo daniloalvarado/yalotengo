@@ -14,6 +14,8 @@ import {
 import AdminSales from './AdminSales'
 import AdminScanner from './AdminScanner'
 import AdminManagement from './AdminManagement'
+import AdminConfigModal from './AdminConfigModal'
+import { Cog6ToothIcon } from '@heroicons/react/24/outline'
 
 const STATUS_LABELS = {
     PENDING: 'Pendiente', PAID: 'Pagado', USED: 'Usado',
@@ -29,6 +31,7 @@ const THEME = {
 export default function AdminReservations() {
     const navigate = useNavigate()
     const [activeTab, setActiveTab] = useState('sales')
+    const [isConfigOpen, setIsConfigOpen] = useState(false)
 
     const getTodayDate = () => {
         const now = new Date();
@@ -240,6 +243,21 @@ export default function AdminReservations() {
         <div style={styles.container}>
             <div style={styles.header}>
                 <h1 style={styles.title}>Panel de Reservas</h1>
+                <button 
+                    onClick={() => setIsConfigOpen(true)}
+                    style={{
+                        display: 'flex', alignItems: 'center', gap: '8px',
+                        padding: '0.6rem 1rem', backgroundColor: '#fff',
+                        border: `1px solid ${THEME.gray}`, borderRadius: '8px',
+                        color: THEME.textDark, fontWeight: '600', cursor: 'pointer',
+                        boxShadow: '0 1px 2px rgba(0,0,0,0.05)', transition: 'all 0.2s'
+                    }}
+                    onMouseEnter={e => e.currentTarget.style.backgroundColor = THEME.primaryLight}
+                    onMouseLeave={e => e.currentTarget.style.backgroundColor = '#fff'}
+                >
+                    <Cog6ToothIcon style={{ width: '20px' }} />
+                    Configuración
+                </button>
             </div>
 
             {/* TABS CON ICONOS */}
@@ -285,6 +303,12 @@ export default function AdminReservations() {
                     formatTime={formatTime} statusLabels={STATUS_LABELS} theme={THEME} styles={styles}
                 />
             )}
+
+            <AdminConfigModal 
+                isOpen={isConfigOpen} 
+                onClose={() => setIsConfigOpen(false)} 
+                theme={THEME} 
+            />
         </div>
     )
 }

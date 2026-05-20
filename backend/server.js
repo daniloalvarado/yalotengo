@@ -11,6 +11,7 @@ import routes from './routes/index.js'
 import { sequelize } from './config/db.js'
 import { DataTypes } from 'sequelize'
 import { initMinio } from './config/s3.js'
+import { initDefaultConfig } from './modules/config/model.config.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -145,6 +146,7 @@ async function start() {
     await sequelize.query("SET time_zone = '+00:00'")
     await ensureSchema()
     await sequelize.sync()
+    await initDefaultConfig()
     app.listen(PORT, () => console.log('Backend on :' + PORT))
   } catch (err) {
     console.error('[Error] No se pudo conectar a la base de datos.')

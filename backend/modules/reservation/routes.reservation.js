@@ -2,6 +2,7 @@ import { Router } from 'express'
 import { Op } from 'sequelize'
 import { auth } from '../../utils/jwt.js'
 import { Reservation, generateTimeSlots, getMaxCapacity } from './model.reservation.js'
+import { SysConfig } from '../config/model.config.js'
 import { generateAndUploadQR, generateQRDataURL } from './qr.generator.js'
 import { User } from '../auth/model.user.js'
 
@@ -33,8 +34,34 @@ r.get('/slots', async (req, res) => {
         }
         // ----------------------------------
 
-        const allSlots = generateTimeSlots()
-        const maxCapacity = getMaxCapacity()
+        // --- LÓGICA DE DÍAS CERRADOS ---
+        const configs = await SysConfig.findAll()
+        const configMap = {}
+        configs.forEach(c => configMap[c.key] = c.value)
+
+        const closedDatesStr = configMap['RESERVATION_CLOSED_DAYS'] || ''
+        const closedDates = closedDatesStr.split(',').map(d => d.trim()).filter(d => d)
+
+        const closedWeekdaysStr = configMap['RESERVATION_CLOSED_WEEKDAYS'] || ''
+        const closedWeekdays = closedWeekdaysStr.split(',').map(d => d.trim()).filter(d => d)
+
+        // 1. Verificar fecha específica
+        if (closedDates.includes(date)) {
+            return res.json({ closed: true, message: 'El museo se encuentra cerrado en esta fecha.' })
+        }
+
+        // 2. Verificar día de la semana (0=Domingo, 1=Lunes, ..., 6=Sábado)
+        // Usamos new Date(date + 'T00:00:00') para evitar problemas de zona horaria al sacar el día
+        const requestedDateObj = new Date(date + 'T00:00:00')
+        const dayOfWeek = requestedDateObj.getDay().toString()
+        
+        if (closedWeekdays.includes(dayOfWeek)) {
+            return res.json({ closed: true, message: 'El museo no atiende este día de la semana.' })
+        }
+        // ----------------------------------
+
+        const { slots: allSlots, openTime, closeTime } = await generateTimeSlots()
+        const maxCapacity = await getMaxCapacity()
 
         // Contar reservas por slot para esa fecha
         const reservations = await Reservation.findAll({
@@ -67,8 +94,8 @@ r.get('/slots', async (req, res) => {
         res.json({
             date,
             slots,
-            openTime: process.env.RESERVATION_OPEN_TIME || '09:00',
-            closeTime: process.env.RESERVATION_CLOSE_TIME || '20:00'
+            openTime,
+            closeTime
         })
     } catch (err) {
         console.error('[Reservations] slots error:', err)
@@ -97,13 +124,13 @@ r.post('/create', auth, async (req, res) => {
         }
 
         // Verificar que el slot existe
-        const allSlots = generateTimeSlots()
+        const { slots: allSlots } = await generateTimeSlots()
         if (!allSlots.includes(timeslot)) {
             return res.status(400).json({ error: 'Horario no válido' })
         }
 
         // Verificar disponibilidad
-        const maxCapacity = getMaxCapacity()
+        const maxCapacity = await getMaxCapacity()
         const currentReservations = await Reservation.findAll({
             where: {
                 res_dt_date: date,

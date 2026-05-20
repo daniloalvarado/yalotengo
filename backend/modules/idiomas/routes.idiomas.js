@@ -19,7 +19,7 @@ const baseUIKeys = {
   "txtTemasBtnBiodiversidad": "Biodiversidad",
   "txtTemasBtnGaleria": "Galería",
   "txtTemasBtnAjustes": "Ajustes",
-  "txtGaleriaPlaceholderBuscador": "Buscar por nombre común o nombre científico...",
+  "txtGaleriaPlaceholderBuscador": "Buscar...",
   "msgNombreComun": "Nombre Común",
   "msgNombreCientifico": "Nombre Científico",
   "msgTodos": "Todos",

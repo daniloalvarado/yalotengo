@@ -1,6 +1,7 @@
 import { DataTypes } from 'sequelize'
 import { sequelize } from '../../config/db.js'
 import crypto from 'crypto'
+import { SysConfig } from '../config/model.config.js'
 
 // Modelo de Reserva de Ticket para Museo
 export const Reservation = sequelize.define('res_reservation', {
@@ -86,11 +87,15 @@ export const Reservation = sequelize.define('res_reservation', {
   }
 })
 
-// Función helper para generar slots del día
-export function generateTimeSlots() {
-  const openTime = process.env.RESERVATION_OPEN_TIME || '09:00'
-  const closeTime = process.env.RESERVATION_CLOSE_TIME || '20:00'
-  const slotDuration = parseInt(process.env.RESERVATION_SLOT_DURATION || '30', 10)
+// Función helper para generar slots del día (Ahora Asíncrona consultando BD)
+export async function generateTimeSlots() {
+  const configs = await SysConfig.findAll()
+  const configMap = {}
+  configs.forEach(c => configMap[c.key] = c.value)
+
+  const openTime = configMap['RESERVATION_OPEN_TIME'] || '09:00'
+  const closeTime = configMap['RESERVATION_CLOSE_TIME'] || '20:00'
+  const slotDuration = parseInt(configMap['RESERVATION_SLOT_DURATION'] || '30', 10)
 
   const slots = []
   const [openHour, openMin] = openTime.split(':').map(Number)
@@ -107,10 +112,11 @@ export function generateTimeSlots() {
     currentMinutes += slotDuration
   }
 
-  return slots
+  return { slots, openTime, closeTime }
 }
 
 // Función para obtener capacidad máxima
-export function getMaxCapacity() {
-  return parseInt(process.env.RESERVATION_MAX_CAPACITY || '10', 10)
+export async function getMaxCapacity() {
+  const capConfig = await SysConfig.findByPk('RESERVATION_MAX_CAPACITY')
+  return parseInt(capConfig ? capConfig.value : '10', 10)
 }
