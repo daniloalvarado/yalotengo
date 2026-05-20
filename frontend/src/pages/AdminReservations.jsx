@@ -190,8 +190,8 @@ export default function AdminReservations() {
     // --- ESTILOS CORREGIDOS ---
     const styles = {
         container: { maxWidth: '1200px', margin: '1rem auto', padding: '1rem', fontFamily: 'system-ui, -apple-system, sans-serif' },
-        header: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' },
-        title: { fontSize: '1.75rem', fontWeight: 'bold', color: THEME.textDark },
+        header: { display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '1rem', marginBottom: '1.5rem' },
+        title: { fontSize: '1.75rem', fontWeight: 'bold', color: THEME.textDark, margin: 0 },
 
         tabs: { display: 'flex', gap: '0.8rem', marginBottom: '2rem', flexWrap: 'wrap', justifyContent: 'flex-start' },
         tab: (active) => ({

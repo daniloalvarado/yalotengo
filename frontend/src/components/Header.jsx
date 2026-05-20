@@ -247,12 +247,12 @@ export default function Header() {
 
       {/* Mobile Nav */}
       <div className="md:hidden border-t border-zinc-800">
-        <nav className="mx-auto max-w-7xl px-6 py-2 flex items-center gap-5 overflow-auto text-sm">
+        <nav className="mx-auto max-w-7xl px-6 py-3 flex items-center gap-5 overflow-x-auto text-sm whitespace-nowrap hide-scrollbar">
           {/* Dashboard - Solo para admins, primero en móvil */}
           {user?.use_txt_role === 'admin' && (
             <NavLink
               to="/admin-dashboard"
-              className={({ isActive }) => `${isActive ? "text-white font-medium" : "text-zinc-300 hover:text-white"}`}
+              className={({ isActive }) => `${isActive ? "text-emerald-400 font-medium" : "text-zinc-300 hover:text-white"}`}
             >
               Dashboard
             </NavLink>
@@ -260,7 +260,7 @@ export default function Header() {
 
           <NavLink
             to={user?.use_txt_role === 'admin' ? "/admin-models3d" : "/models3d"}
-            className={({ isActive }) => `${isActive ? "text-white font-medium" : "text-zinc-300 hover:text-white"}`}
+            className={({ isActive }) => `${isActive ? "text-emerald-400 font-medium" : "text-zinc-300 hover:text-white"}`}
           >
             Modelos 3D
           </NavLink>
@@ -268,7 +268,7 @@ export default function Header() {
           {user?.use_txt_role === 'admin' && (
             <NavLink
               to="/admin-microscopicos"
-              className={({ isActive }) => `${isActive ? "text-white font-medium" : "text-zinc-300 hover:text-white"}`}
+              className={({ isActive }) => `${isActive ? "text-emerald-400 font-medium" : "text-zinc-300 hover:text-white"}`}
             >
               Gestión Micromuseo
             </NavLink>
@@ -276,21 +276,21 @@ export default function Header() {
 
           <NavLink
             to={user?.use_txt_role === 'admin' ? "/admin-books" : "/books"}
-            className={({ isActive }) => `${isActive ? "text-white font-medium" : "text-zinc-300 hover:text-white"}`}
+            className={({ isActive }) => `${isActive ? "text-emerald-400 font-medium" : "text-zinc-300 hover:text-white"}`}
           >
             Libros
           </NavLink>
 
           <NavLink
             to={user?.use_txt_role === 'admin' ? "/admin-courses" : "/courses"}
-            className={({ isActive }) => `${isActive ? "text-white font-medium" : "text-zinc-300 hover:text-white"}`}
+            className={({ isActive }) => `${isActive ? "text-emerald-400 font-medium" : "text-zinc-300 hover:text-white"}`}
           >
             Cursos
           </NavLink>
 
           <NavLink
             to={reservationsLink}
-            className={({ isActive }) => `${isActive ? "text-white font-medium" : "text-zinc-300 hover:text-white"}`}
+            className={({ isActive }) => `${isActive ? "text-emerald-400 font-medium" : "text-zinc-300 hover:text-white"}`}
           >
             {reservationsLabel}
           </NavLink>

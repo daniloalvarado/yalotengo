@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import api from '../api/client';
 import toast from 'react-hot-toast';
 import { XMarkIcon } from '@heroicons/react/24/outline';
+import DatePicker from 'react-multi-date-picker';
 
 export default function AdminConfigModal({ isOpen, onClose, theme }) {
     const [config, setConfig] = useState({
@@ -13,7 +14,6 @@ export default function AdminConfigModal({ isOpen, onClose, theme }) {
         RESERVATION_CLOSED_WEEKDAYS: ''
     });
     const [loading, setLoading] = useState(false);
-    const [newDate, setNewDate] = useState('');
 
     useEffect(() => {
         if (isOpen) {
@@ -45,15 +45,27 @@ export default function AdminConfigModal({ isOpen, onClose, theme }) {
         handleChange('RESERVATION_CLOSED_WEEKDAYS', currentDays.join(','));
     };
 
-    // Funciones para fechas específicas
-    const handleAddDate = () => {
-        if (!newDate) return;
-        let currentDates = config.RESERVATION_CLOSED_DAYS ? config.RESERVATION_CLOSED_DAYS.split(',').filter(d => d) : [];
-        if (!currentDates.includes(newDate)) {
-            currentDates.push(newDate);
-            handleChange('RESERVATION_CLOSED_DAYS', currentDates.join(','));
+    // Funciones para fechas específicas (ahora usando DatePicker)
+    const closedDatesArr = config.RESERVATION_CLOSED_DAYS ? config.RESERVATION_CLOSED_DAYS.split(',').filter(d => d) : [];
+
+    const handleDatesChange = (dateObjects) => {
+        // dateObjects es un arreglo de objetos DatePicker
+        if (!dateObjects) {
+            handleChange('RESERVATION_CLOSED_DAYS', '');
+            return;
         }
-        setNewDate('');
+        
+        // Extraer formato YYYY-MM-DD
+        const formattedDates = dateObjects.map(dateObj => {
+            const date = dateObj.toDate();
+            // Evitar problemas de zona horaria, construir el string local
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        });
+        
+        handleChange('RESERVATION_CLOSED_DAYS', formattedDates.join(','));
     };
 
     const handleRemoveDate = (dateToRemove) => {
@@ -73,7 +85,6 @@ export default function AdminConfigModal({ isOpen, onClose, theme }) {
     ];
 
     const closedWeekdaysArr = config.RESERVATION_CLOSED_WEEKDAYS ? config.RESERVATION_CLOSED_WEEKDAYS.split(',').filter(d => d) : [];
-    const closedDatesArr = config.RESERVATION_CLOSED_DAYS ? config.RESERVATION_CLOSED_DAYS.split(',').filter(d => d) : [];
 
     const handleSave = async () => {
         setLoading(true);
@@ -215,33 +226,53 @@ export default function AdminConfigModal({ isOpen, onClose, theme }) {
 
                     <div style={styles.fieldGroup}>
                         <label style={styles.label}>Fechas Específicas Cerradas (Mantenimiento / Feriados)</label>
-                        <div style={{ display: 'flex', gap: '0.5rem' }}>
-                            <input type="date" style={{ ...styles.input, flex: 1 }} 
-                                value={newDate} onChange={e => setNewDate(e.target.value)} />
-                            <button onClick={handleAddDate} style={{ ...styles.btnSave, padding: '0 1rem' }}>
-                                Añadir
-                            </button>
+                        <p style={{ margin: '0 0 0.5rem 0', fontSize: '0.85rem', color: '#6b7280' }}>
+                            Haz clic para abrir el calendario y selecciona todas las fechas que quieras (puedes elegir varias de golpe).
+                        </p>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                            {/* Convertir strings a objetos Date para el picker */}
+                            <DatePicker
+                                multiple
+                                value={closedDatesArr.map(d => new Date(d + 'T00:00:00'))}
+                                onChange={handleDatesChange}
+                                format="DD/MM/YYYY"
+                                placeholder="Haz clic aquí para seleccionar fechas"
+                                containerStyle={{ width: '100%' }}
+                                style={{
+                                    ...styles.input,
+                                    width: '100%',
+                                    cursor: 'pointer'
+                                }}
+                            />
+                            
+                            {/* Lista visual de fechas seleccionadas para quitarlas rápidamente */}
+                            {closedDatesArr.length > 0 && (
+                                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                                    {closedDatesArr.map(d => {
+                                        // d viene como YYYY-MM-DD desde la base de datos
+                                        const [year, month, day] = d.split('-');
+                                        const displayDate = `${day}-${month}-${year}`;
+                                        
+                                        return (
+                                            <div key={d} style={{
+                                                display: 'flex', alignItems: 'center', gap: '6px',
+                                                padding: '0.3rem 0.6rem', borderRadius: '6px',
+                                                backgroundColor: '#fee2e2', color: '#991b1b',
+                                                fontSize: '0.85rem', fontWeight: '500', border: '1px solid #fca5a5'
+                                            }}>
+                                                <span>{displayDate}</span>
+                                                <button onClick={() => handleRemoveDate(d)} style={{
+                                                    background: 'none', border: 'none', color: '#dc2626',
+                                                    cursor: 'pointer', padding: '0', display: 'flex'
+                                                }}>
+                                                    <XMarkIcon style={{ width: '14px', strokeWidth: 3 }} />
+                                                </button>
+                                            </div>
+                                        )
+                                    })}
+                                </div>
+                            )}
                         </div>
-                        {closedDatesArr.length > 0 && (
-                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginTop: '0.5rem' }}>
-                                {closedDatesArr.map(d => (
-                                    <div key={d} style={{
-                                        display: 'flex', alignItems: 'center', gap: '6px',
-                                        padding: '0.3rem 0.6rem', borderRadius: '6px',
-                                        backgroundColor: '#fee2e2', color: '#991b1b',
-                                        fontSize: '0.85rem', fontWeight: '500', border: '1px solid #fca5a5'
-                                    }}>
-                                        <span>{d}</span>
-                                        <button onClick={() => handleRemoveDate(d)} style={{
-                                            background: 'none', border: 'none', color: '#dc2626',
-                                            cursor: 'pointer', padding: '0', display: 'flex'
-                                        }}>
-                                            <XMarkIcon style={{ width: '14px', strokeWidth: 3 }} />
-                                        </button>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
                     </div>
                 </div>
 
