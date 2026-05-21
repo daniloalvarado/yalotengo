@@ -110,27 +110,31 @@ public class ControladorInfo : MonoBehaviour
                 }
             }
 
+            bool descripcionTraducida = false;
             // 3. Aplicamos la traducción encontrada
             if (traduccion != null)
             {
                 if (!string.IsNullOrEmpty(traduccion.name)) nombreDefinitivo = traduccion.name;
-                if (!string.IsNullOrEmpty(traduccion.descripcion)) descripcionDefinitiva = traduccion.descripcion;
+                if (!string.IsNullOrEmpty(traduccion.descripcion)) {
+                    descripcionDefinitiva = traduccion.descripcion;
+                    descripcionTraducida = true;
+                }
             }
 
             // --- AGREGAR FUENTE AL FINAL DE LA DESCRIPCIÓN ---
             if (!string.IsNullOrEmpty(datos.fuente))
               {
                   string tagFuente = "Fuente:";
-                  if (idiomaActual != "es" && LectorApiAR.DiccionarioUI != null && LectorApiAR.DiccionarioUI.ContainsKey(idiomaActual)) {
+                  if (descripcionTraducida && idiomaActual != "es" && LectorApiAR.DiccionarioUI != null && LectorApiAR.DiccionarioUI.ContainsKey(idiomaActual)) {
                       var d = LectorApiAR.DiccionarioUI[idiomaActual];
                       if (d.ContainsKey("lbl_fuente")) tagFuente = d["lbl_fuente"];
                   }
                   // Añadimos la fuente al final de la descripción en itálica
                 descripcionDefinitiva += $"\n\n<i>{tagFuente} {datos.fuente}</i>";
             }
-
+            
             // --- TRADUCCIÓN DE TAXONOMÍA DINÁMICA ---
-              taxonomiaDefinitiva = TraducirTaxonomiaDinamica(taxonomiaDefinitiva);
+            taxonomiaDefinitiva = TraducirTaxonomiaDinamica(taxonomiaDefinitiva, descripcionTraducida);
 
             // --- PREPARACIÓN DE TEXTOS PARA EL EFECTO ---
             string tituloCompleto = "";
@@ -138,27 +142,23 @@ public class ControladorInfo : MonoBehaviour
             // --- CHIP DE TEMÁTICA ---
             if (!string.IsNullOrEmpty(datos.tematica))
             {
-                string[] palabras = datos.tematica.ToUpper().Split(' ');
+                string tematicaTraducida = TraducirTematicaUI(datos.tematica);
+                string[] palabras = tematicaTraducida.ToUpper().Split(' ');
                 string tematicaChips = "";
                 
                 for (int i = 0; i < palabras.Length; i++)
                 {
-                    // Truco definitivo 4.0: Eliminar los guiones transparentes que causan problemas en móviles.
-                    // En su lugar, usamos el atributo nativo 'padding' de TextMeshPro y reducimos levemente el tamaño.
                     tematicaChips += $"<size=85%><nobr><mark=#10b98150 padding=\"30,30,0,0\"><color=#064e3b><b>{palabras[i]}</b></color></mark></nobr></size>";
-                    
-                    if (i < palabras.Length - 1) tematicaChips += "\n"; // Bajamos de renglón cada palabra para simetría total
+                    if (i < palabras.Length - 1) tematicaChips += "\n";
                 }
                 
                 tituloCompleto += $"<align=center>{tematicaChips}</align>\n<size=50%>\n</size>";
             }
 
             tituloCompleto += nombreDefinitivo;
-            
-            // Verificamos que tenga nombre científico y no sea exactamente igual al nombre común
+
             if (!string.IsNullOrEmpty(datos.nombre_cientifico) && nombreDefinitivo.ToLower() != datos.nombre_cientifico.ToLower())
             {
-                // Solo el nombre científico va entre paréntesis y en itálica
                 tituloCompleto += " <i>(" + datos.nombre_cientifico + ")</i>";
             }
 
@@ -339,9 +339,12 @@ public class ControladorInfo : MonoBehaviour
     
 
     // --- TRADUCCIÓN OPTIMIZADA DINÁMICA ---
-    private string TraducirTaxonomiaDinamica(string texto)
+    private string TraducirTaxonomiaDinamica(string texto, bool descripcionTraducida)
     {
         if (string.IsNullOrEmpty(texto)) return texto;
+
+        // Si la descripción principal cayó en fallback a español, mantenemos la taxonomía en español
+        if (!descripcionTraducida) return texto;
         string codigo = PlayerPrefs.GetString("IdiomaSeleccionado", "es").ToLower();
         if (codigo == "es" || LectorApiAR.DiccionarioUI == null || !LectorApiAR.DiccionarioUI.ContainsKey(codigo)) return texto;
 
@@ -356,6 +359,30 @@ public class ControladorInfo : MonoBehaviour
         if (d.ContainsKey("lbl_genero")) texto = texto.Replace("Género:", d["lbl_genero"]);
 
         return texto;
+    }
+
+    private string TraducirTematicaUI(string original)
+    {
+        if (string.IsNullOrEmpty(original)) return original;
+        string idiomaActivo = PlayerPrefs.GetString("IdiomaSeleccionado", "es").ToLower();
+        if (idiomaActivo == "es") return original;
+
+        string normalized = original.Trim().ToLower().Normalize(System.Text.NormalizationForm.FormD);
+        System.Text.StringBuilder sb = new System.Text.StringBuilder();
+        foreach (char c in normalized) {
+            if (System.Globalization.CharUnicodeInfo.GetUnicodeCategory(c) != System.Globalization.UnicodeCategory.NonSpacingMark) sb.Append(c);
+        }
+        string cleanKey = System.Text.RegularExpressions.Regex.Replace(sb.ToString(), @"[^a-z0-9]", "_");
+        string finalKey = "tema_" + cleanKey;
+
+        if (LectorApiAR.DiccionarioUI != null && LectorApiAR.DiccionarioUI.ContainsKey(idiomaActivo))
+        {
+            if (LectorApiAR.DiccionarioUI[idiomaActivo].ContainsKey(finalKey))
+            {
+                return LectorApiAR.DiccionarioUI[idiomaActivo][finalKey];
+            }
+        }
+        return original;
     }
 
     private IEnumerator FadePanel(float targetAlpha, float duration)

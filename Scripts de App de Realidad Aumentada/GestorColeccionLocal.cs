@@ -18,6 +18,7 @@ public class ResumenColeccion
     public string rutaFotoLocal;
     public string rutaModeloLocal;
     public string tematica;
+    public LectorApiAR.Traduccion[] traducciones;
 }
 
 [Serializable]
@@ -127,7 +128,8 @@ public class GestorColeccionLocal : MonoBehaviour
             fuente = datos.fuente,
             tematica = datos.tematica, // Obtenemos la tematica enviada desde NodeJS
             rutaFotoLocal = rutaFoto,
-            rutaModeloLocal = rutaModeloFinal
+            rutaModeloLocal = rutaModeloFinal,
+            traducciones = datos.traducciones
         };
 
         // 4. Actualizar el Gran Índice (El JSON Maestro de la Galería)

@@ -278,13 +278,35 @@ public class GestorGaleria : MonoBehaviour
             
             TextMeshProUGUI txtMsg = objMensajeVacio.AddComponent<TextMeshProUGUI>();
             
+            string idiomaActual = PlayerPrefs.GetString("IdiomaSeleccionado", "es").ToLower();
+            string msgVacia = "¡Aún no hay modelos descargados!";
+            string msgSinResultados = "No se encontraron modelos con esa búsqueda";
+
+            if (idiomaActual == "en")
+            {
+                msgVacia = "No downloaded models yet!";
+                msgSinResultados = "No models found for this search";
+            }
+            else if (idiomaActual == "pt")
+            {
+                msgVacia = "Nenhum modelo baixado ainda!";
+                msgSinResultados = "Nenhum modelo encontrado";
+            }
+
+            if (LectorApiAR.DiccionarioUI != null && LectorApiAR.DiccionarioUI.ContainsKey(idiomaActual))
+            {
+                var d = LectorApiAR.DiccionarioUI[idiomaActual];
+                if (d.ContainsKey("txtGaleriaVacia")) msgVacia = d["txtGaleriaVacia"];
+                if (d.ContainsKey("txtGaleriaSinResultados")) msgSinResultados = d["txtGaleriaSinResultados"];
+            }
+
             if (todosLosModelos.Count == 0)
             {
-                txtMsg.text = "¡Aún no hay modelos descargados!";
+                txtMsg.text = msgVacia;
             }
             else
             {
-                txtMsg.text = "No se encontraron modelos con esa búsqueda";
+                txtMsg.text = msgSinResultados;
             }
 
             txtMsg.fontSize = 45;

@@ -42,6 +42,7 @@ public class LectorApiAR : MonoBehaviour
         // --- NUEVO: ASEGURAR QUE EL LOADING EMPIEZA OCULTO ---
         if (objetoLoading != null) objetoLoading.SetActive(false);
 
+        
         // Añadimos el script de giro automático al objeto de carga
         if (objetoLoading != null && objetoLoading.GetComponent<RotarLento>() == null)
         {
@@ -52,8 +53,11 @@ public class LectorApiAR : MonoBehaviour
     [Serializable]
     public class Traduccion
     {
+        public int id;
+        public int microscopico_id;
         public string language_code;
         public string name;
+        public string taxonomia;
         public string descripcion;
     }
 

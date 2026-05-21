@@ -190,7 +190,8 @@ public class Visor3DAutonomo : MonoBehaviour
             taxonomia = modeloData.taxonomia,
             descripcion = modeloData.descripcion,
             fuente = modeloData.fuente,
-            tematica = modeloData.tematica
+            tematica = modeloData.tematica,
+            traducciones = modeloData.traducciones
         };
 
         // 5. Mostrar la Data en la UI lateral

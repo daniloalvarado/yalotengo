@@ -21,6 +21,8 @@ const baseUIKeys = {
   "txtTemasBtnGaleria": "Galería",
   "txtTemasBtnAjustes": "Ajustes",
   "txtGaleriaPlaceholderBuscador": "Buscar...",
+  "txtGaleriaVacia": "¡Aún no hay modelos descargados!",
+  "txtGaleriaSinResultados": "No se encontraron modelos con esa búsqueda",
   "msgNombreComun": "Nombre Común",
   "msgNombreCientifico": "Nombre Científico",
   "msgTodos": "Todos",
@@ -211,6 +213,43 @@ router.post('/autotranslate', async (req, res) => {
     res.json({ translatedText: translated })
   } catch (error) {
     res.status(500).json({ error: error.message })
+  }
+})
+
+// ENDPOINT ESPECIAL: Sincronizar claves base faltantes y eliminar obsoletas
+router.post('/sync-ui', async (req, res) => {
+  try {
+    const idiomas = await Idioma.findAll();
+    let agregados = 0;
+    let eliminados = 0;
+
+    for (const idioma of idiomas) {
+      // 1. Agregar claves nuevas
+      for (const [key, esValue] of Object.entries(baseUIKeys)) {
+        const existe = await UITranslation.findOne({ where: { language_code: idioma.code, key: key }});
+        if (!existe) {
+          console.log(`Autotraduciendo ${key} para ${idioma.code}...`);
+          const val = await autotranslate(esValue, 'es', idioma.code);
+          await UITranslation.create({ language_code: idioma.code, key: key, value: val });
+          agregados++;
+        }
+      }
+
+      // 2. Eliminar claves obsoletas
+      const traduccionesActuales = await UITranslation.findAll({ where: { language_code: idioma.code }});
+      for (const t of traduccionesActuales) {
+        if (!(t.key in baseUIKeys)) {
+          console.log(`Eliminando clave obsoleta ${t.key} de ${idioma.code}...`);
+          await t.destroy();
+          eliminados++;
+        }
+      }
+    }
+    
+    res.json({ message: `Sincronización completada. Se agregaron ${agregados} claves y se eliminaron ${eliminados} obsoletas.` });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: error.message });
   }
 })
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import api from '../api/client'
 import toast from 'react-hot-toast'
-import { PlusIcon, PencilIcon, CheckIcon, LanguageIcon, TrashIcon, ChevronDownIcon, ChevronUpIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { PlusIcon, PencilIcon, CheckIcon, LanguageIcon, TrashIcon, ChevronDownIcon, ChevronUpIcon, XMarkIcon, ArrowPathIcon } from '@heroicons/react/24/outline'
 
 export default function AdminIdiomas() {
   const [idiomas, setIdiomas] = useState([])
@@ -125,6 +125,17 @@ export default function AdminIdiomas() {
     }
   }
 
+  const handleSyncUI = async () => {
+    const loadingToast = toast.loading('Sincronizando base de datos, por favor espera...')
+    try {
+      const res = await api.post('/languages/sync-ui')
+      toast.success(res.data.message || 'Sincronización completada', { id: loadingToast, duration: 4000 })
+      setTimeout(() => window.location.reload(), 2000)
+    } catch (error) {
+      toast.error('Error al sincronizar claves', { id: loadingToast })
+    }
+  }
+
   return (
     <div className="relative max-w-6xl mx-auto p-4 sm:p-6 lg:p-8 space-y-8 min-h-screen pb-20">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-2">
@@ -140,12 +151,21 @@ export default function AdminIdiomas() {
             <p className="text-gray-500 text-sm">Agrega idiomas globales para el Micromuseo AR</p>
           </div>
         </div>
-        <button
-          onClick={() => setIsAdding(true)}
-          className="flex items-center justify-center gap-2 px-4 py-2 text-white bg-emerald-600 rounded-lg shadow-sm hover:bg-emerald-700 transition-colors w-full sm:w-auto"
-        >
-          <PlusIcon className="w-5 h-5" /> Nuevo Idioma
-        </button>
+        <div className="flex gap-2 w-full sm:w-auto">
+          <button
+            onClick={handleSyncUI}
+            className="flex items-center justify-center gap-2 px-4 py-2 text-emerald-700 bg-emerald-50 rounded-lg shadow-sm border border-emerald-200 hover:bg-emerald-100 transition-colors w-full sm:w-auto font-medium"
+            title="Añadir nuevas claves y limpiar las obsoletas en todos los idiomas"
+          >
+            <ArrowPathIcon className="w-5 h-5" /> Sincronizar Claves
+          </button>
+          <button
+            onClick={() => setIsAdding(true)}
+            className="flex items-center justify-center gap-2 px-4 py-2 text-white bg-emerald-600 rounded-lg shadow-sm hover:bg-emerald-700 transition-colors w-full sm:w-auto"
+          >
+            <PlusIcon className="w-5 h-5" /> Nuevo Idioma
+          </button>
+        </div>
       </div>
 
       {isAdding && (
