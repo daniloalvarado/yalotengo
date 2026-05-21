@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import api from '../api/client'
 import toast from 'react-hot-toast'
-import { PlusIcon, PencilIcon, CheckIcon, LanguageIcon, TrashIcon, ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline'
+import { PlusIcon, PencilIcon, CheckIcon, LanguageIcon, TrashIcon, ChevronDownIcon, ChevronUpIcon, XMarkIcon } from '@heroicons/react/24/outline'
 
 export default function AdminIdiomas() {
   const [idiomas, setIdiomas] = useState([])
@@ -128,15 +128,17 @@ export default function AdminIdiomas() {
   return (
     <div className="relative max-w-6xl mx-auto p-4 sm:p-6 lg:p-8 space-y-8 min-h-screen pb-20">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-gradient-to-r from-emerald-600 to-teal-700 p-6 rounded-2xl shadow-lg text-white">
-        <button onClick={() => window.history.back()} className="absolute top-4 left-4 bg-white/20 hover:bg-white/30 p-2 rounded-full backdrop-blur-sm transition" title="Volver">
-          <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
-        </button>
-        <div>
-          <h1 className="text-3xl font-black flex items-center gap-3">
-            <LanguageIcon className="w-8 h-8 opacity-90" />
-            Gestión de Idiomas
-          </h1>
-          <p className="text-emerald-100 mt-2">Agrega idiomas globales para el Micromuseo AR</p>
+        <div className="flex items-center gap-4">
+          <button onClick={() => window.history.back()} className="bg-white/20 hover:bg-white/30 p-3 rounded-full backdrop-blur-sm transition flex-shrink-0" title="Volver">
+            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+          </button>
+          <div>
+            <h1 className="text-3xl font-black flex items-center gap-3">
+              <LanguageIcon className="w-8 h-8 opacity-90" />
+              Gestión de Idiomas
+            </h1>
+            <p className="text-emerald-100 mt-2">Agrega idiomas globales para el Micromuseo AR</p>
+          </div>
         </div>
         <button
           onClick={() => setIsAdding(true)}

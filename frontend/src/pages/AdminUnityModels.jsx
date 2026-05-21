@@ -272,15 +272,15 @@ export default function AdminUnityModels() {
                                     placeholder="Buscar por nombre científico o común..."
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
-                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none text-sm transition-all shadow-sm hover:border-emerald-300"
+                                    className="w-full h-[42px] px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none text-sm transition-all shadow-sm hover:border-emerald-300"
                                 />
                             </div>
-                            <div className="flex flex-row gap-3 w-full sm:w-auto">
+                            <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
                               <div className="w-full sm:w-auto min-w-[200px]">
                                 <select
                                     value={selectedPanel}
                                     onChange={(e) => setSelectedPanel(e.target.value)}
-                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none text-sm transition-all shadow-sm hover:border-emerald-300 bg-white cursor-pointer"
+                                    className="w-full h-[42px] px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none text-sm transition-all shadow-sm hover:border-emerald-300 bg-white cursor-pointer"
                                 >
                                     <option value="">Todas las Temáticas</option>
                                     {uniquePanels.map((tematica, idx) => (
@@ -290,7 +290,7 @@ export default function AdminUnityModels() {
                             </div>
                             <button
                                 onClick={() => navigate('/admin-idiomas')}
-                                className="w-full sm:w-auto px-4 py-2 bg-emerald-100 text-emerald-700 font-bold rounded-lg hover:bg-emerald-200 transition-all shadow-sm flex items-center justify-center gap-2"
+                                className="w-full sm:w-auto h-[42px] px-4 bg-emerald-100 text-emerald-700 font-bold rounded-lg hover:bg-emerald-200 transition-all shadow-sm flex items-center justify-center gap-2"
                             >
                                 <LanguageIcon className="w-5 h-5" /> APP AR
                             </button>
