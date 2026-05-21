@@ -32,6 +32,7 @@ export default function AdminReservations() {
     const navigate = useNavigate()
     const [activeTab, setActiveTab] = useState('sales')
     const [isConfigOpen, setIsConfigOpen] = useState(false)
+    const [refreshTrigger, setRefreshTrigger] = useState(0)
 
     const getTodayDate = () => {
         const now = new Date();
@@ -87,7 +88,7 @@ export default function AdminReservations() {
                 .then(res => setSlots(res.data.slots || []))
                 .catch(err => toast.error(err.response?.data?.error || 'No hay horarios disponibles'))
         }
-    }, [date, activeTab])
+    }, [date, activeTab, refreshTrigger])
 
     useEffect(() => {
         if (activeTab === 'table') {
@@ -303,6 +304,7 @@ export default function AdminReservations() {
             <AdminConfigModal 
                 isOpen={isConfigOpen} 
                 onClose={() => setIsConfigOpen(false)} 
+                onSaveSuccess={() => setRefreshTrigger(prev => prev + 1)}
                 theme={THEME} 
             />
         </div>

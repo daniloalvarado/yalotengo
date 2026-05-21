@@ -17,7 +17,7 @@ const selectionStyles = `
 
 export default function ReservationSelection({
     date, setDate, today, loading, slots, selectedSlot, setSelectedSlot,
-    guests, setGuests, onNext, theme, styles, formatTime
+    guests, setGuests, onNext, theme, styles, formatTime, closedMessage
 }) {
 
     // Lógica visual local
@@ -77,6 +77,9 @@ export default function ReservationSelection({
                             if (!e.target.value) e.target.type = "text";
                         }}
                     />
+                    <p style={{ margin: '0.4rem 0 0 0', fontSize: '0.78rem', color: '#9ca3af', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                        🇵🇪 Horarios en <strong>Hora de Perú (UTC‑5)</strong>
+                    </p>
                 </div>
 
                 {/* Sección Horarios - SIEMPRE VISIBLE */}
@@ -86,6 +89,14 @@ export default function ReservationSelection({
                         <p style={{ color: '#9ca3af', textAlign: 'center', padding: '1rem' }}>Primero selecciona una fecha</p>
                     ) : loading ? (
                         <p>Cargando horarios...</p>
+                    ) : closedMessage ? (
+                        <div style={{
+                            backgroundColor: '#fee2e2', color: '#991b1b', border: '1px solid #fca5a5',
+                            padding: '1.5rem', borderRadius: '10px', textAlign: 'center', margin: '1rem 0'
+                        }}>
+                            <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '1.2rem', fontWeight: 'bold' }}>⛔ Museo Cerrado</h3>
+                            <p style={{ margin: 0 }}>{closedMessage}</p>
+                        </div>
                     ) : slots.length === 0 ? (
                         <p>No hay horarios disponibles</p>
                     ) : (

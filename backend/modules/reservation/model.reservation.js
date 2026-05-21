@@ -104,6 +104,7 @@ export async function generateTimeSlots() {
   let currentMinutes = openHour * 60 + openMin
   const closeMinutes = closeHour * 60 + closeMin
 
+  // El último slot debe TERMINAR a más tardar en la hora de cierre
   while (currentMinutes + slotDuration <= closeMinutes) {
     const hour = Math.floor(currentMinutes / 60)
     const min = currentMinutes % 60

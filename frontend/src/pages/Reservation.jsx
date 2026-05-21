@@ -32,6 +32,7 @@ export default function Reservation() {
     const [loading, setLoading] = useState(false)
     const [reservation, setReservation] = useState(null)
     const [step, setStep] = useState('select')
+    const [closedMessage, setClosedMessage] = useState('')
 
     // --- 1. LÓGICA DEL NEGOCIO ---
 
@@ -76,8 +77,18 @@ export default function Reservation() {
         if (!date) return
         setLoading(true)
         setSelectedSlot(null)
+        setClosedMessage('')
+        
         api.get(`/reservations/slots?date=${date}`)
-            .then(res => setSlots(res.data.slots || []))
+            .then(res => {
+                if (res.data.closed) {
+                    setClosedMessage(res.data.message);
+                    setSlots([]);
+                    showErrorToast(res.data.message);
+                } else {
+                    setSlots(res.data.slots || []);
+                }
+            })
             .catch(err => {
                 const msg = err.response?.data?.error || 'No hay horarios disponibles';
                 showErrorToast(msg);
@@ -233,7 +244,7 @@ export default function Reservation() {
             date={date} setDate={setDate} today={today}
             slots={slots} selectedSlot={selectedSlot} setSelectedSlot={setSelectedSlot} loading={loading}
             guests={guests} setGuests={setGuests} onNext={handleCreateReservation}
-            theme={THEME} styles={styles} formatTime={formatTime}
+            theme={THEME} styles={styles} formatTime={formatTime} closedMessage={closedMessage}
         />
     }
 

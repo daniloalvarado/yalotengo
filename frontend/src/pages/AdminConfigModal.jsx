@@ -4,7 +4,7 @@ import toast from 'react-hot-toast';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import DatePicker from 'react-multi-date-picker';
 
-export default function AdminConfigModal({ isOpen, onClose, theme }) {
+export default function AdminConfigModal({ isOpen, onClose, onSaveSuccess, theme }) {
     const [config, setConfig] = useState({
         RESERVATION_OPEN_TIME: '09:00',
         RESERVATION_CLOSE_TIME: '20:00',
@@ -95,6 +95,7 @@ export default function AdminConfigModal({ isOpen, onClose, theme }) {
                 await api.put(`/config/${key}`, { value: config[key] });
             }
             toast.success('Configuración guardada exitosamente');
+            if (onSaveSuccess) onSaveSuccess();
             onClose();
         } catch (err) {
             toast.error('Error al guardar configuración');

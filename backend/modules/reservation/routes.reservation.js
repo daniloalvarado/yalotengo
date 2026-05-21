@@ -21,14 +21,13 @@ r.get('/slots', async (req, res) => {
             return res.status(400).json({ error: 'Fecha requerida en formato YYYY-MM-DD' })
         }
 
-        // --- CORRECCIÓN DE ZONA HORARIA ---
-        // 1. Obtenemos la fecha ACTUAL del servidor ajustada a su zona horaria local
+        // --- ZONA HORARIA FIJA: PERÚ (UTC-5) ---
+        // Siempre usamos hora peruana, independientemente de dónde esté el servidor o el usuario
         const now = new Date();
-        const offset = now.getTimezoneOffset() * 60000; // Desfase en milisegundos
-        const localDate = new Date(now.getTime() - offset).toISOString().split('T')[0];
+        const peruOffset = -5 * 60; // UTC-5 en minutos
+        const peruDate = new Date(now.getTime() + peruOffset * 60000);
+        const localDate = peruDate.toISOString().split('T')[0];
 
-        // 2. Comparamos cadenas de texto (Ej: "2026-01-13" < "2026-01-13")
-        // Si la fecha pedida es MENOR a la fecha local de hoy, es pasado.
         if (date < localDate) {
             return res.status(400).json({ error: 'No se pueden reservar fechas pasadas' })
         }
