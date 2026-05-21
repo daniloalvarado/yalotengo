@@ -127,22 +127,22 @@ export default function AdminIdiomas() {
 
   return (
     <div className="relative max-w-6xl mx-auto p-4 sm:p-6 lg:p-8 space-y-8 min-h-screen pb-20">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-gradient-to-r from-emerald-600 to-teal-700 p-6 rounded-2xl shadow-lg text-white">
-        <div className="flex items-center gap-4">
-          <button onClick={() => window.history.back()} className="bg-white/20 hover:bg-white/30 p-3 rounded-full backdrop-blur-sm transition flex-shrink-0" title="Volver">
-            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-2">
+        <div className="flex items-center gap-3">
+          <button onClick={() => window.history.back()} className="p-2 text-gray-500 hover:text-emerald-600 hover:bg-emerald-50 rounded-full transition-colors flex-shrink-0" title="Volver">
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
           </button>
           <div>
-            <h1 className="text-3xl font-black flex items-center gap-3">
-              <LanguageIcon className="w-8 h-8 opacity-90" />
+            <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+              <LanguageIcon className="w-6 h-6 text-emerald-600" />
               Gestión de Idiomas
             </h1>
-            <p className="text-emerald-100 mt-2">Agrega idiomas globales para el Micromuseo AR</p>
+            <p className="text-gray-500 text-sm">Agrega idiomas globales para el Micromuseo AR</p>
           </div>
         </div>
         <button
           onClick={() => setIsAdding(true)}
-          className="bg-white text-emerald-700 px-4 py-2 rounded-xl font-bold shadow-sm hover:bg-emerald-50 transition-colors flex items-center gap-2"
+          className="flex items-center justify-center gap-2 px-4 py-2 text-white bg-emerald-600 rounded-lg shadow-sm hover:bg-emerald-700 transition-colors w-full sm:w-auto"
         >
           <PlusIcon className="w-5 h-5" /> Nuevo Idioma
         </button>
