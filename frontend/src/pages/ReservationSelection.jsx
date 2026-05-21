@@ -77,9 +77,6 @@ export default function ReservationSelection({
                             if (!e.target.value) e.target.type = "text";
                         }}
                     />
-                    <p style={{ margin: '0.4rem 0 0 0', fontSize: '0.78rem', color: '#9ca3af', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                        🇵🇪 Horarios en <strong>Hora de Perú (UTC‑5)</strong>
-                    </p>
                 </div>
 
                 {/* Sección Horarios - SIEMPRE VISIBLE */}
@@ -94,7 +91,7 @@ export default function ReservationSelection({
                             backgroundColor: '#fee2e2', color: '#991b1b', border: '1px solid #fca5a5',
                             padding: '1.5rem', borderRadius: '10px', textAlign: 'center', margin: '1rem 0'
                         }}>
-                            <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '1.2rem', fontWeight: 'bold' }}>⛔ Museo Cerrado</h3>
+                            <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '1.2rem', fontWeight: 'bold' }}>Museo Cerrado</h3>
                             <p style={{ margin: 0 }}>{closedMessage}</p>
                         </div>
                     ) : slots.length === 0 ? (
