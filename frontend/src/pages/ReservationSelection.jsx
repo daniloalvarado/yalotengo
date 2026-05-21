@@ -17,7 +17,7 @@ const selectionStyles = `
 
 export default function ReservationSelection({
     date, setDate, today, loading, slots, selectedSlot, setSelectedSlot,
-    guests, setGuests, onNext, theme, styles, formatTime, closedMessage
+    guests, setGuests, onNext, theme, styles, formatTime, closedMessage, prices = { pen: 5, usd: 2 }
 }) {
 
     // Lógica visual local
@@ -132,11 +132,11 @@ export default function ReservationSelection({
                         <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
                             <div style={priceBadgeStyle}>
                                 <span>💳</span>
-                                <span>Tarjeta: <strong>$ {(guests * 2).toFixed(2)}</strong></span>
+                                <span>Tarjeta: <strong>$ {(guests * prices.usd).toFixed(2)}</strong></span>
                             </div>
                             <div style={priceBadgeStyle}>
                                 <span>📱</span>
-                                <span>Yape: <strong>S/ {(guests * 5).toFixed(2)}</strong></span>
+                                <span>Yape / Efectivo: <strong>S/ {(guests * prices.pen).toFixed(2)}</strong></span>
                             </div>
                         </div>
                     </div>

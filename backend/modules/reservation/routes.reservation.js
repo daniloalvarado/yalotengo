@@ -90,11 +90,16 @@ r.get('/slots', async (req, res) => {
             }
         })
 
+        const pricePEN = parseFloat(configMap['RESERVATION_PRICE_PEN'] || '5')
+        const priceUSD = parseFloat(configMap['RESERVATION_PRICE_USD'] || '2')
+
         res.json({
             date,
             slots,
             openTime,
-            closeTime
+            closeTime,
+            pricePEN,
+            priceUSD
         })
     } catch (err) {
         console.error('[Reservations] slots error:', err)

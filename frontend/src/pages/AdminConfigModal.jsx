@@ -10,6 +10,8 @@ export default function AdminConfigModal({ isOpen, onClose, onSaveSuccess, theme
         RESERVATION_CLOSE_TIME: '20:00',
         RESERVATION_SLOT_DURATION: '30',
         RESERVATION_MAX_CAPACITY: '10',
+        RESERVATION_PRICE_PEN: '5',
+        RESERVATION_PRICE_USD: '2',
         RESERVATION_CLOSED_DAYS: '',
         RESERVATION_CLOSED_WEEKDAYS: ''
     });
@@ -179,6 +181,28 @@ export default function AdminConfigModal({ isOpen, onClose, onSaveSuccess, theme
                         <input type="number" style={styles.input} min="5" step="5"
                             value={config.RESERVATION_SLOT_DURATION}
                             onChange={e => handleChange('RESERVATION_SLOT_DURATION', e.target.value)} />
+                    </div>
+
+                    {/* Precios */}
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                        <div style={styles.fieldGroup}>
+                            <label style={styles.label}>Precio en Soles 🇵🇪</label>
+                            <div style={{ position: 'relative' }}>
+                                <span style={{ position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)', color: '#6b7280', fontWeight: 'bold' }}>S/</span>
+                                <input type="number" style={{ ...styles.input, paddingLeft: '2rem' }} min="0" step="0.50"
+                                    value={config.RESERVATION_PRICE_PEN}
+                                    onChange={e => handleChange('RESERVATION_PRICE_PEN', e.target.value)} />
+                            </div>
+                        </div>
+                        <div style={styles.fieldGroup}>
+                            <label style={styles.label}>Precio en Dólares 🇺🇸</label>
+                            <div style={{ position: 'relative' }}>
+                                <span style={{ position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)', color: '#6b7280', fontWeight: 'bold' }}>$</span>
+                                <input type="number" style={{ ...styles.input, paddingLeft: '2rem' }} min="0" step="0.50"
+                                    value={config.RESERVATION_PRICE_USD}
+                                    onChange={e => handleChange('RESERVATION_PRICE_USD', e.target.value)} />
+                            </div>
+                        </div>
                     </div>
 
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>

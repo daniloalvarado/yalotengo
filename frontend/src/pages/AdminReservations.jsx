@@ -47,7 +47,7 @@ export default function AdminReservations() {
     const [slots, setSlots] = useState([])
     const [selectedSlot, setSelectedSlot] = useState(null)
     const [guests, setGuests] = useState(1)
-    const FIXED_PRICE = 2;
+    const [prices, setPrices] = useState({ pen: 5, usd: 2 })
 
     // Estados de Gestión
     const [reservations, setReservations] = useState([])
@@ -85,7 +85,10 @@ export default function AdminReservations() {
     useEffect(() => {
         if (activeTab === 'sales' && date) {
             api.get(`/reservations/slots?date=${date}`)
-                .then(res => setSlots(res.data.slots || []))
+                .then(res => {
+                    setSlots(res.data.slots || []);
+                    if (res.data.pricePEN) setPrices({ pen: res.data.pricePEN, usd: res.data.priceUSD });
+                })
                 .catch(err => toast.error(err.response?.data?.error || 'No hay horarios disponibles'))
         }
     }, [date, activeTab, refreshTrigger])
@@ -275,7 +278,7 @@ export default function AdminReservations() {
                     date={date} setDate={setDate}
                     slots={slots} selectedSlot={selectedSlot} setSelectedSlot={setSelectedSlot}
                     guests={guests} setGuests={setGuests}
-                    FIXED_PRICE={FIXED_PRICE} loading={loading} handleWalkIn={handleWalkIn}
+                    FIXED_PRICE={prices.pen} loading={loading} handleWalkIn={handleWalkIn}
                     isTimePast={isTimePast} formatTime={formatTime} theme={THEME} styles={styles}
                 />
             )}

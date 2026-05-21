@@ -33,6 +33,7 @@ export default function Reservation() {
     const [reservation, setReservation] = useState(null)
     const [step, setStep] = useState('select')
     const [closedMessage, setClosedMessage] = useState('')
+    const [prices, setPrices] = useState({ pen: 5, usd: 2 })
 
     // --- 1. LÓGICA DEL NEGOCIO ---
 
@@ -87,6 +88,8 @@ export default function Reservation() {
                     showErrorToast(res.data.message);
                 } else {
                     setSlots(res.data.slots || []);
+                    // Actualizar precios si el servidor los devuelve
+                    if (res.data.pricePEN) setPrices({ pen: res.data.pricePEN, usd: res.data.priceUSD });
                 }
             })
             .catch(err => {
@@ -244,7 +247,8 @@ export default function Reservation() {
             date={date} setDate={setDate} today={today}
             slots={slots} selectedSlot={selectedSlot} setSelectedSlot={setSelectedSlot} loading={loading}
             guests={guests} setGuests={setGuests} onNext={handleCreateReservation}
-            theme={THEME} styles={styles} formatTime={formatTime} closedMessage={closedMessage}
+            theme={THEME} styles={styles} formatTime={formatTime}
+            closedMessage={closedMessage} prices={prices}
         />
     }
 

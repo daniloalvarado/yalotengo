@@ -23,8 +23,10 @@ export const initDefaultConfig = async () => {
     { key: 'RESERVATION_CLOSE_TIME', value: '20:00' },
     { key: 'RESERVATION_SLOT_DURATION', value: '30' },
     { key: 'RESERVATION_MAX_CAPACITY', value: '10' },
-    { key: 'RESERVATION_CLOSED_DAYS', value: '' }, // Fechas bloqueadas separadas por coma
-    { key: 'RESERVATION_CLOSED_WEEKDAYS', value: '' } // Días de la semana bloqueados: 0=Dom, 1=Lun...
+    { key: 'RESERVATION_PRICE_PEN', value: '5' },   // Precio en Soles (Yape/efectivo)
+    { key: 'RESERVATION_PRICE_USD', value: '2' },   // Precio en Dólares (Tarjeta)
+    { key: 'RESERVATION_CLOSED_DAYS', value: '' },
+    { key: 'RESERVATION_CLOSED_WEEKDAYS', value: '' }
   ]
 
   for (const item of defaults) {
