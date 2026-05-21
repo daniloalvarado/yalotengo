@@ -1,5 +1,5 @@
 import React from 'react';
-import { PlusIcon, MinusIcon, CalendarDaysIcon } from "@heroicons/react/24/outline";
+import { PlusIcon, MinusIcon, CalendarDaysIcon, CreditCardIcon, DevicePhoneMobileIcon } from "@heroicons/react/24/outline";
 
 // Estilos específicos para este paso
 const selectionStyles = `
@@ -131,11 +131,11 @@ export default function ReservationSelection({
                     <div style={{ marginTop: '1.5rem', fontSize: '1rem', color: theme.textDark }}>
                         <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
                             <div style={priceBadgeStyle}>
-                                <span>💳</span>
+                                <CreditCardIcon style={{ width: '20px', height: '20px', flexShrink: 0 }} />
                                 <span>Tarjeta: <strong>$ {(guests * prices.usd).toFixed(2)}</strong></span>
                             </div>
                             <div style={priceBadgeStyle}>
-                                <span>📱</span>
+                                <DevicePhoneMobileIcon style={{ width: '20px', height: '20px', flexShrink: 0 }} />
                                 <span>Yape / Efectivo: <strong>S/ {(guests * prices.pen).toFixed(2)}</strong></span>
                             </div>
                         </div>

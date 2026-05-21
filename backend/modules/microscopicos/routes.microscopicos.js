@@ -7,6 +7,10 @@ import { uploadFile, deleteFile } from '../../services/storage.js'
 import multer from 'multer'
 import { Op } from 'sequelize'
 import { User } from '../auth/model.user.js' // Added import for User model
+import { Tematica } from './model.tematica.js'
+import { Idioma } from '../idiomas/model.idioma.js'
+import { UITranslation } from '../idiomas/model.ui_translation.js'
+import { autotranslate } from '../idiomas/routes.idiomas.js'
 
 const r = Router()
 const upload = multer({ storage: multer.memoryStorage() })
@@ -73,6 +77,34 @@ r.get('/admin/:id', adminAuth, async (req, res) => {
 r.post('/admin', adminAuth, async (req, res) => {
   try {
     const { translations, ...modelData } = req.body
+
+    // Procesar temática
+    if (modelData.tematica) {
+      const nombreTematica = modelData.tematica.trim()
+      let keySlug = nombreTematica.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]/g, '_')
+      const keyName = `tema_${keySlug}`
+
+      const [tematicaObj, created] = await Tematica.findOrCreate({
+        where: { key_name: keyName },
+        defaults: { nombre: nombreTematica }
+      })
+      modelData.tematica_id = tematicaObj.id
+
+      if (created) {
+        // Autotraducir en background
+        Idioma.findAll({ where: { is_active: true } }).then(async (idiomasActivos) => {
+          for (const idioma of idiomasActivos) {
+            const transExists = await UITranslation.findOne({ where: { language_code: idioma.code, key: keyName } })
+            if (!transExists) {
+              let translatedText = nombreTematica
+              if (idioma.code !== 'es') translatedText = await autotranslate(nombreTematica, 'es', idioma.code)
+              await UITranslation.create({ language_code: idioma.code, key: keyName, value: translatedText })
+            }
+          }
+        }).catch(err => console.error('Error autotraduciendo nueva temática:', err))
+      }
+    }
+
     const model = await Microscopico.create(modelData)
 
     if (translations && Array.isArray(translations)) {
@@ -96,6 +128,33 @@ r.put('/admin/:id', adminAuth, async (req, res) => {
     if (!model) return res.status(404).json({ error: 'No encontrado' })
 
     const { translations, ...modelData } = req.body
+
+    // Procesar temática
+    if (modelData.tematica) {
+      const nombreTematica = modelData.tematica.trim()
+      let keySlug = nombreTematica.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]/g, '_')
+      const keyName = `tema_${keySlug}`
+
+      const [tematicaObj, created] = await Tematica.findOrCreate({
+        where: { key_name: keyName },
+        defaults: { nombre: nombreTematica }
+      })
+      modelData.tematica_id = tematicaObj.id
+
+      if (created) {
+        // Autotraducir en background
+        Idioma.findAll({ where: { is_active: true } }).then(async (idiomasActivos) => {
+          for (const idioma of idiomasActivos) {
+            const transExists = await UITranslation.findOne({ where: { language_code: idioma.code, key: keyName } })
+            if (!transExists) {
+              let translatedText = nombreTematica
+              if (idioma.code !== 'es') translatedText = await autotranslate(nombreTematica, 'es', idioma.code)
+              await UITranslation.create({ language_code: idioma.code, key: keyName, value: translatedText })
+            }
+          }
+        }).catch(err => console.error('Error autotraduciendo nueva temática:', err))
+      }
+    }
 
     // Si el usuario subió un nuevo .molde (y había uno antiguo), borrar el antiguo de MinIO
     if (modelData.assetBundleFileName && model.assetBundleFileName && modelData.assetBundleFileName !== model.assetBundleFileName) {

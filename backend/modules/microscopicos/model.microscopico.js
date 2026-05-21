@@ -1,6 +1,7 @@
 import { DataTypes } from 'sequelize'
 import { sequelize } from '../../config/db.js'
 import { Translation } from './model.translation.js'
+import { Tematica } from './model.tematica.js'
 
 export const Microscopico = sequelize.define('mm_darwin_data', {
   id: {
@@ -51,4 +52,14 @@ Microscopico.hasMany(Translation, {
 
 Translation.belongsTo(Microscopico, {
   foreignKey: 'microscopico_id'
+})
+
+// Asociación con Temáticas
+Microscopico.belongsTo(Tematica, {
+  foreignKey: 'tematica_id',
+  as: 'tematica_obj'
+})
+
+Tematica.hasMany(Microscopico, {
+  foreignKey: 'tematica_id'
 })

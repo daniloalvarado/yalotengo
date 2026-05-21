@@ -12,8 +12,14 @@ export default function AdminIdiomas() {
   const [isOtro, setIsOtro] = useState(false)
   
   // Para editar traducciones UI
-  const [editingLang, setEditingLang] = useState(null) // El idioma seleccionado para editar UI
+  const [editingLang, setEditingLang] = useState(null)
   const [uiTranslations, setUiTranslations] = useState([])
+  const [searchTerm, setSearchTerm] = useState('')
+
+  const filteredTranslations = uiTranslations.filter(t =>
+    t.key.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    t.value.toLowerCase().includes(searchTerm.toLowerCase())
+  )
 
   useEffect(() => {
     fetchIdiomas()
@@ -65,6 +71,7 @@ export default function AdminIdiomas() {
   const openTranslations = (idioma) => {
     setEditingLang(idioma)
     setUiTranslations(idioma.ui_translations || [])
+    setSearchTerm('')
   }
 
   const handleSaveTranslation = async (key, newValue) => {
@@ -195,13 +202,33 @@ export default function AdminIdiomas() {
                 </div>
               </div>
 
+              {/* BUSCADOR */}
+              <div className="mb-4">
+                <input
+                  type="text"
+                  placeholder="Buscar por clave o texto..."
+                  value={searchTerm}
+                  onChange={e => setSearchTerm(e.target.value)}
+                  className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none bg-gray-50"
+                />
+                {searchTerm && (
+                  <p className="text-xs text-gray-400 mt-1">
+                    {filteredTranslations.length} resultado(s) de {uiTranslations.length} total
+                  </p>
+                )}
+              </div>
+
               {uiTranslations.length === 0 ? (
                 <div className="text-center py-10 bg-gray-50 rounded-xl">
                   <p className="text-gray-500 font-medium">No hay textos generados para este idioma aún.</p>
                 </div>
+              ) : filteredTranslations.length === 0 ? (
+                <div className="text-center py-10 bg-gray-50 rounded-xl">
+                  <p className="text-gray-500 font-medium">No se encontraron resultados para "{searchTerm}"</p>
+                </div>
               ) : (
                 <div className="space-y-3">
-                  {uiTranslations.map((trans) => (
+                  {filteredTranslations.map((trans) => (
                     <TranslationItem key={trans.id} trans={trans} onSave={handleSaveTranslation} />
                   ))}
                 </div>

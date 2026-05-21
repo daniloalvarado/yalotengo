@@ -37,6 +37,17 @@ export default function Reservation() {
 
     // --- 1. LÓGICA DEL NEGOCIO ---
 
+    // Cargar precios desde la configuración al iniciar
+    useEffect(() => {
+        api.get('/config')
+            .then(res => {
+                const pen = parseFloat(res.data.RESERVATION_PRICE_PEN || 5);
+                const usd = parseFloat(res.data.RESERVATION_PRICE_USD || 2);
+                setPrices({ pen, usd });
+            })
+            .catch(() => {}); // silencioso, usamos defaults
+    }, []);
+
     useEffect(() => {
         if (location.state?.pendingReservation) {
             const incoming = location.state.pendingReservation;

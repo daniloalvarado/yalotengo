@@ -13,6 +13,12 @@ import { DataTypes } from 'sequelize'
 import { initMinio } from './config/s3.js'
 import { initDefaultConfig } from './modules/config/model.config.js'
 
+import { Tematica } from './modules/microscopicos/model.tematica.js'
+import { Microscopico } from './modules/microscopicos/model.microscopico.js'
+import { Idioma } from './modules/idiomas/model.idioma.js'
+import { UITranslation } from './modules/idiomas/model.ui_translation.js'
+import { autotranslate } from './modules/idiomas/routes.idiomas.js'
+
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
@@ -137,6 +143,76 @@ async function ensureSchema() {
   }
 }
 
+async function migrateTematicas() {
+  try {
+    // 1. Obtener todos los modelos con temática de texto que no tienen tematica_id
+    const modelos = await Microscopico.findAll({
+      where: { tematica_id: null },
+      attributes: ['id', 'tematica']
+    })
+
+    if (modelos.length === 0) return // Ya está migrado o no hay datos
+
+    console.log(`[Migración] Encontrados ${modelos.length} modelos sin tematica_id.`)
+
+    // 2. Extraer temáticas únicas, descartar vacías
+    const tematicasUnicas = [...new Set(modelos.map(m => m.tematica).filter(t => t))]
+
+    // 3. Crear temáticas y traducciones en la BD
+    const idiomasActivos = await Idioma.findAll({ where: { is_active: true } })
+
+    const cacheTematicas = {} // nombre -> id
+
+    for (const nombreTematica of tematicasUnicas) {
+      // Normalizar nombre (quitar acentos, espacios -> _, todo a minúsculas) para la key
+      let keySlug = nombreTematica.trim().toLowerCase()
+        .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // quita acentos
+        .replace(/[^a-z0-9]/g, '_') // caracteres no alfanuméricos por guión bajo
+      
+      const keyName = `tema_${keySlug}`
+
+      // Buscar o crear la Tematica
+      const [tematicaObj] = await Tematica.findOrCreate({
+        where: { key_name: keyName },
+        defaults: { nombre: nombreTematica.trim() }
+      })
+      cacheTematicas[nombreTematica] = tematicaObj.id
+
+      // Auto-traducir para los idiomas activos
+      for (const idioma of idiomasActivos) {
+        // Verificar si ya existe la traducción UI
+        const transExists = await UITranslation.findOne({
+          where: { language_code: idioma.code, key: keyName }
+        })
+
+        if (!transExists) {
+          let translatedText = nombreTematica
+          if (idioma.code !== 'es') {
+            translatedText = await autotranslate(nombreTematica, 'es', idioma.code)
+          }
+          await UITranslation.create({
+            language_code: idioma.code,
+            key: keyName,
+            value: translatedText
+          })
+        }
+      }
+    }
+
+    // 4. Actualizar modelos
+    for (const model of modelos) {
+      if (model.tematica && cacheTematicas[model.tematica]) {
+        await model.update({ tematica_id: cacheTematicas[model.tematica] })
+      }
+    }
+
+    console.log(`[Migración] Migración de temáticas completada con éxito.`)
+  } catch (error) {
+    console.error(`[Migración] Error al migrar temáticas:`, error)
+  }
+}
+
+
 
 
 async function start() {
@@ -146,6 +222,7 @@ async function start() {
     await sequelize.query("SET time_zone = '+00:00'")
     await ensureSchema()
     await sequelize.sync()
+    await migrateTematicas()
     await initDefaultConfig()
     app.listen(PORT, () => console.log('Backend on :' + PORT))
   } catch (err) {

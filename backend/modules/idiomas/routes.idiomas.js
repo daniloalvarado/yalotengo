@@ -1,6 +1,7 @@
 import express from 'express'
 import { Idioma } from './model.idioma.js'
 import { UITranslation } from './model.ui_translation.js'
+import { Tematica } from '../microscopicos/model.tematica.js'
 // import { protect } from '../../utils/middleware.js' // asumiendo middleware de auth
 
 const router = express.Router()
@@ -52,7 +53,7 @@ const baseUIKeys = {
 /**
  * Servicio interno para traducir usando MyMemory (API gratuita)
  */
-async function autotranslate(text, sourceLang, targetLang) {
+export async function autotranslate(text, sourceLang, targetLang) {
   try {
     const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${sourceLang}|${targetLang}`
     const response = await fetch(url)
@@ -140,6 +141,17 @@ router.post('/', async (req, res) => {
       translationsToInsert.push({
         language_code: code,
         key: key,
+        value: translatedText
+      })
+    }
+
+    // Novedad: También traducimos todas las temáticas dinámicas!
+    const tematicas = await Tematica.findAll()
+    for (const tema of tematicas) {
+      const translatedText = await autotranslate(tema.nombre, 'es', code)
+      translationsToInsert.push({
+        language_code: code,
+        key: tema.key_name,
         value: translatedText
       })
     }

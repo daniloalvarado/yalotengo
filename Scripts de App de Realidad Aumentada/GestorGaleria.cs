@@ -4,6 +4,9 @@ using TMPro;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Globalization;
 
 public class GestorGaleria : MonoBehaviour
 {
@@ -155,10 +158,39 @@ public class GestorGaleria : MonoBehaviour
         CrearChipInstancia(strTodos, "");
 
         // 4. Crear los demás chips
-        foreach (string t in tematicasUnicas) CrearChipInstancia(t, t);
+        foreach (string t in tematicasUnicas) {
+            string etiquetaTraducida = TraducirTematica(t);
+            CrearChipInstancia(etiquetaTraducida, t);
+        }
 
         // 5. Aplicar colores iniciales ("Todos" empieza seleccionado)
         ActualizarColoresChips();
+    }
+
+    private string TraducirTematica(string original)
+    {
+        if (string.IsNullOrEmpty(original)) return original;
+        string idiomaActivo = PlayerPrefs.GetString("IdiomaSeleccionado", "es").ToLower();
+        if (idiomaActivo == "es") return original;
+
+        // Replicar la lógica de key_name del backend (tema_...)
+        string normalized = original.Trim().ToLower().Normalize(NormalizationForm.FormD);
+        StringBuilder sb = new StringBuilder();
+        foreach (char c in normalized) {
+            if (CharUnicodeInfo.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark) sb.Append(c);
+        }
+        string sinAcentos = sb.ToString();
+        string cleanKey = Regex.Replace(sinAcentos, @"[^a-z0-9]", "_");
+        string finalKey = "tema_" + cleanKey;
+
+        if (LectorApiAR.DiccionarioUI.ContainsKey(idiomaActivo))
+        {
+            if (LectorApiAR.DiccionarioUI[idiomaActivo].ContainsKey(finalKey))
+            {
+                return LectorApiAR.DiccionarioUI[idiomaActivo][finalKey];
+            }
+        }
+        return original;
     }
 
     private void CrearChipInstancia(string etiquetaVisiva, string valorTematica)
