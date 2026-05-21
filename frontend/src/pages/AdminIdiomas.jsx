@@ -138,12 +138,12 @@ export default function AdminIdiomas() {
 
   return (
     <div className="relative max-w-6xl mx-auto p-4 sm:p-6 lg:p-8 space-y-8 min-h-screen pb-20">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-2">
-        <div className="flex items-center gap-3">
-          <button onClick={() => window.history.back()} className="p-2 text-gray-500 hover:text-emerald-600 hover:bg-emerald-50 rounded-full transition-colors flex-shrink-0" title="Volver">
+      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-2">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-3 w-full lg:w-auto">
+          <button onClick={() => window.history.back()} className="p-2 text-gray-500 hover:text-emerald-600 hover:bg-emerald-50 rounded-full transition-colors self-start" title="Volver">
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
           </button>
-          <div>
+          <div className="mt-1 sm:mt-0">
             <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
               <LanguageIcon className="w-6 h-6 text-emerald-600" />
               Gestión de Idiomas
@@ -151,7 +151,7 @@ export default function AdminIdiomas() {
             <p className="text-gray-500 text-sm">Agrega idiomas globales para el Micromuseo AR</p>
           </div>
         </div>
-        <div className="flex gap-2 w-full sm:w-auto">
+        <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
           <button
             onClick={handleSyncUI}
             className="flex items-center justify-center gap-2 px-4 py-2 text-emerald-700 bg-emerald-50 rounded-lg shadow-sm border border-emerald-200 hover:bg-emerald-100 transition-colors w-full sm:w-auto font-medium"

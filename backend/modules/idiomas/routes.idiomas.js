@@ -235,10 +235,10 @@ router.post('/sync-ui', async (req, res) => {
         }
       }
 
-      // 2. Eliminar claves obsoletas
+      // 2. Eliminar claves obsoletas (protegiendo las temáticas dinámicas)
       const traduccionesActuales = await UITranslation.findAll({ where: { language_code: idioma.code }});
       for (const t of traduccionesActuales) {
-        if (!(t.key in baseUIKeys)) {
+        if (!(t.key in baseUIKeys) && !t.key.startsWith('tema_')) {
           console.log(`Eliminando clave obsoleta ${t.key} de ${idioma.code}...`);
           await t.destroy();
           eliminados++;
