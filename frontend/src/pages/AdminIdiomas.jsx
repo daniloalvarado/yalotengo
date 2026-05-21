@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import api from '../api/client'
 import toast from 'react-hot-toast'
-import { PlusIcon, LanguageIcon, PencilIcon, CheckIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { PlusIcon, PencilIcon, CheckIcon, LanguageIcon, TrashIcon, ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline'
 
 export default function AdminIdiomas() {
   const [idiomas, setIdiomas] = useState([])
@@ -15,11 +15,50 @@ export default function AdminIdiomas() {
   const [editingLang, setEditingLang] = useState(null)
   const [uiTranslations, setUiTranslations] = useState([])
   const [searchTerm, setSearchTerm] = useState('')
+  const [expandedCats, setExpandedCats] = useState({})
 
   const filteredTranslations = uiTranslations.filter(t =>
     t.key.toLowerCase().includes(searchTerm.toLowerCase()) ||
     t.value.toLowerCase().includes(searchTerm.toLowerCase())
   )
+
+  const categorizeTranslations = (translations) => {
+    const categories = {
+      'Temáticas (Filtros de App)': [],
+      'App: Autenticación': [],
+      'App: Navegación y Ajustes': [],
+      'App: Realidad Aumentada': [],
+      'App: Datos y Taxonomía': [],
+      'App: Alertas y Sistema': [],
+      'Otros Textos': []
+    };
+
+    translations.forEach(t => {
+      const key = t.key.toLowerCase();
+      if (key.startsWith('tema_')) categories['Temáticas (Filtros de App)'].push(t);
+      else if (key.startsWith('txtlogin')) categories['App: Autenticación'].push(t);
+      else if (key.startsWith('txtbienv') || key.startsWith('txttemas') || key.startsWith('txtajustes')) categories['App: Navegación y Ajustes'].push(t);
+      else if (key.startsWith('txtar') || key.startsWith('txtgaleria') || key.startsWith('txteliminar') || key.startsWith('txtexito')) categories['App: Realidad Aumentada'].push(t);
+      else if (key.startsWith('lbl_') || key.includes('nombre') || key.includes('todos')) categories['App: Datos y Taxonomía'].push(t);
+      else if (key.startsWith('msg')) categories['App: Alertas y Sistema'].push(t);
+      else categories['Otros Textos'].push(t);
+    });
+
+    return Object.entries(categories).filter(([_, items]) => items.length > 0);
+  };
+
+  const groupedTranslations = categorizeTranslations(filteredTranslations);
+
+  const toggleCategory = (catName) => {
+    setExpandedCats(prev => ({ ...prev, [catName]: !prev[catName] }))
+  }
+
+  // Cuando cambia el idioma, expandimos por defecto "Temáticas" y colapsamos el resto para no saturar
+  useEffect(() => {
+    if (editingLang) {
+      setExpandedCats({ 'Temáticas (Filtros de App)': true })
+    }
+  }, [editingLang])
 
   useEffect(() => {
     fetchIdiomas()
@@ -227,10 +266,39 @@ export default function AdminIdiomas() {
                   <p className="text-gray-500 font-medium">No se encontraron resultados para "{searchTerm}"</p>
                 </div>
               ) : (
-                <div className="space-y-3">
-                  {filteredTranslations.map((trans) => (
-                    <TranslationItem key={trans.id} trans={trans} onSave={handleSaveTranslation} />
-                  ))}
+                <div className="space-y-4">
+                  {groupedTranslations.map(([catName, items]) => {
+                    // Si hay término de búsqueda, expandimos todo automáticamente
+                    const isExpanded = searchTerm ? true : expandedCats[catName];
+                    return (
+                      <div key={catName} className="border border-gray-200 rounded-xl overflow-hidden bg-white">
+                        <button
+                          onClick={() => toggleCategory(catName)}
+                          className="w-full flex items-center justify-between p-4 bg-gray-50 hover:bg-gray-100 transition-colors"
+                        >
+                          <div className="flex items-center gap-2">
+                            <span className="font-bold text-gray-700">{catName}</span>
+                            <span className="bg-emerald-100 text-emerald-800 text-xs font-bold px-2 py-0.5 rounded-full">
+                              {items.length}
+                            </span>
+                          </div>
+                          {isExpanded ? (
+                            <ChevronUpIcon className="w-5 h-5 text-gray-500" />
+                          ) : (
+                            <ChevronDownIcon className="w-5 h-5 text-gray-500" />
+                          )}
+                        </button>
+                        
+                        {isExpanded && (
+                          <div className="p-4 space-y-3 border-t border-gray-200">
+                            {items.map((trans) => (
+                              <TranslationItem key={trans.id} trans={trans} onSave={handleSaveTranslation} />
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    )
+                  })}
                 </div>
               )}
             </div>

@@ -169,21 +169,39 @@ export default function AdminConfigModal({ isOpen, onClose, onSaveSuccess, theme
                 </div>
                 
                 <div style={styles.body}>
-                    <div style={styles.fieldGroup}>
-                        <label style={styles.label}>Aforo Máximo (Personas por turno)</label>
-                        <input type="number" style={styles.input} min="1"
-                            value={config.RESERVATION_MAX_CAPACITY}
-                            onChange={e => handleChange('RESERVATION_MAX_CAPACITY', e.target.value)} />
-                    </div>
-                    
-                    <div style={styles.fieldGroup}>
-                        <label style={styles.label}>Duración del Turno (Minutos)</label>
-                        <input type="number" style={styles.input} min="5" step="5"
-                            value={config.RESERVATION_SLOT_DURATION}
-                            onChange={e => handleChange('RESERVATION_SLOT_DURATION', e.target.value)} />
+                    {/* Fila 1: Horas */}
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                        <div style={styles.fieldGroup}>
+                            <label style={styles.label}>Hora de Apertura</label>
+                            <input type="time" style={styles.input}
+                                value={config.RESERVATION_OPEN_TIME}
+                                onChange={e => handleChange('RESERVATION_OPEN_TIME', e.target.value)} />
+                        </div>
+                        <div style={styles.fieldGroup}>
+                            <label style={styles.label}>Hora de Cierre</label>
+                            <input type="time" style={styles.input}
+                                value={config.RESERVATION_CLOSE_TIME}
+                                onChange={e => handleChange('RESERVATION_CLOSE_TIME', e.target.value)} />
+                        </div>
                     </div>
 
-                    {/* Precios */}
+                    {/* Fila 2: Capacidad y Tiempo */}
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                        <div style={styles.fieldGroup}>
+                            <label style={styles.label}>Aforo Máximo (Personas/turno)</label>
+                            <input type="number" style={styles.input} min="1"
+                                value={config.RESERVATION_MAX_CAPACITY}
+                                onChange={e => handleChange('RESERVATION_MAX_CAPACITY', e.target.value)} />
+                        </div>
+                        <div style={styles.fieldGroup}>
+                            <label style={styles.label}>Duración del Turno (Minutos)</label>
+                            <input type="number" style={styles.input} min="5" step="5"
+                                value={config.RESERVATION_SLOT_DURATION}
+                                onChange={e => handleChange('RESERVATION_SLOT_DURATION', e.target.value)} />
+                        </div>
+                    </div>
+
+                    {/* Fila 3: Precios */}
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                         <div style={styles.fieldGroup}>
                             <label style={styles.label}>Precio en Soles 🇵🇪</label>
@@ -202,21 +220,6 @@ export default function AdminConfigModal({ isOpen, onClose, onSaveSuccess, theme
                                     value={config.RESERVATION_PRICE_USD}
                                     onChange={e => handleChange('RESERVATION_PRICE_USD', e.target.value)} />
                             </div>
-                        </div>
-                    </div>
-
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                        <div style={styles.fieldGroup}>
-                            <label style={styles.label}>Hora de Apertura</label>
-                            <input type="time" style={styles.input}
-                                value={config.RESERVATION_OPEN_TIME}
-                                onChange={e => handleChange('RESERVATION_OPEN_TIME', e.target.value)} />
-                        </div>
-                        <div style={styles.fieldGroup}>
-                            <label style={styles.label}>Hora de Cierre</label>
-                            <input type="time" style={styles.input}
-                                value={config.RESERVATION_CLOSE_TIME}
-                                onChange={e => handleChange('RESERVATION_CLOSE_TIME', e.target.value)} />
                         </div>
                     </div>
 
