@@ -138,8 +138,29 @@ async function ensureSchema() {
       })
       console.log('[Schema] Columna tematica creada')
     }
+    
   } catch (e) {
     console.error('Error verificando esquema:', e.message)
+  }
+}
+
+async function ensureTematicaId() {
+  const qi = sequelize.getQueryInterface()
+  try {
+    const tableInfo = await qi.describeTable('mm_darwin_data')
+    if (!tableInfo.tematica_id) {
+      await qi.addColumn('mm_darwin_data', 'tematica_id', {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references: {
+          model: 'cat_tematica',
+          key: 'id'
+        }
+      })
+      console.log('[Schema] Columna tematica_id creada (después del sync)')
+    }
+  } catch (e) {
+    console.error('Error verificando tematica_id:', e.message)
   }
 }
 
@@ -222,6 +243,7 @@ async function start() {
     await sequelize.query("SET time_zone = '+00:00'")
     await ensureSchema()
     await sequelize.sync()
+    await ensureTematicaId()
     await migrateTematicas()
     await initDefaultConfig()
     app.listen(PORT, () => console.log('Backend on :' + PORT))
