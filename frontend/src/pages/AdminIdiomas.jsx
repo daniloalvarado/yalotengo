@@ -130,7 +130,17 @@ export default function AdminIdiomas() {
     try {
       const res = await api.post('/languages/sync-ui')
       toast.success(res.data.message || 'Sincronización completada', { id: loadingToast, duration: 4000 })
-      setTimeout(() => window.location.reload(), 2000)
+      
+      const idiomasRes = await api.get('/languages')
+      setIdiomas(idiomasRes.data)
+      
+      if (editingLang) {
+        const updatedLang = idiomasRes.data.find(i => i.code === editingLang.code)
+        if (updatedLang) {
+          setEditingLang(updatedLang)
+          setUiTranslations(updatedLang.ui_translations || [])
+        }
+      }
     } catch (error) {
       toast.error('Error al sincronizar claves', { id: loadingToast })
     }

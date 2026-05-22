@@ -235,6 +235,19 @@ router.post('/sync-ui', async (req, res) => {
         }
       }
 
+      // 1.5 Agregar temáticas
+      const tematicas = await Tematica.findAll();
+      for (const t of tematicas) {
+        if (!t.key_name) continue; // Por seguridad
+        const existe = await UITranslation.findOne({ where: { language_code: idioma.code, key: t.key_name }});
+        if (!existe) {
+          console.log(`Autotraduciendo temática ${t.key_name} para ${idioma.code}...`);
+          const val = await autotranslate(t.nombre, 'es', idioma.code);
+          await UITranslation.create({ language_code: idioma.code, key: t.key_name, value: val });
+          agregados++;
+        }
+      }
+
       // 2. Eliminar claves obsoletas (protegiendo las temáticas dinámicas)
       const traduccionesActuales = await UITranslation.findAll({ where: { language_code: idioma.code }});
       for (const t of traduccionesActuales) {
