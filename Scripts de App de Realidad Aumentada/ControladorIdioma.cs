@@ -131,13 +131,7 @@ public class ControladorIdioma : MonoBehaviour
         if(d.ContainsKey("msgErrDetalleServidor")) msgErrDetalleServidor = d["msgErrDetalleServidor"];
     }
 
-    // --- MÉTODOS DE COMPATIBILIDAD ---
-    public void CambiarAEspanol() => CambiarIdioma("es");
-    public void CambiarAIngles()  => CambiarIdioma("en");
-    public void CambiarAPortugues() => CambiarIdioma("pt");
-    public void CambiarAFrances()   => CambiarIdioma("fr");
-    public void CambiarAItaliano()  => CambiarIdioma("it");
-    public void CambiarAAleman()    => CambiarIdioma("de");
+    // (Los botones de idioma se generan de forma dinámica mediante ControladorBotonesIdioma.cs)
 
     public string GetPlaceholderText()
     {
@@ -147,6 +141,6 @@ public class ControladorIdioma : MonoBehaviour
             var d = LectorApiAR.DiccionarioUI[codigo];
             if (d.ContainsKey("txtArPlaceholder")) return d["txtArPlaceholder"];
         }
-        return "Escanea un animal...";
+        return "Escanea una imagen...";
     }
 }

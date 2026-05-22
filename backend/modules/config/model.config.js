@@ -26,7 +26,9 @@ export const initDefaultConfig = async () => {
     { key: 'RESERVATION_PRICE_PEN', value: '5' },   // Precio en Soles (Yape/efectivo)
     { key: 'RESERVATION_PRICE_USD', value: '2' },   // Precio en Dólares (Tarjeta)
     { key: 'RESERVATION_CLOSED_DAYS', value: '' },
-    { key: 'RESERVATION_CLOSED_WEEKDAYS', value: '' }
+    { key: 'RESERVATION_CLOSED_WEEKDAYS', value: '' },
+    { key: 'HELP_CONTACT_TITLE', value: '¿Necesitas más ayuda?' },
+    { key: 'HELP_CONTACT_DESC', value: 'Si no encontraste la respuesta que buscabas, contáctanos directamente. Estamos aquí para ayudarte.' }
   ]
 
   for (const item of defaults) {

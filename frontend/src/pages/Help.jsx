@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import api from '../api/client'
+import toast from 'react-hot-toast'
 import {
     QuestionMarkCircleIcon,
     ShoppingCartIcon,
@@ -129,10 +130,25 @@ function FAQItem({ faq }) {
 export default function Help() {
     const [user, setUser] = useState(null)
     const [loading, setLoading] = useState(true)
+    const [config, setConfig] = useState({
+        HELP_CONTACT_TITLE: '¿Necesitas más ayuda?',
+        HELP_CONTACT_DESC: 'Si no encontraste la respuesta que buscabas, contáctanos directamente. Estamos aquí para ayudarte.'
+    })
+    const [savingConfig, setSavingConfig] = useState(false)
 
     useEffect(() => {
-        const fetchUser = async () => {
+        const fetchUserAndConfig = async () => {
             const token = localStorage.getItem('token')
+            
+            try {
+                const configRes = await api.get('/config')
+                if (configRes.data) {
+                    setConfig(prev => ({...prev, ...configRes.data}))
+                }
+            } catch (e) {
+                console.error('Error fetching config:', e)
+            }
+
             if (!token) {
                 setLoading(false)
                 return
@@ -146,8 +162,22 @@ export default function Help() {
                 setLoading(false)
             }
         }
-        fetchUser()
+        fetchUserAndConfig()
     }, [])
+
+    const handleSaveConfig = async () => {
+        setSavingConfig(true)
+        try {
+            await api.put('/config/HELP_CONTACT_TITLE', { value: config.HELP_CONTACT_TITLE })
+            await api.put('/config/HELP_CONTACT_DESC', { value: config.HELP_CONTACT_DESC })
+            toast.success('Textos actualizados correctamente')
+        } catch (error) {
+            console.error('Error saving config:', error)
+            toast.error('Error al guardar los textos')
+        } finally {
+            setSavingConfig(false)
+        }
+    }
 
     const isAdmin = user?.use_txt_role === 'admin'
     const faqs = isAdmin ? ADMIN_FAQS : USER_FAQS
@@ -185,10 +215,39 @@ export default function Help() {
 
             {/* Contact Section */}
             <div className="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl p-6 space-y-4">
-                <h2 className="text-lg font-semibold text-gray-900">¿Necesitas más ayuda?</h2>
-                <p className="text-gray-600 text-sm">
-                    Si no encontraste la respuesta que buscabas, contáctanos directamente. Estamos aquí para ayudarte.
-                </p>
+                {isAdmin ? (
+                    <div className="space-y-2">
+                        <input
+                            className="text-lg font-semibold text-gray-900 bg-transparent border-b border-gray-300 focus:border-green-500 outline-none w-full pb-1"
+                            value={config.HELP_CONTACT_TITLE}
+                            onChange={(e) => setConfig({ ...config, HELP_CONTACT_TITLE: e.target.value })}
+                            placeholder="Título del contacto"
+                        />
+                        <textarea
+                            className="text-gray-600 text-sm bg-transparent border-b border-gray-300 focus:border-green-500 outline-none w-full resize-none pb-1"
+                            rows={2}
+                            value={config.HELP_CONTACT_DESC}
+                            onChange={(e) => setConfig({ ...config, HELP_CONTACT_DESC: e.target.value })}
+                            placeholder="Descripción del contacto"
+                        />
+                        <div className="flex justify-end">
+                            <button
+                                onClick={handleSaveConfig}
+                                disabled={savingConfig}
+                                className="px-3 py-1.5 bg-green-500 hover:bg-green-600 text-white rounded-lg text-sm font-medium transition-colors disabled:opacity-50"
+                            >
+                                {savingConfig ? 'Guardando...' : 'Guardar Textos'}
+                            </button>
+                        </div>
+                    </div>
+                ) : (
+                    <>
+                        <h2 className="text-lg font-semibold text-gray-900">{config.HELP_CONTACT_TITLE}</h2>
+                        <p className="text-gray-600 text-sm">
+                            {config.HELP_CONTACT_DESC}
+                        </p>
+                    </>
+                )}
 
                 <div className="flex flex-col sm:flex-row gap-3">
                     <button
@@ -217,6 +276,12 @@ export default function Help() {
                         {EMAIL}
                     </p>
                 </div>
+
+                {!isAdmin && (
+                    <div className="pt-4 mt-2 border-t border-teal-100/60 text-center text-sm text-gray-500">
+                        Desarrollado por <a href="https://daniloalvarado.com" target="_blank" rel="noopener noreferrer" className="text-teal-600 hover:text-teal-700 font-medium transition-colors">daniloalvarado.com</a>
+                    </div>
+                )}
             </div>
 
             {/* Back link */}
