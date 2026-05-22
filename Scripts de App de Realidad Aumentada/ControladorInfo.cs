@@ -24,11 +24,7 @@ public class ControladorInfo : MonoBehaviour
     private Coroutine rutinaDescargando;
 
     // --- DICCIONARIOS DE TRADUCCIÓN ---
-    
-    
-    
-    
-    
+       
     void Awake()
     {
         if (btnAgrandar != null)
@@ -142,7 +138,7 @@ public class ControladorInfo : MonoBehaviour
             // --- CHIP DE TEMÁTICA ---
             if (!string.IsNullOrEmpty(datos.tematica))
             {
-                string tematicaTraducida = TraducirTematicaUI(datos.tematica);
+                string tematicaTraducida = TraducirTematicaUI(datos.tematica, descripcionTraducida);
                 string[] palabras = tematicaTraducida.ToUpper().Split(' ');
                 string tematicaChips = "";
                 
@@ -336,8 +332,6 @@ public class ControladorInfo : MonoBehaviour
         txt.maxVisibleCharacters = 99999;
     }
 
-    
-
     // --- TRADUCCIÓN OPTIMIZADA DINÁMICA ---
     private string TraducirTaxonomiaDinamica(string texto, bool descripcionTraducida)
     {
@@ -361,9 +355,9 @@ public class ControladorInfo : MonoBehaviour
         return texto;
     }
 
-    private string TraducirTematicaUI(string original)
+    private string TraducirTematicaUI(string original, bool aplicarTraduccion = true)
     {
-        if (string.IsNullOrEmpty(original)) return original;
+        if (string.IsNullOrEmpty(original) || !aplicarTraduccion) return original;
         string idiomaActivo = PlayerPrefs.GetString("IdiomaSeleccionado", "es").ToLower();
         if (idiomaActivo == "es") return original;
 

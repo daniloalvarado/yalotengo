@@ -183,7 +183,7 @@ public class GestorGaleria : MonoBehaviour
         string cleanKey = Regex.Replace(sinAcentos, @"[^a-z0-9]", "_");
         string finalKey = "tema_" + cleanKey;
 
-        if (LectorApiAR.DiccionarioUI.ContainsKey(idiomaActivo))
+        if (LectorApiAR.DiccionarioUI != null && LectorApiAR.DiccionarioUI.ContainsKey(idiomaActivo))
         {
             if (LectorApiAR.DiccionarioUI[idiomaActivo].ContainsKey(finalKey))
             {

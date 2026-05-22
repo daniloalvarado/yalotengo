@@ -27,7 +27,7 @@ const baseUIKeys = {
   "msgNombreCientifico": "Nombre Científico",
   "msgTodos": "Todos",
     "txtArMenuBtn": "MENÚ",
-    "txtArPlaceholder": "Escanea un animal...",
+    "txtArPlaceholder": "Escanea una imagen...",
     "txtEliminarTitulo": "¿Deseas eliminar este modelo?",
     "txtEliminarSi": "Sí, eliminar",
     "txtEliminarNo": "Cancelar",
