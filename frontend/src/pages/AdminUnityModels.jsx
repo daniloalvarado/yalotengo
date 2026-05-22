@@ -6,6 +6,7 @@ import Swal from 'sweetalert2'
 import { PlusIcon, PencilIcon, TrashIcon, EyeIcon, EyeSlashIcon, ArrowUpTrayIcon, CheckCircleIcon, ChartBarSquareIcon, CircleStackIcon , LanguageIcon } from '@heroicons/react/24/outline'
 import AnimatedModal from '../components/AnimatedModal'
 import AdminUnityDashboard from './AdminUnityDashboard'
+import FadeInStagger from '../components/ui/FadeInStagger'
 
 const THEME = { primary: '#059669' }
 const API_BASE_URL = (import.meta.env.VITE_API_BASE || 'http://localhost:3000').replace(/\/api$/, '');
@@ -224,7 +225,7 @@ export default function AdminUnityModels() {
     if (!isAdmin) return <div className="p-8 text-center text-gray-500">Verificando permisos...</div>
 
     return (
-        <div className="max-w-6xl mx-auto p-4 sm:p-6 space-y-6">
+        <FadeInStagger staggerDelay={100} className="max-w-6xl mx-auto p-4 sm:p-6 space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
                     <h1 className="text-2xl font-bold text-gray-900">Gestión de App AR</h1>
@@ -243,7 +244,7 @@ export default function AdminUnityModels() {
             </div>
 
             {/* Pestañas de Navegación */}
-            <div className="flex space-x-1 bg-gray-100/50 p-1.5 rounded-xl border border-gray-200">
+            <FadeInStagger baseDelay={200} staggerDelay={100} className="flex space-x-1 bg-gray-100/50 p-1.5 rounded-xl border border-gray-200">
                 <button
                     onClick={() => setActiveTab('gestion')}
                     className={`flex items-center gap-2 flex-1 justify-center py-2.5 text-sm font-medium rounded-lg transition-all ${activeTab === 'gestion' ? 'bg-white text-emerald-700 shadow-sm' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'}`}
@@ -258,14 +259,14 @@ export default function AdminUnityModels() {
                     <ChartBarSquareIcon className="w-5 h-5" />
                     Dashboard AR
                 </button>
-            </div>
+            </FadeInStagger>
 
             {activeTab === 'dashboard' ? (
                 <AdminUnityDashboard />
             ) : (
                 <>
                     <div className="mb-4 mt-2">
-                        <div className="flex flex-row flex-wrap xs:flex-nowrap gap-3 items-center justify-between w-full">
+                        <FadeInStagger baseDelay={300} staggerDelay={100} className="flex flex-row flex-wrap xs:flex-nowrap gap-3 items-center justify-between w-full">
                             <div className="relative w-full sm:max-w-md">
                                 <input
                                     type="text"
@@ -295,7 +296,7 @@ export default function AdminUnityModels() {
                                 <LanguageIcon className="w-5 h-5" /> APP AR
                             </button>
                           </div>
-                        </div>
+                        </FadeInStagger>
                     </div>
 
                     {loading ? <div className="text-gray-500">Cargando datos...</div> : (
@@ -313,7 +314,7 @@ export default function AdminUnityModels() {
                                         <th className="px-4 py-3 text-right font-medium text-gray-600">Acciones</th>
                                     </tr>
                                 </thead>
-                                <tbody className="divide-y divide-gray-100">
+                                <FadeInStagger baseDelay={200} staggerDelay={50} className="divide-y divide-gray-100 table-row-group">
                                     {paginatedModels.map((m, idx) => (
                                         <tr key={m.id} className="hover:bg-gray-50 transition-colors">
                                             <td className="px-4 py-3 text-center text-gray-400 font-mono text-xs">
@@ -396,7 +397,7 @@ export default function AdminUnityModels() {
                                             </td>
                                         </tr>
                                     )}
-                                </tbody>
+                                </FadeInStagger>
                             </table>
                         </div>
                     )}
@@ -820,6 +821,6 @@ export default function AdminUnityModels() {
                     cursor: not-allowed;
                 }
             `}</style>
-        </div>
+        </FadeInStagger>
     )
 }

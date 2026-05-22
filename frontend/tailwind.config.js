@@ -29,20 +29,9 @@ export default {
         }
       },
       animation: {
-        'fade-in-up': 'fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+        'fade-in-up': 'fadeInUp 1s ease-out forwards',
         'slide-down-slow': 'slideDown 1.2s ease-out forwards',
-        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
       },
-      transitionDelay: {
-        '50': '50ms',
-        '100': '100ms',
-        '150': '150ms',
-        '200': '200ms',
-        '250': '250ms',
-        '300': '300ms',
-        '400': '400ms',
-        '500': '500ms',
-      }
     }
   },
   plugins: [],

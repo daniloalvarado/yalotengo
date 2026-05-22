@@ -19,7 +19,6 @@ import {
     PhoneIcon,
     ChevronDownIcon
 } from '@heroicons/react/24/outline'
-import FadeInStagger from '../components/ui/FadeInStagger'
 
 const THEME = { primary: '#059669' }
 
@@ -138,11 +137,11 @@ export default function Help() {
     useEffect(() => {
         const fetchUserAndConfig = async () => {
             const token = localStorage.getItem('token')
-            
+
             try {
                 const configRes = await api.get('/config')
                 if (configRes.data) {
-                    setConfig(prev => ({...prev, ...configRes.data}))
+                    setConfig(prev => ({ ...prev, ...configRes.data }))
                 }
             } catch (e) {
                 console.error('Error fetching config:', e)
@@ -187,7 +186,7 @@ export default function Help() {
     }
 
     return (
-        <FadeInStagger staggerDelay={100} className="max-w-4xl mx-auto p-4 sm:p-6 space-y-8">
+        <div className="max-w-4xl mx-auto p-4 sm:p-6 space-y-8">
             {/* Header */}
             <div className="text-center space-y-2">
                 <div className="w-16 h-16 rounded-2xl mx-auto flex items-center justify-center" style={{ backgroundColor: `${THEME.primary}15` }}>
@@ -294,6 +293,6 @@ export default function Help() {
                     ← Volver al inicio
                 </Link>
             </div>
-        </FadeInStagger>
+        </div>
     )
 }

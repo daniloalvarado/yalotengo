@@ -17,7 +17,6 @@ import {
   AcademicCapIcon,
   BanknotesIcon
 } from "@heroicons/react/24/outline";
-import FadeInStagger from '../components/ui/FadeInStagger'
 
 // --- HELPERS ---
 
@@ -275,7 +274,7 @@ export default function Cart() {
   }
 
   return (
-    <FadeInStagger staggerDelay={100} className="max-w-4xl mx-auto">
+    <div className="max-w-4xl mx-auto">
       {/* Header del Carrito */}
       <div className="text-left mb-10">
         <h2 className="text-4xl font-extrabold text-gray-900 tracking-tight mb-3 mt-4 md:mt-10">Tu Carrito</h2>
@@ -543,6 +542,6 @@ export default function Cart() {
           </div>
         )
       }
-    </FadeInStagger>
+    </div >
   );
 }

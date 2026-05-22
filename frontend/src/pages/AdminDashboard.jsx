@@ -6,11 +6,10 @@ import {
     CurrencyDollarIcon, ChartBarIcon, ClockIcon, UserGroupIcon,
     TrophyIcon, ArrowTrendingUpIcon, CalendarDaysIcon, ChartPieIcon
 } from '@heroicons/react/24/outline'
-import { 
+import {
     BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
     AreaChart, Area, PieChart, Pie, Cell, Legend
 } from 'recharts';
-import FadeInStagger from '../components/ui/FadeInStagger'
 
 const THEME = { primary: '#059669', secondary: '#3b82f6', accent: '#f59e0b', danger: '#ef4444' }
 const PIE_COLORS = ['#059669', '#3b82f6', '#f59e0b', '#ec4899']; // Verde, Azul, Amarillo, Rosa
@@ -67,7 +66,7 @@ export default function AdminDashboard() {
     // Días rentables (traducción)
     const dayMap = { 'Monday': 'Lun', 'Tuesday': 'Mar', 'Wednesday': 'Mié', 'Thursday': 'Jue', 'Friday': 'Vie', 'Saturday': 'Sáb', 'Sunday': 'Dom' };
     const daysData = useMemo(() => {
-        if(!analytics) return [];
+        if (!analytics) return [];
         return analytics.bestDays.map(d => ({
             day: dayMap[d.day] || d.day,
             Ingresos: parseFloat(d.revenue)
@@ -79,13 +78,13 @@ export default function AdminDashboard() {
     if (!stats || !analytics) return null;
 
     const ticketPromedio = stats.total.revenue / (stats.total.transactions || 1);
-    const crossSellRate = analytics.crossSell 
+    const crossSellRate = analytics.crossSell
         ? ((analytics.crossSell.multi_category_buyers / analytics.crossSell.total_customers) * 100).toFixed(1)
         : 0;
 
     return (
-        <FadeInStagger staggerDelay={100} className="max-w-7xl mx-auto p-4 sm:p-6 space-y-6 bg-gray-50/50 min-h-screen">
-            
+        <div className="max-w-7xl mx-auto p-4 sm:p-6 space-y-6 bg-gray-50/50 min-h-screen">
+
             {/* 1. Header & Fecha */}
             <div className="flex justify-between items-end">
                 <div>
@@ -143,7 +142,7 @@ export default function AdminDashboard() {
 
             {/* 3. SECCIÓN GRÁFICA PRINCIPAL */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                
+
                 {/* A. Historial de Ventas (Area Chart) */}
                 <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 lg:col-span-2">
                     <h3 className="font-bold text-gray-800 mb-6">Tendencia de Ingresos (7 Días)</h3>
@@ -152,14 +151,14 @@ export default function AdminDashboard() {
                             <AreaChart data={history}>
                                 <defs>
                                     <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
-                                        <stop offset="5%" stopColor={THEME.primary} stopOpacity={0.1}/>
-                                        <stop offset="95%" stopColor={THEME.primary} stopOpacity={0}/>
+                                        <stop offset="5%" stopColor={THEME.primary} stopOpacity={0.1} />
+                                        <stop offset="95%" stopColor={THEME.primary} stopOpacity={0} />
                                     </linearGradient>
                                 </defs>
                                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f3f4f6" />
-                                <XAxis dataKey="date" axisLine={false} tickLine={false} tick={{fontSize: 12, fill: '#9ca3af'}} dy={10} />
-                                <YAxis axisLine={false} tickLine={false} tick={{fontSize: 12, fill: '#9ca3af'}} tickFormatter={(val) => `S/${val}`} />
-                                <Tooltip formatter={(value) => [PEN.format(value), "Ventas"]} contentStyle={{borderRadius: '12px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)'}} />
+                                <XAxis dataKey="date" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#9ca3af' }} dy={10} />
+                                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#9ca3af' }} tickFormatter={(val) => `S/${val}`} />
+                                <Tooltip formatter={(value) => [PEN.format(value), "Ventas"]} contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }} />
                                 <Area type="monotone" dataKey="amount" stroke={THEME.primary} strokeWidth={3} fillOpacity={1} fill="url(#colorRevenue)" />
                             </AreaChart>
                         </ResponsiveContainer>
@@ -187,8 +186,8 @@ export default function AdminDashboard() {
                                         <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
                                     ))}
                                 </Pie>
-                                <Tooltip formatter={(value) => PEN.format(value)} contentStyle={{borderRadius: '8px', border: 'none'}} />
-                                <Legend verticalAlign="bottom" height={36}/>
+                                <Tooltip formatter={(value) => PEN.format(value)} contentStyle={{ borderRadius: '8px', border: 'none' }} />
+                                <Legend verticalAlign="bottom" height={36} />
                             </PieChart>
                         </ResponsiveContainer>
                         <div className="absolute inset-0 flex items-center justify-center pointer-events-none pb-8">
@@ -200,7 +199,7 @@ export default function AdminDashboard() {
 
             {/* 4. SECCIÓN SECUNDARIA */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                
+
                 {/* C. Días Más Rentables (Bar Chart Vertical) */}
                 <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
                     <h3 className="font-bold text-gray-800 mb-6 flex items-center gap-2">
@@ -208,10 +207,10 @@ export default function AdminDashboard() {
                     </h3>
                     <div className="h-[250px] w-full">
                         <ResponsiveContainer width="100%" height="100%">
-                            <BarChart data={daysData} layout="vertical" margin={{left: 0}}>
+                            <BarChart data={daysData} layout="vertical" margin={{ left: 0 }}>
                                 <XAxis type="number" hide />
-                                <YAxis dataKey="day" type="category" axisLine={false} tickLine={false} tick={{fontSize: 13, fontWeight: 500}} width={30} />
-                                <Tooltip cursor={{fill: 'transparent'}} formatter={(val) => [PEN.format(val), "Ingresos"]} />
+                                <YAxis dataKey="day" type="category" axisLine={false} tickLine={false} tick={{ fontSize: 13, fontWeight: 500 }} width={30} />
+                                <Tooltip cursor={{ fill: 'transparent' }} formatter={(val) => [PEN.format(val), "Ingresos"]} />
                                 <Bar dataKey="Ingresos" fill={THEME.secondary} radius={[0, 4, 4, 0]} barSize={20} />
                             </BarChart>
                         </ResponsiveContainer>
@@ -224,11 +223,11 @@ export default function AdminDashboard() {
                         <CubeIcon className="w-5 h-5 text-gray-400" /> Unidades Vendidas
                     </h3>
                     <div className="h-[250px] w-full">
-                         <ResponsiveContainer width="100%" height="100%">
+                        <ResponsiveContainer width="100%" height="100%">
                             <BarChart data={volumeData}>
                                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f3f4f6" />
-                                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fontSize: 12}} />
-                                <Tooltip cursor={{fill: '#f3f4f6'}} />
+                                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 12 }} />
+                                <Tooltip cursor={{ fill: '#f3f4f6' }} />
                                 <Bar dataKey="cantidad" name="Ventas" fill={THEME.accent} radius={[4, 4, 0, 0]} barSize={30} />
                             </BarChart>
                         </ResponsiveContainer>
@@ -304,6 +303,6 @@ export default function AdminDashboard() {
                     </div>
                 </div>
             </div>
-        </FadeInStagger>
+        </div>
     )
 }
