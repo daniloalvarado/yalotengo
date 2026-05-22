@@ -10,6 +10,7 @@ import {
     BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
     AreaChart, Area, PieChart, Pie, Cell, Legend
 } from 'recharts';
+import FadeInStagger from '../components/ui/FadeInStagger'
 
 const THEME = { primary: '#059669', secondary: '#3b82f6', accent: '#f59e0b', danger: '#ef4444' }
 const PIE_COLORS = ['#059669', '#3b82f6', '#f59e0b', '#ec4899']; // Verde, Azul, Amarillo, Rosa
@@ -83,7 +84,7 @@ export default function AdminDashboard() {
         : 0;
 
     return (
-        <div className="max-w-7xl mx-auto p-4 sm:p-6 space-y-6 bg-gray-50/50 min-h-screen">
+        <FadeInStagger staggerDelay={100} className="max-w-7xl mx-auto p-4 sm:p-6 space-y-6 bg-gray-50/50 min-h-screen">
             
             {/* 1. Header & Fecha */}
             <div className="flex justify-between items-end">
@@ -303,6 +304,6 @@ export default function AdminDashboard() {
                     </div>
                 </div>
             </div>
-        </div>
+        </FadeInStagger>
     )
 }

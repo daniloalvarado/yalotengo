@@ -3,6 +3,8 @@ import api from '../api/client'
 import { Link, useSearchParams } from 'react-router-dom'
 import Card from '../components/ui/Card'
 import Button from '../components/ui/Button'
+import FadeInStagger from '../components/ui/FadeInStagger'
+import SkeletonCard from '../components/ui/SkeletonCard'
 
 const PLACEHOLDER =
   'data:image/svg+xml;utf8,' +
@@ -18,8 +20,11 @@ export default function Catalog() {
   // Modal preview
   const [preview, setPreview] = useState(null) // { url, title } | null
 
+  const [loading, setLoading] = useState(true)
+
   useEffect(() => {
     (async () => {
+      setLoading(true)
       try {
         const { data } = await api.get('/catalog/products', { params: { kind } })
         const list = Array.isArray(data) ? data : []
@@ -27,6 +32,8 @@ export default function Catalog() {
       } catch (e) {
         console.error(e)
         setProds([])
+      } finally {
+        setLoading(false)
       }
     })()
   }, [kind])
@@ -58,52 +65,63 @@ export default function Catalog() {
         </Link>
       </div>
 
-      <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-        {prods.map((p) => {
-          const imgUrl = p.pro_txt_image || '' // nueva URL que mencionaste
-          return (
-            <li key={p.pro_int_id}>
-              <Card>
-                <div className="flex flex-col gap-3">
-                  {/* Imagen representativa */}
-                  <button
-                    type="button"
-                    className="relative w-full overflow-hidden rounded-lg bg-slate-100 aspect-[4/3] focus:outline-none focus:ring-2 focus:ring-slate-400"
-                    onClick={() =>
-                      setPreview({
-                        url: imgUrl || PLACEHOLDER,
-                        title: p.pro_txt_name || 'Producto',
-                      })
-                    }
-                    title="Ver imagen en grande"
-                  >
-                    <img
-                      src={imgUrl || PLACEHOLDER}
-                      alt={p.pro_txt_name || 'Producto'}
-                      loading="lazy"
-                      className="absolute inset-0 h-full w-full object-cover"
-                      onError={(e) => {
-                        if (e.currentTarget.src !== PLACEHOLDER) e.currentTarget.src = PLACEHOLDER
-                      }}
-                    />
-                  </button>
-
-                  <div className="text-base font-semibold">{p.pro_txt_name}</div>
-                  <div className="text-sm text-slate-600 line-clamp-2">{p.pro_txt_desc}</div>
-                  <div className="mt-1 text-lg font-semibold">
-                    S/ {Number(p.pro_dec_price).toFixed(2)}
+      {loading ? (
+        <FadeInStagger className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5" staggerDelay={75}>
+          <SkeletonCard />
+          <SkeletonCard />
+          <SkeletonCard />
+          <SkeletonCard />
+          <SkeletonCard />
+          <SkeletonCard />
+        </FadeInStagger>
+      ) : (
+        <FadeInStagger className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5" staggerDelay={75}>
+          {prods.map((p) => {
+            const imgUrl = p.pro_txt_image || '' // nueva URL que mencionaste
+            return (
+              <li key={p.pro_int_id} className="list-none transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-lg rounded-xl">
+                <Card>
+                  <div className="flex flex-col gap-3">
+                    {/* Imagen representativa */}
+                    <button
+                      type="button"
+                      className="relative w-full overflow-hidden rounded-lg bg-slate-100 aspect-[4/3] focus:outline-none focus:ring-2 focus:ring-slate-400 group"
+                      onClick={() =>
+                        setPreview({
+                          url: imgUrl || PLACEHOLDER,
+                          title: p.pro_txt_name || 'Producto',
+                        })
+                      }
+                      title="Ver imagen en grande"
+                    >
+                      <img
+                        src={imgUrl || PLACEHOLDER}
+                        alt={p.pro_txt_name || 'Producto'}
+                        loading="lazy"
+                        className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        onError={(e) => {
+                          if (e.currentTarget.src !== PLACEHOLDER) e.currentTarget.src = PLACEHOLDER
+                        }}
+                      />
+                    </button>
+  
+                    <div className="text-base font-semibold transition-colors hover:text-green-600 cursor-pointer">{p.pro_txt_name}</div>
+                    <div className="text-sm text-slate-600 line-clamp-2">{p.pro_txt_desc}</div>
+                    <div className="mt-1 text-lg font-semibold text-slate-900">
+                      S/ {Number(p.pro_dec_price).toFixed(2)}
+                    </div>
+                    <div className="mt-1">
+                      <Button onClick={() => addToCart(p.pro_int_id)} className="w-full transition-transform active:scale-95">
+                        Agregar al carrito
+                      </Button>
+                    </div>
                   </div>
-                  <div className="mt-1">
-                    <Button onClick={() => addToCart(p.pro_int_id)} className="w-full">
-                      Agregar al carrito
-                    </Button>
-                  </div>
-                </div>
-              </Card>
-            </li>
-          )
-        })}
-      </ul>
+                </Card>
+              </li>
+            )
+          })}
+        </FadeInStagger>
+      )}
 
       {/* Modal de imagen ampliada */}
       {preview && (

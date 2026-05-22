@@ -3,6 +3,7 @@ import api from '../api/client';
 import toast from 'react-hot-toast';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import DatePicker from 'react-multi-date-picker';
+import AnimatedModal from '../components/AnimatedModal';
 
 export default function AdminConfigModal({ isOpen, onClose, onSaveSuccess, theme }) {
     const [config, setConfig] = useState({
@@ -106,223 +107,157 @@ export default function AdminConfigModal({ isOpen, onClose, onSaveSuccess, theme
         }
     };
 
-    if (!isOpen) return null;
-
-    const styles = {
-        overlay: {
-            position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
-            backgroundColor: 'rgba(0,0,0,0.6)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            zIndex: 9999, padding: '1rem',
-            backdropFilter: 'blur(4px)'
-        },
-        modal: {
-            backgroundColor: '#fff', borderRadius: '16px',
-            width: '100%', maxWidth: '600px', maxHeight: '90vh',
-            boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)',
-            display: 'flex', flexDirection: 'column'
-        },
-        header: {
-            padding: '1.25rem 1.5rem', borderBottom: '1px solid #e5e7eb',
-            display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-            backgroundColor: theme.bgLight, borderRadius: '16px 16px 0 0'
-        },
-        title: { margin: 0, fontSize: '1.25rem', color: theme.textDark, fontWeight: 'bold' },
-        closeBtn: {
-            background: 'none', border: 'none', cursor: 'pointer',
-            color: theme.gray, padding: '4px', borderRadius: '50%',
-            transition: 'background 0.2s', display: 'flex'
-        },
-        body: { padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1.5rem', overflowY: 'auto' },
-        fieldGroup: { display: 'flex', flexDirection: 'column', gap: '0.5rem' },
-        label: { fontSize: '0.9rem', fontWeight: '600', color: '#374151' },
-        input: {
-            padding: '0.75rem', fontSize: '1rem', border: '1px solid #d1d5db',
-            borderRadius: '8px', outline: 'none', transition: 'border 0.2s'
-        },
-        footer: {
-            padding: '1.5rem', borderTop: '1px solid #e5e7eb',
-            display: 'flex', justifyContent: 'flex-end', gap: '1rem',
-            backgroundColor: theme.bgLight
-        },
-        btnCancel: {
-            padding: '0.75rem 1.5rem', border: '1px solid #d1d5db', borderRadius: '8px',
-            background: '#fff', color: '#374151', cursor: 'pointer', fontWeight: '600'
-        },
-        btnSave: {
-            padding: '0.75rem 1.5rem', border: 'none', borderRadius: '8px',
-            background: theme.primary, color: '#fff', cursor: 'pointer', fontWeight: '600',
-            opacity: loading ? 0.7 : 1
-        }
-    };
-
     return (
-        <div style={styles.overlay} onClick={onClose}>
-            <div style={styles.modal} onClick={e => e.stopPropagation()}>
-                <div style={styles.header}>
-                    <h2 style={styles.title}>Ajustes de Reservas</h2>
-                    <button style={styles.closeBtn} onClick={onClose}
-                        onMouseEnter={e => e.currentTarget.style.backgroundColor = '#e5e7eb'}
-                        onMouseLeave={e => e.currentTarget.style.backgroundColor = 'transparent'}>
-                        <XMarkIcon style={{ width: '24px' }} />
-                    </button>
+        <AnimatedModal
+            isOpen={isOpen}
+            onClose={onClose}
+            title="Ajustes de Reservas"
+            maxWidth="max-w-2xl"
+        >
+            <div className="flex flex-col gap-6">
+                {/* Fila 1: Horas */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="flex flex-col gap-2">
+                        <label className="text-sm font-semibold text-gray-700">Hora de Apertura</label>
+                        <input type="time" className="p-3 text-base border border-gray-300 rounded-lg outline-none focus:border-green-500 transition-colors"
+                            value={config.RESERVATION_OPEN_TIME}
+                            onChange={e => handleChange('RESERVATION_OPEN_TIME', e.target.value)} />
+                    </div>
+                    <div className="flex flex-col gap-2">
+                        <label className="text-sm font-semibold text-gray-700">Hora de Cierre</label>
+                        <input type="time" className="p-3 text-base border border-gray-300 rounded-lg outline-none focus:border-green-500 transition-colors"
+                            value={config.RESERVATION_CLOSE_TIME}
+                            onChange={e => handleChange('RESERVATION_CLOSE_TIME', e.target.value)} />
+                    </div>
                 </div>
-                
-                <div style={styles.body}>
-                    {/* Fila 1: Horas */}
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                        <div style={styles.fieldGroup}>
-                            <label style={styles.label}>Hora de Apertura</label>
-                            <input type="time" style={styles.input}
-                                value={config.RESERVATION_OPEN_TIME}
-                                onChange={e => handleChange('RESERVATION_OPEN_TIME', e.target.value)} />
-                        </div>
-                        <div style={styles.fieldGroup}>
-                            <label style={styles.label}>Hora de Cierre</label>
-                            <input type="time" style={styles.input}
-                                value={config.RESERVATION_CLOSE_TIME}
-                                onChange={e => handleChange('RESERVATION_CLOSE_TIME', e.target.value)} />
+
+                {/* Fila 2: Capacidad y Tiempo */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="flex flex-col gap-2">
+                        <label className="text-sm font-semibold text-gray-700">Aforo Máximo (Personas/turno)</label>
+                        <input type="number" className="p-3 text-base border border-gray-300 rounded-lg outline-none focus:border-green-500 transition-colors" min="1"
+                            value={config.RESERVATION_MAX_CAPACITY}
+                            onChange={e => handleChange('RESERVATION_MAX_CAPACITY', e.target.value)} />
+                    </div>
+                    <div className="flex flex-col gap-2">
+                        <label className="text-sm font-semibold text-gray-700">Duración del Turno (Minutos)</label>
+                        <input type="number" className="p-3 text-base border border-gray-300 rounded-lg outline-none focus:border-green-500 transition-colors" min="5" step="5"
+                            value={config.RESERVATION_SLOT_DURATION}
+                            onChange={e => handleChange('RESERVATION_SLOT_DURATION', e.target.value)} />
+                    </div>
+                </div>
+
+                {/* Fila 3: Precios */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="flex flex-col gap-2">
+                        <label className="text-sm font-semibold text-gray-700">Precio en Soles 🇵🇪</label>
+                        <div className="relative">
+                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 font-bold">S/</span>
+                            <input type="number" className="p-3 pl-8 text-base border border-gray-300 rounded-lg outline-none focus:border-green-500 transition-colors w-full" min="0" step="0.50"
+                                value={config.RESERVATION_PRICE_PEN}
+                                onChange={e => handleChange('RESERVATION_PRICE_PEN', e.target.value)} />
                         </div>
                     </div>
-
-                    {/* Fila 2: Capacidad y Tiempo */}
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                        <div style={styles.fieldGroup}>
-                            <label style={styles.label}>Aforo Máximo (Personas/turno)</label>
-                            <input type="number" style={styles.input} min="1"
-                                value={config.RESERVATION_MAX_CAPACITY}
-                                onChange={e => handleChange('RESERVATION_MAX_CAPACITY', e.target.value)} />
-                        </div>
-                        <div style={styles.fieldGroup}>
-                            <label style={styles.label}>Duración del Turno (Minutos)</label>
-                            <input type="number" style={styles.input} min="5" step="5"
-                                value={config.RESERVATION_SLOT_DURATION}
-                                onChange={e => handleChange('RESERVATION_SLOT_DURATION', e.target.value)} />
-                        </div>
-                    </div>
-
-                    {/* Fila 3: Precios */}
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                        <div style={styles.fieldGroup}>
-                            <label style={styles.label}>Precio en Soles 🇵🇪</label>
-                            <div style={{ position: 'relative' }}>
-                                <span style={{ position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)', color: '#6b7280', fontWeight: 'bold' }}>S/</span>
-                                <input type="number" style={{ ...styles.input, paddingLeft: '2rem' }} min="0" step="0.50"
-                                    value={config.RESERVATION_PRICE_PEN}
-                                    onChange={e => handleChange('RESERVATION_PRICE_PEN', e.target.value)} />
-                            </div>
-                        </div>
-                        <div style={styles.fieldGroup}>
-                            <label style={styles.label}>Precio en Dólares 🇺🇸</label>
-                            <div style={{ position: 'relative' }}>
-                                <span style={{ position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)', color: '#6b7280', fontWeight: 'bold' }}>$</span>
-                                <input type="number" style={{ ...styles.input, paddingLeft: '2rem' }} min="0" step="0.50"
-                                    value={config.RESERVATION_PRICE_USD}
-                                    onChange={e => handleChange('RESERVATION_PRICE_USD', e.target.value)} />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div style={{ height: '1px', backgroundColor: '#e5e7eb', margin: '0.5rem 0' }}></div>
-
-                    <div style={styles.fieldGroup}>
-                        <label style={styles.label}>Días Recurrentes Cerrados (Para siempre)</label>
-                        <p style={{ margin: '0 0 0.5rem 0', fontSize: '0.85rem', color: '#6b7280' }}>
-                            Selecciona qué días de la semana el museo NUNCA atiende.
-                        </p>
-                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
-                            {WEEKDAYS.map(day => {
-                                const isChecked = closedWeekdaysArr.includes(day.num.toString());
-                                return (
-                                    <label key={day.num} style={{ 
-                                        display: 'flex', alignItems: 'center', gap: '4px', 
-                                        padding: '0.4rem 0.8rem', borderRadius: '20px', 
-                                        backgroundColor: isChecked ? '#fee2e2' : '#f3f4f6',
-                                        color: isChecked ? '#991b1b' : '#374151',
-                                        border: `1px solid ${isChecked ? '#fca5a5' : '#e5e7eb'}`,
-                                        cursor: 'pointer', fontSize: '0.85rem', fontWeight: '500',
-                                        transition: 'all 0.2s'
-                                    }}>
-                                        <input type="checkbox" checked={isChecked} 
-                                            onChange={() => handleWeekdayToggle(day.num)} 
-                                            style={{ cursor: 'pointer', margin: 0 }} />
-                                        {day.label}
-                                    </label>
-                                );
-                            })}
-                        </div>
-                    </div>
-
-                    <div style={styles.fieldGroup}>
-                        <label style={styles.label}>Fechas Específicas Cerradas (Mantenimiento / Feriados)</label>
-                        <p style={{ margin: '0 0 0.5rem 0', fontSize: '0.85rem', color: '#6b7280' }}>
-                            Haz clic para abrir el calendario y selecciona todas las fechas que quieras (puedes elegir varias de golpe).
-                        </p>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                            <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-                                {/* Convertir strings a objetos Date para el picker */}
-                                <div style={{ flex: 1 }}>
-                                    <DatePicker
-                                        ref={datePickerRef}
-                                        multiple
-                                        value={closedDatesArr.map(d => new Date(d + 'T00:00:00'))}
-                                        onChange={handleDatesChange}
-                                        format="DD/MM/YYYY"
-                                        placeholder="Haz clic aquí para seleccionar fechas"
-                                        containerStyle={{ width: '100%' }}
-                                        style={{
-                                            ...styles.input,
-                                            width: '100%',
-                                            cursor: 'pointer'
-                                        }}
-                                    />
-                                </div>
-                                <button 
-                                    onClick={() => datePickerRef.current?.closeCalendar()} 
-                                    style={{ ...styles.btnSave, padding: '0 1rem', height: '42px' }}
-                                >
-                                    Listo
-                                </button>
-                            </div>
-                            
-                            {/* Lista visual de fechas seleccionadas para quitarlas rápidamente */}
-                            {closedDatesArr.length > 0 && (
-                                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
-                                    {closedDatesArr.map(d => {
-                                        // d viene como YYYY-MM-DD desde la base de datos
-                                        const [year, month, day] = d.split('-');
-                                        const displayDate = `${day}-${month}-${year}`;
-                                        
-                                        return (
-                                            <div key={d} style={{
-                                                display: 'flex', alignItems: 'center', gap: '6px',
-                                                padding: '0.3rem 0.6rem', borderRadius: '6px',
-                                                backgroundColor: '#fee2e2', color: '#991b1b',
-                                                fontSize: '0.85rem', fontWeight: '500', border: '1px solid #fca5a5'
-                                            }}>
-                                                <span>{displayDate}</span>
-                                                <button onClick={() => handleRemoveDate(d)} style={{
-                                                    background: 'none', border: 'none', color: '#dc2626',
-                                                    cursor: 'pointer', padding: '0', display: 'flex'
-                                                }}>
-                                                    <XMarkIcon style={{ width: '14px', strokeWidth: 3 }} />
-                                                </button>
-                                            </div>
-                                        )
-                                    })}
-                                </div>
-                            )}
+                    <div className="flex flex-col gap-2">
+                        <label className="text-sm font-semibold text-gray-700">Precio en Dólares 🇺🇸</label>
+                        <div className="relative">
+                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 font-bold">$</span>
+                            <input type="number" className="p-3 pl-8 text-base border border-gray-300 rounded-lg outline-none focus:border-green-500 transition-colors w-full" min="0" step="0.50"
+                                value={config.RESERVATION_PRICE_USD}
+                                onChange={e => handleChange('RESERVATION_PRICE_USD', e.target.value)} />
                         </div>
                     </div>
                 </div>
 
-                <div style={styles.footer}>
-                    <button style={styles.btnCancel} onClick={onClose} disabled={loading}>Cancelar</button>
-                    <button style={styles.btnSave} onClick={handleSave} disabled={loading}>
-                        {loading ? 'Guardando...' : 'Guardar Cambios'}
-                    </button>
+                <hr className="border-gray-200" />
+
+                <div className="flex flex-col gap-2">
+                    <label className="text-sm font-semibold text-gray-700">Días Recurrentes Cerrados (Para siempre)</label>
+                    <p className="text-sm text-gray-500 m-0 mb-2">
+                        Selecciona qué días de la semana el museo NUNCA atiende.
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                        {WEEKDAYS.map(day => {
+                            const isChecked = closedWeekdaysArr.includes(day.num.toString());
+                            return (
+                                <label key={day.num} className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border cursor-pointer text-sm font-medium transition-all ${
+                                    isChecked ? 'bg-red-100 text-red-800 border-red-300' : 'bg-gray-100 text-gray-700 border-gray-200'
+                                }`}>
+                                    <input type="checkbox" checked={isChecked} 
+                                        onChange={() => handleWeekdayToggle(day.num)} 
+                                        className="cursor-pointer m-0" />
+                                    {day.label}
+                                </label>
+                            );
+                        })}
+                    </div>
+                </div>
+
+                <div className="flex flex-col gap-2">
+                    <label className="text-sm font-semibold text-gray-700">Fechas Específicas Cerradas (Mantenimiento / Feriados)</label>
+                    <p className="text-sm text-gray-500 m-0 mb-2">
+                        Haz clic para abrir el calendario y selecciona todas las fechas que quieras (puedes elegir varias de golpe).
+                    </p>
+                    <div className="flex flex-col gap-4">
+                        <div className="flex gap-2 items-center">
+                            <div className="flex-1">
+                                <DatePicker
+                                    ref={datePickerRef}
+                                    multiple
+                                    value={closedDatesArr.map(d => new Date(d + 'T00:00:00'))}
+                                    onChange={handleDatesChange}
+                                    format="DD/MM/YYYY"
+                                    placeholder="Haz clic aquí para seleccionar fechas"
+                                    containerStyle={{ width: '100%' }}
+                                    style={{
+                                        width: '100%',
+                                        padding: '0.75rem',
+                                        fontSize: '1rem',
+                                        border: '1px solid #d1d5db',
+                                        borderRadius: '0.5rem',
+                                        cursor: 'pointer'
+                                    }}
+                                />
+                            </div>
+                            <button 
+                                onClick={() => datePickerRef.current?.closeCalendar()} 
+                                className="px-4 h-[46px] bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors"
+                            >
+                                Listo
+                            </button>
+                        </div>
+                        
+                        {closedDatesArr.length > 0 && (
+                            <div className="flex flex-wrap gap-2">
+                                {closedDatesArr.map(d => {
+                                    const [year, month, day] = d.split('-');
+                                    const displayDate = `${day}-${month}-${year}`;
+                                    
+                                    return (
+                                        <div key={d} className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-red-100 text-red-800 text-sm font-medium border border-red-300">
+                                            <span>{displayDate}</span>
+                                            <button onClick={() => handleRemoveDate(d)} className="text-red-600 hover:text-red-800 flex">
+                                                <XMarkIcon className="w-3.5 h-3.5 stroke-[3]" />
+                                            </button>
+                                        </div>
+                                    )
+                                })}
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
-        </div>
+
+            <div className="flex justify-end gap-3 mt-8 pt-4 border-t border-gray-100">
+                <button className="px-6 py-2.5 border border-gray-300 rounded-lg bg-white text-gray-700 font-semibold hover:bg-gray-50 transition-colors disabled:opacity-50" 
+                    onClick={onClose} disabled={loading}>
+                    Cancelar
+                </button>
+                <button className="px-6 py-2.5 rounded-lg bg-green-600 text-white font-semibold hover:bg-green-700 transition-colors disabled:opacity-70" 
+                    onClick={handleSave} disabled={loading}>
+                    {loading ? 'Guardando...' : 'Guardar Cambios'}
+                </button>
+            </div>
+        </AnimatedModal>
     );
 }
