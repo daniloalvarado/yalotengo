@@ -21,8 +21,6 @@ import {
 } from '@heroicons/react/24/outline'
 
 const THEME = { primary: '#059669' }
-const WHATSAPP = '+51953808566'
-const EMAIL = 'daniloalvarado2002@gmail.com'
 
 // FAQs para usuarios normales
 const USER_FAQS = [
@@ -131,8 +129,8 @@ export default function Help() {
     const [user, setUser] = useState(null)
     const [loading, setLoading] = useState(true)
     const [config, setConfig] = useState({
-        HELP_CONTACT_TITLE: '¿Necesitas más ayuda?',
-        HELP_CONTACT_DESC: 'Si no encontraste la respuesta que buscabas, contáctanos directamente. Estamos aquí para ayudarte.'
+        HELP_CONTACT_WHATSAPP: '+51953808566',
+        HELP_CONTACT_EMAIL: 'daniloalvarado2002@gmail.com'
     })
     const [savingConfig, setSavingConfig] = useState(false)
 
@@ -168,9 +166,9 @@ export default function Help() {
     const handleSaveConfig = async () => {
         setSavingConfig(true)
         try {
-            await api.put('/config/HELP_CONTACT_TITLE', { value: config.HELP_CONTACT_TITLE })
-            await api.put('/config/HELP_CONTACT_DESC', { value: config.HELP_CONTACT_DESC })
-            toast.success('Textos actualizados correctamente')
+            await api.put('/config/HELP_CONTACT_WHATSAPP', { value: config.HELP_CONTACT_WHATSAPP })
+            await api.put('/config/HELP_CONTACT_EMAIL', { value: config.HELP_CONTACT_EMAIL })
+            toast.success('Contactos actualizados correctamente')
         } catch (error) {
             console.error('Error saving config:', error)
             toast.error('Error al guardar los textos')
@@ -184,7 +182,7 @@ export default function Help() {
 
     const openWhatsApp = () => {
         const message = encodeURIComponent('Hola, necesito ayuda con la plataforma.')
-        window.open(`https://wa.me/${WHATSAPP.replace(/\+/g, '')}?text=${message}`, '_blank')
+        window.open(`https://wa.me/${(config.HELP_CONTACT_WHATSAPP || '').replace(/\+/g, '')}?text=${message}`, '_blank')
     }
 
     return (
@@ -215,38 +213,43 @@ export default function Help() {
 
             {/* Contact Section */}
             <div className="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl p-6 space-y-4">
-                {isAdmin ? (
-                    <div className="space-y-2">
-                        <input
-                            className="text-lg font-semibold text-gray-900 bg-transparent border-b border-gray-300 focus:border-green-500 outline-none w-full pb-1"
-                            value={config.HELP_CONTACT_TITLE}
-                            onChange={(e) => setConfig({ ...config, HELP_CONTACT_TITLE: e.target.value })}
-                            placeholder="Título del contacto"
-                        />
-                        <textarea
-                            className="text-gray-600 text-sm bg-transparent border-b border-gray-300 focus:border-green-500 outline-none w-full resize-none pb-1"
-                            rows={2}
-                            value={config.HELP_CONTACT_DESC}
-                            onChange={(e) => setConfig({ ...config, HELP_CONTACT_DESC: e.target.value })}
-                            placeholder="Descripción del contacto"
-                        />
-                        <div className="flex justify-end">
+                <h2 className="text-lg font-semibold text-gray-900">¿Necesitas más ayuda?</h2>
+                <p className="text-gray-600 text-sm">
+                    Si no encontraste la respuesta que buscabas, contáctanos directamente. Estamos aquí para ayudarte.
+                </p>
+
+                {isAdmin && (
+                    <div className="space-y-2 mt-4">
+                        <div className="flex flex-col sm:flex-row gap-3 pt-2">
+                            <div className="flex-1 flex items-center border-b border-gray-300 focus-within:border-green-500 pb-1">
+                                <PhoneIcon className="w-4 h-4 text-gray-400 mr-2" />
+                                <input
+                                    className="text-gray-900 bg-transparent outline-none w-full text-sm"
+                                    value={config.HELP_CONTACT_WHATSAPP}
+                                    onChange={(e) => setConfig({ ...config, HELP_CONTACT_WHATSAPP: e.target.value })}
+                                    placeholder="WhatsApp (ej. +51...)"
+                                />
+                            </div>
+                            <div className="flex-1 flex items-center border-b border-gray-300 focus-within:border-green-500 pb-1">
+                                <EnvelopeIcon className="w-4 h-4 text-gray-400 mr-2" />
+                                <input
+                                    className="text-gray-900 bg-transparent outline-none w-full text-sm"
+                                    value={config.HELP_CONTACT_EMAIL}
+                                    onChange={(e) => setConfig({ ...config, HELP_CONTACT_EMAIL: e.target.value })}
+                                    placeholder="Correo Electrónico"
+                                />
+                            </div>
+                        </div>
+                        <div className="flex justify-end mt-2">
                             <button
                                 onClick={handleSaveConfig}
                                 disabled={savingConfig}
                                 className="px-3 py-1.5 bg-green-500 hover:bg-green-600 text-white rounded-lg text-sm font-medium transition-colors disabled:opacity-50"
                             >
-                                {savingConfig ? 'Guardando...' : 'Guardar Textos'}
+                                {savingConfig ? 'Guardando...' : 'Guardar Contactos'}
                             </button>
                         </div>
                     </div>
-                ) : (
-                    <>
-                        <h2 className="text-lg font-semibold text-gray-900">{config.HELP_CONTACT_TITLE}</h2>
-                        <p className="text-gray-600 text-sm">
-                            {config.HELP_CONTACT_DESC}
-                        </p>
-                    </>
                 )}
 
                 <div className="flex flex-col sm:flex-row gap-3">
@@ -258,7 +261,7 @@ export default function Help() {
                         WhatsApp
                     </button>
                     <a
-                        href={`mailto:${EMAIL}`}
+                        href={`mailto:${config.HELP_CONTACT_EMAIL}`}
                         className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-white hover:bg-gray-50 text-gray-700 rounded-xl font-medium border border-gray-200 transition-colors"
                     >
                         <EnvelopeIcon className="w-5 h-5" />
@@ -269,11 +272,11 @@ export default function Help() {
                 <div className="pt-2 text-sm text-gray-500 space-y-1">
                     <p className="flex items-center gap-2">
                         <PhoneIcon className="w-4 h-4" />
-                        {WHATSAPP}
+                        {config.HELP_CONTACT_WHATSAPP}
                     </p>
                     <p className="flex items-center gap-2">
                         <EnvelopeIcon className="w-4 h-4" />
-                        {EMAIL}
+                        {config.HELP_CONTACT_EMAIL}
                     </p>
                 </div>
 
