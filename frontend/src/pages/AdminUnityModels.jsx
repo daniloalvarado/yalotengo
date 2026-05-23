@@ -7,6 +7,7 @@ import { PlusIcon, PencilIcon, TrashIcon, EyeIcon, EyeSlashIcon, ArrowUpTrayIcon
 import AnimatedModal from '../components/AnimatedModal'
 import AdminUnityDashboard from './AdminUnityDashboard'
 import FadeInStagger from '../components/ui/FadeInStagger'
+import { cascade } from '../utils/animations'
 
 const THEME = { primary: '#059669' }
 const API_BASE_URL = (import.meta.env.VITE_API_BASE || 'http://localhost:3000').replace(/\/api$/, '');
@@ -225,16 +226,16 @@ export default function AdminUnityModels() {
     if (!isAdmin) return <div className="p-8 text-center text-gray-500">Verificando permisos...</div>
 
     return (
-        <FadeInStagger staggerDelay={100} className="max-w-6xl mx-auto p-4 sm:p-6 space-y-6">
+        <div className="max-w-6xl mx-auto p-4 sm:p-6 space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                <div>
+                <div {...cascade(0)}>
                     <h1 className="text-2xl font-bold text-gray-900">Gestión de App AR</h1>
                     <p className="text-gray-500 text-sm">Panel de control de Realidad Aumentada</p>
                 </div>
                 {activeTab === 'gestion' && (
                     <button
                         onClick={() => openModal()}
-                        className="flex items-center justify-center gap-2 px-4 py-2 text-white rounded-lg shadow-md hover:opacity-90 transition-all"
+                        {...cascade(1, "flex items-center justify-center gap-2 px-4 py-2 text-white rounded-lg shadow-md hover:opacity-90 transition-all")}
                         style={{ backgroundColor: THEME.primary }}
                     >
                         <PlusIcon className="w-5 h-5" />
@@ -244,30 +245,30 @@ export default function AdminUnityModels() {
             </div>
 
             {/* Pestañas de Navegación */}
-            <FadeInStagger baseDelay={200} staggerDelay={100} className="flex space-x-1 bg-gray-100/50 p-1.5 rounded-xl border border-gray-200">
+            <div {...cascade(2, "flex space-x-1 bg-gray-100/50 p-1.5 rounded-xl border border-gray-200")}>
                 <button
                     onClick={() => setActiveTab('gestion')}
-                    className={`flex items-center gap-2 flex-1 justify-center py-2.5 text-sm font-medium rounded-lg transition-all ${activeTab === 'gestion' ? 'bg-white text-emerald-700 shadow-sm' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'}`}
+                    {...cascade(3, `flex items-center gap-2 flex-1 justify-center py-2.5 text-sm font-medium rounded-lg transition-all ${activeTab === 'gestion' ? 'bg-white text-emerald-700 shadow-sm' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'}`)}
                 >
                     <CircleStackIcon className="w-5 h-5" />
                     Modelos 3D
                 </button>
                 <button
                     onClick={() => setActiveTab('dashboard')}
-                    className={`flex items-center gap-2 flex-1 justify-center py-2.5 text-sm font-medium rounded-lg transition-all ${activeTab === 'dashboard' ? 'bg-white text-emerald-700 shadow-sm' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'}`}
+                    {...cascade(4, `flex items-center gap-2 flex-1 justify-center py-2.5 text-sm font-medium rounded-lg transition-all ${activeTab === 'dashboard' ? 'bg-white text-emerald-700 shadow-sm' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'}`)}
                 >
                     <ChartBarSquareIcon className="w-5 h-5" />
                     Dashboard AR
                 </button>
-            </FadeInStagger>
+            </div>
 
             {activeTab === 'dashboard' ? (
                 <AdminUnityDashboard />
             ) : (
                 <>
                     <div className="mb-4 mt-2">
-                        <FadeInStagger baseDelay={300} staggerDelay={100} className="flex flex-row flex-wrap xs:flex-nowrap gap-3 items-center justify-between w-full">
-                            <div className="relative w-full sm:max-w-md">
+                        <div className="flex flex-row flex-wrap xs:flex-nowrap gap-3 items-center justify-between w-full">
+                            <div {...cascade(5, "relative w-full sm:max-w-md")}>
                                 <input
                                     type="text"
                                     placeholder="Buscar por nombre científico o común..."
@@ -277,7 +278,7 @@ export default function AdminUnityModels() {
                                 />
                             </div>
                             <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-                              <div className="w-full sm:w-auto min-w-[200px]">
+                              <div {...cascade(6, "w-full sm:w-auto min-w-[200px]")}>
                                 <select
                                     value={selectedPanel}
                                     onChange={(e) => setSelectedPanel(e.target.value)}
@@ -291,19 +292,19 @@ export default function AdminUnityModels() {
                             </div>
                             <button
                                 onClick={() => navigate('/admin-idiomas')}
-                                className="w-full sm:w-auto h-[42px] px-4 bg-emerald-100 text-emerald-700 font-bold rounded-lg hover:bg-emerald-200 transition-all shadow-sm flex items-center justify-center gap-2"
+                                {...cascade(7, "w-full sm:w-auto h-[42px] px-4 bg-emerald-100 text-emerald-700 font-bold rounded-lg hover:bg-emerald-200 transition-all shadow-sm flex items-center justify-center gap-2")}
                             >
                                 <LanguageIcon className="w-5 h-5" /> APP AR
                             </button>
                           </div>
-                        </FadeInStagger>
+                        </div>
                     </div>
 
                     {loading ? <div className="text-gray-500">Cargando datos...</div> : (
-                        <div className="overflow-x-auto rounded-lg border border-gray-200 bg-white">
+                        <div {...cascade(8, "overflow-x-auto rounded-lg border border-gray-200 bg-white")}>
                             <table className="w-full text-sm">
                                 <thead className="bg-gray-50">
-                                    <tr>
+                                    <tr {...cascade(9)}>
                                         <th className="px-4 py-3 text-left font-medium text-gray-600 w-12 text-center">N°</th>
                                         <th className="px-4 py-3 text-left font-medium text-gray-600">Especie</th>
                                         <th className="px-4 py-3 text-left font-medium text-gray-600">Temática</th>
@@ -314,9 +315,9 @@ export default function AdminUnityModels() {
                                         <th className="px-4 py-3 text-right font-medium text-gray-600">Acciones</th>
                                     </tr>
                                 </thead>
-                                <FadeInStagger baseDelay={200} staggerDelay={50} className="divide-y divide-gray-100 table-row-group">
+                                <tbody className="divide-y divide-gray-100 table-row-group">
                                     {paginatedModels.map((m, idx) => (
-                                        <tr key={m.id} className="hover:bg-gray-50 transition-colors">
+                                        <tr key={m.id} {...cascade(10 + idx, "hover:bg-gray-50 transition-colors")}>
                                             <td className="px-4 py-3 text-center text-gray-400 font-mono text-xs">
                                                 {(currentPage - 1) * itemsPerPage + idx + 1}
                                             </td>
@@ -391,20 +392,20 @@ export default function AdminUnityModels() {
                                         </tr>
                                     ))}
                                     {filteredModels.length === 0 && (
-                                        <tr>
-                                            <td colSpan="5" className="px-4 py-8 text-center text-gray-500">
+                                        <tr {...cascade(10)}>
+                                            <td colSpan="8" className="px-4 py-8 text-center text-gray-500">
                                                 No se encontraron especies microscópicas.
                                             </td>
                                         </tr>
                                     )}
-                                </FadeInStagger>
+                                </tbody>
                             </table>
                         </div>
                     )}
 
                     {/* Controles de Paginación */}
                     {!loading && totalPages > 1 && (
-                        <div className="flex items-center justify-between bg-white px-4 py-3 rounded-lg border border-gray-200 mt-4 shadow-sm">
+                        <div {...cascade(10 + Math.min(itemsPerPage, filteredModels.length) + 1, "flex items-center justify-between bg-white px-4 py-3 rounded-lg border border-gray-200 mt-4 shadow-sm")}>
                             <div className="flex flex-1 justify-between sm:hidden">
                                 <button
                                     onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
@@ -821,6 +822,6 @@ export default function AdminUnityModels() {
                     cursor: not-allowed;
                 }
             `}</style>
-        </FadeInStagger>
+        </div>
     )
 }
