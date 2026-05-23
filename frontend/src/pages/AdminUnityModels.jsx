@@ -301,7 +301,7 @@ export default function AdminUnityModels() {
                     </div>
 
                     {loading ? <div className="text-gray-500">Cargando datos...</div> : (
-                        <div {...cascade(8, "overflow-x-auto rounded-lg border border-gray-200 bg-white")}>
+                        <div key={searchTerm + selectedPanel} {...cascade(8, "overflow-x-auto rounded-lg border border-gray-200 bg-white")}>
                             <table className="w-full text-sm">
                                 <thead className="bg-gray-50">
                                     <tr {...cascade(9)}>

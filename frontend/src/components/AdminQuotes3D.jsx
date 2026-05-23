@@ -4,6 +4,7 @@ import toast from 'react-hot-toast'
 import api from '../api/client'
 import JSZip from 'jszip'
 import { saveAs } from 'file-saver'
+import { cascade } from '../utils/animations'
 
 export default function AdminQuotes3D() {
     const [quotes, setQuotes] = useState([])
@@ -119,8 +120,8 @@ export default function AdminQuotes3D() {
 
     return (
         <div className="space-y-4">
-            {quotes.map(quote => (
-                <div key={quote.cot_int_id} className={`bg-white rounded-xl border ${quote.cot_txt_status === 'Pendiente' ? 'border-yellow-300 shadow-md' : 'border-gray-200'} p-5 relative`}>
+            {quotes.map((quote, idx) => (
+                <div key={quote.cot_int_id} {...cascade(idx, `bg-white rounded-xl border ${quote.cot_txt_status === 'Pendiente' ? 'border-yellow-300 shadow-md' : 'border-gray-200'} p-5 relative`)}>
                     
                     <div className="flex flex-col md:flex-row gap-6">
                         {/* Info Cliente */}

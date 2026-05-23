@@ -13,6 +13,7 @@ import Swal from 'sweetalert2'
 import PurchaseDetailModal from './admin/PurchaseDetailModal'
 import AnimatedModal from '../components/AnimatedModal'
 import AdminQuotes3D from '../components/AdminQuotes3D'
+import { cascade } from '../utils/animations'
 
 const THEME = { primary: '#059669' }
 
@@ -314,14 +315,14 @@ export default function AdminModels3D() {
     return (
         <div className="max-w-6xl mx-auto p-4 sm:p-6 space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                <div>
+                <div {...cascade(0)}>
                     <h1 className="text-2xl font-bold text-gray-900">Gestión Modelos 3D</h1>
                     <p className="text-gray-500 text-sm">Productos y ventas de modelos 3D</p>
                 </div>
                 {mainTab === 'products' && (
                     <button
                         onClick={() => openModal()}
-                        className="flex items-center justify-center gap-2 px-4 py-2 text-white rounded-lg shadow-md hover:opacity-90 transition-all"
+                        {...cascade(1, "flex items-center justify-center gap-2 px-4 py-2 text-white rounded-lg shadow-md hover:opacity-90 transition-all")}
                         style={{ backgroundColor: THEME.primary }}
                     >
                         <PlusIcon className="w-5 h-5" />
@@ -330,46 +331,46 @@ export default function AdminModels3D() {
                 )}
             </div>
 
-            <div className="flex gap-2 border-b border-gray-200 overflow-x-auto whitespace-nowrap custom-scrollbar pb-1">
+            <div {...cascade(2, "flex gap-2 border-b border-gray-200 overflow-x-auto whitespace-nowrap custom-scrollbar pb-1")}>
                 <button
                     onClick={() => { setMainTab('products'); setSearchTerm(''); }}
-                    className={`px-4 py-2 shrink-0 text-sm font-medium border-b-2 transition-all ${mainTab === 'products' ? 'border-emerald-500 text-emerald-600' : 'border-transparent text-gray-500 hover:text-gray-700'}`}
+                    {...cascade(3, `px-4 py-2 shrink-0 text-sm font-medium border-b-2 transition-all ${mainTab === 'products' ? 'border-emerald-500 text-emerald-600' : 'border-transparent text-gray-500 hover:text-gray-700'}`)}
                 >
                     Productos ({models.length})
                 </button>
                 <button
                     onClick={() => setMainTab('purchases')}
-                    className={`px-4 py-2 shrink-0 text-sm font-medium border-b-2 transition-all ${mainTab === 'purchases' ? 'border-emerald-500 text-emerald-600' : 'border-transparent text-gray-500 hover:text-gray-700'}`}
+                    {...cascade(4, `px-4 py-2 shrink-0 text-sm font-medium border-b-2 transition-all ${mainTab === 'purchases' ? 'border-emerald-500 text-emerald-600' : 'border-transparent text-gray-500 hover:text-gray-700'}`)}
                 >
                     Compras ({purchases.length})
                 </button>
                 <button
                     onClick={() => { setMainTab('quotes'); setSearchTerm(''); }}
-                    className={`px-4 py-2 shrink-0 text-sm font-medium border-b-2 transition-all ${mainTab === 'quotes' ? 'border-emerald-500 text-emerald-600' : 'border-transparent text-gray-500 hover:text-gray-700'}`}
+                    {...cascade(5, `px-4 py-2 shrink-0 text-sm font-medium border-b-2 transition-all ${mainTab === 'quotes' ? 'border-emerald-500 text-emerald-600' : 'border-transparent text-gray-500 hover:text-gray-700'}`)}
                 >
                     Cotizaciones 3D
                 </button>
             </div>
 
             {mainTab === 'products' && (
-                <div className="flex flex-row flex-wrap items-center justify-between gap-4 w-full pb-2 mt-1">
+                <div {...cascade(6, "flex flex-row flex-wrap items-center justify-between gap-4 w-full pb-2 mt-1")}>
                     <div className="flex gap-2 overflow-x-auto whitespace-nowrap custom-scrollbar">
                         <button
                             onClick={() => { setModelCategory('DIGITALIZADO'); setModelSubcategory('Todas'); }}
-                            className={`px-3 py-1 shrink-0 text-sm rounded-full transition-colors ${modelCategory === 'DIGITALIZADO' ? 'bg-emerald-100 text-emerald-700 font-medium' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+                            {...cascade(7, `px-3 py-1 shrink-0 text-sm rounded-full transition-colors ${modelCategory === 'DIGITALIZADO' ? 'bg-emerald-100 text-emerald-700 font-medium' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`)}
                         >
                             Digitales (GLB)
                         </button>
                         <button
                             onClick={() => setModelCategory('IMPRESO')}
-                            className={`px-3 py-1 shrink-0 text-sm rounded-full transition-colors ${modelCategory === 'IMPRESO' ? 'bg-emerald-100 text-emerald-700 font-medium' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+                            {...cascade(8, `px-3 py-1 shrink-0 text-sm rounded-full transition-colors ${modelCategory === 'IMPRESO' ? 'bg-emerald-100 text-emerald-700 font-medium' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`)}
                         >
                             Impresos (Físicos)
                         </button>
                     </div>
 
                     {modelCategory === 'DIGITALIZADO' && (
-                        <div className="flex items-center gap-2">
+                        <div {...cascade(9, "flex items-center gap-2")}>
                             <span className="text-sm text-gray-500 font-medium">Filtro:</span>
                             <select
                                 value={modelSubcategory}
@@ -386,7 +387,7 @@ export default function AdminModels3D() {
             )}
 
             {mainTab === 'purchases' && (
-                <div className="relative">
+                <div {...cascade(6, "relative")}>
                     <MagnifyingGlassIcon className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                     <input
                         type="text"
@@ -401,9 +402,9 @@ export default function AdminModels3D() {
             {loading && <div className="text-gray-500">Cargando...</div>}
 
             {mainTab === 'products' && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {filteredModels.map(m => (
-                        <div key={m.mod_int_id} className={`bg-white rounded-xl border p-4 shadow-sm transition-all ${!m.mod_bool_active ? 'opacity-60' : ''}`}>
+                <div key={`${modelCategory}-${modelSubcategory}`} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {filteredModels.map((m, idx) => (
+                        <div key={m.mod_int_id} {...cascade(10 + idx, `bg-white rounded-xl border p-4 shadow-sm transition-all ${!m.mod_bool_active ? 'opacity-60' : ''}`)}>
                             {m.mod_txt_category === 'IMPRESO' ? (
                                 <div className="aspect-square bg-gray-100 rounded-lg mb-3 overflow-hidden grid place-items-center">
                                     {m.mod_txt_glb_filename ? (
@@ -448,7 +449,7 @@ export default function AdminModels3D() {
                         </div>
                     ))}
                     {filteredModels.length === 0 && (
-                        <div className="col-span-full py-12 text-center text-gray-400 border-2 border-dashed border-gray-200 rounded-xl">
+                        <div {...cascade(10, "col-span-full py-12 text-center text-gray-400 border-2 border-dashed border-gray-200 rounded-xl")}>
                             <p>No hay modelos {modelCategory === 'IMPRESO' ? 'impresos' : 'digitales'} registrados.</p>
                         </div>
                     )}
@@ -460,10 +461,10 @@ export default function AdminModels3D() {
             )}
 
             {mainTab === 'purchases' && (
-                <div className="overflow-x-auto rounded-lg border border-gray-200">
+                <div key={searchTerm} {...cascade(7, "overflow-x-auto rounded-lg border border-gray-200")}>
                     <table className="w-full text-sm">
                         <thead className="bg-gray-50">
-                            <tr>
+                            <tr {...cascade(8)}>
                                 <th className="px-4 py-3 text-left font-medium text-gray-600">Cliente</th>
                                 <th className="px-4 py-3 text-left font-medium text-gray-600">Modelo</th>
                                 <th className="px-4 py-3 text-left font-medium text-gray-600">Monto</th>
@@ -473,7 +474,7 @@ export default function AdminModels3D() {
                         </thead>
                         <tbody className="divide-y divide-gray-100">
                             {filteredPurchases.map((p, i) => (
-                                <tr key={i} onClick={() => setDetailItem(p)} className="hover:bg-emerald-50 cursor-pointer transition-colors group">
+                                <tr key={i} onClick={() => setDetailItem(p)} {...cascade(9 + i, "hover:bg-emerald-50 cursor-pointer transition-colors group")}>
                                     <td className="px-4 py-3">
                                         <div className="font-medium text-gray-900">{p.userName}</div>
                                         <div className="text-xs text-gray-500">{p.userEmail}</div>
@@ -507,7 +508,7 @@ export default function AdminModels3D() {
                         </tbody>
                     </table>
                     {filteredPurchases.length === 0 && (
-                        <div className="text-center py-8 text-gray-500">
+                        <div {...cascade(9, "text-center py-8 text-gray-500")}>
                             {searchTerm ? 'No se encontraron resultados' : 'No hay compras aún'}
                         </div>
                     )}
