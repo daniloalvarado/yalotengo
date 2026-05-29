@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import api from '../api/client'
 import toast from 'react-hot-toast'
 import { UserCircleIcon, CameraIcon, LockClosedIcon, IdentificationIcon, MapPinIcon, PhoneIcon } from '@heroicons/react/24/outline'
+import { cascade } from '../utils/animations'
 
 export default function Profile() {
     const navigate = useNavigate()
@@ -159,12 +160,12 @@ export default function Profile() {
 
     return (
         <div className="max-w-4xl mx-auto p-6 space-y-8">
-            <h1 className="text-3xl font-bold text-zinc-900">Mi Perfil</h1>
+            <h1 {...cascade(1)} className="text-3xl font-bold text-zinc-900">Mi Perfil</h1>
 
             <div className="grid md:grid-cols-[1fr_2fr] gap-8">
 
                 {/* LEFT COLUMN: AVATAR & BASIC BADGE */}
-                <div className="flex flex-col items-center gap-4">
+                <div {...cascade(2)} className="flex flex-col items-center gap-4">
                     <div className="relative group cursor-pointer" onClick={handleAvatarClick}>
                         <div className="w-40 h-40 rounded-full overflow-hidden border-4 border-white shadow-lg bg-zinc-100 flex items-center justify-center">
                             {avatarUrl ? (
@@ -207,13 +208,13 @@ export default function Profile() {
                 <div className="space-y-8">
 
                     {/* PERSONAL INFO */}
-                    <section className="bg-white rounded-xl border border-zinc-200 shadow-sm p-6">
+                    <section {...cascade(3)} className="bg-white rounded-xl border border-zinc-200 shadow-sm p-6">
                         <h2 className="text-xl font-semibold text-zinc-800 mb-6 flex items-center gap-2">
                             <IdentificationIcon className="w-5 h-5 text-emerald-500" />
                             Información Personal
                         </h2>
                         <form onSubmit={handleUpdateProfile} className="space-y-4">
-                            <div className="grid sm:grid-cols-2 gap-4">
+                            <div {...cascade(4)} className="grid sm:grid-cols-2 gap-4">
                                 <div>
                                     <label className="block text-sm font-medium text-zinc-700 mb-1">Nombres</label>
                                     <input
@@ -235,7 +236,7 @@ export default function Profile() {
                             </div>
 
                             {/* DNI & PHONE */}
-                            <div className="grid sm:grid-cols-2 gap-4">
+                            <div {...cascade(5)} className="grid sm:grid-cols-2 gap-4">
                                 <div>
                                     <label className="block text-sm font-medium text-zinc-700 mb-1">DNI (8 dígitos)</label>
                                     <input
@@ -263,7 +264,7 @@ export default function Profile() {
                             </div>
 
                             {/* EMAIL */}
-                            <div>
+                            <div {...cascade(6)}>
                                 <label className="block text-sm font-medium text-zinc-700 mb-1">Email</label>
                                 <input
                                     type="email"
@@ -274,7 +275,7 @@ export default function Profile() {
                             </div>
 
                             {/* ADDRESS (Full Width, Textarea) */}
-                            <div>
+                            <div {...cascade(7)}>
                                 <label className="block text-sm font-medium text-zinc-700 mb-1 flex items-center gap-1">
                                     <MapPinIcon className="w-4 h-4" /> Dirección
                                 </label>
@@ -288,7 +289,7 @@ export default function Profile() {
                                 {isMissing('Dirección') && <span className="text-xs text-red-500">Requerido para compras</span>}
                             </div>
 
-                            <div className="pt-2 flex justify-end">
+                            <div {...cascade(8)} className="pt-2 flex justify-end">
                                 <button
                                     type="submit"
                                     disabled={saving}
@@ -302,13 +303,13 @@ export default function Profile() {
 
                     {/* CHANGE PASSWORD (ONLY LOCAL USERS) */}
                     {isLocalUser && (
-                        <section className="bg-white rounded-xl border border-zinc-200 shadow-sm p-6">
+                        <section {...cascade(4)} className="bg-white rounded-xl border border-zinc-200 shadow-sm p-6">
                             <h2 className="text-xl font-semibold text-zinc-800 mb-6 flex items-center gap-2">
                                 <LockClosedIcon className="w-5 h-5 text-amber-500" />
                                 Seguridad
                             </h2>
                             <form onSubmit={handleChangePassword} className="space-y-4">
-                                <div>
+                                <div {...cascade(5)}>
                                     <label className="block text-sm font-medium text-zinc-700 mb-1">Contraseña Actual</label>
                                     <input
                                         type="password"
@@ -317,7 +318,7 @@ export default function Profile() {
                                         onChange={e => setCurrPass(e.target.value)}
                                     />
                                 </div>
-                                <div className="grid sm:grid-cols-2 gap-4">
+                                <div {...cascade(6)} className="grid sm:grid-cols-2 gap-4">
                                     <div>
                                         <label className="block text-sm font-medium text-zinc-700 mb-1">Nueva Contraseña (min 8)</label>
                                         <input
@@ -338,7 +339,7 @@ export default function Profile() {
                                     </div>
                                 </div>
 
-                                <div className="pt-2 flex justify-end">
+                                <div {...cascade(7)} className="pt-2 flex justify-end">
                                     <button
                                         type="submit"
                                         disabled={saving}

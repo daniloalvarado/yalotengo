@@ -13,6 +13,7 @@ import {
     CheckBadgeIcon,
     TrashIcon
 } from "@heroicons/react/24/outline";
+import { cascade } from '../utils/animations';
 
 export default function AdminScanner({
     scannerActive, setScannerActive, handleScan, lastScan, onReset,
@@ -73,8 +74,8 @@ export default function AdminScanner({
     };
 
     return (
-        <div style={styles.section}>
-            <div style={{ marginBottom: '1.5rem', borderBottom: '1px solid #eee', paddingBottom: '1rem' }}>
+        <div style={{ ...styles.section, ...cascade(4).style }} className={cascade(4).className}>
+            <div style={{ marginBottom: '1.5rem', borderBottom: '1px solid #eee', paddingBottom: '1rem', ...cascade(5).style }} className={cascade(5).className}>
                 <h2 style={{ margin: 0, color: theme.textDark }}>Escáner de Entrada</h2>
                 <p style={{ color: '#666', margin: '0.5rem 0 0 0', fontSize: '0.9rem' }}>
                     Escanea el QR del visitante para validar su entrada
@@ -87,8 +88,10 @@ export default function AdminScanner({
                     ...styles.primaryBtn,
                     marginBottom: '1rem',
                     backgroundColor: scannerActive ? theme.danger : theme.primary,
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem'
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
+                    ...cascade(6).style
                 }}
+                className={cascade(6).className}
                 onClick={() => setScannerActive(!scannerActive)}
             >
                 {scannerActive ? (
@@ -115,7 +118,7 @@ export default function AdminScanner({
 
             {/* RESULTADO DEL ESCANEO */}
             {lastScan && !lastScan.scanning && (
-                <div style={localStyles.resultCard}>
+                <div style={{ ...localStyles.resultCard, ...cascade(7).style }} className={cascade(7).className}>
                     {/* ENCABEZADO: VALIDO / INVALIDO */}
                     <div style={localStyles.header(lastScan.valid)}>
                         {lastScan.valid ? (

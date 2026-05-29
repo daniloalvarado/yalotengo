@@ -16,6 +16,7 @@ import AdminScanner from './AdminScanner'
 import AdminManagement from './AdminManagement'
 import AdminConfigModal from './AdminConfigModal'
 import { Cog6ToothIcon } from '@heroicons/react/24/outline'
+import { cascade } from '../utils/animations'
 
 const STATUS_LABELS = {
     PENDING: 'Pendiente', PAID: 'Pagado', USED: 'Usado',
@@ -244,20 +245,20 @@ export default function AdminReservations() {
     }
 
     return (
-        <div style={styles.container}>
-            <div style={styles.header}>
+        <div style={{ ...styles.container, ...cascade(1).style }} className={cascade(1).className}>
+            <div style={{ ...styles.header, ...cascade(2).style }} className={cascade(2).className}>
                 <h1 style={styles.title}>Panel de Reservas</h1>
             </div>
 
             {/* TABS CON ICONOS */}
-            <div style={styles.tabs} className="hide-scrollbar">
-                <button style={styles.tab(activeTab === 'sales')} onClick={() => setActiveTab('sales')} style={{...styles.tab(activeTab === 'sales'), whiteSpace: 'nowrap'}}>
+            <div style={{ ...styles.tabs, ...cascade(3).style }} className={`hide-scrollbar ${cascade(3).className}`}>
+                <button style={{...styles.tab(activeTab === 'sales'), whiteSpace: 'nowrap'}} onClick={() => setActiveTab('sales')}>
                     <TicketIcon style={{ width: '20px' }} /> Venta Taquilla
                 </button>
-                <button style={styles.tab(activeTab === 'scanner')} onClick={() => setActiveTab('scanner')} style={{...styles.tab(activeTab === 'scanner'), whiteSpace: 'nowrap'}}>
+                <button style={{...styles.tab(activeTab === 'scanner'), whiteSpace: 'nowrap'}} onClick={() => setActiveTab('scanner')}>
                     <QrCodeIcon style={{ width: '20px' }} /> Escáner QR
                 </button>
-                <button style={styles.tab(activeTab === 'table')} onClick={() => setActiveTab('table')} style={{...styles.tab(activeTab === 'table'), whiteSpace: 'nowrap'}}>
+                <button style={{...styles.tab(activeTab === 'table'), whiteSpace: 'nowrap'}} onClick={() => setActiveTab('table')}>
                     <ClipboardDocumentListIcon style={{ width: '20px' }} /> Gestión
                 </button>
                 

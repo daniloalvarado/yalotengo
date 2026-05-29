@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import { cascade } from '../utils/animations';
 
 export default function AdminManagement({ 
     stats, realVisitors, reservations, filterDate, setFilterDate, 
@@ -75,18 +76,18 @@ export default function AdminManagement({
             {/* ESTADÍSTICAS */}
             {stats && (
                 <div style={styles.statsGrid}>
-                    <div style={styles.statCard}><div style={styles.statValue}>{stats.total}</div><div style={styles.statLabel}>Total Reservas</div></div>
-                    <div style={styles.statCard}><div style={styles.statValue}>{realVisitors}</div><div style={styles.statLabel}>Visitantes (Entraron)</div></div>
-                    <div style={styles.statCard}><div style={styles.statValue}>{stats.totalGuests}</div><div style={styles.statLabel}>Aforo Esperado</div></div>
-                    <div style={styles.statCard}><div style={{ ...styles.statValue, color: theme.primary }}>S/ {stats.revenue?.toFixed(2) || '0.00'}</div><div style={styles.statLabel}>Ingresos</div></div>
+                    <div style={{...styles.statCard, ...cascade(4).style}} className={cascade(4).className}><div style={styles.statValue}>{stats.total}</div><div style={styles.statLabel}>Total Reservas</div></div>
+                    <div style={{...styles.statCard, ...cascade(5).style}} className={cascade(5).className}><div style={styles.statValue}>{realVisitors}</div><div style={styles.statLabel}>Visitantes (Entraron)</div></div>
+                    <div style={{...styles.statCard, ...cascade(6).style}} className={cascade(6).className}><div style={styles.statValue}>{stats.totalGuests}</div><div style={styles.statLabel}>Aforo Esperado</div></div>
+                    <div style={{...styles.statCard, ...cascade(7).style}} className={cascade(7).className}><div style={{ ...styles.statValue, color: theme.primary }}>S/ {stats.revenue?.toFixed(2) || '0.00'}</div><div style={styles.statLabel}>Ingresos</div></div>
                 </div>
             )}
 
-            <div style={styles.section}>
+            <div style={{...styles.section, ...cascade(8).style}} className={cascade(8).className}>
                 <h2 style={{ margin: '0 0 1.5rem 0' }}>Listado de Reservas</h2>
                 
                 {/* 👇 FILTROS Y BUSCADOR (GRID RESPONSIVE) */}
-                <div className="management-filters">
+                <div className={`management-filters ${cascade(9).className}`} style={cascade(9).style}>
                     
                     {/* FECHA */}
                     <input 
@@ -125,7 +126,7 @@ export default function AdminManagement({
                 </div>
 
                 {/* 👇 TABLA EN CONTENEDOR FLEXIBLE */}
-                <div className="management-table-container">
+                <div className={`management-table-container ${cascade(10).className}`} style={cascade(10).style}>
                     <div className="scroll-wrapper custom-scroll">
                         <table className="full-width-table">
                             <thead style={{ position: 'sticky', top: 0, zIndex: 10 }}>
@@ -139,8 +140,8 @@ export default function AdminManagement({
                                         {reservations.length === 0 ? 'No hay reservas en esta fecha' : 'No se encontraron resultados'}
                                     </td></tr>
                                 ) : (
-                                    filteredReservations.map(r => (
-                                        <tr key={r.id}>
+                                    filteredReservations.map((r, i) => (
+                                        <tr key={r.id} style={cascade(11 + i).style} className={cascade(11 + i).className}>
                                             <td style={styles.td}>#{r.id}</td>
                                             <td style={styles.td}>{formatTime(r.timeslot)}</td>
                                             <td style={styles.td}>{r.guests}</td>

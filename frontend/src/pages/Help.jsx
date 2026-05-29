@@ -19,6 +19,7 @@ import {
     PhoneIcon,
     ChevronDownIcon
 } from '@heroicons/react/24/outline'
+import { cascade } from '../utils/animations'
 
 const THEME = { primary: '#059669' }
 
@@ -100,12 +101,12 @@ const ADMIN_FAQS = [
     }
 ]
 
-function FAQItem({ faq }) {
+function FAQItem({ faq, index = 0 }) {
     const [isOpen, setIsOpen] = useState(false)
     const Icon = faq.icon
 
     return (
-        <div className="border border-gray-200 rounded-xl overflow-hidden">
+        <div {...cascade(3 + index, "border border-gray-200 rounded-xl overflow-hidden")}>
             <button
                 onClick={() => setIsOpen(!isOpen)}
                 className="w-full flex items-center gap-3 p-4 text-left hover:bg-gray-50 transition-colors"
@@ -188,7 +189,7 @@ export default function Help() {
     return (
         <div className="max-w-4xl mx-auto p-4 sm:p-6 space-y-8">
             {/* Header */}
-            <div className="text-center space-y-2">
+            <div {...cascade(1)} className="text-center space-y-2">
                 <div className="w-16 h-16 rounded-2xl mx-auto flex items-center justify-center" style={{ backgroundColor: `${THEME.primary}15` }}>
                     <QuestionMarkCircleIcon className="w-8 h-8" style={{ color: THEME.primary }} />
                 </div>
@@ -199,20 +200,20 @@ export default function Help() {
             </div>
 
             {/* FAQs */}
-            <div className="space-y-3">
+            <div {...cascade(2)} className="space-y-3">
                 <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
                     <ChatBubbleLeftRightIcon className="w-5 h-5" style={{ color: THEME.primary }} />
                     Preguntas Frecuentes
                 </h2>
                 <div className="space-y-2">
                     {faqs.map((faq, i) => (
-                        <FAQItem key={i} faq={faq} />
+                        <FAQItem key={i} faq={faq} index={i} />
                     ))}
                 </div>
             </div>
 
             {/* Contact Section */}
-            <div className="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl p-6 space-y-4">
+            <div {...cascade(3)} className="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl p-6 space-y-4">
                 <h2 className="text-lg font-semibold text-gray-900">¿Necesitas más ayuda?</h2>
                 <p className="text-gray-600 text-sm">
                     Si no encontraste la respuesta que buscabas, contáctanos directamente. Estamos aquí para ayudarte.
@@ -288,7 +289,7 @@ export default function Help() {
             </div>
 
             {/* Back link */}
-            <div className="text-center">
+            <div {...cascade(4)} className="text-center">
                 <Link to="/" className="text-sm text-gray-500 hover:text-gray-700">
                     ← Volver al inicio
                 </Link>

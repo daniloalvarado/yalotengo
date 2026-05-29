@@ -1,6 +1,7 @@
 import React from 'react';
 // 👇 Importamos BanknotesIcon para el botón de cobrar
 import { TicketIcon, BanknotesIcon } from "@heroicons/react/24/outline";
+import { cascade } from '../utils/animations';
 
 export default function AdminSales({
     date, setDate, slots, selectedSlot, setSelectedSlot,
@@ -73,22 +74,22 @@ export default function AdminSales({
     };
 
     return (
-        <div style={styles.section}>
+        <div style={{ ...styles.section, ...cascade(4).style }} className={cascade(4).className}>
             <style>{responsiveCss}</style>
 
-            <div style={{ marginBottom: '1.5rem', borderBottom: '1px solid #eee', paddingBottom: '1rem' }}>
+            <div style={{ marginBottom: '1.5rem', borderBottom: '1px solid #eee', paddingBottom: '1rem', ...cascade(5).style }} className={cascade(5).className}>
                 <h2 style={{ margin: 0, color: theme.textDark }}>Venta en Taquilla</h2>
                 <p style={{ color: '#666', margin: '0.5rem 0 0 0', fontSize: '0.9rem' }}>
                     Registra visitantes presenciales (Pago en efectivo)
                 </p>
             </div>
 
-            <div style={styles.row}>
+            <div style={{ ...styles.row, ...cascade(6).style }} className={cascade(6).className}>
                 <label style={{ fontWeight: 'bold' }}>Fecha de venta:</label>
                 <input type="date" value={date} onChange={e => { setDate(e.target.value); setSelectedSlot(null) }} style={styles.input} />
             </div>
 
-            <div className="main-layout-responsive" style={{ marginTop: '1.5rem' }}>
+            <div className={`main-layout-responsive ${cascade(7).className}`} style={{ marginTop: '1.5rem', ...cascade(7).style }}>
 
                 {/* COLUMNA 1: Horarios */}
                 <div>
@@ -98,14 +99,15 @@ export default function AdminSales({
                         <p style={{ color: '#999', fontStyle: 'italic' }}>No hay horarios para esta fecha.</p>
                     ) : (
                         <div className="slots-grid-responsive custom-scroll">
-                            {slots.map(slot => {
+                            {slots.map((slot, index) => {
                                 const past = isTimePast(slot.time);
                                 return (
                                     <button
                                         key={slot.time}
                                         onClick={() => !slot.isFull && !past && setSelectedSlot(slot.time)}
                                         disabled={slot.isFull || past}
-                                        style={localStyles.squareBtn(slot, selectedSlot === slot.time, past)}
+                                        style={{ ...localStyles.squareBtn(slot, selectedSlot === slot.time, past), ...cascade(8 + index).style }}
+                                        className={cascade(8 + index).className}
                                     >
                                         <span className="slot-time-text" style={{ fontWeight: '800' }}>
                                             {formatTime(slot.time)}
