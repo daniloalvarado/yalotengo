@@ -190,18 +190,18 @@ export default function Help() {
         <div className="max-w-4xl mx-auto p-4 sm:p-6 space-y-8">
             {/* Header */}
             <div className="text-center space-y-2">
-                <div {...cascade(1)} className="w-16 h-16 rounded-2xl mx-auto flex items-center justify-center" style={{ backgroundColor: `${THEME.primary}15` }}>
+                <div {...cascade(1, "w-16 h-16 rounded-2xl mx-auto flex items-center justify-center")} style={{ backgroundColor: `${THEME.primary}15` }}>
                     <QuestionMarkCircleIcon className="w-8 h-8" style={{ color: THEME.primary }} />
                 </div>
-                <h1 {...cascade(2)} className="text-2xl font-bold text-gray-900">Centro de Ayuda</h1>
-                <p {...cascade(3)} className="text-gray-500">
+                <h1 {...cascade(2, "text-2xl font-bold text-gray-900")}>Centro de Ayuda</h1>
+                <p {...cascade(3, "text-gray-500")}>
                     {isAdmin ? 'Guía para administrar la plataforma' : 'Encuentra respuestas a las preguntas más frecuentes'}
                 </p>
             </div>
 
             {/* FAQs */}
             <div className="space-y-3">
-                <h2 {...cascade(4)} className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+                <h2 {...cascade(4, "text-lg font-semibold text-gray-900 flex items-center gap-2")}>
                     <ChatBubbleLeftRightIcon className="w-5 h-5" style={{ color: THEME.primary }} />
                     Preguntas Frecuentes
                 </h2>
