@@ -214,15 +214,15 @@ export default function AdminCourses() {
 
     return (
         <div className="max-w-6xl mx-auto p-4 sm:p-6 space-y-6">
-            <div {...cascade(1)} className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold text-gray-900">Gestión Cursos</h1>
-                    <p className="text-gray-500 text-sm">Productos y ventas de cursos</p>
+                    <h1 {...cascade(1)} className="text-2xl font-bold text-gray-900">Gestión Cursos</h1>
+                    <p {...cascade(2)} className="text-gray-500 text-sm">Productos y ventas de cursos</p>
                 </div>
                 {subTab === 'products' && (
                     <button
+                        {...cascade(3, "flex items-center justify-center gap-2 px-4 py-2 text-white rounded-lg shadow-md hover:opacity-90 transition-all")}
                         onClick={() => openModal()}
-                        className="flex items-center justify-center gap-2 px-4 py-2 text-white rounded-lg shadow-md hover:opacity-90 transition-all"
                         style={{ backgroundColor: THEME.primary }}
                     >
                         <PlusIcon className="w-5 h-5" />
@@ -231,16 +231,16 @@ export default function AdminCourses() {
                 )}
             </div>
 
-            <div {...cascade(2)} className="flex gap-2 border-b border-gray-200">
+            <div className="flex gap-2 border-b border-gray-200">
                 <button
+                    {...cascade(4, `px-4 py-2 text-sm font-medium border-b-2 transition-all ${subTab === 'products' ? 'border-emerald-500 text-emerald-600' : 'border-transparent text-gray-500 hover:text-gray-700'}`)}
                     onClick={() => { setSubTab('products'); setSearchTerm(''); }}
-                    className={`px-4 py-2 text-sm font-medium border-b-2 transition-all ${subTab === 'products' ? 'border-emerald-500 text-emerald-600' : 'border-transparent text-gray-500 hover:text-gray-700'}`}
                 >
                     Productos ({courses.length})
                 </button>
                 <button
+                    {...cascade(5, `px-4 py-2 text-sm font-medium border-b-2 transition-all ${subTab === 'purchases' ? 'border-emerald-500 text-emerald-600' : 'border-transparent text-gray-500 hover:text-gray-700'}`)}
                     onClick={() => setSubTab('purchases')}
-                    className={`px-4 py-2 text-sm font-medium border-b-2 transition-all ${subTab === 'purchases' ? 'border-emerald-500 text-emerald-600' : 'border-transparent text-gray-500 hover:text-gray-700'}`}
                 >
                     Compras ({purchases.length})
                 </button>

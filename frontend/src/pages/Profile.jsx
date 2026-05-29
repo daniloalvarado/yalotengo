@@ -165,8 +165,8 @@ export default function Profile() {
             <div className="grid md:grid-cols-[1fr_2fr] gap-8">
 
                 {/* LEFT COLUMN: AVATAR & BASIC BADGE */}
-                <div {...cascade(2)} className="flex flex-col items-center gap-4">
-                    <div className="relative group cursor-pointer" onClick={handleAvatarClick}>
+                <div className="flex flex-col items-center gap-4">
+                    <div {...cascade(2)} className="relative group cursor-pointer" onClick={handleAvatarClick}>
                         <div className="w-40 h-40 rounded-full overflow-hidden border-4 border-white shadow-lg bg-zinc-100 flex items-center justify-center">
                             {avatarUrl ? (
                                 <img
@@ -198,7 +198,7 @@ export default function Profile() {
                             onChange={handleFileChange}
                         />
                     </div>
-                    <p className="text-sm text-zinc-500 text-center">
+                    <p {...cascade(3)} className="text-sm text-zinc-500 text-center">
                         Click para cambiar foto<br />
                         (Max 5MB)
                     </p>
@@ -208,27 +208,27 @@ export default function Profile() {
                 <div className="space-y-8">
 
                     {/* PERSONAL INFO */}
-                    <section {...cascade(3)} className="bg-white rounded-xl border border-zinc-200 shadow-sm p-6">
-                        <h2 className="text-xl font-semibold text-zinc-800 mb-6 flex items-center gap-2">
+                    <section className="bg-white rounded-xl border border-zinc-200 shadow-sm p-6">
+                        <h2 {...cascade(4)} className="text-xl font-semibold text-zinc-800 mb-6 flex items-center gap-2">
                             <IdentificationIcon className="w-5 h-5 text-emerald-500" />
                             Información Personal
                         </h2>
                         <form onSubmit={handleUpdateProfile} className="space-y-4">
-                            <div {...cascade(4)} className="grid sm:grid-cols-2 gap-4">
+                            <div className="grid sm:grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block text-sm font-medium text-zinc-700 mb-1">Nombres</label>
+                                    <label {...cascade(5)} className="block text-sm font-medium text-zinc-700 mb-1">Nombres</label>
                                     <input
+                                        {...cascade(6, "w-full px-4 py-2 rounded-lg border-zinc-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent focus:ring-offset-1 transition-shadow")}
                                         type="text"
-                                        className="w-full px-4 py-2 rounded-lg border-zinc-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent focus:ring-offset-1 transition-shadow"
                                         value={nombres}
                                         onChange={e => setNombres(e.target.value)}
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-zinc-700 mb-1">Apellidos</label>
+                                    <label {...cascade(7)} className="block text-sm font-medium text-zinc-700 mb-1">Apellidos</label>
                                     <input
+                                        {...cascade(8, "w-full px-4 py-2 rounded-lg border-zinc-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent focus:ring-offset-1 transition-shadow")}
                                         type="text"
-                                        className="w-full px-4 py-2 rounded-lg border-zinc-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent focus:ring-offset-1 transition-shadow"
                                         value={apellidos}
                                         onChange={e => setApellidos(e.target.value)}
                                     />
@@ -236,13 +236,13 @@ export default function Profile() {
                             </div>
 
                             {/* DNI & PHONE */}
-                            <div {...cascade(5)} className="grid sm:grid-cols-2 gap-4">
+                            <div className="grid sm:grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block text-sm font-medium text-zinc-700 mb-1">DNI (8 dígitos)</label>
+                                    <label {...cascade(9)} className="block text-sm font-medium text-zinc-700 mb-1">DNI (8 dígitos)</label>
                                     <input
+                                        {...cascade(10, `w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent focus:ring-offset-1 transition-shadow ${isMissing('DNI') ? 'border-red-500 ring-1 ring-red-500 bg-red-50' : 'border-zinc-300'}`)}
                                         type="text"
                                         maxLength={8}
-                                        className={`w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent focus:ring-offset-1 transition-shadow ${isMissing('DNI') ? 'border-red-500 ring-1 ring-red-500 bg-red-50' : 'border-zinc-300'}`}
                                         value={documento}
                                         onChange={e => setDocumento(e.target.value.replace(/\D/g, ''))}
                                     />

@@ -77,9 +77,9 @@ export default function AdminSales({
         <div style={{ ...styles.section, ...cascade(4).style }} className={cascade(4).className}>
             <style>{responsiveCss}</style>
 
-            <div style={{ marginBottom: '1.5rem', borderBottom: '1px solid #eee', paddingBottom: '1rem', ...cascade(5).style }} className={cascade(5).className}>
-                <h2 style={{ margin: 0, color: theme.textDark }}>Venta en Taquilla</h2>
-                <p style={{ color: '#666', margin: '0.5rem 0 0 0', fontSize: '0.9rem' }}>
+            <div style={{ marginBottom: '1.5rem', borderBottom: '1px solid #eee', paddingBottom: '1rem' }}>
+                <h2 style={{ margin: 0, color: theme.textDark, ...cascade(1).style }} className={cascade(1).className}>Venta en Taquilla</h2>
+                <p style={{ color: '#666', margin: '0.5rem 0 0 0', fontSize: '0.9rem', ...cascade(2).style }} className={cascade(2).className}>
                     Registra visitantes presenciales (Pago en efectivo)
                 </p>
             </div>

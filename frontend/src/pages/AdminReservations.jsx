@@ -245,27 +245,28 @@ export default function AdminReservations() {
     }
 
     return (
-        <div style={{ ...styles.container, ...cascade(1).style }} className={cascade(1).className}>
-            <div style={{ ...styles.header, ...cascade(2).style }} className={cascade(2).className}>
-                <h1 style={styles.title}>Panel de Reservas</h1>
+        <div style={styles.container}>
+            <div style={styles.header}>
+                <h1 style={{...styles.title, ...cascade(1).style}} className={cascade(1).className}>Panel de Reservas</h1>
             </div>
 
             {/* TABS CON ICONOS */}
-            <div style={{ ...styles.tabs, ...cascade(3).style }} className={`hide-scrollbar ${cascade(3).className}`}>
-                <button style={{...styles.tab(activeTab === 'sales'), whiteSpace: 'nowrap'}} onClick={() => setActiveTab('sales')}>
+            <div style={styles.tabs} className="hide-scrollbar">
+                <button style={{...styles.tab(activeTab === 'sales'), whiteSpace: 'nowrap', ...cascade(2).style}} className={cascade(2).className} onClick={() => setActiveTab('sales')}>
                     <TicketIcon style={{ width: '20px' }} /> Venta Taquilla
                 </button>
-                <button style={{...styles.tab(activeTab === 'scanner'), whiteSpace: 'nowrap'}} onClick={() => setActiveTab('scanner')}>
+                <button style={{...styles.tab(activeTab === 'scanner'), whiteSpace: 'nowrap', ...cascade(3).style}} className={cascade(3).className} onClick={() => setActiveTab('scanner')}>
                     <QrCodeIcon style={{ width: '20px' }} /> Escáner QR
                 </button>
-                <button style={{...styles.tab(activeTab === 'table'), whiteSpace: 'nowrap'}} onClick={() => setActiveTab('table')}>
+                <button style={{...styles.tab(activeTab === 'table'), whiteSpace: 'nowrap', ...cascade(4).style}} className={cascade(4).className} onClick={() => setActiveTab('table')}>
                     <ClipboardDocumentListIcon style={{ width: '20px' }} /> Gestión
                 </button>
                 
                 {/* Botón de configuración movido aquí como un tab más */}
                 <button 
                     onClick={() => setIsConfigOpen(true)}
-                    style={{...styles.tab(false), whiteSpace: 'nowrap'}}
+                    style={{...styles.tab(false), whiteSpace: 'nowrap', ...cascade(5).style}}
+                    className={cascade(5).className}
                     onMouseEnter={e => e.currentTarget.style.backgroundColor = THEME.primaryLight}
                     onMouseLeave={e => e.currentTarget.style.backgroundColor = '#fff'}
                 >
