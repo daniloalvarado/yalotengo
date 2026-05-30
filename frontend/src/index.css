@@ -86,3 +86,33 @@
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
 }
+
+/* Premium Tab Sweep Animation */
+.premium-tab {
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  transition: color 0.3s ease, border-color 0.3s ease;
+}
+
+.premium-tab::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #059669; /* emerald-600 */
+  z-index: -1;
+  transform: translateX(-101%);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.premium-tab.premium-tab-active::before {
+  transform: translateX(0);
+}
+
+.premium-tab.premium-tab-active {
+  color: white !important;
+  border-color: #059669 !important;
+}

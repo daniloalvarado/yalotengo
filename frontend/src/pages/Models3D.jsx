@@ -174,17 +174,17 @@ export default function Models3D() {
                 <div className="flex gap-2 overflow-x-auto w-full pb-2 custom-scrollbar">
                     <button
                         onClick={() => setActiveTab('DIGITALIZADO')}
-                        className={`px-4 py-2 rounded-lg font-medium flex items-center shrink-0 gap-2 transition-colors ${activeTab === 'DIGITALIZADO' ? 'bg-emerald-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+                        className={`premium-tab px-4 py-2 rounded-lg font-medium flex items-center shrink-0 gap-2 border ${activeTab === 'DIGITALIZADO' ? 'premium-tab-active border-emerald-600' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 border-transparent'}`}
                     >
-                        <SparklesIcon className="w-4 h-4" />
-                        Digitalizados
+                        <SparklesIcon className="w-4 h-4 z-10" />
+                        <span className="z-10">Digitalizados</span>
                     </button>
                     <button
                         onClick={() => setActiveTab('IMPRESO')}
-                        className={`px-4 py-2 rounded-lg font-medium flex items-center shrink-0 gap-2 transition-colors ${activeTab === 'IMPRESO' ? 'bg-emerald-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+                        className={`premium-tab px-4 py-2 rounded-lg font-medium flex items-center shrink-0 gap-2 border ${activeTab === 'IMPRESO' ? 'premium-tab-active border-emerald-600' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 border-transparent'}`}
                     >
-                        <CubeIcon className="w-4 h-4" />
-                        Impresos
+                        <CubeIcon className="w-4 h-4 z-10" />
+                        <span className="z-10">Impresos</span>
                     </button>
                     {/* Cotizaciones 3D (Comentado temporalmente)
                     <button

@@ -110,11 +110,10 @@ export default function Purchases() {
   // Componente de Tab Button
   const TabButton = ({ id, label, count }) => (
     <button
-      className={`px-3 py-1.5 rounded-lg text-sm transition ${tab === id ? 'text-white' : 'border border-zinc-300 hover:bg-zinc-50'}`}
-      style={{ backgroundColor: tab === id ? THEME.primary : undefined }}
+      className={`premium-tab px-3 py-1.5 rounded-lg text-sm border flex items-center justify-center ${tab === id ? 'premium-tab-active border-emerald-600' : 'border-zinc-300 hover:bg-zinc-50 text-gray-700'}`}
       onClick={() => setTab(id)}
     >
-      {label} ({count})
+      <span className="z-10">{label} ({count})</span>
     </button>
   )
 
