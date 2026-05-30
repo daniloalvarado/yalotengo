@@ -247,7 +247,7 @@ export default function AdminCourses() {
             </div>
 
             {subTab === 'purchases' && (
-                <div {...cascade(3)} className="relative">
+                <div {...cascade(6, "relative")}>
                     <MagnifyingGlassIcon className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                     <input
                         type="text"

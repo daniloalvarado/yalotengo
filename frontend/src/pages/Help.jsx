@@ -186,6 +186,8 @@ export default function Help() {
         window.open(`https://wa.me/${(config.HELP_CONTACT_WHATSAPP || '').replace(/\+/g, '')}?text=${message}`, '_blank')
     }
 
+    if (loading) return null
+
     return (
         <div className="max-w-4xl mx-auto p-4 sm:p-6 space-y-8">
             {/* Header */}

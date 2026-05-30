@@ -255,12 +255,12 @@ export default function Profile() {
                                     {isMissing('DNI') && <span className="text-xs text-red-500">Requerido para compras</span>}
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-zinc-700 mb-1 flex items-center gap-1">
+                                    <label {...cascade(11, "block text-sm font-medium text-zinc-700 mb-1 flex items-center gap-1")}>
                                         <PhoneIcon className="w-4 h-4" /> Teléfono
                                     </label>
                                     <input
+                                        {...cascade(12, `w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent focus:ring-offset-1 transition-shadow ${isMissing('Teléfono') ? 'border-red-500 ring-1 ring-red-500 bg-red-50' : 'border-zinc-300'}`)}
                                         type="tel"
-                                        className={`w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent focus:ring-offset-1 transition-shadow ${isMissing('Teléfono') ? 'border-red-500 ring-1 ring-red-500 bg-red-50' : 'border-zinc-300'}`}
                                         placeholder="9xx xxx xxx"
                                         value={phone}
                                         onChange={e => setPhone(e.target.value)}
