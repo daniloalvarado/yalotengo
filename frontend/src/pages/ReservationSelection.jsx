@@ -1,6 +1,7 @@
 import React from 'react';
 import { PlusIcon, MinusIcon, CalendarDaysIcon, CreditCardIcon, DevicePhoneMobileIcon } from "@heroicons/react/24/outline";
 import DatePicker from "react-multi-date-picker";
+import PayButton from "../components/PayButton";
 
 // Estilos específicos para este paso
 const selectionStyles = `
@@ -67,7 +68,9 @@ export default function ReservationSelection({
                         value={date ? new Date(date + 'T12:00:00') : null}
                         onChange={(dateObj) => setDate(dateObj ? dateObj.format("YYYY-MM-DD") : '')}
                         minDate={new Date(today + 'T12:00:00')}
-                        format="YYYY-MM-DD"
+                        format="DD/MM/YYYY"
+                        months={["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]}
+                        weekDays={["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"]}
                         placeholder="Seleccionar fecha"
                         containerStyle={{ width: '100%' }}
                         style={styles.input}
@@ -136,12 +139,13 @@ export default function ReservationSelection({
                         </div>
                     </div>
 
-                    <button
-                        style={{ ...styles.primaryBtn, ...(loading || !selectedSlot || !date ? styles.disabledBtn : {}) }}
-                        onClick={onNext}
-                        disabled={loading || !selectedSlot || !date}>
-                        {loading ? 'Procesando...' : 'Continuar Pago'}
-                    </button>
+                    <div style={{ marginTop: '1rem' }}>
+                        <PayButton
+                            text={loading ? 'Procesando...' : 'Continuar Pago'}
+                            onClick={onNext}
+                            disabled={loading || !selectedSlot || !date}
+                        />
+                    </div>
                 </div>
             </div>
         </div>

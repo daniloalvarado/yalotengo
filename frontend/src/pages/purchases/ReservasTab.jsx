@@ -1,6 +1,6 @@
 // src/pages/purchases/ReservasTab.jsx
 import Card from '../../components/ui/Card'
-import Button from '../../components/ui/Button'
+import QrButton from '../../components/QrButton'
 import { Tag, THEME, STATUS_LABELS, fmtReservation, formatDate, formatTime, getReservationTone } from './purchasesUtils'
 
 export default function ReservasTab({ reservations, loading, onViewQr }) {
@@ -32,13 +32,11 @@ export default function ReservasTab({ reservations, loading, onViewQr }) {
                             </div>
 
                             {(r.status === 'PAID' || r.status === 'USED') && (
-                                <Button
-                                    className="mt-2 text-white"
-                                    style={{ backgroundColor: THEME.primary }}
+                                <QrButton
+                                    className="mt-2"
                                     onClick={() => onViewQr(r)}
-                                >
-                                    👁️ Ver QR / Detalles
-                                </Button>
+                                    text="Ver QR / Detalles"
+                                />
                             )}
 
                             {r.status === 'PENDING' && (
