@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 import Swal from 'sweetalert2';
 import Tooltip from '../components/Tooltip';
 import DigitalCartCheckout from '../components/DigitalCartCheckout';
+import PayButton from '../components/PayButton';
 import {
   CalendarDaysIcon,
   ClockIcon,
@@ -367,12 +368,10 @@ export default function Cart() {
 
                       {/* Botones de Acción */}
                       <div className="flex flex-col gap-2 min-w-[120px]">
-                        <button
+                        <PayButton
                           onClick={() => handleCompletePayment(r)}
-                          className="flex items-center justify-center gap-2 w-full px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold rounded-lg shadow-sm shadow-emerald-200 transition-colors"
-                        >
-                          Pagar Ahora
-                        </button>
+                          text="Pagar Ahora"
+                        />
                         <button
                           onClick={() => handleCancelReservation(r.id)}
                           disabled={loadingIds[`res-${r.id}`]}

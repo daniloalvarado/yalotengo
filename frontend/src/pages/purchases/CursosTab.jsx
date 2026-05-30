@@ -1,5 +1,6 @@
 // src/pages/purchases/CursosTab.jsx
 import Card from '../../components/ui/Card'
+import DownloadButton from '../../components/DownloadButton'
 import { Tag, fmt } from './purchasesUtils'
 
 export default function CursosTab({ courses, loading }) {
@@ -32,9 +33,14 @@ export default function CursosTab({ courses, loading }) {
                                     <div><span className="opacity-60">Precio:</span> {fmt(price)}</div>
                                     <div><span className="opacity-60">Fecha:</span> {purchaseDate}</div>
                                 </div>
-                                <div className="text-xs text-gray-500 mt-1">
+                                <div className="text-xs text-gray-500 mt-1 mb-2">
                                     📧 Revisa tu email para las instrucciones de acceso
                                 </div>
+                                <DownloadButton
+                                    className="w-full"
+                                    onClick={() => alert('Próximamente disponible')}
+                                    text="Materiales del Curso"
+                                />
                             </div>
                         </Card>
                     )

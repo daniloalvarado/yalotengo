@@ -1,6 +1,6 @@
 // src/pages/purchases/LibrosTab.jsx
 import Card from '../../components/ui/Card'
-import Button from '../../components/ui/Button'
+import DownloadButton from '../../components/DownloadButton'
 import { Tag, fmt } from './purchasesUtils'
 import api from '../../api/client'
 
@@ -42,12 +42,11 @@ export default function LibrosTab({ books, loading }) {
                                     <div><span className="opacity-60">Precio:</span> {fmt(price)}</div>
                                     <div><span className="opacity-60">Fecha:</span> {purchaseDate}</div>
                                 </div>
-                                <Button
-                                    className="mt-1 bg-emerald-600 hover:bg-emerald-500 text-white"
+                                <DownloadButton
+                                    className="mt-3 w-full"
                                     onClick={handleDownload}
-                                >
-                                    📥 Descargar PDF
-                                </Button>
+                                    text="Descargar PDF"
+                                />
                             </div>
                         </Card>
                     )

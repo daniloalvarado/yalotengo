@@ -15,14 +15,8 @@ initMercadoPago(MP_PUBLIC_KEY, {
   locale: 'es-PE'
 });
 
-// Precios por tipo de pago
-const PRICING = {
-  card: { amount: 2.00, currency: 'USD', symbol: '$', label: 'Tarjeta' },
-  yape: { amount: 5.00, currency: 'PEN', symbol: 'S/', label: 'Yape' }
-};
-
 export default function ReservationConfirmation({
-  reservation, loading, setLoading, onPaymentSuccess, onCancel, theme, styles, formatTime, formatDate
+  reservation, loading, setLoading, onPaymentSuccess, onCancel, theme, styles, formatTime, formatDate, prices = { pen: 5, usd: 2 }
 }) {
   const [paymentMethod, setPaymentMethod] = useState('card'); // 'card' or 'yape'
   const [processingPayment, setProcessingPayment] = useState(false);
@@ -32,6 +26,12 @@ export default function ReservationConfirmation({
   const [yapePhone, setYapePhone] = useState('');
   const [yapeOtp, setYapeOtp] = useState('');
   const [yapeStep, setYapeStep] = useState(1); // 1: phone, 2: otp
+
+  // Precios dinámicos por tipo de pago basados en la base de datos (config)
+  const PRICING = {
+    card: { amount: prices.usd, currency: 'USD', symbol: '$', label: 'Tarjeta' },
+    yape: { amount: prices.pen, currency: 'PEN', symbol: 'S/', label: 'Yape' }
+  };
 
   // Calcular precio según método de pago y número de guests
   const currentPricing = PRICING[paymentMethod];
@@ -552,7 +552,7 @@ export default function ReservationConfirmation({
             >
               <CreditCardIcon />
               <span>Tarjeta</span>
-              <span className="price-label">$2.00 USD</span>
+              <span className="price-label">${prices.usd.toFixed(2)} USD</span>
             </button>
             <button
               type="button"
@@ -561,7 +561,7 @@ export default function ReservationConfirmation({
             >
               <DevicePhoneMobileIcon />
               <span>Yape</span>
-              <span className="price-label">S/ 5.00 PEN</span>
+              <span className="price-label">S/ {prices.pen.toFixed(2)} PEN</span>
             </button>
           </div>
 

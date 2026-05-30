@@ -13,6 +13,7 @@ import Swal from 'sweetalert2'
 import PurchaseDetailModal from './admin/PurchaseDetailModal'
 import AnimatedModal from '../components/AnimatedModal'
 import AdminQuotes3D from '../components/AdminQuotes3D'
+import CustomSelect from '../components/CustomSelect'
 import { cascade } from '../utils/animations'
 
 const THEME = { primary: '#059669' }
@@ -374,16 +375,12 @@ export default function AdminModels3D() {
 
                     {modelCategory === 'DIGITALIZADO' && (
                         <div {...cascade(9, "flex items-center gap-2")}>
-                            <span className="text-sm text-gray-500 font-medium">Filtro:</span>
-                            <select
+                            <CustomSelect 
+                                options={availableSubcategories}
                                 value={modelSubcategory}
-                                onChange={(e) => setModelSubcategory(e.target.value)}
-                                className="px-3 py-1.5 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none bg-white"
-                            >
-                                {availableSubcategories.map(sub => (
-                                    <option key={sub} value={sub}>{sub}</option>
-                                ))}
-                            </select>
+                                onChange={setModelSubcategory}
+                                label="Filtrar:"
+                            />
                         </div>
                     )}
                 </div>

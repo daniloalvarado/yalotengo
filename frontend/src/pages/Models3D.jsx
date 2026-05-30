@@ -7,6 +7,7 @@ import toast from 'react-hot-toast'
 import { ShoppingCartIcon, CubeIcon, SparklesIcon, BanknotesIcon, DocumentTextIcon } from '@heroicons/react/24/outline'
 import UserQuotes3D from '../components/UserQuotes3D'
 import QuoteModal from '../components/QuoteModal'
+import CustomSelect from '../components/CustomSelect'
 
 const PEN = new Intl.NumberFormat('es-PE', { style: 'currency', currency: 'PEN' })
 
@@ -205,20 +206,13 @@ export default function Models3D() {
                     </button>
                 )}
 
-                {/* Filtro Subcategorías trasladado a la misma fila */}
                 {activeTab === 'DIGITALIZADO' && availableSubcategories.length > 1 && (
-                    <div className="flex items-center gap-2 bg-white px-3 py-1.5 rounded-xl border border-gray-100 shadow-sm shrink-0">
-                        <span className="text-sm font-medium text-gray-500">Filtrar:</span>
-                        <select
-                            value={modelSubcategory}
-                            onChange={(e) => setModelSubcategory(e.target.value)}
-                            className="text-sm bg-transparent border-none focus:ring-0 font-medium text-gray-700 outline-none cursor-pointer py-1 pl-1 pr-6"
-                        >
-                            {availableSubcategories.map(sub => (
-                                <option key={sub} value={sub}>{sub}</option>
-                            ))}
-                        </select>
-                    </div>
+                    <CustomSelect 
+                        options={availableSubcategories}
+                        value={modelSubcategory}
+                        onChange={setModelSubcategory}
+                        label="Filtrar:"
+                    />
                 )}
             </div>
 

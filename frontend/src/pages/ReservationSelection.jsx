@@ -1,5 +1,6 @@
 import React from 'react';
 import { PlusIcon, MinusIcon, CalendarDaysIcon, CreditCardIcon, DevicePhoneMobileIcon } from "@heroicons/react/24/outline";
+import DatePicker from "react-multi-date-picker";
 
 // Estilos específicos para este paso
 const selectionStyles = `
@@ -62,20 +63,14 @@ export default function ReservationSelection({
                 {/* Sección Fecha */}
                 <div style={styles.section} className="date-section mobile-margin">
                     <label style={styles.label}>Selecciona una fecha</label>
-                    <input
-                        type={date ? "date" : "text"}
+                    <DatePicker
+                        value={date ? new Date(date + 'T12:00:00') : null}
+                        onChange={(dateObj) => setDate(dateObj ? dateObj.format("YYYY-MM-DD") : '')}
+                        minDate={new Date(today + 'T12:00:00')}
+                        format="YYYY-MM-DD"
                         placeholder="Seleccionar fecha"
-                        min={today}
-                        value={date}
-                        onChange={e => setDate(e.target.value)}
+                        containerStyle={{ width: '100%' }}
                         style={styles.input}
-                        onFocus={(e) => {
-                            e.target.type = "date";
-                            e.target.showPicker && e.target.showPicker();
-                        }}
-                        onBlur={(e) => {
-                            if (!e.target.value) e.target.type = "text";
-                        }}
                     />
                 </div>
 

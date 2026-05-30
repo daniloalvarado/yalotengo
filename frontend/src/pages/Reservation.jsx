@@ -152,7 +152,7 @@ export default function Reservation() {
         }
         setLoading(true)
         try {
-            const res = await api.post('/reservations/create', { date, timeslot: selectedSlot, guests, price: guests * 2 })
+            const res = await api.post('/reservations/create', { date, timeslot: selectedSlot, guests, price: guests * prices.usd })
             setReservation(res.data.reservation)
             setStep('confirm')
             window.dispatchEvent(new Event("cart:update"));
@@ -268,6 +268,7 @@ export default function Reservation() {
             reservation={reservation} loading={loading} setLoading={setLoading}
             onPaymentSuccess={handlePaymentSuccess} onCancel={handleCancel}
             theme={THEME} styles={styles} formatTime={formatTime} formatDate={formatDate}
+            prices={prices}
         />
     }
 

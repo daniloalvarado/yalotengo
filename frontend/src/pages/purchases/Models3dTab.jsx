@@ -1,6 +1,6 @@
 // src/pages/purchases/Models3dTab.jsx
 import Card from '../../components/ui/Card'
-import Button from '../../components/ui/Button'
+import DownloadButton from '../../components/DownloadButton'
 import { Tag, fmt } from './purchasesUtils'
 import api from '../../api/client'
 
@@ -61,12 +61,11 @@ export default function Models3dTab({ models3d = [], loading }) {
                                     📦 Contactaremos contigo para la entrega.
                                 </div>
                             ) : (
-                                <Button
-                                    className="mt-3 bg-emerald-600 hover:bg-emerald-500 text-white w-full flex justify-center items-center gap-2"
+                                <DownloadButton
+                                    className="mt-3 w-full"
                                     onClick={handleDownload}
-                                >
-                                    📥 Descargar modelo
-                                </Button>
+                                    text="Descargar GLB"
+                                />
                             )}
                         </div>
                     </Card>
