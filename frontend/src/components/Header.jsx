@@ -169,7 +169,7 @@ export default function Header() {
             Modelos 3D
           </NavLink>
 
-          {/* Unity AR Models - Solo para admins */}
+          {/* Gestión Micromuseo (Comentado temporalmente)
           {user?.use_txt_role === 'admin' && (
             <NavLink
               to="/admin-microscopicos"
@@ -178,6 +178,7 @@ export default function Header() {
               Gestión Micromuseo
             </NavLink>
           )}
+          */}
 
           {/* Libros */}
           <NavLink
@@ -266,6 +267,7 @@ export default function Header() {
             Modelos 3D
           </NavLink>
 
+          {/* Gestión Micromuseo Móvil (Comentado temporalmente)
           {user?.use_txt_role === 'admin' && (
             <NavLink
               to="/admin-microscopicos"
@@ -274,6 +276,7 @@ export default function Header() {
               Gestión Micromuseo
             </NavLink>
           )}
+          */}
 
           <NavLink
             to={user?.use_txt_role === 'admin' ? "/admin-books" : "/books"}

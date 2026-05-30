@@ -132,7 +132,7 @@ export default function Purchases() {
         <TabButton id="DIGITAL" label="Modelos 3D" count={digitalModels.length} />
         <TabButton id="PRINTED" label="Impresiones 3D" count={printedModels.length} />
         <TabButton id="LIBROS" label="Libros" count={books.length} />
-        <TabButton id="CURSOS" label="Cursos" count={courses.length} />
+        {/* <TabButton id="CURSOS" label="Cursos" count={courses.length} /> */}
         <TabButton id="RESERVAS" label="Reservas" count={reservations.length} />
       </div>
 
@@ -151,9 +151,11 @@ export default function Purchases() {
         <LibrosTab books={books} loading={loading} />
       )}
 
+      {/* 
       {tab === 'CURSOS' && (
         <CursosTab courses={courses} loading={loading} />
       )}
+      */}
 
       {tab === 'RESERVAS' && (
         <ReservasTab reservations={reservations} loading={loading} onViewQr={handleViewQr} />

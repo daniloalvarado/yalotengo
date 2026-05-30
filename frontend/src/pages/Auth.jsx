@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import api, { setToken } from "../api/client";
 
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
+import { cascade } from "../utils/animations";
 
 function Label({ children, htmlFor, className = "" }) {
   return (
@@ -140,16 +141,16 @@ export default function Auth() {
       <div className="w-full max-w-4xl rounded-2xl border border-zinc-200 bg-white shadow-xl p-8">
         <div className="grid md:grid-cols-2 gap-10">
           <section className="hidden md:flex flex-col justify-center">
-            <h1 className="text-3xl font-semibold text-zinc-900 leading-tight">
+            <h1 {...cascade(0, "text-3xl font-semibold text-zinc-900 leading-tight")}>
               Bienvenido a <span className="text-emerald-600">Yalotengo</span>
             </h1>
-            <p className="mt-4 text-zinc-600">
+            <p {...cascade(1, "mt-4 text-zinc-600")}>
               Crea tu cuenta o inicia sesión para acceder a tu carrito, pedidos y ofertas personalizadas.
             </p>
           </section>
 
           <section>
-            <div className="grid grid-cols-2 rounded-lg bg-zinc-100 p-1 mb-6">
+            <div {...cascade(2, "grid grid-cols-2 rounded-lg bg-zinc-100 p-1 mb-6")}>
               <button
                 onClick={() => setTab("login")}
                 className={`py-2 rounded-md text-sm font-medium transition ${tab === "login" ? "bg-white shadow text-zinc-900" : "text-zinc-500 hover:text-zinc-700"
@@ -167,12 +168,12 @@ export default function Auth() {
             </div>
 
             {tab === "login" ? (
-              <form onSubmit={handleLogin} className="space-y-4">
-                <div>
+              <form key="login" onSubmit={handleLogin} className="space-y-4">
+                <div {...cascade(3)}>
                   <Label htmlFor="email">Correo</Label>
                   <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
                 </div>
-                <div className="relative">
+                <div {...cascade(4, "relative")}>
                   <Label htmlFor="password">Contraseña</Label>
                   <div className="relative">
                     <Input
@@ -195,20 +196,20 @@ export default function Auth() {
                     </button>
                   </div>
                 </div>
-                <button type="submit" className="w-full rounded-lg bg-emerald-500 py-2.5 font-medium text-white hover:bg-emerald-400">
+                <button type="submit" {...cascade(5, "w-full rounded-lg bg-emerald-500 py-2.5 font-medium text-white hover:bg-emerald-400")}>
                   Entrar
                 </button>
-                <div className="relative py-2 text-center">
+                <div {...cascade(6, "relative py-2 text-center")}>
                   <span className="px-3 text-xs text-zinc-500 bg-white relative z-10">o continúa con</span>
                   <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-px bg-zinc-200" />
                 </div>
-                <div className="flex flex-col gap-3">
+                <div {...cascade(7, "flex flex-col gap-3")}>
                   <OAuthButton onClick={() => loginWith("google")} icon={GoogleIcon}>Google</OAuthButton>
                 </div>
               </form>
             ) : (
-              <form onSubmit={handleRegister} className="space-y-4">
-                <div className="grid sm:grid-cols-2 gap-4">
+              <form key="register" onSubmit={handleRegister} className="space-y-4">
+                <div {...cascade(3, "grid sm:grid-cols-2 gap-4")}>
                   <div>
                     <Label htmlFor="nombres">Nombres</Label>
                     <Input value={nombres} onChange={(e) => setNombres(e.target.value)} required />
@@ -218,7 +219,7 @@ export default function Auth() {
                     <Input value={apellidos} onChange={(e) => setApellidos(e.target.value)} required />
                   </div>
                 </div>
-                <div>
+                <div {...cascade(4)}>
                   <Label htmlFor="documento">DNI (Opcional)</Label>
                   <Input
                     value={documento}
@@ -229,11 +230,11 @@ export default function Auth() {
                     maxLength={8}
                   />
                 </div>
-                <div>
+                <div {...cascade(5)}>
                   <Label htmlFor="email">Correo</Label>
                   <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
                 </div>
-                <div className="relative">
+                <div {...cascade(6, "relative")}>
                   <Label htmlFor="password">Contraseña</Label>
                   <div className="relative">
                     <Input
@@ -257,7 +258,7 @@ export default function Auth() {
                     </button>
                   </div>
                 </div>
-                <button type="submit" className="w-full rounded-lg bg-emerald-500 py-2.5 font-medium text-white hover:bg-emerald-400">
+                <button type="submit" {...cascade(7, "w-full rounded-lg bg-emerald-500 py-2.5 font-medium text-white hover:bg-emerald-400")}>
                   Registrarme
                 </button>
               </form>

@@ -171,7 +171,7 @@ export default function Models3DCheckout() {
 
                     <div className="mt-8 pt-6 border-t border-gray-100">
                         <p className="text-sm text-gray-500 mb-3">
-                            Puedes ver el detalle de tus compras en tu perfil.
+                            Ir a "Mis compras" para ver el detalle de tus compras.
                         </p>
                         <button
                             onClick={() => navigate('/models3d')}

@@ -321,6 +321,7 @@ export default function AdminModels3D() {
                 </div>
                 {mainTab === 'products' && (
                     <button
+                        key={modelCategory}
                         onClick={() => openModal()}
                         {...cascade(1, "flex items-center justify-center gap-2 px-4 py-2 text-white rounded-lg shadow-md hover:opacity-90 transition-all")}
                         style={{ backgroundColor: THEME.primary }}
