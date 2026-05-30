@@ -187,13 +187,14 @@ export default function Header() {
             Libros
           </NavLink>
 
-          {/* Cursos */}
+          {/* Cursos (Comentado temporalmente)
           <NavLink
             to={user?.use_txt_role === 'admin' ? "/admin-courses" : "/courses"}
             className={({ isActive }) => `${linkBase} ${isActive ? linkActive : linkIdle}`}
           >
             Cursos
           </NavLink>
+          */}
 
           {/* Reservas */}
           <Link
@@ -281,12 +282,14 @@ export default function Header() {
             Libros
           </NavLink>
 
+          {/* Cursos (Comentado temporalmente)
           <NavLink
             to={user?.use_txt_role === 'admin' ? "/admin-courses" : "/courses"}
             className={({ isActive }) => `${isActive ? "text-emerald-400 font-medium" : "text-zinc-300 hover:text-white"}`}
           >
             Cursos
           </NavLink>
+          */}
 
           <NavLink
             to={reservationsLink}

@@ -185,6 +185,7 @@ export default function Models3D() {
                         <CubeIcon className="w-4 h-4" />
                         Impresos
                     </button>
+                    {/* Cotizaciones 3D (Comentado temporalmente)
                     <button
                         onClick={() => setActiveTab('MIS_COTIZACIONES')}
                         className={`px-4 py-2 rounded-lg font-medium flex items-center shrink-0 gap-2 transition-colors ${activeTab === 'MIS_COTIZACIONES' ? 'bg-emerald-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
@@ -192,6 +193,7 @@ export default function Models3D() {
                         <DocumentTextIcon className="w-4 h-4" />
                         Mis Cotizaciones 3D
                     </button>
+                    */}
                 </div>
 
                 {activeTab === 'MIS_COTIZACIONES' && (
