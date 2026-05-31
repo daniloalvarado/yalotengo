@@ -79,7 +79,7 @@ export default function AdminDashboard() {
     if (!stats || !analytics) return null;
 
     const ticketPromedio = stats.total.revenue / (stats.total.transactions || 1);
-    const crossSellRate = analytics.crossSell
+    const crossSellRate = (analytics.crossSell && analytics.crossSell.total_customers > 0)
         ? ((analytics.crossSell.multi_category_buyers / analytics.crossSell.total_customers) * 100).toFixed(1)
         : 0;
 
