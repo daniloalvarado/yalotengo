@@ -135,8 +135,6 @@ export default function Purchases() {
         <TabButton id="RESERVAS" label="Reservas" count={reservations.length} />
       </div>
 
-      {loading && <div className="opacity-70 text-sm">Cargando…</div>}
-
       {/* Tab Content */}
       {tab === 'DIGITAL' && (
         <Models3dTab models3d={digitalModels} loading={loading} />

@@ -63,7 +63,7 @@ export default function ReservationSelection({
 
             <div className="reservation-grid">
                 {/* Sección Fecha */}
-                <div style={styles.section} className="date-section mobile-margin">
+                <div style={styles.section} className="date-section mobile-margin" {...cascade(0)}>
                     <label style={styles.label}>Selecciona una fecha</label>
                     <DatePicker
                         value={date ? new Date(date + 'T12:00:00') : null}
@@ -79,7 +79,7 @@ export default function ReservationSelection({
                 </div>
 
                 {/* Sección Horarios - SIEMPRE VISIBLE */}
-                <div style={styles.section} className="mobile-margin">
+                <div style={styles.section} className="mobile-margin" {...cascade(1)}>
                     <label style={styles.label}>Selecciona un horario</label>
                     {!date ? (
                         <p style={{ color: '#9ca3af', textAlign: 'center', padding: '1rem' }}>Primero selecciona una fecha</p>
@@ -115,7 +115,7 @@ export default function ReservationSelection({
                 </div>
 
                 {/* Sección Personas y Botón - SIEMPRE VISIBLE */}
-                <div style={styles.sidebarSection}>
+                <div style={styles.sidebarSection} {...cascade(2)}>
                     <label style={{ ...styles.label, textAlign: 'center' }}>Número de personas</label>
                     <div style={styles.guestSelector}>
                         <button style={styles.guestBtn} onClick={() => setGuests(Math.max(1, guests - 1))}>
