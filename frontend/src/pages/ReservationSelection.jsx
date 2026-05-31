@@ -1,6 +1,7 @@
 import React from 'react';
 import { PlusIcon, MinusIcon, CalendarDaysIcon, CreditCardIcon, DevicePhoneMobileIcon } from "@heroicons/react/24/outline";
 import DatePicker from "react-multi-date-picker";
+import { cascade } from "../utils/animations";
 import PayButton from "../components/PayButton";
 
 // Estilos específicos para este paso
@@ -96,10 +97,11 @@ export default function ReservationSelection({
                         <p>No hay horarios disponibles</p>
                     ) : (
                         <div className="slots-container" style={styles.slotsGrid}>
-                            {slots.map(slot => {
+                            {slots.map((slot, index) => {
                                 const past = isTimePast(slot.time);
                                 return (
                                     <button key={slot.time}
+                                        {...cascade(index, '', 0, 50)}
                                         onClick={() => !slot.isFull && !past && setSelectedSlot(slot.time)}
                                         disabled={slot.isFull || past}
                                         style={styles.slotBtn(slot, selectedSlot === slot.time, past, theme)}>

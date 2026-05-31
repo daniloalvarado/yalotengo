@@ -2,6 +2,7 @@
 import Card from '../../components/ui/Card'
 import QrButton from '../../components/QrButton'
 import { Tag, THEME, STATUS_LABELS, fmtReservation, formatDate, formatTime, getReservationTone } from './purchasesUtils'
+import { cascade } from '../../utils/animations'
 
 export default function ReservasTab({ reservations, loading, onViewQr }) {
     return (
@@ -10,8 +11,9 @@ export default function ReservasTab({ reservations, loading, onViewQr }) {
                 <div className="text-sm opacity-60">Aún no tienes reservas de museo.</div>
             )}
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {reservations.map((r) => (
-                    <Card key={r.id}>
+                {reservations.map((r, index) => (
+                    <div key={r.id} {...cascade(index, '', 0, 100)}>
+                        <Card>
                         <div className="flex flex-col gap-2">
                             <div className="flex items-center justify-between">
                                 <div className="text-sm opacity-70">Reserva #{r.id}</div>
@@ -45,7 +47,8 @@ export default function ReservasTab({ reservations, loading, onViewQr }) {
                                 </div>
                             )}
                         </div>
-                    </Card>
+                        </Card>
+                    </div>
                 ))}
             </div>
         </>

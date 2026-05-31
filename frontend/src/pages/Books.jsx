@@ -5,6 +5,7 @@ import Tooltip from '../components/Tooltip'
 import toast from 'react-hot-toast'
 import { BookOpenIcon, ShoppingCartIcon, BanknotesIcon } from '@heroicons/react/24/outline'
 import styled from 'styled-components'
+import { cascade } from '../utils/animations'
 
 const PEN = new Intl.NumberFormat('es-PE', { style: 'currency', currency: 'PEN' })
 
@@ -125,8 +126,8 @@ export default function Books() {
 
                 {/* Books Grid */}
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
-                    {books.map((book) => (
-                        <StyledWrapper key={book.boo_int_id}>
+                    {books.map((book, index) => (
+                        <StyledWrapper key={book.boo_int_id} {...cascade(index, '', 0, 100)}>
                             <div className="book">
                                 {/* LO QUE SE VE AL ABRIR (FONDO/INTERIOR) */}
                                 <div className="pl-10 pr-4 py-4 flex flex-col h-full justify-between items-center text-center w-full">

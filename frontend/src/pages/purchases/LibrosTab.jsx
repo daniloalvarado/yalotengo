@@ -3,6 +3,7 @@ import Card from '../../components/ui/Card'
 import DownloadButton from '../../components/DownloadButton'
 import { Tag, fmt } from './purchasesUtils'
 import api from '../../api/client'
+import { cascade } from '../../utils/animations'
 
 export default function LibrosTab({ books, loading }) {
     return (
@@ -11,7 +12,7 @@ export default function LibrosTab({ books, loading }) {
                 <div className="text-sm opacity-60">Aún no tienes compras de libros.</div>
             )}
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {books.map((purchase) => {
+                {books.map((purchase, index) => {
                     const book = purchase.book || {}
                     const title = book.boo_txt_title || 'Libro'
                     const author = book.boo_txt_author || ''
@@ -28,27 +29,29 @@ export default function LibrosTab({ books, loading }) {
                     }
 
                     return (
-                        <Card key={purchase.bpu_int_id}>
-                            <div className="flex flex-col gap-2">
-                                <div className="flex items-center justify-between">
-                                    <div className="text-sm opacity-70">Compra #{purchase.bpu_int_id}</div>
-                                    <Tag tone="emerald">Pagado</Tag>
+                        <div key={purchase.bpu_int_id} {...cascade(index, '', 0, 100)}>
+                            <Card>
+                                <div className="flex flex-col gap-2">
+                                    <div className="flex items-center justify-between">
+                                        <div className="text-sm opacity-70">Compra #{purchase.bpu_int_id}</div>
+                                        <Tag tone="emerald">Pagado</Tag>
+                                    </div>
+                                    <div className="font-medium truncate">{title}</div>
+                                    {author && (
+                                        <div className="text-sm text-gray-500">{author}</div>
+                                    )}
+                                    <div className="grid grid-cols-2 gap-2 text-sm">
+                                        <div><span className="opacity-60">Precio:</span> {fmt(price)}</div>
+                                        <div><span className="opacity-60">Fecha:</span> {purchaseDate}</div>
+                                    </div>
+                                    <DownloadButton
+                                        className="mt-3 w-full"
+                                        onClick={handleDownload}
+                                        text="Descargar PDF"
+                                    />
                                 </div>
-                                <div className="font-medium truncate">{title}</div>
-                                {author && (
-                                    <div className="text-sm text-gray-500">{author}</div>
-                                )}
-                                <div className="grid grid-cols-2 gap-2 text-sm">
-                                    <div><span className="opacity-60">Precio:</span> {fmt(price)}</div>
-                                    <div><span className="opacity-60">Fecha:</span> {purchaseDate}</div>
-                                </div>
-                                <DownloadButton
-                                    className="mt-3 w-full"
-                                    onClick={handleDownload}
-                                    text="Descargar PDF"
-                                />
-                            </div>
-                        </Card>
+                            </Card>
+                        </div>
                     )
                 })}
             </div>

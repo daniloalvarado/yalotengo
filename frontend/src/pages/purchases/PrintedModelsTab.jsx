@@ -1,6 +1,7 @@
 import Card from '../../components/ui/Card'
 import { Tag, fmt } from './purchasesUtils'
 import api from '../../api/client'
+import { cascade } from '../../utils/animations'
 
 // Steps configs
 const STEPS = [
@@ -75,7 +76,7 @@ export default function PrintedModelsTab({ printedModels = [], loading }) {
 
     return (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {printedModels.map((purchase) => {
+            {printedModels.map((purchase, index) => {
                 const model = purchase.model || {}
                 const name = model.mod_txt_name || 'Modelo Impreso'
                 const price = Number(purchase.pur_dec_amount || model.mod_dec_price || 0)
@@ -86,8 +87,9 @@ export default function PrintedModelsTab({ printedModels = [], loading }) {
                 const estimate = purchase.pur_txt_delivery_estimate || '1 día'
 
                 return (
-                    <Card key={purchase.pur_int_id}>
-                        <div className="flex flex-col gap-2 pb-6"> {/* Increased padding bottom for timeline text */}
+                    <div key={purchase.pur_int_id} {...cascade(index, '', 0, 100)}>
+                        <Card>
+                            <div className="flex flex-col gap-2 pb-6"> {/* Increased padding bottom for timeline text */}
                             <div className="flex items-center justify-between">
                                 <div className="text-sm opacity-70">Pedido #{purchase.pur_int_id}</div>
                                 <Tag tone="emerald">Pagado</Tag>
@@ -113,7 +115,8 @@ export default function PrintedModelsTab({ printedModels = [], loading }) {
                                 <StatusTimeline status={status} estimate={estimate} />
                             </div>
                         </div>
-                    </Card>
+                        </Card>
+                    </div>
                 )
             })}
         </div>

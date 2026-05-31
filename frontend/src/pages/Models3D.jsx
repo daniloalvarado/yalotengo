@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import api from '../api/client'
 import Model3DViewer from '../components/Model3DViewer'
 import Tooltip from '../components/Tooltip'
+import { cascade } from '../utils/animations'
 import toast from 'react-hot-toast'
 import { ShoppingCartIcon, CubeIcon, SparklesIcon, BanknotesIcon, DocumentTextIcon } from '@heroicons/react/24/outline'
 import UserQuotes3D from '../components/UserQuotes3D'
@@ -230,10 +231,10 @@ export default function Models3D() {
                 </div>
             ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-                    {filteredModels.map((model) => (
+                    {filteredModels.map((model, index) => (
                         <div
                             key={model.mod_int_id}
-                            className="bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-lg transition-all group relative z-0 hover:z-10 w-full max-w-[320px] mx-auto sm:max-w-none"
+                            {...(activeTab === 'IMPRESO' ? cascade(index, "bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-lg transition-all group relative z-0 hover:z-10 w-full max-w-[320px] mx-auto sm:max-w-none") : { className: "bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-lg transition-all group relative z-0 hover:z-10 w-full max-w-[320px] mx-auto sm:max-w-none" })}
                         >
                             {/* Visor / Imagen */}
                             <div className={`relative rounded-t-2xl overflow-hidden bg-gray-100 ${activeTab === 'IMPRESO' ? 'aspect-square' : 'aspect-[4/3]'}`}>

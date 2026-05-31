@@ -3,6 +3,7 @@ import Card from '../../components/ui/Card'
 import DownloadButton from '../../components/DownloadButton'
 import { Tag, fmt } from './purchasesUtils'
 import api from '../../api/client'
+import { cascade } from '../../utils/animations'
 
 export default function Models3dTab({ models3d = [], loading }) {
     if (loading) {
@@ -15,7 +16,7 @@ export default function Models3dTab({ models3d = [], loading }) {
 
     return (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {models3d.map((purchase) => {
+            {models3d.map((purchase, index) => {
                 const model = purchase.model || {}
                 const name = model.mod_txt_name || 'Modelo 3D'
                 const price = Number(purchase.pur_dec_amount || model.mod_dec_price || 0)
@@ -34,8 +35,9 @@ export default function Models3dTab({ models3d = [], loading }) {
                 }
 
                 return (
-                    <Card key={purchase.pur_int_id}>
-                        <div className="flex flex-col gap-2">
+                    <div key={purchase.pur_int_id} {...cascade(index, '', 0, 100)}>
+                        <Card>
+                            <div className="flex flex-col gap-2">
                             <div className="flex items-center justify-between">
                                 <div className="text-sm opacity-70">Compra #{purchase.pur_int_id}</div>
                                 <Tag tone="emerald">Pagado</Tag>
