@@ -107,16 +107,6 @@ export default function Purchases() {
     }
   }
 
-  // Componente de Tab Button
-  const TabButton = ({ id, label, count }) => (
-    <button
-      className={`premium-tab px-3 py-1.5 rounded-lg text-sm border flex items-center justify-center ${tab === id ? 'premium-tab-active border-emerald-600' : 'border-zinc-300 hover:bg-zinc-50 text-gray-700'}`}
-      onClick={() => setTab(id)}
-    >
-      <span className="z-10">{label} ({count})</span>
-    </button>
-  )
-
   return (
     <div className="max-w-5xl mx-auto flex flex-col gap-4 p-4 sm:p-6">
       <div className="flex items-center gap-3 mb-1">
@@ -128,11 +118,20 @@ export default function Purchases() {
 
       {/* Tabs */}
       <div className="flex gap-2 flex-wrap">
-        <TabButton id="DIGITAL" label="Modelos 3D" count={digitalModels.length} />
-        <TabButton id="PRINTED" label="Impresiones 3D" count={printedModels.length} />
-        <TabButton id="LIBROS" label="Libros" count={books.length} />
-        {/* <TabButton id="CURSOS" label="Cursos" count={courses.length} /> */}
-        <TabButton id="RESERVAS" label="Reservas" count={reservations.length} />
+        {[
+          { id: 'DIGITAL', label: 'Modelos 3D' },
+          { id: 'PRINTED', label: 'Impresiones 3D' },
+          { id: 'LIBROS', label: 'Libros' },
+          { id: 'RESERVAS', label: 'Reservas' }
+        ].map(({ id, label }) => (
+          <button
+            key={id}
+            className={`premium-tab px-3 py-1.5 rounded-lg text-sm border flex items-center justify-center ${tab === id ? 'premium-tab-active border-emerald-600' : 'border-zinc-300 hover:bg-zinc-50 text-gray-700'}`}
+            onClick={() => setTab(id)}
+          >
+            <span className="z-10">{label}</span>
+          </button>
+        ))}
       </div>
 
       {/* Tab Content */}
