@@ -50,7 +50,7 @@ export default function AdminDashboard() {
             { name: 'Museo', value: parseFloat(stats.reservations?.revenue || 0) },
             { name: 'Modelos 3D', value: parseFloat(stats.models3d?.revenue || 0) },
             { name: 'Libros', value: parseFloat(stats.books?.revenue || 0) },
-            { name: 'Cursos', value: parseFloat(stats.courses?.revenue || 0) },
+            /* { name: 'Cursos', value: parseFloat(stats.courses?.revenue || 0) }, */
         ].filter(item => item.value > 0);
     }, [stats]);
 
@@ -60,7 +60,7 @@ export default function AdminDashboard() {
             { name: 'Entradas', cantidad: stats.reservations?.total || 0 },
             { name: '3D', cantidad: stats.models3d?.sold || 0 },
             { name: 'Libros', cantidad: stats.books?.sold || 0 },
-            { name: 'Cursos', cantidad: stats.courses?.sold || 0 },
+            /* { name: 'Cursos', cantidad: stats.courses?.sold || 0 }, */
         ];
     }, [stats]);
 
@@ -243,7 +243,7 @@ export default function AdminDashboard() {
                     <div className="space-y-4">
                         {[
                             { icon: BookOpenIcon, data: analytics.topProducts.book, color: 'text-amber-600 bg-amber-50', label: 'Libro' },
-                            { icon: AcademicCapIcon, data: analytics.topProducts.course, color: 'text-pink-600 bg-pink-50', label: 'Curso' },
+                            /* { icon: AcademicCapIcon, data: analytics.topProducts.course, color: 'text-pink-600 bg-pink-50', label: 'Curso' }, */
                             { icon: CubeIcon, data: analytics.topProducts.model, color: 'text-blue-600 bg-blue-50', label: '3D' },
                         ].map((item, idx) => (
                             <div key={idx} {...cascade(10 + idx, "flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 transition-colors")}>
