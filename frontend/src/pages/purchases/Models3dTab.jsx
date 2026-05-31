@@ -71,7 +71,8 @@ export default function Models3dTab({ models3d = [], loading }) {
                             )}
                         </div>
                     </Card>
-                )
+                </div>
+            )
             })}
         </div>
     )
