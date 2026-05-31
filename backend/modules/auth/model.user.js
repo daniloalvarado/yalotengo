@@ -10,7 +10,6 @@ export const User = sequelize.define('core_user', {
   use_txt_passwordhash: DataTypes.STRING(120),
   use_txt_role: { type: DataTypes.STRING(20), defaultValue: 'cliente' },
 
-  use_txt_fb_id: DataTypes.STRING(64),
 
   // --- AGREGA ESTAS DOS LÍNEAS ---
   use_txt_google_id: DataTypes.STRING(64), // Para guardar el ID de Google

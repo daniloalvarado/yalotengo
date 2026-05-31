@@ -1,7 +1,6 @@
 import { Router } from 'express'
 import bcrypt from 'bcryptjs'
 import passport from 'passport'
-import { Strategy as FacebookStrategy } from 'passport-facebook'
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20'
 import { User } from './model.user.js'
 import { sign, verify } from '../../utils/jwt.js'
@@ -11,39 +10,6 @@ import fs from 'fs'
 import path from 'path'
 
 const r = Router()
-
-// --- ESTRATEGIA FACEBOOK ---
-passport.use(new FacebookStrategy({
-  clientID: process.env.FB_APP_ID || 'x',
-  clientSecret: process.env.FB_APP_SECRET || 'x',
-  callbackURL: process.env.FB_CALLBACK_URL || 'http://localhost:3000/api/auth/facebook/callback',
-  profileFields: ['id', 'emails', 'name', 'photos']
-}, async (_at, _rt, profile, done) => {
-  try {
-    const email = profile.emails?.[0]?.value?.toLowerCase() || `${profile.id}@facebook.local`
-    const avatar = profile.photos?.[0]?.value || null
-
-    let u = await User.findOne({ where: { use_txt_email: email } })
-    if (!u) {
-      u = await User.create({
-        use_txt_email: email,
-        use_txt_nombres: profile.name?.givenName || 'FB',
-        use_txt_apellidos: profile.name?.familyName || 'User',
-        use_txt_role: 'cliente',
-        use_txt_fb_id: profile.id,
-        use_txt_avatar: avatar,
-        use_txt_provider_avatar: avatar // Guardamos backup
-      })
-    } else {
-      let changed = false;
-      if (!u.use_txt_fb_id) { u.use_txt_fb_id = profile.id; changed = true; }
-      if (!u.use_txt_avatar && avatar) { u.use_txt_avatar = avatar; changed = true; }
-      if (avatar && u.use_txt_provider_avatar !== avatar) { u.use_txt_provider_avatar = avatar; changed = true; } // Update backup
-      if (changed) await u.save();
-    }
-    done(null, u)
-  } catch (e) { done(e) }
-}))
 
 // ... importaciones ...
 
@@ -114,16 +80,7 @@ r.post('/login', async (req, res) => {
   res.json({ token: sign({ use_int_id: u.use_int_id, email: u.use_txt_email, role: u.use_txt_role }), user: u })
 })
 
-// --- RUTAS OAUTH (Facebook & Google) ---
-r.get('/facebook', passport.authenticate('facebook', { scope: ['email'] }))
-r.get('/facebook/callback',
-  passport.authenticate('facebook', { session: false, failureRedirect: '/auth/fail' }),
-  (req, res) => {
-    const token = sign({ use_int_id: req.user.use_int_id, email: req.user.use_txt_email, role: req.user.use_txt_role })
-    const redirectUrl = process.env.OAUTH_FRONT_REDIRECT || 'http://localhost:5173/auth';
-    res.redirect(`${redirectUrl}?token=${token}`)
-  }
-)
+// --- RUTAS OAUTH (Google) ---
 
 r.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }))
 r.get('/google/callback',
