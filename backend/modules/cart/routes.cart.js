@@ -120,8 +120,6 @@ r.post('/purchase', auth, async (req, res) => {
                     // Increment Course Sold Count
                     if (course) {
                         try {
-                            // Check concurrency again? or just increment
-                            // We rely on the initial check + optimistic 
                             course.cou_int_sold = (course.cou_int_sold || 0) + (quantity || 1)
                             await course.save()
                         } catch (err) { console.error('Error inc course sold', err) }
@@ -129,6 +127,23 @@ r.post('/purchase', auth, async (req, res) => {
                 }
                 return record.save()
             }))
+
+            // Enviar notificación de Venta Unificada
+            import('../../services/email.service.js').then(({ notifyAdminPurchase }) => {
+                const user = req.user;
+                const itemsDetails = purchasesToUpdate.map(p => ({
+                    name: p.type === 'course' ? p.course?.cou_txt_title || 'Curso' : `Item de tipo ${p.type}`,
+                    quantity: p.quantity,
+                    price: p.type === 'model' ? p.record.pur_dec_amount : (p.type === 'book' ? p.record.bpu_dec_amount : p.record.cpu_dec_amount)
+                }));
+                notifyAdminPurchase({
+                    category: 'Múltiples Categorías (Carrito)',
+                    customerName: `${user.use_txt_nombres} ${user.use_txt_apellidos}`,
+                    items: itemsDetails,
+                    total: totalAmount,
+                    transactionId: paymentId
+                });
+            }).catch(err => console.error('Error cargando email.service', err));
 
             return res.json({
                 success: true,

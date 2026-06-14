@@ -45,6 +45,17 @@ r.post('/', auth, (req, res) => {
                 cot_txt_status: 'Pendiente'
             })
 
+            // Notificar al administrador
+            import('../../services/email.service.js').then(({ notifyAdminCotizacion }) => {
+                notifyAdminCotizacion({
+                    id: cotizacion.cot_int_id,
+                    customerName: req.user ? `${req.user.use_txt_nombres} ${req.user.use_txt_apellidos}` : 'Usuario Registrado',
+                    contactEmail: req.user?.use_txt_email,
+                    description: description,
+                    status: 'Nueva Cotización'
+                });
+            }).catch(err => console.error('Error cargando email.service', err));
+
             res.json({ ok: true, cotizacion })
         } catch (e) {
             console.error('[Cotizaciones3D] create error:', e)

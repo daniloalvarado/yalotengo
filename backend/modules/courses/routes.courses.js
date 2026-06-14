@@ -294,6 +294,18 @@ r.post('/purchase', auth, async (req, res) => {
             }
             // -----------------------------
 
+            // Enviar notificación al administrador
+            import('../../services/email.service.js').then(({ notifyAdminPurchase }) => {
+                const user = req.user;
+                notifyAdminPurchase({
+                    category: 'Cursos',
+                    customerName: user ? `${user.use_txt_nombres} ${user.use_txt_apellidos}` : 'Usuario Registrado',
+                    items: [{ name: course.cou_txt_title, quantity: quantity, price: course.cou_dec_price }],
+                    total: price,
+                    transactionId: result.id
+                });
+            }).catch(err => console.error('Error cargando email.service', err));
+
             return res.json({
                 success: true,
                 purchaseId: purchase.cpu_int_id,

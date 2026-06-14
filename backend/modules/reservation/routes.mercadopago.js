@@ -112,6 +112,19 @@ r.post('/:id/mercadopago', auth, async (req, res) => {
 
             const user = await User.findByPk(userId)
 
+            // Enviar correo de notificación al administrador
+            import('../../services/email.service.js').then(({ notifyAdminReservation }) => {
+                notifyAdminReservation({
+                    id: reservation.res_int_id,
+                    customerName: `${user.use_txt_nombres} ${user.use_txt_apellidos}`,
+                    date: reservation.res_dt_date,
+                    timeslot: reservation.res_txt_timeslot,
+                    guests: reservation.res_int_guests,
+                    total: totalAmount,
+                    type: 'Pago Online'
+                });
+            }).catch(err => console.error('Error cargando email.service', err));
+
             return res.json({
                 ok: true,
                 status: 'approved',

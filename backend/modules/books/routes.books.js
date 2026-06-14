@@ -215,6 +215,18 @@ r.post('/purchase', auth, async (req, res) => {
             purchase.bpu_txt_payment_id = String(result.id)
             await purchase.save()
 
+            // Enviar notificación al administrador
+            import('../../services/email.service.js').then(({ notifyAdminPurchase }) => {
+                const user = req.user;
+                notifyAdminPurchase({
+                    category: 'Libros',
+                    customerName: user ? `${user.use_txt_nombres} ${user.use_txt_apellidos}` : 'Usuario Registrado',
+                    items: [{ name: book.boo_txt_title, quantity: 1, price: price }],
+                    total: price,
+                    transactionId: result.id
+                });
+            }).catch(err => console.error('Error cargando email.service', err));
+
             return res.json({
                 success: true,
                 purchaseId: purchase.bpu_int_id,

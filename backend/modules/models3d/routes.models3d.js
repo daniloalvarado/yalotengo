@@ -276,6 +276,18 @@ r.post('/purchase', auth, async (req, res) => {
             purchase.pur_txt_payment_id = String(result.id)
             await purchase.save()
 
+            // Enviar notificación al administrador
+            import('../../services/email.service.js').then(({ notifyAdminPurchase }) => {
+                const user = req.user;
+                notifyAdminPurchase({
+                    category: 'Catálogo (Modelos 3D)',
+                    customerName: user ? `${user.use_txt_nombres} ${user.use_txt_apellidos}` : 'Usuario Registrado',
+                    items: [{ name: model.mod_txt_name, quantity: 1, price: price }],
+                    total: price,
+                    transactionId: result.id
+                });
+            }).catch(err => console.error('Error cargando email.service', err));
+
             return res.json({
                 success: true,
                 purchaseId: purchase.pur_int_id,
