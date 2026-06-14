@@ -16,7 +16,7 @@ initMercadoPago(MP_PUBLIC_KEY, {
 });
 
 export default function ReservationConfirmation({
-  reservation, loading, setLoading, onPaymentSuccess, onCancel, theme, styles, formatTime, formatDate, prices = { pen: 5, usd: 2 }
+  reservation, loading, setLoading, onPaymentSuccess, onCancel, theme, styles, formatTime, formatDate, prices = { pen: 5 }
 }) {
   const [paymentMethod, setPaymentMethod] = useState('card'); // 'card' or 'yape'
   const [processingPayment, setProcessingPayment] = useState(false);
@@ -29,8 +29,8 @@ export default function ReservationConfirmation({
 
   // Precios dinámicos por tipo de pago basados en la base de datos (config)
   const PRICING = {
-    card: { amount: prices.usd, currency: 'USD', symbol: '$', label: 'Tarjeta' },
-    yape: { amount: prices.pen, currency: 'PEN', symbol: 'S/', label: 'Yape' }
+    card: { amount: prices.pen, currency: 'PEN', symbol: 'S/', label: 'Tarjeta' },
+    yape: { amount: prices.pen, currency: 'PEN', symbol: 'S/', label: 'Yape / Efectivo' }
   };
 
   // Calcular precio según método de pago y número de guests
@@ -552,7 +552,7 @@ export default function ReservationConfirmation({
             >
               <CreditCardIcon />
               <span>Tarjeta</span>
-              <span className="price-label">${prices.usd.toFixed(2)} USD</span>
+              <span className="price-label">S/ {prices.pen.toFixed(2)} PEN</span>
             </button>
             <button
               type="button"

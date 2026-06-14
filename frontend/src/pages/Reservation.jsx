@@ -42,8 +42,7 @@ export default function Reservation() {
         api.get('/config')
             .then(res => {
                 const pen = parseFloat(res.data.RESERVATION_PRICE_PEN || 5);
-                const usd = parseFloat(res.data.RESERVATION_PRICE_USD || 2);
-                setPrices({ pen, usd });
+                setPrices({ pen });
             })
             .catch(() => {}); // silencioso, usamos defaults
     }, []);
@@ -100,7 +99,7 @@ export default function Reservation() {
                 } else {
                     setSlots(res.data.slots || []);
                     // Actualizar precios si el servidor los devuelve
-                    if (res.data.pricePEN) setPrices({ pen: res.data.pricePEN, usd: res.data.priceUSD });
+                    if (res.data.pricePEN) setPrices({ pen: res.data.pricePEN });
                 }
             })
             .catch(err => {
@@ -152,7 +151,7 @@ export default function Reservation() {
         }
         setLoading(true)
         try {
-            const res = await api.post('/reservations/create', { date, timeslot: selectedSlot, guests, price: guests * prices.usd })
+            const res = await api.post('/reservations/create', { date, timeslot: selectedSlot, guests, price: guests * prices.pen })
             setReservation(res.data.reservation)
             setStep('confirm')
             window.dispatchEvent(new Event("cart:update"));

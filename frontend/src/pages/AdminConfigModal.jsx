@@ -12,7 +12,6 @@ export default function AdminConfigModal({ isOpen, onClose, onSaveSuccess, theme
         RESERVATION_SLOT_DURATION: '30',
         RESERVATION_MAX_CAPACITY: '10',
         RESERVATION_PRICE_PEN: '5',
-        RESERVATION_PRICE_USD: '2',
         RESERVATION_CLOSED_DAYS: '',
         RESERVATION_CLOSED_WEEKDAYS: ''
     });
@@ -150,21 +149,12 @@ export default function AdminConfigModal({ isOpen, onClose, onSaveSuccess, theme
                 {/* Fila 3: Precios */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="flex flex-col gap-2">
-                        <label className="text-sm font-semibold text-gray-700">Precio en Soles 🇵🇪</label>
+                        <label className="text-sm font-semibold text-gray-700">Precio por Reserva (Soles)</label>
                         <div className="relative">
                             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 font-bold">S/</span>
                             <input type="number" className="p-3 pl-8 text-base border border-gray-300 rounded-lg outline-none focus:border-green-500 transition-colors w-full" min="0" step="0.50"
                                 value={config.RESERVATION_PRICE_PEN}
                                 onChange={e => handleChange('RESERVATION_PRICE_PEN', e.target.value)} />
-                        </div>
-                    </div>
-                    <div className="flex flex-col gap-2">
-                        <label className="text-sm font-semibold text-gray-700">Precio en Dólares 🇺🇸</label>
-                        <div className="relative">
-                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 font-bold">$</span>
-                            <input type="number" className="p-3 pl-8 text-base border border-gray-300 rounded-lg outline-none focus:border-green-500 transition-colors w-full" min="0" step="0.50"
-                                value={config.RESERVATION_PRICE_USD}
-                                onChange={e => handleChange('RESERVATION_PRICE_USD', e.target.value)} />
                         </div>
                     </div>
                 </div>
