@@ -25,10 +25,10 @@ const baseTemplate = (title, content, color) => `
         .content { padding: 30px; }
         .content p { font-size: 16px; line-height: 1.5; color: #555; }
         .details-box { background-color: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px; margin: 20px 0; }
-        .detail-row { margin-bottom: 10px; border-bottom: 1px dashed #e5e7eb; padding-bottom: 5px; overflow: hidden; }
+        .detail-row { display: table; width: 100%; margin-bottom: 10px; border-bottom: 1px dashed #e5e7eb; padding-bottom: 5px; }
         .detail-row:last-child { margin-bottom: 0; border-bottom: none; padding-bottom: 0; }
-        .detail-label { font-weight: 600; color: #6b7280; font-size: 14px; float: left; margin-right: 10px; }
-        .detail-value { font-weight: bold; color: #111827; font-size: 15px; float: right; text-align: right; }
+        .detail-label { display: table-cell; font-weight: 600; color: #6b7280; font-size: 14px; width: 40%; vertical-align: top; }
+        .detail-value { display: table-cell; font-weight: bold; color: #111827; font-size: 15px; text-align: right; vertical-align: top; }
         .footer { background-color: #f3f4f6; padding: 15px; text-align: center; font-size: 12px; color: #9ca3af; border-top: 1px solid #e5e7eb; }
         .highlight { color: ${color}; font-size: 20px; font-weight: 800; }
     </style>
@@ -61,8 +61,7 @@ export const notifyAdminReservation = async (reservationData) => {
         const { id, customerName, date, timeslot, guests, total, type = 'Online' } = reservationData;
         
         const content = `
-            <p>Hola,</p>
-            <p>Se ha registrado una nueva <strong>Reserva en Yalotengo</strong>.</p>
+            <p>Hola, se ha registrado una nueva <strong>Reserva en Yalotengo</strong>.</p>
             
             <div class="details-box">
                 <div class="detail-row"><span class="detail-label">ID Reserva:</span> <span class="detail-value">#${id}</span></div>
@@ -79,13 +78,11 @@ export const notifyAdminReservation = async (reservationData) => {
             <p style="text-align: center; margin-top: 20px;">Ingresa al panel de administración para ver más detalles.</p>
         `;
 
-        const html = baseTemplate('Nueva Reserva Confirmada', content, '#0d9467'); // Verde
-
-        await resend.emails.send({
-            from: `Yalotengo <${SENDER_EMAIL}>`,
+        const response = await resend.emails.send({
+            from: SENDER_EMAIL,
             to: ADMIN_EMAIL,
-            subject: `[Yalotengo] Nueva Reserva: ${date} a las ${timeslot}`,
-            html: html
+            subject: `📅 Nueva Reserva Registrada - Yalotengo (#${id})`,
+            html: baseTemplate('Nueva Reserva', content, '#3b82f6')
         });
         console.log('[EmailService] Notificación de Reserva enviada con éxito a', ADMIN_EMAIL);
     } catch (error) {
@@ -117,16 +114,16 @@ export const notifyAdminPurchase = async (purchaseData) => {
         ).join('');
 
         const content = `
-            <p>Hola,</p>
-            <p>Se ha procesado una nueva venta exitosa en la sección de <strong>${category}</strong>.</p>
+            
+            <p>Hola, se ha procesado una nueva venta exitosa en la sección de <strong>${category}</strong>.</p>
             
             <div class="details-box">
                 <div class="detail-row"><span class="detail-label">ID Transacción:</span> <span class="detail-value">${transactionId || 'N/A'}</span></div>
                 <div class="detail-row"><span class="detail-label">Cliente:</span> <span class="detail-value">${customerName || 'Usuario Registrado'}</span></div>
                 
-                <div style="margin-top: 15px;">
+                <div class="detail-row" style="margin-top: 15px;">
                     <span class="detail-label">Artículos Comprados:</span>
-                    <div style="margin-top: 8px; font-size: 14px;">
+                    <div class="detail-value" style="font-size: 14px; font-weight: normal; text-align: right;">
                         ${itemsHtml}
                     </div>
                 </div>
@@ -139,13 +136,11 @@ export const notifyAdminPurchase = async (purchaseData) => {
             <p style="text-align: center; margin-top: 20px;">Revisa el módulo de Ventas/Pedidos para gestionar esta entrega.</p>
         `;
 
-        const html = baseTemplate(`Nueva Venta de ${category}`, content, color);
-
-        await resend.emails.send({
-            from: `Yalotengo <${SENDER_EMAIL}>`,
+        const response = await resend.emails.send({
+            from: SENDER_EMAIL,
             to: ADMIN_EMAIL,
-            subject: `Venta exitosa: ${category} por S/ ${Number(total).toFixed(2)}`,
-            html: html
+            subject: `💰 Nueva Venta Exitosa - ${category} (#${transactionId || Date.now()})`,
+            html: baseTemplate(`Nueva Venta: ${category}`, content, '#10b981')
         });
         console.log(`[EmailService] Notificación de Venta (${category}) enviada con éxito.`);
     } catch (error) {
@@ -161,8 +156,7 @@ export const notifyAdminCotizacion = async (quoteData) => {
         const { id, customerName, contactEmail, description, status } = quoteData;
         
         const content = `
-            <p>Hola,</p>
-            <p>Se ha registrado una actualización en <strong>Cotizaciones 3D Personalizadas</strong>.</p>
+            <p>Hola, se ha registrado una actualización en <strong>Cotizaciones 3D Personalizadas</strong>.</p>
             
             <div class="details-box">
                 <div class="detail-row"><span class="detail-label">ID Cotización:</span> <span class="detail-value">#${id}</span></div>
@@ -170,9 +164,9 @@ export const notifyAdminCotizacion = async (quoteData) => {
                 <div class="detail-row"><span class="detail-label">Contacto:</span> <span class="detail-value">${contactEmail || 'N/A'}</span></div>
                 <div class="detail-row"><span class="detail-label">Estado:</span> <span class="detail-value" style="color: #ec4899;">${status}</span></div>
                 
-                <div style="margin-top: 15px;">
+                <div class="detail-row" style="margin-top: 15px;">
                     <span class="detail-label">Descripción:</span>
-                    <div style="margin-top: 8px; font-size: 14px; background: #fff; padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+                    <div class="detail-value" style="font-size: 14px; font-weight: normal; text-align: right; max-width: 60%; background: #fff; padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
                         ${description || 'Sin descripción'}
                     </div>
                 </div>
@@ -180,15 +174,12 @@ export const notifyAdminCotizacion = async (quoteData) => {
             <p style="text-align: center; margin-top: 20px;">Revisa el módulo de Cotizaciones para responder al cliente o verificar su pago.</p>
         `;
 
-        const html = baseTemplate('Novedad en Cotización 3D', content, '#ec4899'); // Rosa
-
-        await resend.emails.send({
-            from: `Yalotengo <${SENDER_EMAIL}>`,
+        const response = await resend.emails.send({
+            from: SENDER_EMAIL,
             to: ADMIN_EMAIL,
-            subject: `Actualización en Cotización #${id}`,
-            html: html
-        });
-        console.log('[EmailService] Notificación de Cotización enviada con éxito.');
+            subject: `🛠️ Actualización en Cotización 3D (#${id})`,
+            html: baseTemplate('Cotización 3D Personalizada', content, '#ec4899')
+        });console.log('[EmailService] Notificación de Cotización enviada con éxito.');
     } catch (error) {
         console.error('[EmailService] Error al enviar correo de cotización:', error);
     }
