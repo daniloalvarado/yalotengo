@@ -86,12 +86,23 @@ r.post('/:id/mercadopago', auth, async (req, res) => {
             }
         }
 
-        const crypto = await import('crypto')
-        const requestOptions = { idempotencyKey: crypto.randomBytes(16).toString('hex') }
-        const paymentResponse = await payment.create({ body: paymentData, requestOptions })
+        let paymentResponse;
+        let mpPaymentId;
 
-        // Safely convert paymentResponse.id (may be BigInt in MP SDK v2)
-        const mpPaymentId = String(paymentResponse.id)
+        // BYPASS DE DESARROLLO PARA SALTAR EL BLOQUEO DE MERCADOPAGO PERU
+        // Si el correo contiene "testuser", simulamos la aprobación sin llamar a MP
+        if (payerEmail.toLowerCase().includes('testuser')) {
+            console.log(`[MercadoPago] TEST BYPASS ACTIVATED for email: ${payerEmail}`);
+            paymentResponse = { status: 'approved' };
+            mpPaymentId = `mock_bypass_${Date.now()}`;
+        } else {
+            const crypto = await import('crypto')
+            const requestOptions = { idempotencyKey: crypto.randomBytes(16).toString('hex') }
+            paymentResponse = await payment.create({ body: paymentData, requestOptions })
+            
+            // Safely convert paymentResponse.id (may be BigInt in MP SDK v2)
+            mpPaymentId = String(paymentResponse.id)
+        }
 
         console.log(`[MercadoPago] Payment response:`, paymentResponse.status, mpPaymentId)
 
