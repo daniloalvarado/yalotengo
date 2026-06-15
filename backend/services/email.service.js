@@ -36,7 +36,6 @@ const baseTemplate = (title, content, color) => `
 <body>
     <div class="container">
         <div class="header">
-            <img src="https://yalotengo-frontend.onrender.com/favicon.png" alt="Yalotengo Logo" />
             <h1>${title}</h1>
         </div>
         <div class="content">
@@ -137,7 +136,7 @@ export const notifyAdminPurchase = async (purchaseData) => {
             <p>Revisa el módulo de Ventas/Pedidos para gestionar esta entrega.</p>
         `;
 
-        const html = baseTemplate(`💰 Nueva Venta de ${category}`, content, color);
+        const html = baseTemplate(`Nueva Venta de ${category}`, content, color);
 
         await resend.emails.send({
             from: `Yalotengo <${SENDER_EMAIL}>`,
@@ -178,7 +177,7 @@ export const notifyAdminCotizacion = async (quoteData) => {
             <p>Revisa el módulo de Cotizaciones para responder al cliente o verificar su pago.</p>
         `;
 
-        const html = baseTemplate('🛠️ Novedad en Cotización 3D', content, '#ec4899'); // Rosa
+        const html = baseTemplate('Novedad en Cotización 3D', content, '#ec4899'); // Rosa
 
         await resend.emails.send({
             from: `Yalotengo <${SENDER_EMAIL}>`,
