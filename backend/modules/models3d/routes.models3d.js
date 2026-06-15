@@ -317,7 +317,9 @@ r.post('/purchase', auth, async (req, res) => {
         console.error('[Models3D] Error message:', e?.message)
         console.error('[Models3D] Error status:', e?.status)
         const errorMsg = e?.message || 'Error desconocido'
-        const statusCode = (typeof e?.status === 'number' && e.status >= 400 && e.status < 600) ? e.status : 500
+        // NEVER forward MP's 5xx as our own — it's always a payment issue (client-side 400)
+        const mpStatus = typeof e?.status === 'number' ? e.status : 500
+        const statusCode = (mpStatus >= 400 && mpStatus < 500) ? mpStatus : 400
         let detail = errorMsg
         try {
             if (e.cause && Array.isArray(e.cause) && e.cause.length > 0) {

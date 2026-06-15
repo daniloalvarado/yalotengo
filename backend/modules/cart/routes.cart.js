@@ -165,7 +165,9 @@ r.post('/purchase', auth, async (req, res) => {
         const errorDetail = e.cause && e.cause.length > 0 ? e.cause : e.message
         let safeErrorDetail = String(errorDetail)
         try { safeErrorDetail = JSON.stringify(errorDetail) } catch (err) {}
-        res.status(e.status || 500).json({
+        const mpStatus = typeof e?.status === 'number' ? e.status : 500
+        const statusCode = (mpStatus >= 400 && mpStatus < 500) ? mpStatus : 400
+        res.status(statusCode).json({
             error: `MP Error: ${safeErrorDetail}`,
             detail: safeErrorDetail
         })

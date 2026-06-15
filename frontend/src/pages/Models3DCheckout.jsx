@@ -69,10 +69,20 @@ export default function Models3DCheckout() {
         } catch (e) {
             console.error('[DEBUG] Full error:', e)
             console.error('[DEBUG] Error response status:', e.response?.status)
-            console.error('[DEBUG] Error response data:', e.response?.data)
+            console.error('[DEBUG] Error response data:', JSON.stringify(e.response?.data))
             console.error('[DEBUG] Error request URL:', e.config?.url)
             console.error('[DEBUG] Error request baseURL:', e.config?.baseURL)
-            const msg = e.response?.data?.error || 'Error procesando pago'
+            const serverMsg = e.response?.data?.error || ''
+            let msg = 'Error procesando pago. Intenta de nuevo.'
+            if (serverMsg.includes('internal_error')) {
+                msg = 'Error temporal del procesador de pagos. Intenta de nuevo en unos segundos.'
+            } else if (serverMsg.includes('Invalid card_token')) {
+                msg = 'Token de tarjeta inválido. Recarga la página e intenta de nuevo.'
+            } else if (serverMsg.includes('Ya has comprado')) {
+                msg = serverMsg
+            } else if (serverMsg) {
+                msg = serverMsg
+            }
             setPaymentError(msg)
             toast.error(msg)
         } finally {
