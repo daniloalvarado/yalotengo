@@ -64,7 +64,7 @@ r.post('/:id/mercadopago', auth, async (req, res) => {
 
         // Usar el email del formulario de pago (el que el usuario ingresa en el Brick)
         // IMPORTANTE: No usar el email del vendedor/cuenta MP del integrador
-        const payerEmail = payer?.email || 'comprador@ejemplo.com'
+        const payerEmail = payer?.email || 'test_user_1717408837989222794@testuser.com'
 
         // Crear pago en Mercado Pago
         // Nota: No incluir currency_id, MP lo detecta automáticamente por país

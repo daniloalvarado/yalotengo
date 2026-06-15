@@ -246,7 +246,7 @@ r.post('/purchase', auth, async (req, res) => {
         })
 
         // Email del comprador (desde el Brick de pago)
-        const payerEmail = payer?.email || req.user.use_txt_email || 'comprador@ejemplo.com'
+        const payerEmail = payer?.email || req.user.use_txt_email || 'test_user_1717408837989222794@testuser.com'
 
         // Datos del pago (igual que en reservaciones)
         const paymentData = {

@@ -80,7 +80,7 @@ r.post('/purchase', auth, async (req, res) => {
         }
 
         // 2. Preparar datos de pago MercadoPago
-        const payerEmail = payer?.email || req.user.use_txt_email || 'comprador@ejemplo.com'
+        const payerEmail = payer?.email || req.user.use_txt_email || 'test_user_1717408837989222794@testuser.com'
         const description = `Compra digital: ${purchasesToUpdate.length} productos`
 
         const paymentData = {
