@@ -234,7 +234,7 @@ r.post('/purchase', auth, async (req, res) => {
                 const user = req.user;
                 notifyAdminPurchase({
                     category: 'Libros',
-                    customerName: user ? `${user.use_txt_nombres} ${user.use_txt_apellidos}` : 'Usuario Registrado',
+                    customerName: (user && user.use_txt_nombres) ? `${user.use_txt_nombres} ${user.use_txt_apellidos}` : (user && user.email) ? user.email : 'Usuario Registrado',
                     items: [{ name: book.boo_txt_title, quantity: 1, price: price }],
                     total: price,
                     transactionId: paymentId

@@ -299,7 +299,7 @@ r.post('/purchase', auth, async (req, res) => {
                 const user = req.user;
                 notifyAdminPurchase({
                     category: 'Catálogo (Modelos 3D)',
-                    customerName: user ? `${user.use_txt_nombres} ${user.use_txt_apellidos}` : 'Usuario Registrado',
+                    customerName: (user && user.use_txt_nombres) ? `${user.use_txt_nombres} ${user.use_txt_apellidos}` : (user && user.email) ? user.email : 'Usuario Registrado',
                     items: [{ name: model.mod_txt_name, quantity: 1, price: price }],
                     total: price,
                     transactionId: paymentId

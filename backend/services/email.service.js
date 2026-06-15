@@ -42,7 +42,11 @@ const baseTemplate = (title, content, color) => `
             ${content}
         </div>
         <div class="footer">
-            Este es un mensaje automático generado por el sistema <strong>Yalotengo</strong>.<br>
+            <div style="display: inline-flex; align-items: center; justify-content: center; gap: 6px; margin-bottom: 4px;">
+                <span>Este es un mensaje automático generado por el sistema</span>
+                <img src="https://yalotengo-frontend.onrender.com/favicon.png" alt="Logo" style="width: 16px; height: 16px; border-radius: 50%; vertical-align: middle;" />
+                <strong>Yalotengo</strong>.
+            </div><br>
             Por favor, no respondas a este correo.
         </div>
     </div>
