@@ -103,7 +103,7 @@ r.post('/purchase', auth, async (req, res) => {
         console.log('[Cart] Processing unified payment:', totalAmount)
 
         // 3. Procesar pago
-        const requestOptions = { idempotencyKey: crypto.randomUUID() }
+        const requestOptions = { idempotencyKey: crypto.randomBytes(16).toString('hex') }
         const result = await paymentClient.create({ body: paymentData, requestOptions })
 
         if (result.status === 'approved') {
