@@ -132,14 +132,14 @@ export default function AdminReservations() {
         if (!selectedSlot) { toast.error('Selecciona un horario'); return }
         const result = await Swal.fire({
             title: '¿Registrar Venta?',
-            html: `Horario: <b>${formatTime(selectedSlot)}</b><br>Personas: <b>${guests}</b><br>Total: <b style="color:${THEME.primary}; font-size:1.2em">S/ ${(guests * FIXED_PRICE).toFixed(2)}</b>`,
+            html: `Horario: <b>${formatTime(selectedSlot)}</b><br>Personas: <b>${guests}</b><br>Total: <b style="color:${THEME.primary}; font-size:1.2em">S/ ${(guests * prices.pen).toFixed(2)}</b>`,
             icon: 'question', showCancelButton: true, confirmButtonColor: THEME.primary, cancelButtonColor: THEME.gray, confirmButtonText: 'Sí, cobrar'
         });
 
         if (!result.isConfirmed) return;
         setLoading(true)
         try {
-            const res = await api.post('/admin/reservations/walk-in', { date, timeslot: selectedSlot, guests, price: guests * FIXED_PRICE })
+            const res = await api.post('/admin/reservations/walk-in', { date, timeslot: selectedSlot, guests, price: guests * prices.pen })
             Swal.fire({ title: '¡Venta Registrada!', text: `Entradas generadas para ${res.data.reservation.guests} personas.`, icon: 'success', confirmButtonColor: THEME.primary, timer: 2000 });
             setSelectedSlot(null); setGuests(1);
             const slotsRes = await api.get(`/reservations/slots?date=${date}`)

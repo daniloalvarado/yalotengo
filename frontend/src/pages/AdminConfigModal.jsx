@@ -197,15 +197,19 @@ export default function AdminConfigModal({ isOpen, onClose, onSaveSuccess, theme
                                     value={closedDatesArr.map(d => new Date(d + 'T00:00:00'))}
                                     onChange={handleDatesChange}
                                     format="DD/MM/YYYY"
+                                    months={["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]}
+                                    weekDays={["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"]}
                                     placeholder="Haz clic aquí para seleccionar fechas"
                                     containerStyle={{ width: '100%' }}
                                     style={{
                                         width: '100%',
+                                        height: '46px',
                                         padding: '0.75rem',
                                         fontSize: '1rem',
                                         border: '1px solid #d1d5db',
                                         borderRadius: '0.5rem',
-                                        cursor: 'pointer'
+                                        cursor: 'pointer',
+                                        boxSizing: 'border-box'
                                     }}
                                 />
                             </div>
