@@ -54,9 +54,7 @@ r.post('/cart', auth, async (req, res) => {
 
         
         
-        const userEmail = req.user && (req.user.use_txt_email || req.user.email || '');
-        const isTestUser = userEmail && (userEmail.toLowerCase().includes('testuser') || userEmail.toLowerCase().includes('danilo'));
-        if (existing && !isTestUser) {
+                if (existing) {
 
 
             return res.status(400).json({ error: 'Este libro ya está en tu carrito' })
@@ -176,9 +174,7 @@ r.post('/purchase', auth, async (req, res) => {
 
         
         
-        const userEmail = req.user && (req.user.use_txt_email || req.user.email || '');
-        const isTestUser = userEmail && (userEmail.toLowerCase().includes('testuser') || userEmail.toLowerCase().includes('danilo'));
-        if (existing && !isTestUser) {
+                if (existing) {
 
 
             return res.status(400).json({ error: 'Ya has comprado este libro anteriormente.' })

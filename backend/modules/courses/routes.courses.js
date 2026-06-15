@@ -53,9 +53,7 @@ r.post('/cart', auth, async (req, res) => {
 
         
         
-        const userEmail = req.user && (req.user.use_txt_email || req.user.email || '');
-        const isTestUser = userEmail && (userEmail.toLowerCase().includes('testuser') || userEmail.toLowerCase().includes('danilo'));
-        if (existing && !isTestUser) {
+                if (existing) {
 
 
             const newQuantity = (existing.cpu_int_quantity || 1) + 1
