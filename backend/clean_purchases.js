@@ -12,17 +12,21 @@ async function clean() {
         
         await sequelize.authenticate();
         
-        const resModels = await Model3DPurchase.destroy({ where: {} });
-        console.log(`- Model3DPurchases eliminados: ${resModels}`);
+        await sequelize.query('SET FOREIGN_KEY_CHECKS = 0');
         
-        const resReservations = await Reservation.destroy({ where: {} });
-        console.log(`- Reservations eliminadas: ${resReservations}`);
+        await sequelize.query('DELETE FROM mod_purchase');
+        console.log(`- Model3DPurchases eliminados`);
         
-        const resBooks = await BookPurchase.destroy({ where: {} });
-        console.log(`- BookPurchases eliminados: ${resBooks}`);
+        await sequelize.query('DELETE FROM res_reservation');
+        console.log(`- Reservations eliminadas`);
         
-        const resCourses = await CoursePurchase.destroy({ where: {} });
-        console.log(`- CoursePurchases eliminados: ${resCourses}`);
+        await sequelize.query('DELETE FROM bpu_book_purchase');
+        console.log(`- BookPurchases eliminados`);
+        
+        await sequelize.query('DELETE FROM cpu_course_purchase');
+        console.log(`- CoursePurchases eliminados`);
+
+        await sequelize.query('SET FOREIGN_KEY_CHECKS = 1');
         
         console.log('Limpieza finalizada con éxito.');
         process.exit(0);
