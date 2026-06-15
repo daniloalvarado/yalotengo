@@ -15,11 +15,11 @@ const baseTemplate = (title, content, color) => `
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>\${title} | Yalotengo</title>
+    <title>${title} | Yalotengo</title>
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; margin: 0; padding: 20px; color: #333; }
         .container { max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        .header { background-color: \${color}; color: #ffffff; padding: 20px 30px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .header { background-color: ${color}; color: #ffffff; padding: 20px 30px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         .header img { width: 50px; height: 50px; margin-bottom: 10px; border-radius: 50%; background: white; padding: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
         .header h1 { margin: 0; font-size: 24px; letter-spacing: 0.5px; }
         .content { padding: 30px; }
@@ -30,17 +30,17 @@ const baseTemplate = (title, content, color) => `
         .detail-label { font-weight: 600; color: #6b7280; font-size: 14px; }
         .detail-value { font-weight: bold; color: #111827; font-size: 15px; text-align: right; }
         .footer { background-color: #f3f4f6; padding: 15px; text-align: center; font-size: 12px; color: #9ca3af; border-top: 1px solid #e5e7eb; }
-        .highlight { color: \${color}; font-size: 20px; font-weight: 800; }
+        .highlight { color: ${color}; font-size: 20px; font-weight: 800; }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
             <img src="https://yalotengo-frontend.onrender.com/favicon.png" alt="Yalotengo Logo" />
-            <h1>\${title}</h1>
+            <h1>${title}</h1>
         </div>
         <div class="content">
-            \${content}
+            ${content}
         </div>
         <div class="footer">
             Este es un mensaje automático generado por el sistema <strong>Yalotengo</strong>.<br>
