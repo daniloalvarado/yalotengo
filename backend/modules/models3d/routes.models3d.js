@@ -265,6 +265,7 @@ r.post('/purchase', auth, async (req, res) => {
         }
 
         console.log('[Models3D] Processing payment:', payment_method_id, price)
+        console.log('[Models3D] Payload:', JSON.stringify(paymentData, null, 2))
 
         // Procesar pago
         const result = await paymentClient.create({ body: paymentData })
