@@ -149,7 +149,7 @@ r.post('/purchase', auth, async (req, res) => {
 
             return res.json({
                 success: true,
-                paymentId: result.id,
+                paymentId: paymentId,
                 status: 'approved',
                 message: 'Pago realizado con éxito'
             })

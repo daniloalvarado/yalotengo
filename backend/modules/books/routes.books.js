@@ -208,12 +208,13 @@ r.post('/purchase', auth, async (req, res) => {
         // Procesar pago
         const requestOptions = { idempotencyKey: crypto.randomBytes(16).toString('hex') }
         const result = await paymentClient.create({ body: paymentData, requestOptions })
+        const paymentId = String(result.id)
 
-        console.log('[Books] Payment response:', result.status, result.id)
+        console.log('[Books] Payment response:', result.status, paymentId)
 
         if (result.status === 'approved') {
             purchase.bpu_txt_status = 'PAID'
-            purchase.bpu_txt_payment_id = String(result.id)
+            purchase.bpu_txt_payment_id = paymentId
             await purchase.save()
 
             // Enviar notificación al administrador
@@ -224,14 +225,14 @@ r.post('/purchase', auth, async (req, res) => {
                     customerName: user ? `${user.use_txt_nombres} ${user.use_txt_apellidos}` : 'Usuario Registrado',
                     items: [{ name: book.boo_txt_title, quantity: 1, price: price }],
                     total: price,
-                    transactionId: result.id
+                    transactionId: paymentId
                 });
             }).catch(err => console.error('Error cargando email.service', err));
 
             return res.json({
                 success: true,
                 purchaseId: purchase.bpu_int_id,
-                paymentId: result.id,
+                paymentId: paymentId,
                 status: 'approved'
             })
         } else {

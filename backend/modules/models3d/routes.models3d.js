@@ -212,6 +212,7 @@ r.post('/purchase', auth, async (req, res) => {
     const { modelId, token, payment_method_id, issuer_id, installments = 1, payer } = req.body
 
     try {
+        console.log('[Models3D] Step 1: Finding model', modelId)
         const model = await Model3D.findByPk(modelId)
         if (!model || !model.mod_bool_active) {
             return res.status(404).json({ error: 'Modelo no encontrado' })
@@ -233,6 +234,7 @@ r.post('/purchase', auth, async (req, res) => {
 
         const price = Number(model.mod_dec_price)
 
+        console.log('[Models3D] Step 2: Creating pending purchase')
         // Crear registro de compra pendiente
         const purchase = await Model3DPurchase.create({
             use_int_id: req.user.use_int_id,
@@ -264,21 +266,24 @@ r.post('/purchase', auth, async (req, res) => {
             }
         }
 
-        console.log('[Models3D] Processing payment:', payment_method_id, price)
-        console.log('[Models3D] Payload:', JSON.stringify(paymentData, null, 2))
+        console.log('[Models3D] Step 3: Processing payment:', payment_method_id, price)
 
         // Procesar pago
         const requestOptions = { idempotencyKey: crypto.randomBytes(16).toString('hex') }
         const result = await paymentClient.create({ body: paymentData, requestOptions })
 
-        console.log('[Models3D] Payment response:', result.status, result.id)
+        // Safely convert result.id (may be BigInt in MP SDK v2)
+        const paymentId = String(result.id)
+
+        console.log('[Models3D] Step 4: Payment response:', result.status, paymentId)
 
         if (result.status === 'approved') {
+            console.log('[Models3D] Step 5: Updating purchase to PAID')
             purchase.pur_txt_status = 'PAID'
-            purchase.pur_txt_payment_id = String(result.id)
+            purchase.pur_txt_payment_id = paymentId
             await purchase.save()
 
-            // Enviar notificación al administrador
+            // Enviar notificación al administrador (async, no bloquea la respuesta)
             import('../../services/email.service.js').then(({ notifyAdminPurchase }) => {
                 const user = req.user;
                 notifyAdminPurchase({
@@ -286,14 +291,15 @@ r.post('/purchase', auth, async (req, res) => {
                     customerName: user ? `${user.use_txt_nombres} ${user.use_txt_apellidos}` : 'Usuario Registrado',
                     items: [{ name: model.mod_txt_name, quantity: 1, price: price }],
                     total: price,
-                    transactionId: result.id
+                    transactionId: paymentId
                 });
             }).catch(err => console.error('Error cargando email.service', err));
 
+            console.log('[Models3D] Step 6: Sending success response')
             return res.json({
                 success: true,
                 purchaseId: purchase.pur_int_id,
-                paymentId: result.id,
+                paymentId: paymentId,
                 status: 'approved'
             })
         } else {
@@ -307,12 +313,20 @@ r.post('/purchase', auth, async (req, res) => {
         }
     } catch (e) {
         console.error('[Models3D] Payment error:', e)
-        const errorDetail = e.cause && e.cause.length > 0 ? e.cause : e.message
-        let safeErrorDetail = String(errorDetail)
-        try { safeErrorDetail = JSON.stringify(errorDetail) } catch (err) {}
-        return res.status(e.status || 500).json({
-            error: `MP Error: ${safeErrorDetail}`,
-            detail: safeErrorDetail
+        console.error('[Models3D] Error name:', e?.name)
+        console.error('[Models3D] Error message:', e?.message)
+        console.error('[Models3D] Error status:', e?.status)
+        const errorMsg = e?.message || 'Error desconocido'
+        const statusCode = (typeof e?.status === 'number' && e.status >= 400 && e.status < 600) ? e.status : 500
+        let detail = errorMsg
+        try {
+            if (e.cause && Array.isArray(e.cause) && e.cause.length > 0) {
+                detail = JSON.stringify(e.cause)
+            }
+        } catch (serErr) { /* ignore */ }
+        return res.status(statusCode).json({
+            error: `MP Error: ${detail}`,
+            detail: detail
         })
     }
 })
