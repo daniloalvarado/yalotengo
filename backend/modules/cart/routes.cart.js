@@ -167,7 +167,7 @@ r.post('/purchase', auth, async (req, res) => {
         try { safeErrorDetail = JSON.stringify(errorDetail) } catch (err) {}
         res.status(e.status || 500).json({
             error: `MP Error: ${safeErrorDetail}`,
-            detail: errorDetail
+            detail: safeErrorDetail
         })
     }
 })
