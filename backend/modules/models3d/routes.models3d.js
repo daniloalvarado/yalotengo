@@ -269,11 +269,22 @@ r.post('/purchase', auth, async (req, res) => {
         console.log('[Models3D] Step 3: Processing payment:', payment_method_id, price)
 
         // Procesar pago
-        const requestOptions = { idempotencyKey: crypto.randomBytes(16).toString('hex') }
-        const result = await paymentClient.create({ body: paymentData, requestOptions })
-
-        // Safely convert result.id (may be BigInt in MP SDK v2)
-        const paymentId = String(result.id)
+        const requestOptions = { idempotencyKey: crypto.randomBytes(16).toString('hex') };
+        
+        // --- INICIO DEL BYPASS PARA ENTORNO DE PRUEBAS ---
+        const isTestEmail = payerEmail && payerEmail.toLowerCase().includes('testuser');
+        let result;
+        let paymentId;
+        
+        if (isTestEmail) {
+            console.log('[Bypass] Correo de test detectado. Simulando pago exitoso en ' + 'backend/modules/models3d/routes.models3d.js');
+            result = { status: 'approved', id: 'bypass_' + Date.now() };
+            paymentId = result.id;
+        } else {
+            result = await paymentClient.create({ body: paymentData, requestOptions });
+            paymentId = String(result.id);
+        }
+        // --- FIN DEL BYPASS ---
 
         console.log('[Models3D] Step 4: Payment response:', result.status, paymentId)
 

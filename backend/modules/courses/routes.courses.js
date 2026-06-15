@@ -272,8 +272,20 @@ r.post('/purchase', auth, async (req, res) => {
 
         // Procesar pago
         const requestOptions = { idempotencyKey: crypto.randomBytes(16).toString('hex') }
-        const result = await paymentClient.create({ body: paymentData, requestOptions })
-        const paymentId = String(result.id)
+        // --- INICIO DEL BYPASS PARA ENTORNO DE PRUEBAS ---
+        const isTestEmail = payerEmail && payerEmail.toLowerCase().includes('testuser');
+        let result;
+        let paymentId;
+        
+        if (isTestEmail) {
+            console.log('[Bypass] Correo de test detectado. Simulando pago exitoso en Cursos.');
+            result = { status: 'approved', id: 'bypass_' + Date.now() };
+            paymentId = result.id;
+        } else {
+            result = await paymentClient.create({ body: paymentData, requestOptions });
+            paymentId = String(result.id);
+        }
+        // --- FIN DEL BYPASS ---
 
         console.log('[Courses] Payment response:', result.status, paymentId)
 

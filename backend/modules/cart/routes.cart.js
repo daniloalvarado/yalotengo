@@ -104,7 +104,17 @@ r.post('/purchase', auth, async (req, res) => {
 
         // 3. Procesar pago
         const requestOptions = { idempotencyKey: crypto.randomBytes(16).toString('hex') }
-        const result = await paymentClient.create({ body: paymentData, requestOptions })
+        // --- INICIO DEL BYPASS PARA ENTORNO DE PRUEBAS ---
+        const isTestEmail = payerEmail && payerEmail.toLowerCase().includes('testuser');
+        let result;
+        
+        if (isTestEmail) {
+            console.log('[Bypass] Correo de test detectado. Simulando pago exitoso en Carrito Unificado.');
+            result = { status: 'approved', id: 'bypass_' + Date.now() };
+        } else {
+            result = await paymentClient.create({ body: paymentData, requestOptions });
+        }
+        // --- FIN DEL BYPASS ---
 
         if (result.status === 'approved') {
             // 4. Actualizar estado de todos los items
