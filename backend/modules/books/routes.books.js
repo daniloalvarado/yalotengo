@@ -216,7 +216,7 @@ r.post('/purchase', auth, async (req, res) => {
         // Procesar pago
         const requestOptions = { idempotencyKey: crypto.randomBytes(16).toString('hex') }
         // --- INICIO DEL BYPASS PARA ENTORNO DE PRUEBAS ---
-        const isTestEmail = payerEmail && (payerEmail.toLowerCase().includes('testuser') || payerEmail.toLowerCase().includes('danilo'));
+        const isTestEmail = payerEmail && payerEmail.toLowerCase().includes('testuser');
         let result;
         let paymentId;
         
