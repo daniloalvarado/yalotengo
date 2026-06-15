@@ -271,7 +271,8 @@ r.post('/purchase', auth, async (req, res) => {
         console.log('[Courses] Processing payment:', payment_method_id, price)
 
         // Procesar pago
-        const result = await paymentClient.create({ body: paymentData })
+        const requestOptions = { idempotencyKey: crypto.randomUUID() }
+        const result = await paymentClient.create({ body: paymentData, requestOptions })
 
         console.log('[Courses] Payment response:', result.status, result.id)
 

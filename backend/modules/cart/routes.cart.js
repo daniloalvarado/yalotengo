@@ -4,6 +4,7 @@ import { MercadoPagoConfig, Payment } from 'mercadopago'
 import { Model3DPurchase } from '../models3d/model.model3d.js'
 import { BookPurchase } from '../books/model.book.js'
 import { CoursePurchase } from '../courses/model.course.js'
+import crypto from 'crypto'
 
 const r = Router()
 
@@ -102,7 +103,8 @@ r.post('/purchase', auth, async (req, res) => {
         console.log('[Cart] Processing unified payment:', totalAmount)
 
         // 3. Procesar pago
-        const result = await paymentClient.create({ body: paymentData })
+        const requestOptions = { idempotencyKey: crypto.randomUUID() }
+        const result = await paymentClient.create({ body: paymentData, requestOptions })
 
         if (result.status === 'approved') {
             // 4. Actualizar estado de todos los items
