@@ -25,6 +25,27 @@ const __dirname = path.dirname(__filename)
 const app = express()
 app.set('trust proxy', 1) // Necesario para Render/Heroku (para que detecte https)
 
+// --- DEBUG LOGGER ---
+const errorLogs = [];
+const originalConsoleError = console.error;
+const originalConsoleLog = console.log;
+console.error = function(...args) {
+  const msg = args.map(a => typeof a === 'object' ? (a instanceof Error ? a.stack || a.message : JSON.stringify(a, Object.getOwnPropertyNames(a))) : String(a)).join(' ');
+  errorLogs.unshift(`[ERROR][${new Date().toISOString()}] ${msg}`);
+  if (errorLogs.length > 200) errorLogs.length = 200;
+  originalConsoleError.apply(console, args);
+};
+console.log = function(...args) {
+  const msg = args.map(a => typeof a === 'object' ? JSON.stringify(a) : String(a)).join(' ');
+  if (msg.includes('[Models3D]') || msg.includes('[Books]') || msg.includes('[Courses]')) {
+    errorLogs.unshift(`[LOG][${new Date().toISOString()}] ${msg}`);
+    if (errorLogs.length > 200) errorLogs.length = 200;
+  }
+  originalConsoleLog.apply(console, args);
+};
+app.get('/debug-logs', (req, res) => res.json(errorLogs));
+// --------------------
+
 // CORS
 const origins = (process.env.CORS_ORIGINS || 'http://localhost:5173').split(',').map(s => s.trim())
 app.use(cors({
