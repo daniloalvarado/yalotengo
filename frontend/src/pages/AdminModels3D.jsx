@@ -14,6 +14,7 @@ import PurchaseDetailModal from './admin/PurchaseDetailModal'
 import AnimatedModal from '../components/AnimatedModal'
 import AdminQuotes3D from '../components/AdminQuotes3D'
 import CustomSelect from '../components/CustomSelect'
+import CustomStatusSelect from '../components/CustomStatusSelect'
 import { cascade } from '../utils/animations'
 
 const THEME = { primary: '#059669' }
@@ -657,15 +658,15 @@ export default function AdminModels3D() {
                 <form onSubmit={handleStatusSubmit} className="space-y-4">
                     <label className="block">
                         <span className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 block">Estado de Entrega</span>
-                        <select
+                        <CustomStatusSelect
                             value={statusForm.status}
-                            onChange={(e) => setStatusForm(prev => ({ ...prev, status: e.target.value }))}
-                            className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none bg-white"
-                        >
-                            <option value="ACCEPTED">Aceptado</option>
-                            <option value="IN_PROGRESS">En curso</option>
-                            <option value="DELIVERED">Entregado</option>
-                        </select>
+                            onChange={(val) => setStatusForm(prev => ({ ...prev, status: val }))}
+                            options={[
+                                { value: "ACCEPTED", label: "Aceptado" },
+                                { value: "IN_PROGRESS", label: "En curso" },
+                                { value: "DELIVERED", label: "Entregado" }
+                            ]}
+                        />
                     </label>
 
                     <label className="block">
