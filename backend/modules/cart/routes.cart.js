@@ -163,8 +163,10 @@ r.post('/purchase', auth, async (req, res) => {
     } catch (e) {
         console.error('[Cart] Payment error:', e)
         const errorDetail = e.cause && e.cause.length > 0 ? e.cause : e.message
+        let safeErrorDetail = String(errorDetail)
+        try { safeErrorDetail = JSON.stringify(errorDetail) } catch (err) {}
         res.status(e.status || 500).json({
-            error: `MP Error: ${JSON.stringify(errorDetail)}`,
+            error: `MP Error: ${safeErrorDetail}`,
             detail: errorDetail
         })
     }
