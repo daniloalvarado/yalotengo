@@ -174,11 +174,7 @@ r.post('/purchase', auth, async (req, res) => {
 
         
         
-                if (existing) {
-
-
-            return res.status(400).json({ error: 'Ya has comprado este libro anteriormente.' })
-        }
+                if (existing) { return res.json({ success: true, alreadyPaid: true, message: 'Ya has comprado este ítem.' }); }
 
         const price = Number(book.boo_dec_price)
 
