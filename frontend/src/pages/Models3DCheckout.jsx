@@ -39,17 +39,25 @@ export default function Models3DCheckout() {
     const price = Number(model.mod_dec_price)
 
     const handleCardSubmit = async (formData) => {
+        console.log('[DEBUG] CardPayment onSubmit called')
+        console.log('[DEBUG] formData:', JSON.stringify(formData, null, 2))
+        console.log('[DEBUG] formData.token:', formData.token)
+        console.log('[DEBUG] formData.payment_method_id:', formData.payment_method_id)
+        console.log('[DEBUG] API baseURL:', api.defaults.baseURL)
         setProcessing(true)
         setPaymentError(null)
         try {
-            const { data } = await api.post('/models3d/purchase', {
+            const payload = {
                 modelId: model.mod_int_id,
                 token: formData.token,
                 payment_method_id: formData.payment_method_id,
                 issuer_id: formData.issuer_id,
                 installments: formData.installments,
                 payer: formData.payer
-            })
+            }
+            console.log('[DEBUG] Sending to /models3d/purchase:', JSON.stringify(payload, null, 2))
+            const { data } = await api.post('/models3d/purchase', payload)
+            console.log('[DEBUG] Response:', JSON.stringify(data, null, 2))
 
             if (data.success) {
                 setPurchaseResult(data)
@@ -59,7 +67,11 @@ export default function Models3DCheckout() {
                 setPaymentError(`Pago rechazado: ${data.statusDetail || 'Intenta de nuevo'}`)
             }
         } catch (e) {
-            console.error('Error en pago:', e)
+            console.error('[DEBUG] Full error:', e)
+            console.error('[DEBUG] Error response status:', e.response?.status)
+            console.error('[DEBUG] Error response data:', e.response?.data)
+            console.error('[DEBUG] Error request URL:', e.config?.url)
+            console.error('[DEBUG] Error request baseURL:', e.config?.baseURL)
             const msg = e.response?.data?.error || 'Error procesando pago'
             setPaymentError(msg)
             toast.error(msg)
@@ -290,7 +302,12 @@ export default function Models3DCheckout() {
                             }}
                             onSubmit={handleCardSubmit}
                             onReady={() => console.log('CardPayment ready')}
-                            onError={(error) => console.error('MP CardPayment Error:', error)}
+                            onError={(error) => {
+                                console.error('MP CardPayment Error:', error)
+                                console.error('MP CardPayment Error JSON:', JSON.stringify(error, null, 2))
+                                if (error?.message) console.error('MP Error message:', error.message)
+                                if (error?.cause) console.error('MP Error cause:', error.cause)
+                            }}
                         />
                     ) : (
                         <div className="space-y-4">
