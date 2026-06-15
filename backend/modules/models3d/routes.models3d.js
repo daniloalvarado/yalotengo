@@ -251,7 +251,7 @@ r.post('/purchase', auth, async (req, res) => {
             transaction_amount: price,
             token: token,
             description: `Modelo 3D: ${model.mod_txt_name}`,
-            installments: parseInt(installments, 10),
+            installments: installments ? parseInt(installments, 10) : 1,
             payment_method_id: payment_method_id,
             issuer_id: issuer_id ? parseInt(issuer_id, 10) : undefined,
             payer: {
@@ -305,9 +305,15 @@ r.post('/purchase', auth, async (req, res) => {
         }
     } catch (e) {
         console.error('[Models3D] Payment error:', e)
+        if (e.cause) {
+            return res.status(400).json({
+                error: 'Error en el pago',
+                detail: e.cause
+            })
+        }
         return res.status(500).json({
             error: 'Error procesando pago',
-            detail: e.message
+            detail: e.message || 'Error interno del servidor'
         })
     }
 })

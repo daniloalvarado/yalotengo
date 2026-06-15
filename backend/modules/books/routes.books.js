@@ -190,7 +190,7 @@ r.post('/purchase', auth, async (req, res) => {
             transaction_amount: price,
             token: token,
             description: `Libro: ${book.boo_txt_title}`,
-            installments: parseInt(installments, 10),
+            installments: installments ? parseInt(installments, 10) : 1,
             payment_method_id: payment_method_id,
             issuer_id: issuer_id ? parseInt(issuer_id, 10) : undefined,
             payer: {
