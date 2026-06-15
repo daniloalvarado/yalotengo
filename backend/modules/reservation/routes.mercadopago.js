@@ -86,9 +86,14 @@ r.post('/:id/mercadopago', auth, async (req, res) => {
             }
         }
 
-        const paymentResponse = await payment.create({ body: paymentData })
+        const crypto = await import('crypto')
+        const requestOptions = { idempotencyKey: crypto.randomBytes(16).toString('hex') }
+        const paymentResponse = await payment.create({ body: paymentData, requestOptions })
 
-        console.log(`[MercadoPago] Payment response:`, paymentResponse.status, paymentResponse.id)
+        // Safely convert paymentResponse.id (may be BigInt in MP SDK v2)
+        const mpPaymentId = String(paymentResponse.id)
+
+        console.log(`[MercadoPago] Payment response:`, paymentResponse.status, mpPaymentId)
 
         // Verificar estado del pago
         if (paymentResponse.status === 'approved') {
@@ -103,7 +108,7 @@ r.post('/:id/mercadopago', auth, async (req, res) => {
             reservation.res_txt_qr_key = qrKey
             reservation.res_dec_price = totalAmount
             reservation.res_txt_currency = currency // USD o PEN
-            reservation.res_txt_payment_id = String(paymentResponse.id)
+            reservation.res_txt_payment_id = mpPaymentId
             await reservation.save()
 
             // Generar QR como data URL
@@ -130,7 +135,7 @@ r.post('/:id/mercadopago', auth, async (req, res) => {
             return res.json({
                 ok: true,
                 status: 'approved',
-                payment_id: paymentResponse.id,
+                payment_id: mpPaymentId,
                 reservation: {
                     id: reservation.res_int_id,
                     date: reservation.res_dt_date,
@@ -146,14 +151,14 @@ r.post('/:id/mercadopago', auth, async (req, res) => {
             })
         } else if (paymentResponse.status === 'pending' || paymentResponse.status === 'in_process') {
             // Pago pendiente (común en métodos offline)
-            reservation.res_txt_payment_id = String(paymentResponse.id)
+            reservation.res_txt_payment_id = mpPaymentId
             await reservation.save()
 
             return res.json({
                 ok: true,
                 status: paymentResponse.status,
                 status_detail: paymentResponse.status_detail,
-                payment_id: paymentResponse.id,
+                payment_id: mpPaymentId,
                 message: 'Pago pendiente de confirmación'
             })
         } else {
@@ -167,17 +172,19 @@ r.post('/:id/mercadopago', auth, async (req, res) => {
         }
 
     } catch (err) {
-        console.error('[MercadoPago] Error en el procesamiento del pago.')
+        console.error('[MercadoPago] Payment error:', err?.message, 'status:', err?.status)
 
         // Manejar errores específicos de MP
-        if (err.cause) {
+        if (err.cause && Array.isArray(err.cause) && err.cause.length > 0) {
             return res.status(400).json({
                 error: 'Error en el pago',
                 details: err.cause
             })
         }
 
-        res.status(500).json({ error: 'Error al procesar el pago' })
+        // NEVER forward MP's 5xx — it's a payment processing issue, not our server crash
+        const errorMsg = err?.message || 'Error al procesar el pago'
+        res.status(400).json({ error: errorMsg })
     }
 })
 
