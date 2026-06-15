@@ -4,7 +4,7 @@ import { initMercadoPago, CardPayment } from '@mercadopago/sdk-react'
 import api from '../api/client'
 import Model3DViewer from '../components/Model3DViewer'
 import toast from 'react-hot-toast'
-import { ArrowLeftIcon, CreditCardIcon, CheckCircleIcon, ArrowDownTrayIcon, DevicePhoneMobileIcon } from '@heroicons/react/24/outline'
+import { ArrowLeftIcon, CreditCardIcon, CheckCircleIcon, ArrowDownTrayIcon, DevicePhoneMobileIcon, CubeIcon } from '@heroicons/react/24/outline'
 
 // Inicializar MercadoPago
 const MP_PUBLIC_KEY = import.meta.env.VITE_MP_PUBLIC_KEY
@@ -172,7 +172,7 @@ export default function Models3DCheckout() {
                                 Gracias por adquirir: <strong>{model.mod_txt_name}</strong>
                             </p>
                             <div className="bg-emerald-50 border border-emerald-100 rounded-xl p-4 mb-6 text-emerald-800 text-sm">
-                                <p className="font-semibold mb-1">📦 Producto Físico</p>
+                                <p className="font-semibold mb-1 flex items-center justify-center gap-2"><CubeIcon className="w-5 h-5" /> Producto Físico</p>
                                 <p>Tu pedido ha sido registrado. Nos pondremos en contacto contigo para coordinar la entrega o recojo del modelo impreso.</p>
                             </div>
                         </>
