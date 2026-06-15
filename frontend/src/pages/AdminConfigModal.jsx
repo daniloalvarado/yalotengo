@@ -196,6 +196,7 @@ export default function AdminConfigModal({ isOpen, onClose, onSaveSuccess, theme
                                     multiple
                                     value={closedDatesArr.map(d => new Date(d + 'T00:00:00'))}
                                     onChange={handleDatesChange}
+                                    minDate={new Date()}
                                     format="DD/MM/YYYY"
                                     months={["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]}
                                     weekDays={["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"]}

@@ -2,6 +2,7 @@ import React from 'react';
 // 👇 Importamos BanknotesIcon para el botón de cobrar
 import { TicketIcon, BanknotesIcon } from "@heroicons/react/24/outline";
 import { cascade } from '../utils/animations';
+import DatePicker from "react-multi-date-picker";
 
 export default function AdminSales({
     date, setDate, slots, selectedSlot, setSelectedSlot,
@@ -86,7 +87,22 @@ export default function AdminSales({
 
             <div style={{ ...styles.row, ...cascade(6).style }} className={cascade(6).className}>
                 <label style={{ fontWeight: 'bold' }}>Fecha de venta:</label>
-                <input type="date" value={date} onChange={e => { setDate(e.target.value); setSelectedSlot(null) }} style={styles.input} />
+                <div style={{ minWidth: '200px' }}>
+                    <DatePicker
+                        value={date ? new Date(date + 'T12:00:00') : null}
+                        onChange={(dateObj) => {
+                            setDate(dateObj ? dateObj.format("YYYY-MM-DD") : '');
+                            setSelectedSlot(null);
+                        }}
+                        minDate={new Date()}
+                        format="DD/MM/YYYY"
+                        months={["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]}
+                        weekDays={["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"]}
+                        placeholder="Seleccionar fecha"
+                        containerStyle={{ width: '100%' }}
+                        style={styles.input}
+                    />
+                </div>
             </div>
 
             <div className={`main-layout-responsive ${cascade(7).className}`} style={{ marginTop: '1.5rem', ...cascade(7).style }}>

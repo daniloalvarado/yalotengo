@@ -13,17 +13,18 @@ const mpClient = new MercadoPagoConfig({
 })
 const payment = new Payment(mpClient)
 
-// Métodos offline que usan PEN
+import { SysConfig } from '../config/model.config.js'
+
+// Métodos offline
 const OFFLINE_METHODS = ['yape', 'plin', 'pagoefectivo_atm', 'rapipago', 'pagofacil']
 
-// Reglas de precios por método de pago
-const getPriceByMethod = (paymentMethodId) => {
-    const isOffline = OFFLINE_METHODS.some(m =>
-        paymentMethodId?.toLowerCase().includes(m.toLowerCase())
-    )
-    return isOffline
-        ? { amount: 5.00, currency: 'PEN' }
-        : { amount: 2.00, currency: 'USD' }
+// Reglas de precios desde la base de datos
+const getDynamicPrice = async () => {
+    const configs = await SysConfig.findAll()
+    const configMap = {}
+    configs.forEach(c => configMap[c.key] = c.value)
+    
+    return parseFloat(configMap['RESERVATION_PRICE_PEN'] || '5.00')
 }
 
 // ============================================
@@ -52,8 +53,9 @@ r.post('/:id/mercadopago', auth, async (req, res) => {
             return res.status(400).json({ error: 'La reserva ya expiró' })
         }
 
-        // Determinar precio según método de pago
-        const { amount, currency } = getPriceByMethod(payment_method_id)
+        // Determinar precio desde la base de datos
+        const amount = await getDynamicPrice()
+        const currency = 'PEN'
 
         // Multiplicar por número de guests
         const totalAmount = amount * reservation.res_int_guests
@@ -181,17 +183,22 @@ r.post('/:id/mercadopago', auth, async (req, res) => {
 
 // ============================================
 // GET /reservations/pricing
-// Obtener precios según método de pago
+// Obtener precios dinámicos
 // ============================================
-r.get('/pricing', (req, res) => {
-    res.json({
-        offline: { amount: 5.00, currency: 'PEN', label: 'S/ 5.00' },
-        card: { amount: 2.00, currency: 'USD', label: '$ 2.00' },
-        methods: {
-            offline: OFFLINE_METHODS,
-            description: 'Yape, PagoEfectivo usan PEN. Tarjetas usan USD.'
-        }
-    })
+r.get('/pricing', async (req, res) => {
+    try {
+        const amount = await getDynamicPrice()
+        res.json({
+            offline: { amount: amount, currency: 'PEN', label: `S/ ${amount.toFixed(2)}` },
+            card: { amount: amount, currency: 'PEN', label: `S/ ${amount.toFixed(2)}` },
+            methods: {
+                offline: OFFLINE_METHODS,
+                description: 'Todos los pagos usan PEN.'
+            }
+        })
+    } catch(err) {
+        res.status(500).json({ error: 'Error getting pricing' })
+    }
 })
 
 export default r
