@@ -249,7 +249,7 @@ export default function Header() {
 
       {/* Mobile Nav */}
       <div className="md:hidden border-t border-zinc-800">
-        <nav className="mx-auto max-w-7xl px-6 py-3 flex items-center gap-5 overflow-x-auto text-sm whitespace-nowrap hide-scrollbar">
+        <nav className="mx-auto max-w-7xl px-6 py-3 flex items-center justify-between gap-5 overflow-x-auto text-sm whitespace-nowrap hide-scrollbar">
           {/* Dashboard - Solo para admins, primero en móvil */}
           {user?.use_txt_role === 'admin' && (
             <NavLink

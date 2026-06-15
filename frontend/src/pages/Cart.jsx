@@ -21,15 +21,7 @@ import {
 
 // --- HELPERS ---
 
-// Formateador SIMPLE: Solo Dólares
-const formatUSD = (amount) => {
-  const value = Number(amount || 0);
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    minimumFractionDigits: 2
-  }).format(value);
-};
+// Ya no usamos formatUSD, usaremos la constante PEN que ya existe en la línea 135
 
 const formatDate = (isoDate) => {
   if (!isoDate) return "";
@@ -306,8 +298,7 @@ export default function Cart() {
         ) : (
           <div className="space-y-8">
             {reservations.map((r) => {
-              // Lógica de precio simplificada: Solo USD
-              // Usamos precio del backend, o fallback de $5 por persona si no existe
+              // Lógica de precio: usar el que manda el backend, o fallback de S/ 5 por persona
               const finalPrice = r.price || (r.guests * 5);
 
               return (
@@ -353,16 +344,16 @@ export default function Cart() {
                     {/* Columna Derecha: Precio y Acciones */}
                     <div className="flex items-center justify-between md:justify-end gap-6 md:w-auto">
 
-                      {/* Precio: SOLO DÓLARES */}
+                      {/* Precio: EN SOLES */}
                       <div className="text-right">
                         <p className="text-xs text-gray-400 mb-0.5">Total a pagar</p>
 
                         <div className="text-xl font-bold text-gray-900 leading-none">
-                          {formatUSD(finalPrice)}
+                          {PEN.format(finalPrice)}
                         </div>
 
                         <p className="text-[10px] font-medium mt-1 text-gray-500 flex items-center justify-end gap-1">
-                          <CreditCardIcon className="w-3 h-3" /> USD
+                          <CreditCardIcon className="w-3 h-3" /> PEN
                         </p>
                       </div>
 
