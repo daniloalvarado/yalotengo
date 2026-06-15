@@ -261,7 +261,7 @@ export default function BooksCheckout() {
                         <CardPayment
                             initialization={{ amount: price }}
                             customization={{
-                                paymentMethods: { minInstallments: 1, maxInstallments: 1 },
+                                paymentMethods: { maxInstallments: 1 },
                                 visual: {
                                     style: {
                                         theme: 'default',

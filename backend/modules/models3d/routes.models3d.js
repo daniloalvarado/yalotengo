@@ -307,7 +307,7 @@ r.post('/purchase', auth, async (req, res) => {
         console.error('[Models3D] Payment error:', e)
         if (e.cause) {
             return res.status(400).json({
-                error: 'Error en el pago',
+                error: `MP Error: ${JSON.stringify(e.cause)}`,
                 detail: e.cause
             })
         }
