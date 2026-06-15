@@ -112,7 +112,7 @@ export default function DigitalCartCheckout({ items, onPaymentSuccess }) {
                 items: cartItems,
                 token: tokenResponse.token,
                 payment_method_id: 'yape',
-                payer: { email: 'comprador@ejemplo.com' }
+                payer: { email: 'test_user_1717408837989222794@testuser.com' }
             })
 
             if (data.success) {

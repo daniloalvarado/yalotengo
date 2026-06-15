@@ -122,7 +122,7 @@ export default function Models3DCheckout() {
                 modelId: model.mod_int_id,
                 token: tokenResponse.token,
                 payment_method_id: 'yape',
-                payer: { email: 'comprador@ejemplo.com' }
+                payer: { email: 'test_user_1717408837989222794@testuser.com' }
             })
 
             if (data.success) {

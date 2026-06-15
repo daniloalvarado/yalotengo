@@ -1,7 +1,7 @@
 const https = require('https');
 
-const ACCESS_TOKEN = 'TEST-8298012952990513-012611-2b60703f4d2a951d5dca1e74d57cce5e-500028168';
-const PUBLIC_KEY = 'TEST-94523d77-0710-470c-8abe-3720d71c53e2';
+const ACCESS_TOKEN = 'TEST-8214313260341952-061510-d03bb46af78cbbb2c6a4b1e4a6f481b6-500028168';
+const PUBLIC_KEY = 'TEST-cfbf3797-fd23-4fee-bd19-6a813bd52dec';
 
 function apiRequest(method, path, body, headers = {}) {
   return new Promise((resolve, reject) => {

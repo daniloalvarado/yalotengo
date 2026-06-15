@@ -99,7 +99,7 @@ export default function ReservationConfirmation({
         token: tokenResponse.token,
         payment_method_id: 'yape',
         payer: {
-          email: 'comprador@ejemplo.com'
+          email: 'test_user_1717408837989222794@testuser.com'
         }
       });
 
