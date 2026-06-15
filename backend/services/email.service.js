@@ -79,7 +79,7 @@ export const notifyAdminReservation = async (reservationData) => {
         `;
 
         const response = await resend.emails.send({
-            from: SENDER_EMAIL,
+            from: `Yalotengo <${SENDER_EMAIL}>`,
             to: ADMIN_EMAIL,
             subject: `📅 Nueva Reserva Registrada - Yalotengo (#${id})`,
             html: baseTemplate('Nueva Reserva', content, '#3b82f6')
@@ -107,9 +107,8 @@ export const notifyAdminPurchase = async (purchaseData) => {
         const color = colors[category] || '#4b5563';
 
         let itemsHtml = items.map(item => 
-            `<div style="padding: 5px 0; border-bottom: 1px solid #eee;">
-                <strong>${item.quantity || 1}x</strong> ${item.name} 
-                <span style="float:right; color:#666;">S/ ${Number(item.price || 0).toFixed(2)}</span>
+            `<div style="padding: 3px 0;">
+                <strong>${item.quantity || 1}x</strong> ${item.name} &nbsp;&mdash;&nbsp; <span style="color:#666;">S/ ${Number(item.price || 0).toFixed(2)}</span>
             </div>`
         ).join('');
 
@@ -137,7 +136,7 @@ export const notifyAdminPurchase = async (purchaseData) => {
         `;
 
         const response = await resend.emails.send({
-            from: SENDER_EMAIL,
+            from: `Yalotengo <${SENDER_EMAIL}>`,
             to: ADMIN_EMAIL,
             subject: `💰 Nueva Venta Exitosa - ${category} (#${transactionId || Date.now()})`,
             html: baseTemplate(`Nueva Venta: ${category}`, content, '#10b981')
@@ -175,7 +174,7 @@ export const notifyAdminCotizacion = async (quoteData) => {
         `;
 
         const response = await resend.emails.send({
-            from: SENDER_EMAIL,
+            from: `Yalotengo <${SENDER_EMAIL}>`,
             to: ADMIN_EMAIL,
             subject: `🛠️ Actualización en Cotización 3D (#${id})`,
             html: baseTemplate('Cotización 3D Personalizada', content, '#ec4899')
