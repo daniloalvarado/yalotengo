@@ -56,8 +56,11 @@ r.post('/cart', auth, async (req, res) => {
         const isPrinted = model.mod_txt_category === 'IMPRESO'
 
         
-        const isTestUser = req.user && req.user.use_txt_email && (req.user.use_txt_email.toLowerCase().includes('testuser') || req.user.use_txt_email.toLowerCase().includes('danilo'));
+        
+        const userEmail = req.user && (req.user.use_txt_email || req.user.email || '');
+        const isTestUser = userEmail && (userEmail.toLowerCase().includes('testuser') || userEmail.toLowerCase().includes('danilo'));
         if (existing && !isTestUser) {
+
 
             if (isPrinted) {
                 // Si es impreso, incrementamos cantidad
@@ -231,8 +234,11 @@ r.post('/purchase', auth, async (req, res) => {
                 }
             })
             
-        const isTestUser = req.user && req.user.use_txt_email && (req.user.use_txt_email.toLowerCase().includes('testuser') || req.user.use_txt_email.toLowerCase().includes('danilo'));
+        
+        const userEmail = req.user && (req.user.use_txt_email || req.user.email || '');
+        const isTestUser = userEmail && (userEmail.toLowerCase().includes('testuser') || userEmail.toLowerCase().includes('danilo'));
         if (existing && !isTestUser) {
+
 
                 return res.status(400).json({ error: 'Ya has comprado este modelo digital anteriormente.' })
             }
