@@ -263,8 +263,8 @@ r.post('/purchase', auth, async (req, res) => {
                 identification: payer?.identification
             },
             metadata: {
-                purchaseId: purchase.cpu_int_id,
-                courseId: courseId
+                purchase_id: purchase.cpu_int_id,
+                course_id: courseId
             }
         }
 
@@ -324,9 +324,10 @@ r.post('/purchase', auth, async (req, res) => {
 
     } catch (e) {
         console.error('[Courses] Payment error:', e)
-        return res.status(500).json({
-            error: 'Error procesando pago',
-            detail: e.message
+        const errorDetail = e.cause && e.cause.length > 0 ? e.cause : e.message
+        return res.status(e.status || 500).json({
+            error: `MP Error: ${JSON.stringify(errorDetail)}`,
+            detail: errorDetail
         })
     }
 })

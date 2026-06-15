@@ -259,8 +259,8 @@ r.post('/purchase', auth, async (req, res) => {
                 identification: payer?.identification
             },
             metadata: {
-                purchaseId: purchase.pur_int_id,
-                modelId: modelId
+                purchase_id: purchase.pur_int_id,
+                model_id: modelId
             }
         }
 
@@ -305,15 +305,10 @@ r.post('/purchase', auth, async (req, res) => {
         }
     } catch (e) {
         console.error('[Models3D] Payment error:', e)
-        if (e.cause) {
-            return res.status(400).json({
-                error: `MP Error: ${JSON.stringify(e.cause)}`,
-                detail: e.cause
-            })
-        }
-        return res.status(500).json({
-            error: 'Error procesando pago',
-            detail: e.message || 'Error interno del servidor'
+        const errorDetail = e.cause && e.cause.length > 0 ? e.cause : e.message
+        return res.status(e.status || 500).json({
+            error: `MP Error: ${JSON.stringify(errorDetail)}`,
+            detail: errorDetail
         })
     }
 })
