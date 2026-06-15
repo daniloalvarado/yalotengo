@@ -45,7 +45,7 @@ const baseTemplate = (title, content, color) => `
             <div style="margin-bottom: 4px;">
                 <span>Este es un mensaje automático generado por</span>
                 <strong>Yalotengo</strong>.
-            </div><br>
+            </div>
             Por favor, no respondas a este correo.
         </div>
     </div>
@@ -76,7 +76,7 @@ export const notifyAdminReservation = async (reservationData) => {
                     <span class="detail-value highlight">S/ ${Number(total).toFixed(2)}</span>
                 </div>
             </div>
-            <p>Ingresa al panel de administración para ver más detalles.</p>
+            <p style="text-align: center; margin-top: 20px;">Ingresa al panel de administración para ver más detalles.</p>
         `;
 
         const html = baseTemplate('Nueva Reserva Confirmada', content, '#0d9467'); // Verde
@@ -136,7 +136,7 @@ export const notifyAdminPurchase = async (purchaseData) => {
                     <span class="detail-value highlight" style="color: ${color};">S/ ${Number(total).toFixed(2)}</span>
                 </div>
             </div>
-            <p>Revisa el módulo de Ventas/Pedidos para gestionar esta entrega.</p>
+            <p style="text-align: center; margin-top: 20px;">Revisa el módulo de Ventas/Pedidos para gestionar esta entrega.</p>
         `;
 
         const html = baseTemplate(`Nueva Venta de ${category}`, content, color);
@@ -177,7 +177,7 @@ export const notifyAdminCotizacion = async (quoteData) => {
                     </div>
                 </div>
             </div>
-            <p>Revisa el módulo de Cotizaciones para responder al cliente o verificar su pago.</p>
+            <p style="text-align: center; margin-top: 20px;">Revisa el módulo de Cotizaciones para responder al cliente o verificar su pago.</p>
         `;
 
         const html = baseTemplate('Novedad en Cotización 3D', content, '#ec4899'); // Rosa
