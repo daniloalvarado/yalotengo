@@ -80,7 +80,7 @@ export const notifyAdminReservation = async (reservationData) => {
         const html = baseTemplate('Nueva Reserva Confirmada', content, '#0d9467'); // Verde
 
         await resend.emails.send({
-            from: `Yalotengo Notificaciones <${SENDER_EMAIL}>`,
+            from: `Yalotengo <${SENDER_EMAIL}>`,
             to: ADMIN_EMAIL,
             subject: `[Yalotengo] Nueva Reserva: ${date} a las ${timeslot}`,
             html: html
@@ -140,7 +140,7 @@ export const notifyAdminPurchase = async (purchaseData) => {
         const html = baseTemplate(`💰 Nueva Venta de ${category}`, content, color);
 
         await resend.emails.send({
-            from: `Ventas <${SENDER_EMAIL}>`,
+            from: `Yalotengo <${SENDER_EMAIL}>`,
             to: ADMIN_EMAIL,
             subject: `Venta exitosa: ${category} por S/ ${Number(total).toFixed(2)}`,
             html: html
@@ -181,7 +181,7 @@ export const notifyAdminCotizacion = async (quoteData) => {
         const html = baseTemplate('🛠️ Novedad en Cotización 3D', content, '#ec4899'); // Rosa
 
         await resend.emails.send({
-            from: `Cotizaciones <${SENDER_EMAIL}>`,
+            from: `Yalotengo <${SENDER_EMAIL}>`,
             to: ADMIN_EMAIL,
             subject: `Actualización en Cotización #${id}`,
             html: html
