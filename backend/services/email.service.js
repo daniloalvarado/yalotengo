@@ -19,16 +19,16 @@ const baseTemplate = (title, content, color) => `
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; margin: 0; padding: 20px; color: #333; }
         .container { max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        .header { background-color: ${color}; color: #ffffff; padding: 20px 30px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .header { background-color: ${color}; color: #ffffff; padding: 20px 30px; text-align: center; }
         .header img { width: 50px; height: 50px; margin-bottom: 10px; border-radius: 50%; background: white; padding: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .header h1 { margin: 0; font-size: 24px; letter-spacing: 0.5px; }
+        .header h1 { margin: 0; font-size: 24px; letter-spacing: 0.5px; text-align: center; width: 100%; }
         .content { padding: 30px; }
         .content p { font-size: 16px; line-height: 1.5; color: #555; }
         .details-box { background-color: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px; margin: 20px 0; }
-        .detail-row { display: flex; justify-content: space-between; margin-bottom: 10px; border-bottom: 1px dashed #e5e7eb; padding-bottom: 5px; }
+        .detail-row { margin-bottom: 10px; border-bottom: 1px dashed #e5e7eb; padding-bottom: 5px; overflow: hidden; }
         .detail-row:last-child { margin-bottom: 0; border-bottom: none; padding-bottom: 0; }
-        .detail-label { font-weight: 600; color: #6b7280; font-size: 14px; }
-        .detail-value { font-weight: bold; color: #111827; font-size: 15px; text-align: right; }
+        .detail-label { font-weight: 600; color: #6b7280; font-size: 14px; float: left; margin-right: 10px; }
+        .detail-value { font-weight: bold; color: #111827; font-size: 15px; float: right; text-align: right; }
         .footer { background-color: #f3f4f6; padding: 15px; text-align: center; font-size: 12px; color: #9ca3af; border-top: 1px solid #e5e7eb; }
         .highlight { color: ${color}; font-size: 20px; font-weight: 800; }
     </style>
@@ -43,7 +43,7 @@ const baseTemplate = (title, content, color) => `
         </div>
         <div class="footer">
             <div style="display: inline-flex; align-items: center; justify-content: center; gap: 6px; margin-bottom: 4px;">
-                <span>Este es un mensaje automático generado por el sistema</span>
+                <span>Este es un mensaje automático generado por</span>
                 <img src="https://yalotengo-frontend.onrender.com/favicon.png" alt="Logo" style="width: 16px; height: 16px; border-radius: 50%; vertical-align: middle;" />
                 <strong>Yalotengo</strong>.
             </div><br>
@@ -62,7 +62,7 @@ export const notifyAdminReservation = async (reservationData) => {
         const { id, customerName, date, timeslot, guests, total, type = 'Online' } = reservationData;
         
         const content = `
-            <p>Hola Administrador,</p>
+            <p>Hola,</p>
             <p>Se ha registrado una nueva <strong>Reserva en Yalotengo</strong>.</p>
             
             <div class="details-box">
@@ -118,7 +118,7 @@ export const notifyAdminPurchase = async (purchaseData) => {
         ).join('');
 
         const content = `
-            <p>Hola Administrador,</p>
+            <p>Hola,</p>
             <p>Se ha procesado una nueva venta exitosa en la sección de <strong>${category}</strong>.</p>
             
             <div class="details-box">
@@ -162,7 +162,7 @@ export const notifyAdminCotizacion = async (quoteData) => {
         const { id, customerName, contactEmail, description, status } = quoteData;
         
         const content = `
-            <p>Hola Administrador,</p>
+            <p>Hola,</p>
             <p>Se ha registrado una actualización en <strong>Cotizaciones 3D Personalizadas</strong>.</p>
             
             <div class="details-box">
