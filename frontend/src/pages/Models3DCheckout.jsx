@@ -53,7 +53,7 @@ export default function Models3DCheckout() {
                 payment_method_id: formData.payment_method_id,
                 issuer_id: formData.issuer_id,
                 installments: formData.installments,
-                payer: formData.payer
+                payer: { ...formData.payer, email: formData.payer?.email || 'testuser@gmail.com' }
             }
             console.log('[DEBUG] Sending to /models3d/purchase:', JSON.stringify(payload, null, 2))
             const { data } = await api.post('/models3d/purchase', payload)

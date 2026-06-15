@@ -46,7 +46,7 @@ export default function CoursesCheckout() {
                 payment_method_id: formData.payment_method_id,
                 issuer_id: formData.issuer_id,
                 installments: formData.installments,
-                payer: formData.payer
+                payer: { ...formData.payer, email: formData.payer?.email || 'testuser@gmail.com' }
             })
 
             if (data.success) {
