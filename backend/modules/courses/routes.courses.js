@@ -2,6 +2,7 @@ import { Router } from 'express'
 import { Course, CoursePurchase } from './model.course.js'
 import { auth } from '../../utils/jwt.js'
 import { MercadoPagoConfig, Payment } from 'mercadopago'
+import crypto from 'crypto'
 
 const r = Router()
 
