@@ -6,7 +6,7 @@ import toast from 'react-hot-toast'
 import { ArrowLeftIcon, CreditCardIcon, CheckCircleIcon, AcademicCapIcon, DevicePhoneMobileIcon } from '@heroicons/react/24/outline'
 
 // Inicializar MercadoPago
-const MP_PUBLIC_KEY = 'TEST-94523d77-0710-470c-8abe-3720d71c53e2'
+const MP_PUBLIC_KEY = import.meta.env.VITE_MP_PUBLIC_KEY || 'TEST-cfbf3797-fd23-4fee-bd19-6a813bd52dec'
 initMercadoPago(MP_PUBLIC_KEY, { locale: 'es-PE' })
 
 const PEN = new Intl.NumberFormat('es-PE', { style: 'currency', currency: 'PEN' })

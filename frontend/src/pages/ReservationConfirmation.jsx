@@ -10,7 +10,7 @@ import {
 import api from '../api/client';
 
 // Inicializar Mercado Pago con la public key
-const MP_PUBLIC_KEY = 'TEST-94523d77-0710-470c-8abe-3720d71c53e2';
+const MP_PUBLIC_KEY = import.meta.env.VITE_MP_PUBLIC_KEY || 'TEST-cfbf3797-fd23-4fee-bd19-6a813bd52dec';
 initMercadoPago(MP_PUBLIC_KEY, {
   locale: 'es-PE'
 });
