@@ -269,7 +269,7 @@ async function start() {
     await initDefaultConfig()
     app.listen(PORT, () => console.log('Backend on :' + PORT))
   } catch (err) {
-    console.error('[Error] No se pudo conectar a la base de datos.')
+    console.error('[Error Crítico de Inicio]', err)
     process.exit(1)
   }
 }
