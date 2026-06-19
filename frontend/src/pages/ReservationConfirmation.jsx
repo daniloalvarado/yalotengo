@@ -421,6 +421,12 @@ export default function ReservationConfirmation({
         color: #0f766e;
       }
 
+      html.dark .yape-instructions {
+        background: rgba(0, 209, 174, 0.1);
+        border-color: rgba(0, 209, 174, 0.3);
+        color: #5eead4;
+      }
+
       .yape-instructions ol {
         margin: 0.5rem 0 0 1.25rem;
         padding: 0;
@@ -496,13 +502,66 @@ export default function ReservationConfirmation({
       @keyframes spin {
         to { transform: rotate(360deg); }
       }
+
+      /* --- DARK MODE --- */
+      html.dark .summary-card {
+        background: #1c1c1c;
+        border-color: #27272a;
+      }
+      html.dark .summary-card .title-section .title {
+        color: #f3f4f6;
+      }
+      html.dark .detail-item {
+        color: #f3f4f6;
+      }
+      html.dark .payment-section {
+        background: #1c1c1c;
+        border-color: #27272a;
+      }
+      html.dark .payment-title {
+        color: #f3f4f6;
+      }
+      html.dark .payment-tab {
+        background: #141414;
+        border-color: #27272a;
+        color: #a1a1aa;
+      }
+      html.dark .payment-tab:hover:not(.active) {
+        border-color: #3f3f46;
+      }
+      html.dark .payment-tab.active {
+        background: rgba(16, 185, 129, 0.1);
+        border-color: #10b981;
+        color: #f3f4f6;
+      }
+      html.dark .payment-tab.active:nth-child(2) {
+        background: rgba(0, 209, 174, 0.1);
+        border-color: #00D1AE;
+      }
+      html.dark .form-group label {
+        color: #f3f4f6;
+      }
+      html.dark .form-group input {
+        background: #141414;
+        border-color: #27272a;
+        color: #f3f4f6;
+      }
+      html.dark .form-group input:focus {
+        border-color: #00D1AE;
+      }
+      html.dark .processing-card {
+        background: #1c1c1c;
+      }
+      html.dark .processing-card p {
+        color: #f3f4f6 !important;
+      }
     `;
 
   return (
     <div style={styles.container}>
       <style>{cardCss}</style>
 
-      <h1 style={styles.title}>Confirma tu Reserva</h1>
+      <h1 className="text-gray-900 dark:text-white" style={styles.title}>Confirma tu Reserva</h1>
 
       <div className="card-container">
         {/* Resumen de la reserva */}
@@ -573,28 +632,30 @@ export default function ReservationConfirmation({
 
           {/* Formulario de tarjeta */}
           {paymentMethod === 'card' && (
-            <CardPayment
-              initialization={{
-                amount: totalPrice
-              }}
-              customization={{
-                visual: {
-                  style: {
-                    theme: 'default',
-                    customVariables: {
-                      formBackgroundColor: '#ffffff',
-                      baseColor: theme.primary
+            <div className="dark:bg-[#141414] dark:p-2 dark:rounded-lg">
+              <CardPayment
+                initialization={{
+                  amount: totalPrice
+                }}
+                customization={{
+                  visual: {
+                    style: {
+                      theme: 'default',
+                      customVariables: {
+                        formBackgroundColor: 'transparent',
+                        baseColor: theme.primary
+                      }
                     }
+                  },
+                  paymentMethods: {
+                    maxInstallments: 1
                   }
-                },
-                paymentMethods: {
-                  maxInstallments: 1
-                }
-              }}
-              onSubmit={onCardSubmit}
-              onReady={onReady}
-              onError={onError}
-            />
+                }}
+                onSubmit={onCardSubmit}
+                onReady={onReady}
+                onError={onError}
+              />
+            </div>
           )}
 
           {/* Formulario de Yape */}

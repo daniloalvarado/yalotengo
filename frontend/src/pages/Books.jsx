@@ -92,24 +92,24 @@ export default function Books() {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
+            <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-[#141414] dark:to-[#141414] flex items-center justify-center">
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600"></div>
             </div>
         )
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-8 px-4">
+        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-[#141414] dark:to-[#141414] py-8 px-4">
             <div className="max-w-6xl mx-auto">
                 {/* Header */}
                 <div className="mb-10">
                     <div className="flex items-center gap-3 mb-2">
-                        <BookOpenIcon className="w-8 h-8 text-emerald-600" />
-                        <h1 className="text-3xl md:text-4xl font-bold text-gray-900">
+                        <BookOpenIcon className="w-8 h-8 text-emerald-600 dark:text-emerald-500" />
+                        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">
                             Libros Digitales
                         </h1>
                     </div>
-                    <p className="text-gray-600">
+                    <p className="text-gray-600 dark:text-gray-400">
                         Descarga libros en formato PDF y EPUB para leer en cualquier dispositivo.
                     </p>
                 </div>
@@ -132,11 +132,11 @@ export default function Books() {
                                 {/* LO QUE SE VE AL ABRIR (FONDO/INTERIOR) */}
                                 <div className="pl-10 pr-4 py-4 flex flex-col h-full justify-between items-center text-center w-full">
                                     <div>
-                                        <h3 className="font-bold text-sm text-gray-800 mb-1 line-clamp-2">
+                                        <h3 className="font-bold text-sm text-gray-800 dark:text-white mb-1 line-clamp-2">
                                             {book.boo_txt_title}
                                         </h3>
-                                        <p className="text-xs text-gray-500 mb-2">{book.boo_txt_author}</p>
-                                        <p className="text-xs text-gray-600 line-clamp-3 mb-2">
+                                        <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">{book.boo_txt_author}</p>
+                                        <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-3 mb-2">
                                             {book.boo_txt_desc}
                                         </p>
                                     </div>
@@ -159,7 +159,7 @@ export default function Books() {
                                                     <button
                                                         onClick={() => handleAddToCart(book)}
                                                         disabled={addingToCart[book.boo_int_id]}
-                                                        className="p-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors disabled:opacity-50"
+                                                        className="p-2 bg-gray-100 dark:bg-zinc-800 hover:bg-gray-200 dark:hover:bg-zinc-700 text-gray-700 dark:text-gray-300 rounded-lg transition-colors disabled:opacity-50"
                                                     >
                                                         <ShoppingCartIcon className="w-5 h-5" />
                                                     </button>
@@ -264,6 +264,15 @@ const StyledWrapper = styled.div`
     -webkit-box-pack: center;
     -ms-flex-pack: center;
     justify-content: center;
+  }
+
+  html.dark & .book {
+    background-color: #1c1c1c;
+    color: #f3f4f6;
+  }
+
+  html.dark & .cover {
+    background-color: #222;
   }
 
   .book:hover .cover {

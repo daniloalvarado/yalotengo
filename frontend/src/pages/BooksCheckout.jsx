@@ -132,14 +132,14 @@ export default function BooksCheckout() {
     if (step === 'success') {
         return (
             <div className="max-w-2xl mx-auto px-4 py-12">
-                <div className="bg-white rounded-2xl shadow-lg p-8 text-center">
-                    <div className="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <CheckCircleIcon className="w-12 h-12 text-emerald-600" />
+                <div className="bg-white dark:bg-[#1c1c1c] rounded-2xl shadow-lg border border-transparent dark:border-zinc-800 p-8 text-center">
+                    <div className="w-20 h-20 bg-emerald-100 dark:bg-emerald-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <CheckCircleIcon className="w-12 h-12 text-emerald-600 dark:text-emerald-500" />
                     </div>
 
-                    <h1 className="text-2xl font-bold text-gray-900 mb-2">¡Compra Exitosa!</h1>
-                    <p className="text-gray-600 mb-6">
-                        Ya puedes descargar tu libro: <strong>{book.boo_txt_title}</strong>
+                    <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">¡Compra Exitosa!</h1>
+                    <p className="text-gray-600 dark:text-gray-400 mb-6">
+                        Ya puedes descargar tu libro: <strong className="dark:text-white">{book.boo_txt_title}</strong>
                     </p>
 
                     <button
@@ -150,16 +150,18 @@ export default function BooksCheckout() {
                         Descargar PDF
                     </button>
 
-                    <div className="mt-8 pt-6 border-t border-gray-100">
+                    <div className="mt-8 pt-6 border-t border-gray-100 dark:border-zinc-800">
                         <p className="text-sm text-gray-500 mb-3">
                             También puedes descargar tus compras desde "Mis compras".
                         </p>
+                        <div className="mt-6">
                         <button
                             onClick={() => navigate('/books')}
-                            className="text-emerald-600 hover:text-emerald-700 font-medium"
+                            className="text-emerald-600 dark:text-emerald-500 hover:text-emerald-700 dark:hover:text-emerald-400 font-medium"
                         >
                             ← Volver a libros
                         </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -172,7 +174,7 @@ export default function BooksCheckout() {
             {/* Back button */}
             <button
                 onClick={() => navigate('/books')}
-                className="flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6"
+                className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white mb-6"
             >
                 <ArrowLeftIcon className="w-4 h-4" />
                 Volver a libros
@@ -180,8 +182,8 @@ export default function BooksCheckout() {
 
             <div className="grid md:grid-cols-2 gap-8 items-start">
                 {/* Book preview */}
-                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden self-start">
-                    <div className="aspect-[3/4] bg-gradient-to-br from-gray-100 to-gray-200 relative overflow-hidden">
+                <div className="bg-white dark:bg-[#1c1c1c] rounded-2xl shadow-sm border border-gray-100 dark:border-zinc-800 overflow-hidden self-start">
+                    <div className="aspect-[3/4] bg-gradient-to-br from-gray-100 to-gray-200 dark:from-zinc-800 dark:to-zinc-900 relative overflow-hidden">
                         {book.boo_txt_cover_image ? (
                             <img
                                 src={
@@ -194,19 +196,19 @@ export default function BooksCheckout() {
                             />
                         ) : (
                             <div className="w-full h-full flex items-center justify-center">
-                                <BookOpenIcon className="w-20 h-20 text-gray-300" />
+                                <BookOpenIcon className="w-20 h-20 text-gray-300 dark:text-zinc-700" />
                             </div>
                         )}
                     </div>
                     <div className="p-5">
-                        <h2 className="text-xl font-bold text-gray-900">{book.boo_txt_title}</h2>
-                        <p className="text-gray-500 mt-1">{book.boo_txt_author}</p>
+                        <h2 className="text-xl font-bold text-gray-900 dark:text-white">{book.boo_txt_title}</h2>
+                        <p className="text-gray-500 dark:text-gray-400 mt-1">{book.boo_txt_author}</p>
                         {book.boo_txt_desc && (
-                            <p className="text-gray-600 mt-2 text-sm">{book.boo_txt_desc}</p>
+                            <p className="text-gray-600 dark:text-gray-400 mt-2 text-sm">{book.boo_txt_desc}</p>
                         )}
-                        <div className="mt-4 pt-4 border-t border-gray-100 flex items-center justify-between">
-                            <span className="text-gray-500">Total a pagar:</span>
-                            <span className="text-2xl font-bold text-emerald-600">
+                        <div className="mt-4 pt-4 border-t border-gray-100 dark:border-zinc-800 flex items-center justify-between">
+                            <span className="text-gray-500 dark:text-gray-400">Total a pagar:</span>
+                            <span className="text-2xl font-bold text-emerald-600 dark:text-emerald-500">
                                 {PEN.format(price)}
                             </span>
                         </div>
@@ -214,10 +216,10 @@ export default function BooksCheckout() {
                 </div>
 
                 {/* Formulario de pago */}
-                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                <div className="bg-white dark:bg-[#1c1c1c] rounded-2xl shadow-sm border border-gray-100 dark:border-zinc-800 p-6">
                     <div className="flex items-center gap-2 mb-4">
-                        <CreditCardIcon className="w-6 h-6 text-gray-400" />
-                        <h3 className="text-lg font-semibold text-gray-900">Método de Pago</h3>
+                        <CreditCardIcon className="w-6 h-6 text-gray-400 dark:text-zinc-500" />
+                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Método de Pago</h3>
                     </div>
 
                     {/* Tabs de método de pago */}
@@ -225,29 +227,29 @@ export default function BooksCheckout() {
                         <button
                             onClick={() => setPaymentMethod('card')}
                             className={`flex-1 flex flex-col items-center gap-1 p-3 rounded-xl border-2 transition-all ${paymentMethod === 'card'
-                                ? 'border-emerald-600 bg-emerald-50'
-                                : 'border-gray-200 hover:border-gray-300'
+                                ? 'border-emerald-600 bg-emerald-50 dark:bg-emerald-900/30'
+                                : 'border-gray-200 dark:border-zinc-800 hover:border-gray-300 dark:hover:border-zinc-700 text-gray-700 dark:text-zinc-400'
                                 }`}
                         >
                             <CreditCardIcon className="w-6 h-6" />
                             <span className="font-medium">Tarjeta</span>
-                            <span className="text-xs text-gray-500">{PEN.format(price)}</span>
+                            <span className="text-xs text-gray-500 dark:text-zinc-500">{PEN.format(price)}</span>
                         </button>
                         <button
                             onClick={() => setPaymentMethod('yape')}
                             className={`flex-1 flex flex-col items-center gap-1 p-3 rounded-xl border-2 transition-all ${paymentMethod === 'yape'
-                                ? 'border-[#00D1AE] bg-[#f0fdfa]'
-                                : 'border-gray-200 hover:border-gray-300'
+                                ? 'border-[#00D1AE] bg-[#f0fdfa] dark:bg-[#00D1AE]/20'
+                                : 'border-gray-200 dark:border-zinc-800 hover:border-gray-300 dark:hover:border-zinc-700 text-gray-700 dark:text-zinc-400'
                                 }`}
                         >
                             <DevicePhoneMobileIcon className="w-6 h-6" />
                             <span className="font-medium">Yape</span>
-                            <span className="text-xs text-gray-500">{PEN.format(price)}</span>
+                            <span className="text-xs text-gray-500 dark:text-zinc-500">{PEN.format(price)}</span>
                         </button>
                     </div>
 
                     {paymentError && (
-                        <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+                        <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg text-red-700 dark:text-red-400 text-sm">
                             {paymentError}
                         </div>
                     )}
@@ -255,7 +257,7 @@ export default function BooksCheckout() {
                     {processing ? (
                         <div className="py-12 text-center">
                             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600 mx-auto mb-4"></div>
-                            <p className="text-gray-600">Procesando pago...</p>
+                            <p className="text-gray-600 dark:text-gray-400">Procesando pago...</p>
                         </div>
                     ) : paymentMethod === 'card' ? (
                         <CardPayment
@@ -278,7 +280,7 @@ export default function BooksCheckout() {
                         />
                     ) : (
                         <div className="space-y-4">
-                            <div className="bg-[#f0fdfa] border border-[#99f6e4] rounded-lg p-4 text-sm text-[#0f766e]">
+                            <div className="bg-[#f0fdfa] dark:bg-[#00D1AE]/10 border border-[#99f6e4] dark:border-[#00D1AE]/30 rounded-lg p-4 text-sm text-[#0f766e] dark:text-[#5eead4]">
                                 <strong>¿Cómo pagar con Yape?</strong>
                                 <ol className="mt-2 ml-4 list-decimal space-y-1">
                                     <li>Ingresa tu número de teléfono registrado en Yape</li>
@@ -289,7 +291,7 @@ export default function BooksCheckout() {
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">
                                     Número de teléfono
                                 </label>
                                 <input
@@ -298,33 +300,30 @@ export default function BooksCheckout() {
                                     value={yapePhone}
                                     onChange={(e) => setYapePhone(e.target.value.replace(/\D/g, '').slice(0, 9))}
                                     maxLength={9}
-                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#00D1AE] focus:border-[#00D1AE] outline-none"
+                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-zinc-700 dark:bg-[#141414] dark:text-white focus:outline-none focus:ring-2 focus:ring-[#00D1AE] focus:border-transparent transition-all"
                                 />
-                                <span className="text-xs text-gray-500">Tu número registrado en Yape</span>
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">
-                                    Código de aprobación (OTP)
+                                <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">
+                                    Código de aprobación (6 dígitos)
                                 </label>
                                 <input
                                     type="text"
-                                    placeholder="XXXXXX"
+                                    placeholder="123456"
                                     value={yapeOtp}
                                     onChange={(e) => setYapeOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
                                     maxLength={6}
-                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#00D1AE] focus:border-[#00D1AE] outline-none"
+                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-zinc-700 dark:bg-[#141414] dark:text-white focus:outline-none focus:ring-2 focus:ring-[#00D1AE] focus:border-transparent transition-all tracking-widest text-lg font-mono placeholder:text-gray-400 placeholder:font-sans placeholder:text-base placeholder:tracking-normal"
                                 />
-                                <span className="text-xs text-gray-500">Código de 6 dígitos de tu app Yape</span>
                             </div>
 
                             <button
                                 onClick={handleYapePayment}
-                                disabled={!yapePhone || yapePhone.length < 9 || !yapeOtp || yapeOtp.length !== 6}
-                                className="w-full py-3 bg-[#00D1AE] hover:bg-[#00b89d] disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-colors flex items-center justify-center gap-2"
+                                disabled={processing || yapePhone.length < 9 || yapeOtp.length !== 6}
+                                className="w-full py-4 bg-[#00D1AE] hover:bg-[#00c0a0] text-white font-bold rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-md shadow-[#00D1AE]/20"
                             >
-                                <DevicePhoneMobileIcon className="w-5 h-5" />
-                                Pagar {PEN.format(price)} con Yape
+                                Confirmar Pago con Yape
                             </button>
                         </div>
                     )}

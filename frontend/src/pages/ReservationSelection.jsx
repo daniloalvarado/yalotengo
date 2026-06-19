@@ -98,10 +98,8 @@ export default function ReservationSelection({
             textAlign: 'center'
         }),
         payPanel: {
-            backgroundColor: '#fff',
             padding: '1.2rem',
             borderRadius: '12px',
-            border: '1px solid #e5e7eb',
             boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)',
             position: 'sticky',
             top: '1rem'
@@ -114,10 +112,10 @@ export default function ReservationSelection({
 
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', marginBottom: '1.5rem' }}>
                 <CalendarDaysIcon style={{ width: '32px', height: '32px', color: theme.primary }} />
-                <h1 style={{ ...styles.title, marginBottom: 0 }}>Reserva tu Entrada</h1>
+                <h1 className="text-gray-900 dark:text-white" style={{ ...styles.title, marginBottom: 0 }}>Reserva tu Entrada</h1>
             </div>
 
-            <div style={{ ...styles.section, ...cascade(0).style }} className={cascade(0).className}>
+            <div className={`bg-white dark:bg-[#1c1c1c] border border-gray-200 dark:border-zinc-800 text-gray-900 dark:text-gray-200 ${cascade(0).className}`} style={{ ...styles.section, ...cascade(0).style }}>
                 {/* Sección Fecha */}
                 <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
                     <label style={{ fontWeight: 'bold' }}>Selecciona una fecha:</label>
@@ -131,7 +129,8 @@ export default function ReservationSelection({
                             weekDays={["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"]}
                             placeholder="Seleccionar fecha"
                             containerStyle={{ width: '100%' }}
-                            style={styles.input}
+                            style={{ ...styles.input }}
+                            className="bg-white dark:bg-[#141414] dark:text-white dark:border-zinc-700"
                         />
                     </div>
                 </div>
@@ -140,9 +139,9 @@ export default function ReservationSelection({
                     
                     {/* COLUMNA 1: Horarios */}
                     <div>
-                        <h4 style={{ margin: '0 0 1rem 0', color: theme.textDark }}>1. Selecciona Horario:</h4>
+                        <h4 className="text-gray-900 dark:text-white" style={{ margin: '0 0 1rem 0' }}>1. Selecciona Horario:</h4>
                         {!date ? (
-                            <p style={{ color: '#9ca3af', textAlign: 'center', padding: '1rem' }}>Primero selecciona una fecha</p>
+                            <p className="text-gray-400 dark:text-gray-500" style={{ textAlign: 'center', padding: '1rem' }}>Primero selecciona una fecha</p>
                         ) : loading ? (
                             <p>Cargando horarios...</p>
                         ) : closedMessage ? (
@@ -161,7 +160,7 @@ export default function ReservationSelection({
                                     const past = isTimePast(slot.time);
                                     return (
                                         <button key={slot.time}
-                                            className={cascade(2 + index, '', 0, 20).className}
+                                            className={`${cascade(2 + index, '', 0, 20).className} border border-gray-200 dark:border-zinc-800 ${slot.isFull || past ? 'bg-gray-200 dark:bg-zinc-800 text-gray-400 dark:text-zinc-500' : selectedSlot === slot.time ? 'bg-emerald-600 text-white' : 'bg-white dark:bg-[#1c1c1c] text-gray-800 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-zinc-700'}`}
                                             style={{ ...localStyles.squareBtn(slot, selectedSlot === slot.time, past), ...cascade(2 + index, '', 0, 20).style }}
                                             onClick={() => !slot.isFull && !past && setSelectedSlot(slot.time)}
                                             disabled={slot.isFull || past}>
@@ -180,22 +179,22 @@ export default function ReservationSelection({
 
                     {/* COLUMNA 2: Panel de Cobro */}
                     {selectedSlot ? (
-                        <div style={{ ...localStyles.payPanel, ...cascade(2).style }} className={`animate-slide-down ${cascade(2).className}`}>
-                            <h4 style={{ margin: '0 0 1rem 0', color: theme.textDark }}>2. Confirmar Reserva:</h4>
+                        <div style={{ ...localStyles.payPanel, ...cascade(2).style }} className={`animate-slide-down bg-white dark:bg-[#141414] border border-gray-200 dark:border-zinc-800 ${cascade(2).className}`}>
+                            <h4 className="text-gray-900 dark:text-white" style={{ margin: '0 0 1rem 0' }}>2. Confirmar Reserva:</h4>
                             
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.8rem' }}>
-                                <span style={{ color: '#666', fontSize: '0.9rem' }}>Horario:</span>
-                                <strong style={{ fontSize: '1rem' }}>{formatTime(selectedSlot)}</strong>
+                                <span className="text-gray-500 dark:text-gray-400" style={{ fontSize: '0.9rem' }}>Horario:</span>
+                                <strong className="text-gray-900 dark:text-white" style={{ fontSize: '1rem' }}>{formatTime(selectedSlot)}</strong>
                             </div>
 
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.2rem' }}>
-                                <span style={{ color: '#666', fontSize: '0.9rem' }}>Personas:</span>
+                                <span className="text-gray-500 dark:text-gray-400" style={{ fontSize: '0.9rem' }}>Personas:</span>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                    <button onClick={() => setGuests(Math.max(1, guests - 1))} style={{ border: 'none', borderRadius: '6px', cursor: 'pointer', backgroundColor: '#e5e7eb', color: '#333', fontSize: '1.1rem', width: '32px', height: '32px', display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 0 }}>
+                                    <button onClick={() => setGuests(Math.max(1, guests - 1))} className="bg-gray-200 dark:bg-zinc-800 text-gray-800 dark:text-white" style={{ border: 'none', borderRadius: '6px', cursor: 'pointer', fontSize: '1.1rem', width: '32px', height: '32px', display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 0 }}>
                                         <MinusIcon style={{ width: '16px', height: '16px' }} strokeWidth={2.5} />
                                     </button>
-                                    <span style={{ fontWeight: 'bold', minWidth: '25px', textAlign: 'center', fontSize: '1.1rem' }}>{guests}</span>
-                                    <button onClick={() => setGuests(Math.min(10, guests + 1))} style={{ border: 'none', borderRadius: '6px', cursor: 'pointer', backgroundColor: '#e5e7eb', color: '#333', fontSize: '1.1rem', width: '32px', height: '32px', display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 0 }}>
+                                    <span className="text-gray-900 dark:text-white" style={{ fontWeight: 'bold', minWidth: '25px', textAlign: 'center', fontSize: '1.1rem' }}>{guests}</span>
+                                    <button onClick={() => setGuests(Math.min(10, guests + 1))} className="bg-gray-200 dark:bg-zinc-800 text-gray-800 dark:text-white" style={{ border: 'none', borderRadius: '6px', cursor: 'pointer', fontSize: '1.1rem', width: '32px', height: '32px', display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 0 }}>
                                         <PlusIcon style={{ width: '16px', height: '16px' }} strokeWidth={2.5} />
                                     </button>
                                 </div>
@@ -220,7 +219,7 @@ export default function ReservationSelection({
                             </div>
                         </div>
                     ) : (
-                        <div style={{ ...localStyles.payPanel, display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '180px', color: '#999', textAlign: 'center', flexDirection: 'column', ...cascade(2).style }} className={cascade(2).className}>
+                        <div style={{ ...localStyles.payPanel, display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '180px', textAlign: 'center', flexDirection: 'column', ...cascade(2).style }} className={`bg-white dark:bg-[#141414] border border-gray-200 dark:border-zinc-800 text-gray-400 dark:text-zinc-600 ${cascade(2).className}`}>
                             <CalendarDaysIcon style={{ width: '50px', height: '50px', marginBottom: '0.8rem', opacity: 0.3 }} />
                             <p style={{ margin: 0, fontSize: '0.9rem' }}>Selecciona un horario</p>
                         </div>

@@ -221,11 +221,11 @@ export default function Reservation() {
     // --- ESTILOS COMPARTIDOS ---
     const styles = {
         container: { maxWidth: '900px', margin: '0rem auto', padding: '1rem', fontFamily: 'system-ui, -apple-system, sans-serif' },
-        title: { fontSize: '2rem', fontWeight: 'bold', marginBottom: '1.5rem', color: THEME.textDark, textAlign: 'center' },
-        section: { padding: '1.5rem', backgroundColor: '#fff', borderRadius: '12px', border: '1px solid #e5e7eb', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)' },
-        sidebarSection: { padding: '1.5rem', backgroundColor: '#fff', borderRadius: '12px', border: '1px solid #e5e7eb', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)', height: 'fit-content' },
-        label: { display: 'block', marginBottom: '0.5rem', fontWeight: '600', color: '#333' },
-        input: { width: '100%', padding: '0.75rem', fontSize: '1rem', border: '2px solid #e0e0e0', borderRadius: '8px', outline: 'none', cursor: 'pointer' },
+        title: { fontSize: '2rem', fontWeight: 'bold', marginBottom: '1.5rem', textAlign: 'center' },
+        section: { padding: '1.5rem', borderRadius: '12px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)' },
+        sidebarSection: { padding: '1.5rem', borderRadius: '12px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)', height: 'fit-content' },
+        label: { display: 'block', marginBottom: '0.5rem', fontWeight: '600' },
+        input: { width: '100%', padding: '0.75rem', fontSize: '1rem', borderRadius: '8px', outline: 'none', cursor: 'pointer' },
         slotsGrid: {
             display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(80px, 1fr))', gap: '0.75rem', marginTop: '1rem',
             maxHeight: '280px', overflowY: 'auto', paddingRight: '0.5rem', paddingBottom: '0.5rem',
@@ -236,10 +236,8 @@ export default function Reservation() {
             return {
                 padding: '0.75rem', fontSize: '1rem', fontWeight: '600', borderRadius: '8px',
                 cursor: isDisabled ? 'not-allowed' : 'pointer',
-                backgroundColor: isDisabled ? '#e0e0e0' : isSelected ? theme.primary : '#fff',
-                color: isDisabled ? '#999' : isSelected ? '#fff' : '#333',
                 boxShadow: isSelected ? `0 4px 6px ${theme.primary}40` : '0 2px 4px rgba(0,0,0,0.1)',
-                transition: 'all 0.2s', opacity: isPast ? 0.6 : 1, border: isSelected ? 'none' : '1px solid #e5e7eb'
+                transition: 'all 0.2s', opacity: isPast ? 0.6 : 1, border: isSelected ? 'none' : undefined
             }
         },
         available: { fontSize: '0.75rem', fontWeight: 'normal', opacity: 0.9 },

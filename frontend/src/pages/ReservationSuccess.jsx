@@ -202,13 +202,43 @@ export default function ReservationSuccess({
         transform: scale(1.02);
       }
       .btn-small svg { width: 1.2rem; height: 1.2rem; }
+
+      /* --- DARK MODE --- */
+      html.dark .card {
+        background-color: #1c1c1c;
+        border-color: #27272a;
+      }
+      html.dark .card__content {
+        background-color: #1c1c1c;
+      }
+      html.dark .qr-title, html.dark .content-title {
+        color: #f3f4f6;
+      }
+      html.dark .qr-hint {
+        background: rgba(13, 148, 103, 0.2);
+        color: #10b981;
+      }
+      html.dark .content-header {
+        border-color: #3f3f46;
+      }
+      html.dark .info-item {
+        color: #d1d5db;
+      }
+      html.dark .status-badge {
+        background-color: rgba(22, 101, 52, 0.3);
+        color: #4ade80;
+      }
+      html.dark .btn-secondary {
+        background-color: #27272a;
+        color: #f3f4f6;
+      }
     `;
 
   return (
     <div style={styles.container}>
       <style>{animatedCardStyles}</style>
 
-      <h1 style={styles.title}>¡Reserva Confirmada!</h1>
+      <h1 className="text-gray-900 dark:text-white" style={styles.title}>¡Reserva Confirmada!</h1>
 
       <div className="card-container">
         <div className="card">
