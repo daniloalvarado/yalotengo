@@ -474,8 +474,12 @@ export default function AdminModels3D() {
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-100 dark:divide-zinc-800">
-                            {filteredPurchases.map((p, i) => (
-                                <tr key={i} onClick={() => setDetailItem(p)} {...cascade(9 + i, "hover:bg-emerald-50 dark:hover:bg-emerald-900/20 cursor-pointer transition-colors group")}>
+                            {filteredPurchases.map((p, i) => {
+                                const isSearching = searchTerm.trim() !== '';
+                                const baseClasses = "hover:bg-emerald-50 dark:hover:bg-emerald-900/20 cursor-pointer transition-colors group";
+                                const animProps = isSearching ? { className: baseClasses } : cascade(9 + i, baseClasses);
+                                return (
+                                <tr key={i} onClick={() => setDetailItem(p)} {...animProps}>
                                     <td className="px-4 py-3">
                                         <div className="font-medium text-gray-900 dark:text-white">{p.userName}</div>
                                         <div className="text-xs text-gray-500 dark:text-gray-300">{p.userEmail}</div>
@@ -505,7 +509,8 @@ export default function AdminModels3D() {
                                     </td>
                                     <td className="px-4 py-3 text-gray-500 dark:text-gray-300">{formatDateTime(p.createdAt)}</td>
                                 </tr>
-                            ))}
+                                );
+                            })}
                         </tbody>
                     </table>
                     {filteredPurchases.length === 0 && (

@@ -24,6 +24,11 @@
     @apply bg-brand-200;
   }
 
+  html.dark ::selection {
+    background-color: #0d9467;
+    color: #ffffff;
+  }
+
   /* SweetAlert2 Dark Mode Overrides */
   html.dark .swal2-popup {
     background: #1c1c1c !important;
