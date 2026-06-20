@@ -37,7 +37,7 @@ export default function ReservationSuccess({
         height: 500px;
         background-color: #fff;
         border-radius: 20px;
-        border: 1px solid #e5e7eb;
+        border: none;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -206,7 +206,7 @@ export default function ReservationSuccess({
       /* --- DARK MODE --- */
       html.dark .card {
         background-color: #1c1c1c;
-        border-color: #27272a;
+        border: none;
       }
       html.dark .card__content {
         background-color: #1c1c1c;

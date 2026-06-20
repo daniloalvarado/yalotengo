@@ -448,6 +448,10 @@ export default function ReservationConfirmation({
 
       .processing-card {
         background: white;
+        padding: 2rem;
+        border-radius: 1rem;
+        text-align: center;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
       }
       
       html.dark .summary-card {
@@ -494,14 +498,10 @@ export default function ReservationConfirmation({
       }
       html.dark .processing-card {
         background: #141414;
+        box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
       }
       html.dark .processing-card p {
         color: #ffffff;
-      }
-        padding: 2rem;
-        border-radius: 1rem;
-        text-align: center;
-        box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
       }
 
       .spinner {
