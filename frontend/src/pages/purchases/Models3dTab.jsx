@@ -7,11 +7,11 @@ import { cascade } from '../../utils/animations'
 
 export default function Models3dTab({ models3d = [], loading }) {
     if (loading) {
-        return <div className="text-sm opacity-60">Cargando...</div>
+        return <div className="text-sm opacity-60 dark:text-zinc-400">Cargando...</div>
     }
 
     if (!models3d || models3d.length === 0) {
-        return <div className="text-sm opacity-60">Aún no tienes compras de modelos 3D.</div>
+        return <div className="text-sm opacity-60 dark:text-zinc-400">Aún no tienes compras de modelos 3D.</div>
     }
 
     return (
@@ -51,15 +51,15 @@ export default function Models3dTab({ models3d = [], loading }) {
                                 )}
                             </div>
                             {model.mod_txt_desc && (
-                                <div className="text-sm text-gray-600 line-clamp-2">{model.mod_txt_desc}</div>
+                                <div className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2">{model.mod_txt_desc}</div>
                             )}
                             <div className="grid grid-cols-2 gap-2 text-sm mt-2">
-                                <div><span className="opacity-60">Precio:</span> {fmt(price)}</div>
-                                <div><span className="opacity-60">Fecha:</span> {purchaseDate}</div>
+                                <div><span className="opacity-60 dark:text-zinc-400">Precio:</span> {fmt(price)}</div>
+                                <div><span className="opacity-60 dark:text-zinc-400">Fecha:</span> {purchaseDate}</div>
                             </div>
 
                             {isPrinted ? (
-                                <div className="mt-3 bg-gray-50 p-2 rounded text-xs text-gray-500 text-center border border-gray-100">
+                                <div className="mt-3 bg-gray-50 dark:bg-[#141414] p-2 rounded text-xs text-gray-500 dark:text-zinc-400 text-center border border-gray-100 dark:border-zinc-800">
                                     📦 Contactaremos contigo para la entrega.
                                 </div>
                             ) : (

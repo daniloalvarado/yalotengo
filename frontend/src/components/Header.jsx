@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState, useCallback } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
-import { ShoppingCartIcon } from "@heroicons/react/24/outline";
+import { ShoppingCartIcon, ArchiveBoxIcon, ShoppingBagIcon } from "@heroicons/react/24/outline";
 import api, { setToken as setAuthToken } from "../api/client";
 import UserMenu from './UserMenu';
 import { uiState } from '../utils/uiState';
@@ -229,10 +229,11 @@ export default function Header() {
               {/* Mis Compras: Requires Auth. If not auth, goes to /auth */}
               <Link
                 to={isAuthed ? "/purchases" : "/auth"}
-                className={isPurchases ? `${linkBase} ${linkActive}` : `${linkBase} ${linkIdle}`}
+                className={`relative inline-flex items-center gap-2 rounded-xl border px-3 h-10 transition-all border-zinc-800 bg-zinc-900/60 text-zinc-100 hover:bg-zinc-900 ${isPurchases ? 'ring-1 ring-emerald-500' : ''}`}
                 onClick={(e) => handleSamePageClick(e, isAuthed ? '/purchases' : '/auth')}
               >
-                Mis compras
+                <ShoppingBagIcon className="h-5 w-5" />
+                <span className="hidden sm:inline">Mis compras</span>
               </Link>
             </>
           )}

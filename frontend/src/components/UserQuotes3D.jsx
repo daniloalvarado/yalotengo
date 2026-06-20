@@ -186,10 +186,10 @@ const UserQuotes3D = forwardRef((props, ref) => {
 
     if (quotes.length === 0) {
         return (
-            <div className="text-center py-16 bg-gray-50 rounded-2xl border border-dashed border-gray-200">
-                <DocumentMagnifyingGlassIcon className="w-16 h-16 mx-auto text-gray-300 mb-4" />
-                <h3 className="text-lg font-medium text-gray-700">No tienes cotizaciones activas</h3>
-                <p className="text-gray-500 text-sm mt-1">Solicita una cotización personalizada de tus propias imágenes</p>
+            <div className="text-center py-16 bg-gray-50 dark:bg-[#141414] rounded-2xl border border-dashed border-gray-200 dark:border-zinc-800">
+                <DocumentMagnifyingGlassIcon className="w-16 h-16 mx-auto text-gray-300 dark:text-zinc-600 mb-4" />
+                <h3 className="text-lg font-medium text-gray-700 dark:text-gray-300">No tienes cotizaciones activas</h3>
+                <p className="text-gray-500 dark:text-gray-500 text-sm mt-1">Solicita una cotización personalizada de tus propias imágenes</p>
             </div>
         )
     }
@@ -197,7 +197,7 @@ const UserQuotes3D = forwardRef((props, ref) => {
     return (
         <div className="space-y-4">
             {quotes.map(quote => (
-                <div key={quote.cot_int_id} className="bg-white rounded-2xl border border-gray-200 shadow-sm p-4 sm:p-6 hover:shadow-md transition-shadow">
+                <div key={quote.cot_int_id} className="bg-white dark:bg-[#1c1c1c] rounded-2xl border border-gray-200 dark:border-zinc-800 shadow-sm p-4 sm:p-6 hover:shadow-md transition-shadow">
                     <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
                         
                         {/* Status + Date + Info */}
@@ -213,18 +213,18 @@ const UserQuotes3D = forwardRef((props, ref) => {
                             {editingQuote?.cot_int_id === quote.cot_int_id ? (
                                 <div className="space-y-4">
                                     <label className="block">
-                                        <span className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1 block">Descripción</span>
+                                        <span className="text-xs font-bold text-gray-500 dark:text-zinc-400 uppercase tracking-wider mb-1 block">Descripción</span>
                                         <textarea 
                                             value={editDesc}
                                             onChange={e => setEditDesc(e.target.value)}
-                                            className="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-emerald-500 outline-none"
+                                            className="w-full px-3 py-2 border dark:border-zinc-700 dark:bg-[#141414] dark:text-white rounded-xl text-sm focus:ring-2 focus:ring-emerald-500 outline-none"
                                             rows="3"
                                         />
                                     </label>
 
                                     {/* Imágenes (Edición) */}
                                     <div>
-                                        <span className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 block">Imágenes Referenciales ({editRetainedImages.length + editNewImages.length}/5)</span>
+                                        <span className="text-xs font-bold text-gray-500 dark:text-zinc-400 uppercase tracking-wider mb-2 block">Imágenes Referenciales ({editRetainedImages.length + editNewImages.length}/5)</span>
                                         
                                         <div className="flex flex-wrap gap-2 mb-2">
                                             {/* Retained Images */}
@@ -257,10 +257,10 @@ const UserQuotes3D = forwardRef((props, ref) => {
                                         </div>
 
                                         {(editRetainedImages.length + editNewImages.length) < 5 && (
-                                            <div {...getRootProps()} className={`border-2 border-dashed rounded-xl p-4 text-center cursor-pointer transition-colors ${isDragActive ? 'border-emerald-500 bg-emerald-50' : 'border-gray-300 hover:border-emerald-400 hover:bg-gray-50'}`}>
+                                            <div {...getRootProps()} className={`border-2 border-dashed rounded-xl p-4 text-center cursor-pointer transition-colors ${isDragActive ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/30' : 'border-gray-300 dark:border-zinc-700 hover:border-emerald-400 hover:bg-gray-50 dark:hover:bg-[#141414]'}`}>
                                                 <input {...getInputProps()} />
-                                                <PhotoIcon className="w-6 h-6 mx-auto text-gray-400 mb-1" />
-                                                <p className="text-xs text-gray-500">Arrastra fotos aquí, o clic para buscar</p>
+                                                <PhotoIcon className="w-6 h-6 mx-auto text-gray-400 dark:text-zinc-500 mb-1" />
+                                                <p className="text-xs text-gray-500 dark:text-zinc-400">Arrastra fotos aquí, o clic para buscar</p>
                                             </div>
                                         )}
                                     </div>
@@ -268,27 +268,27 @@ const UserQuotes3D = forwardRef((props, ref) => {
                                     {/* Notificaciones */}
                                     <div className="flex gap-4 pt-2">
                                         <label className="flex items-center gap-2 cursor-pointer">
-                                            <input type="checkbox" checked={editNotifyWhatsapp} onChange={e => setEditNotifyWhatsapp(e.target.checked)} className="w-4 h-4 text-emerald-600 rounded border-gray-300 focus:ring-emerald-600" />
-                                            <span className="text-sm text-gray-700">Notificar por WhatsApp</span>
+                                            <input type="checkbox" checked={editNotifyWhatsapp} onChange={e => setEditNotifyWhatsapp(e.target.checked)} className="w-4 h-4 text-emerald-600 rounded border-gray-300 dark:border-zinc-700 dark:bg-[#141414] focus:ring-emerald-600" />
+                                            <span className="text-sm text-gray-700 dark:text-gray-300">Notificar por WhatsApp</span>
                                         </label>
                                         <label className="flex items-center gap-2 cursor-pointer">
-                                            <input type="checkbox" checked={editNotifyEmail} onChange={e => setEditNotifyEmail(e.target.checked)} className="w-4 h-4 text-emerald-600 rounded border-gray-300 focus:ring-emerald-600" />
-                                            <span className="text-sm text-gray-700">Notificar por Correo</span>
+                                            <input type="checkbox" checked={editNotifyEmail} onChange={e => setEditNotifyEmail(e.target.checked)} className="w-4 h-4 text-emerald-600 rounded border-gray-300 dark:border-zinc-700 dark:bg-[#141414] focus:ring-emerald-600" />
+                                            <span className="text-sm text-gray-700 dark:text-gray-300">Notificar por Correo</span>
                                         </label>
                                     </div>
 
-                                    <div className="flex gap-2 pt-2 border-t border-gray-100">
+                                    <div className="flex gap-2 pt-2 border-t border-gray-100 dark:border-zinc-800">
                                         <button onClick={() => saveEdit(quote.cot_int_id)} className="px-4 py-2 bg-emerald-600 text-white text-sm font-bold rounded-lg hover:bg-emerald-700 shadow-sm">Guardar Cambios</button>
-                                        <button onClick={cancelEdit} className="px-4 py-2 bg-gray-100 text-gray-700 text-sm font-bold rounded-lg hover:bg-gray-200">Cancelar</button>
+                                        <button onClick={cancelEdit} className="px-4 py-2 bg-gray-100 dark:bg-[#141414] text-gray-700 dark:text-gray-300 text-sm font-bold rounded-lg hover:bg-gray-200 dark:hover:bg-zinc-800">Cancelar</button>
                                     </div>
                                 </div>
                             ) : (
                                 <>
-                                    <p className="text-gray-800 text-sm whitespace-pre-wrap">
+                                    <p className="text-gray-800 dark:text-gray-300 text-sm whitespace-pre-wrap">
                                         {quote.cot_txt_description}
                                     </p>
                                     {/* Archivos Adjuntos y Notificaciones */}
-                                    <div className="flex flex-col sm:flex-row sm:items-center gap-4 mt-3 pt-3 border-t border-gray-100">
+                                    <div className="flex flex-col sm:flex-row sm:items-center gap-4 mt-3 pt-3 border-t border-gray-100 dark:border-zinc-800">
                                         {(() => {
                                             const images = parseImages(quote.cot_jso_images)
                                             if (images.length > 0) {
@@ -311,18 +311,18 @@ const UserQuotes3D = forwardRef((props, ref) => {
                                                     </div>
                                                 )
                                             }
-                                            return <div className="flex-1 text-xs text-gray-400 italic">Sin imágenes adjuntas</div>
+                                            return <div className="flex-1 text-xs text-gray-400 dark:text-zinc-600 italic">Sin imágenes adjuntas</div>
                                         })()}
 
                                         {/* Mostrar checks en vista de lectura */}
-                                        <div className="flex gap-4 sm:pl-4 sm:border-l border-gray-200">
+                                        <div className="flex gap-4 sm:pl-4 sm:border-l border-gray-200 dark:border-zinc-800">
                                             <div className="flex items-center gap-1.5">
-                                                <div className={`w-2 h-2 rounded-full ${quote.cot_bool_notify_whatsapp ? 'bg-emerald-500 shadow-sm shadow-emerald-200' : 'bg-gray-300'}`}></div>
-                                                <span className={`text-xs ${quote.cot_bool_notify_whatsapp ? 'text-gray-700 font-bold' : 'text-gray-400'}`}>WhatsApp</span>
+                                                <div className={`w-2 h-2 rounded-full ${quote.cot_bool_notify_whatsapp ? 'bg-emerald-500 shadow-sm shadow-emerald-200 dark:shadow-emerald-900/50' : 'bg-gray-300 dark:bg-zinc-700'}`}></div>
+                                                <span className={`text-xs ${quote.cot_bool_notify_whatsapp ? 'text-gray-700 dark:text-gray-300 font-bold' : 'text-gray-400 dark:text-zinc-600'}`}>WhatsApp</span>
                                             </div>
                                             <div className="flex items-center gap-1.5">
-                                                <div className={`w-2 h-2 rounded-full ${quote.cot_bool_notify_email ? 'bg-emerald-500 shadow-sm shadow-emerald-200' : 'bg-gray-300'}`}></div>
-                                                <span className={`text-xs ${quote.cot_bool_notify_email ? 'text-gray-700 font-bold' : 'text-gray-400'}`}>Correo</span>
+                                                <div className={`w-2 h-2 rounded-full ${quote.cot_bool_notify_email ? 'bg-emerald-500 shadow-sm shadow-emerald-200 dark:shadow-emerald-900/50' : 'bg-gray-300 dark:bg-zinc-700'}`}></div>
+                                                <span className={`text-xs ${quote.cot_bool_notify_email ? 'text-gray-700 dark:text-gray-300 font-bold' : 'text-gray-400 dark:text-zinc-600'}`}>Correo</span>
                                             </div>
                                         </div>
                                     </div>
@@ -331,9 +331,9 @@ const UserQuotes3D = forwardRef((props, ref) => {
 
                             {/* Respuesta del Admin! */}
                             {quote.cot_txt_admin_response && (
-                                <div className="mt-4 p-4 bg-emerald-50 border border-emerald-100 rounded-xl relative">
-                                    <h4 className="text-xs font-bold text-emerald-800 uppercase tracking-wider mb-2">Respuesta de Soporte</h4>
-                                    <p className="text-sm text-emerald-900 whitespace-pre-wrap">{quote.cot_txt_admin_response}</p>
+                                <div className="mt-4 p-4 bg-emerald-50 dark:bg-[#00D1AE]/10 border border-emerald-100 dark:border-[#00D1AE]/30 rounded-xl relative">
+                                    <h4 className="text-xs font-bold text-emerald-800 dark:text-[#5eead4] uppercase tracking-wider mb-2">Respuesta de Soporte</h4>
+                                    <p className="text-sm text-emerald-900 dark:text-[#a7f3d0] whitespace-pre-wrap">{quote.cot_txt_admin_response}</p>
                                 </div>
                             )}
                         </div>
@@ -343,14 +343,14 @@ const UserQuotes3D = forwardRef((props, ref) => {
                             <div className="flex items-center gap-2">
                                 <button
                                     onClick={() => startEdit(quote)}
-                                    className="p-2 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors border border-transparent hover:border-blue-100"
+                                    className="p-2 text-gray-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-lg transition-colors border border-transparent hover:border-blue-100 dark:hover:border-blue-800"
                                     title="Editar"
                                 >
                                     <PencilSquareIcon className="w-5 h-5" />
                                 </button>
                                 <button
                                     onClick={() => deleteQuote(quote.cot_int_id)}
-                                    className="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors border border-transparent hover:border-red-100"
+                                    className="p-2 text-gray-500 dark:text-zinc-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors border border-transparent hover:border-red-100 dark:hover:border-red-800"
                                     title="Eliminar"
                                 >
                                     <TrashIcon className="w-5 h-5" />

@@ -18,7 +18,7 @@ function StatusTimeline({ status, estimate }) {
     return (
         <div className="flex items-start justify-between w-full mt-6 relative px-2">
             {/* Connecting Line */}
-            <div className="absolute top-3 left-0 w-full h-0.5 bg-gray-200 -z-10"></div>
+            <div className="absolute top-3 left-0 w-full h-0.5 bg-gray-200 dark:bg-zinc-700 -z-10"></div>
             <div
                 className="absolute top-3 left-0 h-0.5 bg-emerald-500 -z-10 transition-all duration-500"
                 style={{ width: `${(currentIndex / (STEPS.length - 1)) * 100}%` }}
@@ -37,23 +37,23 @@ function StatusTimeline({ status, estimate }) {
                 return (
                     <div key={step.id} className="flex flex-col items-center relative group w-1/3">
                         <div
-                            className={`w-6 h-6 rounded-full flex items-center justify-center border-2 bg-white transition-colors
-                                ${completed ? 'border-emerald-500 bg-emerald-500 text-white' : 'border-gray-300'}
+                            className={`w-6 h-6 rounded-full flex items-center justify-center border-2 bg-white dark:bg-[#1c1c1c] transition-colors
+                                ${completed ? 'border-emerald-500 bg-emerald-500 text-white dark:bg-emerald-500 dark:border-emerald-500' : 'border-gray-300 dark:border-zinc-600'}
                             `}
                         >
                             {completed && (
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                                 </svg>
                             )}
                         </div>
-                        <span className={`text-xs mt-2 font-medium ${current ? 'text-emerald-700' : 'text-gray-500'}`}>
+                        <span className={`text-xs mt-2 font-medium ${current ? 'text-emerald-700 dark:text-emerald-500' : 'text-gray-500 dark:text-zinc-500'}`}>
                             {step.label}
                         </span>
 
                         {/* Description with more spacing */}
                         {current && (
-                            <span className="text-[10px] text-gray-500 font-medium absolute top-12 w-32 text-center bg-white/80 px-1 rounded">
+                            <span className="text-[10px] text-gray-500 dark:text-zinc-400 font-medium absolute top-12 w-32 text-center bg-white/80 dark:bg-[#1c1c1c]/80 px-1 rounded">
                                 {displayDesc}
                             </span>
                         )}
@@ -67,11 +67,11 @@ function StatusTimeline({ status, estimate }) {
 export default function PrintedModelsTab({ printedModels = [], loading }) {
     const API_BASE = (api.defaults.baseURL || 'http://localhost:3000').replace(/\/api\/?$/, '')
     if (loading) {
-        return <div className="text-sm opacity-60">Cargando...</div>
+        return <div className="text-sm opacity-60 dark:text-zinc-400">Cargando...</div>
     }
 
     if (!printedModels || printedModels.length === 0) {
-        return <div className="text-sm opacity-60">Aún no tienes pedidos de impresiones 3D.</div>
+        return <div className="text-sm opacity-60 dark:text-zinc-400">Aún no tienes pedidos de impresiones 3D.</div>
     }
 
     return (
@@ -91,12 +91,12 @@ export default function PrintedModelsTab({ printedModels = [], loading }) {
                         <Card>
                             <div className="flex flex-col gap-2 pb-6"> {/* Increased padding bottom for timeline text */}
                             <div className="flex items-center justify-between">
-                                <div className="text-sm opacity-70">Pedido #{purchase.pur_int_id}</div>
+                                <div className="text-sm opacity-70 dark:text-zinc-400">Pedido #{purchase.pur_int_id}</div>
                                 <Tag tone="emerald">Pagado</Tag>
                             </div>
 
                             <div className="flex items-center gap-2">
-                                <div className="w-12 h-12 rounded bg-gray-100 overflow-hidden shrink-0">
+                                <div className="w-12 h-12 rounded bg-gray-100 dark:bg-zinc-800 overflow-hidden shrink-0">
                                     <img
                                         src={`${API_BASE}/uploads/impresos/${model.mod_txt_glb_filename}`}
                                         alt={name}
@@ -105,13 +105,13 @@ export default function PrintedModelsTab({ printedModels = [], loading }) {
                                     />
                                 </div>
                                 <div>
-                                    <div className="font-medium truncate">{name}</div>
-                                    <div className="text-xs text-gray-500">{fmt(price)} • {purchaseDate}</div>
+                                    <div className="font-medium truncate dark:text-white">{name}</div>
+                                    <div className="text-xs text-gray-500 dark:text-gray-400">{fmt(price)} • {purchaseDate}</div>
                                 </div>
                             </div>
 
-                            <div className="mt-2 pt-2 border-t border-gray-50">
-                                <span className="text-xs text-gray-400 uppercase tracking-widest font-semibold">Estado del Pedido</span>
+                            <div className="mt-2 pt-2 border-t border-gray-50 dark:border-zinc-800">
+                                <span className="text-xs text-gray-400 dark:text-zinc-500 uppercase tracking-widest font-semibold">Estado del Pedido</span>
                                 <StatusTimeline status={status} estimate={estimate} />
                             </div>
                         </div>

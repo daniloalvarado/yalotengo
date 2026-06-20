@@ -1,13 +1,24 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ArrowRightOnRectangleIcon, TicketIcon, UserCircleIcon } from '@heroicons/react/24/outline'
+import { ArrowRightOnRectangleIcon, TicketIcon, UserCircleIcon, SunIcon, MoonIcon } from '@heroicons/react/24/outline'
 import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
 import api from '../api/client'
 
 export default function UserMenu({ user, onLogout }) {
   const [isOpen, setIsOpen] = useState(false)
+  const [isDark, setIsDark] = useState(() => localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches))
   const navigate = useNavigate()
   const menuRef = useRef(null)
+
+  useEffect(() => {
+    if (isDark) {
+      document.documentElement.classList.add('dark')
+      localStorage.setItem('theme', 'dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+      localStorage.setItem('theme', 'light')
+    }
+  }, [isDark])
 
   // Detectar clic fuera para cerrar menú
   useEffect(() => {
@@ -117,8 +128,28 @@ export default function UserMenu({ user, onLogout }) {
             )}
           </div>
 
+          {/* Botón Modo Oscuro / Claro */}
+          <div className="py-1 border-t border-zinc-700">
+            <button
+              onClick={() => { setIsDark(!isDark); setIsOpen(false); }}
+              className="group flex w-full items-center px-4 py-2 text-sm text-zinc-300 hover:bg-zinc-800 hover:text-white"
+            >
+              {isDark ? (
+                <>
+                  <SunIcon className="mr-3 h-5 w-5 text-amber-400 group-hover:text-amber-300" aria-hidden="true" />
+                  Modo Claro
+                </>
+              ) : (
+                <>
+                  <MoonIcon className="mr-3 h-5 w-5 text-indigo-400 group-hover:text-indigo-300" aria-hidden="true" />
+                  Modo Oscuro
+                </>
+              )}
+            </button>
+          </div>
+
           {/* Botón Salir */}
-          <div className="py-1">
+          <div className="py-1 border-t border-zinc-700">
             <button
               onClick={() => { setIsOpen(false); onLogout(); }}
               className="group flex w-full items-center px-4 py-2 text-sm text-red-400 hover:bg-red-900/20 hover:text-red-300"

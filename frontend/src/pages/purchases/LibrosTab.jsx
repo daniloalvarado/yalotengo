@@ -9,7 +9,7 @@ export default function LibrosTab({ books, loading }) {
     return (
         <>
             {!loading && books.length === 0 && (
-                <div className="text-sm opacity-60">Aún no tienes compras de libros.</div>
+                <div className="text-sm opacity-60 dark:text-zinc-400">Aún no tienes compras de libros.</div>
             )}
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {books.map((purchase, index) => {
@@ -33,16 +33,16 @@ export default function LibrosTab({ books, loading }) {
                             <Card>
                                 <div className="flex flex-col gap-2">
                                     <div className="flex items-center justify-between">
-                                        <div className="text-sm opacity-70">Compra #{purchase.bpu_int_id}</div>
+                                        <div className="text-sm opacity-70 dark:text-zinc-400">Compra #{purchase.bpu_int_id}</div>
                                         <Tag tone="emerald">Pagado</Tag>
                                     </div>
-                                    <div className="font-medium truncate">{title}</div>
+                                    <div className="font-medium truncate dark:text-white">{title}</div>
                                     {author && (
-                                        <div className="text-sm text-gray-500">{author}</div>
+                                        <div className="text-sm text-gray-500 dark:text-gray-400">{author}</div>
                                     )}
                                     <div className="grid grid-cols-2 gap-2 text-sm">
-                                        <div><span className="opacity-60">Precio:</span> {fmt(price)}</div>
-                                        <div><span className="opacity-60">Fecha:</span> {purchaseDate}</div>
+                                        <div><span className="opacity-60 dark:text-zinc-400">Precio:</span> {fmt(price)}</div>
+                                        <div><span className="opacity-60 dark:text-zinc-400">Fecha:</span> {purchaseDate}</div>
                                     </div>
                                     <DownloadButton
                                         className="mt-3 w-full"

@@ -106,19 +106,19 @@ function FAQItem({ faq, index = 0 }) {
     const Icon = faq.icon
 
     return (
-        <div {...cascade(index, "border border-gray-200 rounded-xl overflow-hidden")}>
+        <div {...cascade(index, "border border-gray-200 dark:border-zinc-800 rounded-xl overflow-hidden")}>
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="w-full flex items-center gap-3 p-4 text-left hover:bg-gray-50 transition-colors"
+                className="w-full flex items-center gap-3 p-4 text-left hover:bg-gray-50 dark:hover:bg-[#141414] transition-colors"
             >
                 <div className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0" style={{ backgroundColor: `${THEME.primary}15` }}>
                     <Icon className="w-5 h-5" style={{ color: THEME.primary }} />
                 </div>
-                <span className="flex-1 font-medium text-gray-900">{faq.question}</span>
-                <ChevronDownIcon className={`w-5 h-5 text-gray-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+                <span className="flex-1 font-medium text-gray-900 dark:text-white">{faq.question}</span>
+                <ChevronDownIcon className={`w-5 h-5 text-gray-400 dark:text-zinc-500 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
             </button>
             {isOpen && (
-                <div className="px-4 pb-4 pl-[68px] text-gray-600 text-sm leading-relaxed">
+                <div className="px-4 pb-4 pl-[68px] text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
                     {faq.answer}
                 </div>
             )}
@@ -195,15 +195,15 @@ export default function Help() {
                 <div {...cascade(1, "w-16 h-16 rounded-2xl mx-auto flex items-center justify-center")} style={{ backgroundColor: `${THEME.primary}15` }}>
                     <QuestionMarkCircleIcon className="w-8 h-8" style={{ color: THEME.primary }} />
                 </div>
-                <h1 {...cascade(2, "text-2xl font-bold text-gray-900")}>Centro de Ayuda</h1>
-                <p {...cascade(3, "text-gray-500")}>
+                <h1 {...cascade(2, "text-2xl font-bold text-gray-900 dark:text-white")}>Centro de Ayuda</h1>
+                <p {...cascade(3, "text-gray-500 dark:text-gray-400")}>
                     {isAdmin ? 'Guía para administrar la plataforma' : 'Encuentra respuestas a las preguntas más frecuentes'}
                 </p>
             </div>
 
             {/* FAQs */}
             <div className="space-y-3">
-                <h2 {...cascade(4, "text-lg font-semibold text-gray-900 flex items-center gap-2")}>
+                <h2 {...cascade(4, "text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2")}>
                     <ChatBubbleLeftRightIcon className="w-5 h-5" style={{ color: THEME.primary }} />
                     Preguntas Frecuentes
                 </h2>
@@ -215,28 +215,28 @@ export default function Help() {
             </div>
 
             {/* Contact Section */}
-            <div {...cascade(3)} className="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl p-6 space-y-4">
-                <h2 className="text-lg font-semibold text-gray-900">¿Necesitas más ayuda?</h2>
-                <p className="text-gray-600 text-sm">
+            <div {...cascade(3)} className="bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-900/10 dark:to-teal-900/10 rounded-2xl p-6 space-y-4">
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-white">¿Necesitas más ayuda?</h2>
+                <p className="text-gray-600 dark:text-gray-400 text-sm">
                     Si no encontraste la respuesta que buscabas, contáctanos directamente. Estamos aquí para ayudarte.
                 </p>
 
                 {isAdmin && (
                     <div className="space-y-2 mt-4">
                         <div className="flex flex-col sm:flex-row gap-3 pt-2">
-                            <div className="flex-1 flex items-center border-b border-gray-300 focus-within:border-green-500 pb-1">
-                                <PhoneIcon className="w-4 h-4 text-gray-400 mr-2" />
+                            <div className="flex-1 flex items-center border-b border-gray-300 dark:border-zinc-700 focus-within:border-green-500 dark:focus-within:border-green-500 pb-1">
+                                <PhoneIcon className="w-4 h-4 text-gray-400 dark:text-zinc-500 mr-2" />
                                 <input
-                                    className="text-gray-900 bg-transparent outline-none w-full text-sm"
+                                    className="text-gray-900 dark:text-white bg-transparent outline-none w-full text-sm placeholder-gray-400 dark:placeholder-zinc-500"
                                     value={config.HELP_CONTACT_WHATSAPP}
                                     onChange={(e) => setConfig({ ...config, HELP_CONTACT_WHATSAPP: e.target.value })}
                                     placeholder="WhatsApp (ej. +51...)"
                                 />
                             </div>
-                            <div className="flex-1 flex items-center border-b border-gray-300 focus-within:border-green-500 pb-1">
-                                <EnvelopeIcon className="w-4 h-4 text-gray-400 mr-2" />
+                            <div className="flex-1 flex items-center border-b border-gray-300 dark:border-zinc-700 focus-within:border-green-500 dark:focus-within:border-green-500 pb-1">
+                                <EnvelopeIcon className="w-4 h-4 text-gray-400 dark:text-zinc-500 mr-2" />
                                 <input
-                                    className="text-gray-900 bg-transparent outline-none w-full text-sm"
+                                    className="text-gray-900 dark:text-white bg-transparent outline-none w-full text-sm placeholder-gray-400 dark:placeholder-zinc-500"
                                     value={config.HELP_CONTACT_EMAIL}
                                     onChange={(e) => setConfig({ ...config, HELP_CONTACT_EMAIL: e.target.value })}
                                     placeholder="Correo Electrónico"
@@ -265,14 +265,14 @@ export default function Help() {
                     </button>
                     <a
                         href={`mailto:${config.HELP_CONTACT_EMAIL}`}
-                        className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-white hover:bg-gray-50 text-gray-700 rounded-xl font-medium border border-gray-200 transition-colors"
+                        className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-white dark:bg-[#1c1c1c] hover:bg-gray-50 dark:hover:bg-[#141414] text-gray-700 dark:text-gray-300 rounded-xl font-medium border border-gray-200 dark:border-zinc-800 transition-colors"
                     >
                         <EnvelopeIcon className="w-5 h-5" />
                         Email
                     </a>
                 </div>
 
-                <div className="pt-2 text-sm text-gray-500 space-y-1">
+                <div className="pt-2 text-sm text-gray-500 dark:text-gray-400 space-y-1">
                     <p className="flex items-center gap-2">
                         <PhoneIcon className="w-4 h-4" />
                         {config.HELP_CONTACT_WHATSAPP}
@@ -284,15 +284,15 @@ export default function Help() {
                 </div>
 
                 {!isAdmin && (
-                    <div className="pt-4 mt-2 border-t border-teal-100/60 text-center text-sm text-gray-500">
-                        Desarrollado por <a href="https://daniloalvarado.com" target="_blank" rel="noopener noreferrer" className="text-teal-600 hover:text-teal-700 font-medium transition-colors">daniloalvarado.com</a>
+                    <div className="pt-4 mt-2 border-t border-teal-100/60 dark:border-teal-900/30 text-center text-sm text-gray-500 dark:text-gray-400">
+                        Desarrollado por <a href="https://daniloalvarado.com" target="_blank" rel="noopener noreferrer" className="text-teal-600 dark:text-teal-500 hover:text-teal-700 dark:hover:text-teal-400 font-medium transition-colors">daniloalvarado.com</a>
                     </div>
                 )}
             </div>
 
             {/* Back link */}
             <div {...cascade(4)} className="text-center">
-                <Link to="/" className="text-sm text-gray-500 hover:text-gray-700">
+                <Link to="/" className="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200">
                     ← Volver al inicio
                 </Link>
             </div>

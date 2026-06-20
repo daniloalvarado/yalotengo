@@ -263,15 +263,15 @@ export default function Cart() {
   const totalItems = reservations.length + totalProducts;
 
   if (loadingGlobal) {
-    return <div className="p-8 text-center text-gray-400 animate-pulse">Cargando carrito...</div>;
+    return <div className="p-8 text-center text-gray-400 dark:text-zinc-500 animate-pulse">Cargando carrito...</div>;
   }
 
   return (
     <div className="max-w-4xl mx-auto">
       {/* Header del Carrito */}
       <div className="text-left mb-10">
-        <h2 className="text-4xl font-extrabold text-gray-900 tracking-tight mb-3 mt-4 md:mt-10">Tu Carrito</h2>
-        <p className="text-gray-600">
+        <h2 className="text-4xl font-extrabold text-gray-900 dark:text-white tracking-tight mb-3 mt-4 md:mt-10">Tu Carrito</h2>
+        <p className="text-gray-600 dark:text-gray-400">
           Tienes {totalItems} {totalItems === 1 ? 'item' : 'items'} en tu carrito
         </p>
       </div>
@@ -279,7 +279,7 @@ export default function Cart() {
 
       {
         errorMsg && (
-          <div className="mb-4 p-4 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm">
+          <div className="mb-4 p-4 rounded-lg bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 text-sm">
             {errorMsg}
           </div>
         )
@@ -288,12 +288,12 @@ export default function Cart() {
       {
         totalItems === 0 ? (
           // Estado Vacío
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-12 text-center flex flex-col items-center">
-            <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mb-4 text-gray-300">
+          <div className="bg-white dark:bg-[#1c1c1c] rounded-2xl shadow-sm border border-gray-100 dark:border-zinc-800 p-12 text-center flex flex-col items-center">
+            <div className="w-16 h-16 bg-gray-50 dark:bg-[#141414] rounded-full flex items-center justify-center mb-4 text-gray-300 dark:text-zinc-600">
               <TicketIcon className="w-8 h-8" />
             </div>
-            <h3 className="text-lg font-medium text-gray-900 mb-1">Tu carrito está vacío</h3>
-            <p className="text-gray-500 text-sm mb-6">No tienes productos ni reservas pendientes de pago.</p>
+            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-1">Tu carrito está vacío</h3>
+            <p className="text-gray-500 dark:text-gray-400 text-sm mb-6">No tienes productos ni reservas pendientes de pago.</p>
           </div>
         ) : (
           <div className="space-y-8">
@@ -304,7 +304,7 @@ export default function Cart() {
               return (
                 <div
                   key={r.id}
-                  className="group bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden"
+                  className="group bg-white dark:bg-[#1c1c1c] rounded-2xl border border-gray-100 dark:border-zinc-800 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden"
                 >
                   <div className="p-5 flex flex-col md:flex-row md:items-center gap-5">
 
@@ -312,7 +312,7 @@ export default function Cart() {
                     <div className="flex-1 space-y-3">
                       <div className="flex items-start justify-between md:justify-start gap-3">
                         <div className="flex items-center gap-2">
-                          <span className="bg-indigo-50 text-indigo-700 text-xs font-bold px-2 py-1 rounded uppercase tracking-wide">
+                          <span className="bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400 text-xs font-bold px-2 py-1 rounded uppercase tracking-wide">
                             Reserva #{r.id}
                           </span>
                           <CountdownTimer
@@ -322,37 +322,37 @@ export default function Cart() {
                         </div>
                       </div>
 
-                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-y-2 gap-x-4 text-sm text-gray-600">
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-y-2 gap-x-4 text-sm text-gray-600 dark:text-gray-400">
                         <div className="flex items-center gap-1.5">
-                          <CalendarDaysIcon className="w-4 h-4 text-gray-400" />
+                          <CalendarDaysIcon className="w-4 h-4 text-gray-400 dark:text-zinc-500" />
                           <span className="capitalize">{formatDate(r.date)}</span>
                         </div>
                         <div className="flex items-center gap-1.5">
-                          <ClockIcon className="w-4 h-4 text-gray-400" />
+                          <ClockIcon className="w-4 h-4 text-gray-400 dark:text-zinc-500" />
                           <span>{formatTimeAMPM(r.timeslot)}</span>
                         </div>
                         <div className="flex items-center gap-1.5">
-                          <UserGroupIcon className="w-4 h-4 text-gray-400" />
+                          <UserGroupIcon className="w-4 h-4 text-gray-400 dark:text-zinc-500" />
                           <span>{r.guests} {r.guests === 1 ? 'persona' : 'personas'}</span>
                         </div>
                       </div>
                     </div>
 
                     {/* Separador móvil */}
-                    <div className="h-px bg-gray-100 w-full md:hidden"></div>
+                    <div className="h-px bg-gray-100 dark:bg-zinc-800 w-full md:hidden"></div>
 
                     {/* Columna Derecha: Precio y Acciones */}
                     <div className="flex items-center justify-between md:justify-end gap-6 md:w-auto">
 
                       {/* Precio: EN SOLES */}
                       <div className="text-right">
-                        <p className="text-xs text-gray-400 mb-0.5">Total a pagar</p>
+                        <p className="text-xs text-gray-400 dark:text-zinc-500 mb-0.5">Total a pagar</p>
 
-                        <div className="text-xl font-bold text-gray-900 leading-none">
+                        <div className="text-xl font-bold text-gray-900 dark:text-white leading-none">
                           {PEN.format(finalPrice)}
                         </div>
 
-                        <p className="text-[10px] font-medium mt-1 text-gray-500 flex items-center justify-end gap-1">
+                        <p className="text-[10px] font-medium mt-1 text-gray-500 dark:text-zinc-500 flex items-center justify-end gap-1">
                           <CreditCardIcon className="w-3 h-3" /> PEN
                         </p>
                       </div>
@@ -381,9 +381,9 @@ export default function Cart() {
 
             {/* === SECCIÓN DE PRODUCTOS DIGITALES === */}
             {totalProducts > 0 && (
-              <div className="mt-12 pt-8 border-t border-gray-100">
-                <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-                  <CubeIcon className="w-6 h-6 text-emerald-600" />
+              <div className="mt-12 pt-8 border-t border-gray-100 dark:border-zinc-800">
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
+                  <CubeIcon className="w-6 h-6 text-emerald-600 dark:text-emerald-500" />
                   Productos Digitales ({totalProducts})
                 </h3>
 
@@ -395,42 +395,42 @@ export default function Cart() {
                     {models.map((item) => {
                       const isPrinted = item.model?.mod_txt_category === 'IMPRESO';
                       return (
-                        <div key={`model-${item.pur_int_id}`} className="bg-white rounded-xl border border-gray-100 p-4 flex items-center justify-between gap-4 relative z-0 hover:z-10 transition-all">
+                        <div key={`model-${item.pur_int_id}`} className="bg-white dark:bg-[#1c1c1c] rounded-xl border border-gray-100 dark:border-zinc-800 p-4 flex items-center justify-between gap-4 relative z-0 hover:z-10 transition-all">
                           <div className="flex items-center gap-4">
-                            <div className="w-12 h-12 bg-emerald-50 rounded-lg flex items-center justify-center flex-shrink-0">
-                              <CubeIcon className="w-6 h-6 text-emerald-600" />
+                            <div className="w-12 h-12 bg-emerald-50 dark:bg-emerald-900/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                              <CubeIcon className="w-6 h-6 text-emerald-600 dark:text-emerald-500" />
                             </div>
                             <div>
-                              <p className="font-medium text-gray-900">{item.model?.mod_txt_name || 'Modelo 3D'}</p>
-                              <p className="text-xs text-gray-500">{isPrinted ? 'Impresión 3D' : 'Modelo 3D Digital'}</p>
+                              <p className="font-medium text-gray-900 dark:text-white">{item.model?.mod_txt_name || 'Modelo 3D'}</p>
+                              <p className="text-xs text-gray-500 dark:text-gray-400">{isPrinted ? 'Impresión 3D' : 'Modelo 3D Digital'}</p>
                             </div>
                           </div>
                           <div className="flex items-center gap-4">
                             {isPrinted && (
-                              <div className="flex items-center border border-gray-200 rounded-lg">
+                              <div className="flex items-center border border-gray-200 dark:border-zinc-700 rounded-lg">
                                 <button
                                   onClick={() => handleUpdateQuantity('model', item.pur_int_id, item.pur_int_quantity || 1, -1)}
                                   disabled={loadingIds[`model-${item.pur_int_id}`] || (item.pur_int_quantity || 1) <= 1}
-                                  className="px-2 py-1 text-gray-500 hover:bg-gray-100 disabled:opacity-50"
+                                  className="px-2 py-1 text-gray-500 dark:text-zinc-400 hover:bg-gray-100 dark:hover:bg-zinc-800 disabled:opacity-50"
                                 >-</button>
-                                <span className="px-2 text-sm font-medium text-gray-700 min-w-[20px] text-center">
+                                <span className="px-2 text-sm font-medium text-gray-700 dark:text-white min-w-[20px] text-center">
                                   {item.pur_int_quantity || 1}
                                 </span>
                                 <button
                                   onClick={() => handleUpdateQuantity('model', item.pur_int_id, item.pur_int_quantity || 1, 1)}
                                   disabled={loadingIds[`model-${item.pur_int_id}`]}
-                                  className="px-2 py-1 text-gray-500 hover:bg-gray-100 disabled:opacity-50"
+                                  className="px-2 py-1 text-gray-500 dark:text-zinc-400 hover:bg-gray-100 dark:hover:bg-zinc-800 disabled:opacity-50"
                                 >+</button>
                               </div>
                             )}
-                            <span className="font-bold text-gray-900">
+                            <span className="font-bold text-gray-900 dark:text-white">
                               {PEN.format(Number(item.pur_dec_amount) * (isPrinted ? (item.pur_int_quantity || 1) : 1))}
                             </span>
                             <Tooltip text="Eliminar" position="top">
                               <button
                                 onClick={() => handleRemoveProduct('model', item.pur_int_id)}
                                 disabled={loadingIds[`model-${item.pur_int_id}`]}
-                                className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50"
+                                className="p-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors disabled:opacity-50"
                               >
                                 <TrashIcon className="w-5 h-5" />
                               </button>
@@ -442,23 +442,23 @@ export default function Cart() {
 
                     {/* Libros */}
                     {books.map((item) => (
-                      <div key={`book-${item.bpu_int_id}`} className="bg-white rounded-xl border border-gray-100 p-4 flex items-center justify-between gap-4 relative z-0 hover:z-10 transition-all">
+                      <div key={`book-${item.bpu_int_id}`} className="bg-white dark:bg-[#1c1c1c] rounded-xl border border-gray-100 dark:border-zinc-800 p-4 flex items-center justify-between gap-4 relative z-0 hover:z-10 transition-all">
                         <div className="flex items-center gap-4">
-                          <div className="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center flex-shrink-0">
-                            <BookOpenIcon className="w-6 h-6 text-blue-600" />
+                          <div className="w-12 h-12 bg-blue-50 dark:bg-blue-900/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <BookOpenIcon className="w-6 h-6 text-blue-600 dark:text-blue-500" />
                           </div>
                           <div>
-                            <p className="font-medium text-gray-900">{item.book?.boo_txt_title || 'Libro'}</p>
-                            <p className="text-xs text-gray-500">Libro Digital</p>
+                            <p className="font-medium text-gray-900 dark:text-white">{item.book?.boo_txt_title || 'Libro'}</p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">Libro Digital</p>
                           </div>
                         </div>
                         <div className="flex items-center gap-4">
-                          <span className="font-bold text-gray-900">{PEN.format(item.bpu_dec_amount)}</span>
+                          <span className="font-bold text-gray-900 dark:text-white">{PEN.format(item.bpu_dec_amount)}</span>
                           <Tooltip text="Eliminar" position="top">
                             <button
                               onClick={() => handleRemoveProduct('book', item.bpu_int_id)}
                               disabled={loadingIds[`book-${item.bpu_int_id}`]}
-                              className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50"
+                              className="p-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors disabled:opacity-50"
                             >
                               <TrashIcon className="w-5 h-5" />
                             </button>
@@ -469,40 +469,40 @@ export default function Cart() {
 
                     {/* Cursos */}
                     {courses.map((item) => (
-                      <div key={`course-${item.cpu_int_id}`} className="bg-white rounded-xl border border-gray-100 p-4 flex items-center justify-between gap-4 relative z-0 hover:z-10 transition-all">
+                      <div key={`course-${item.cpu_int_id}`} className="bg-white dark:bg-[#1c1c1c] rounded-xl border border-gray-100 dark:border-zinc-800 p-4 flex items-center justify-between gap-4 relative z-0 hover:z-10 transition-all">
                         <div className="flex items-center gap-4">
-                          <div className="w-12 h-12 bg-purple-50 rounded-lg flex items-center justify-center flex-shrink-0">
-                            <AcademicCapIcon className="w-6 h-6 text-purple-600" />
+                          <div className="w-12 h-12 bg-purple-50 dark:bg-purple-900/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <AcademicCapIcon className="w-6 h-6 text-purple-600 dark:text-purple-500" />
                           </div>
                           <div>
-                            <p className="font-medium text-gray-900">{item.course?.cou_txt_title || 'Curso'}</p>
-                            <p className="text-xs text-gray-500">Curso Online</p>
+                            <p className="font-medium text-gray-900 dark:text-white">{item.course?.cou_txt_title || 'Curso'}</p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">Curso Online</p>
                           </div>
                         </div>
                         <div className="flex items-center gap-4">
-                          <div className="flex items-center border border-gray-200 rounded-lg">
+                          <div className="flex items-center border border-gray-200 dark:border-zinc-700 rounded-lg">
                             <button
                               onClick={() => handleUpdateQuantity('course', item.cpu_int_id, item.cpu_int_quantity || 1, -1)}
                               disabled={loadingIds[`course-${item.cpu_int_id}`] || (item.cpu_int_quantity || 1) <= 1}
-                              className="px-2 py-1 text-gray-500 hover:bg-gray-100 disabled:opacity-50"
+                              className="px-2 py-1 text-gray-500 dark:text-zinc-400 hover:bg-gray-100 dark:hover:bg-zinc-800 disabled:opacity-50"
                             >-</button>
-                            <span className="px-2 text-sm font-medium text-gray-700 min-w-[20px] text-center">
+                            <span className="px-2 text-sm font-medium text-gray-700 dark:text-white min-w-[20px] text-center">
                               {item.cpu_int_quantity || 1}
                             </span>
                             <button
                               onClick={() => handleUpdateQuantity('course', item.cpu_int_id, item.cpu_int_quantity || 1, 1)}
                               disabled={loadingIds[`course-${item.cpu_int_id}`]}
-                              className="px-2 py-1 text-gray-500 hover:bg-gray-100 disabled:opacity-50"
+                              className="px-2 py-1 text-gray-500 dark:text-zinc-400 hover:bg-gray-100 dark:hover:bg-zinc-800 disabled:opacity-50"
                             >+</button>
                           </div>
-                          <span className="font-bold text-gray-900">
+                          <span className="font-bold text-gray-900 dark:text-white">
                             {PEN.format(Number(item.cpu_dec_amount) * (item.cpu_int_quantity || 1))}
                           </span>
                           <Tooltip text="Eliminar" position="top">
                             <button
                               onClick={() => handleRemoveProduct('course', item.cpu_int_id)}
                               disabled={loadingIds[`course-${item.cpu_int_id}`]}
-                              className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50"
+                              className="p-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors disabled:opacity-50"
                             >
                               <TrashIcon className="w-5 h-5" />
                             </button>

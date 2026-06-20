@@ -9,7 +9,7 @@ function Label({ children, htmlFor, className = "" }) {
   return (
     <label
       htmlFor={htmlFor}
-      className={`block text-sm font-medium text-zinc-700 ${className}`}
+      className={`block text-sm font-medium text-zinc-700 dark:text-zinc-300 ${className}`}
     >
       {children}
     </label>
@@ -19,7 +19,7 @@ function Label({ children, htmlFor, className = "" }) {
 function Input({ className = "", ...props }) {
   return (
     <input
-      className={`w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-zinc-900 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent ${className}`}
+      className={`w-full rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-[#141414] px-3 py-2 text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-600 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent ${className}`}
       {...props}
     />
   );
@@ -30,7 +30,7 @@ function OAuthButton({ onClick, children, icon }) {
     <button
       onClick={onClick}
       type="button"
-      className="w-full inline-flex items-center justify-center gap-2 rounded-lg border border-zinc-300 bg-white py-2.5 text-zinc-700 hover:bg-zinc-50 focus:ring-2 focus:ring-emerald-400 transition"
+      className="w-full inline-flex items-center justify-center gap-2 rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-[#141414] py-2.5 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-900 focus:ring-2 focus:ring-emerald-400 transition"
     >
       {icon}
       <span className="text-sm font-medium">{children}</span>
@@ -127,40 +127,40 @@ export default function Auth() {
 
   if (hasToken) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-emerald-50 via-white to-emerald-100">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-emerald-50 via-white to-emerald-100 dark:from-[#141414] dark:via-[#1c1c1c] dark:to-[#141414]">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600 mx-auto mb-4"></div>
-          <h2 className="text-xl font-semibold text-gray-700">Iniciando sesión...</h2>
+          <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-300">Iniciando sesión...</h2>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-emerald-50 via-white to-emerald-100 p-6">
-      <div className="w-full max-w-4xl rounded-2xl border border-zinc-200 bg-white shadow-xl p-8">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-emerald-50 via-white to-emerald-100 dark:from-[#141414] dark:via-[#1c1c1c] dark:to-[#141414] p-6">
+      <div className="w-full max-w-4xl rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-[#1c1c1c] shadow-xl p-8">
         <div className="grid md:grid-cols-2 gap-10">
           <section className="hidden md:flex flex-col justify-center">
-            <h1 {...cascade(0, "text-3xl font-semibold text-zinc-900 leading-tight")}>
-              Bienvenido a <span className="text-emerald-600">Yalotengo</span>
+            <h1 {...cascade(0, "text-3xl font-semibold text-zinc-900 dark:text-white leading-tight")}>
+              Bienvenido a <span className="text-emerald-600 dark:text-emerald-500">Yalotengo</span>
             </h1>
-            <p {...cascade(1, "mt-4 text-zinc-600")}>
+            <p {...cascade(1, "mt-4 text-zinc-600 dark:text-zinc-400")}>
               Crea tu cuenta o inicia sesión para acceder a tu carrito, pedidos y ofertas personalizadas.
             </p>
           </section>
 
           <section>
-            <div {...cascade(2, "grid grid-cols-2 rounded-lg bg-zinc-100 p-1 mb-6")}>
+            <div {...cascade(2, "grid grid-cols-2 rounded-lg bg-zinc-100 dark:bg-zinc-900 p-1 mb-6")}>
               <button
                 onClick={() => setTab("login")}
-                className={`py-2 rounded-md text-sm font-medium transition ${tab === "login" ? "bg-white shadow text-zinc-900" : "text-zinc-500 hover:text-zinc-700"
+                className={`py-2 rounded-md text-sm font-medium transition ${tab === "login" ? "bg-white dark:bg-[#141414] shadow text-zinc-900 dark:text-white" : "text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300"
                   }`}
               >
                 Iniciar sesión
               </button>
               <button
                 onClick={() => setTab("register")}
-                className={`py-2 rounded-md text-sm font-medium transition ${tab === "register" ? "bg-white shadow text-zinc-900" : "text-zinc-500 hover:text-zinc-700"
+                className={`py-2 rounded-md text-sm font-medium transition ${tab === "register" ? "bg-white dark:bg-[#141414] shadow text-zinc-900 dark:text-white" : "text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300"
                   }`}
               >
                 Crear cuenta
@@ -196,12 +196,12 @@ export default function Auth() {
                     </button>
                   </div>
                 </div>
-                <button type="submit" {...cascade(5, "w-full rounded-lg bg-emerald-500 py-2.5 font-medium text-white hover:bg-emerald-400")}>
+                <button type="submit" {...cascade(5, "w-full rounded-lg bg-emerald-500 py-2.5 font-medium text-white hover:bg-emerald-400 dark:bg-emerald-600 dark:hover:bg-emerald-500")}>
                   Entrar
                 </button>
                 <div {...cascade(6, "relative py-2 text-center")}>
-                  <span className="px-3 text-xs text-zinc-500 bg-white relative z-10">o continúa con</span>
-                  <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-px bg-zinc-200" />
+                  <span className="px-3 text-xs text-zinc-500 bg-white dark:bg-[#1c1c1c] relative z-10">o continúa con</span>
+                  <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-px bg-zinc-200 dark:bg-zinc-800" />
                 </div>
                 <div {...cascade(7, "flex flex-col gap-3")}>
                   <OAuthButton onClick={() => loginWith("google")} icon={GoogleIcon}>Google</OAuthButton>

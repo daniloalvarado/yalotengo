@@ -160,14 +160,14 @@ export default function Profile() {
 
     return (
         <div className="max-w-4xl mx-auto p-6 space-y-8">
-            <h1 {...cascade(1, "text-3xl font-bold text-zinc-900")}>Mi Perfil</h1>
+            <h1 {...cascade(1, "text-3xl font-bold text-zinc-900 dark:text-white")}>Mi Perfil</h1>
 
             <div className="grid md:grid-cols-[1fr_2fr] gap-8">
 
                 {/* LEFT COLUMN: AVATAR & BASIC BADGE */}
                 <div className="flex flex-col items-center gap-4">
                     <div {...cascade(2, "relative group cursor-pointer")} onClick={handleAvatarClick}>
-                        <div className="w-40 h-40 rounded-full overflow-hidden border-4 border-white shadow-lg bg-zinc-100 flex items-center justify-center">
+                        <div className="w-40 h-40 rounded-full overflow-hidden border-4 border-white dark:border-[#1c1c1c] shadow-lg bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center">
                             {avatarUrl ? (
                                 <img
                                     src={avatarUrl}
@@ -183,7 +183,7 @@ export default function Profile() {
                                     }}
                                 />
                             ) : (
-                                <UserCircleIcon className="w-full h-full text-zinc-300 p-4" />
+                                <UserCircleIcon className="w-full h-full text-zinc-300 dark:text-zinc-600 p-4" />
                             )}
                         </div>
                         {/* Overlay */}
@@ -198,7 +198,7 @@ export default function Profile() {
                             onChange={handleFileChange}
                         />
                     </div>
-                    <p {...cascade(3, "text-sm text-zinc-500 text-center")}>
+                    <p {...cascade(3, "text-sm text-zinc-500 dark:text-zinc-400 text-center")}>
                         Click para cambiar foto<br />
                         (Max 5MB)
                     </p>
@@ -208,30 +208,30 @@ export default function Profile() {
                 <div className="space-y-8">
 
                     {/* PERSONAL INFO */}
-                    <section className="bg-white rounded-xl border border-zinc-200 shadow-sm p-6">
-                        <h2 {...cascade(4, "text-xl font-semibold text-zinc-800 mb-6 flex items-center gap-2")}>
+                    <section className="bg-white dark:bg-[#1c1c1c] rounded-xl border border-zinc-200 dark:border-zinc-800 shadow-sm p-6">
+                        <h2 {...cascade(4, "text-xl font-semibold text-zinc-800 dark:text-white mb-6 flex items-center gap-2")}>
                             <IdentificationIcon className="w-5 h-5 text-emerald-500" />
                             Información Personal
                         </h2>
                         <form onSubmit={handleUpdateProfile} className="space-y-4">
                             <div className="grid sm:grid-cols-2 gap-4">
                                 <div>
-                                    <label {...cascade(5, "block text-sm font-medium text-zinc-700 mb-1 flex items-center gap-1")}>
+                                    <label {...cascade(5, "block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1 flex items-center gap-1")}>
                                         <UserIcon className="w-4 h-4" /> Nombres
                                     </label>
                                     <input
-                                        {...cascade(6, "w-full px-4 py-2 rounded-lg border-zinc-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent focus:ring-offset-1 transition-shadow")}
+                                        {...cascade(6, "w-full px-4 py-2 rounded-lg border-zinc-300 dark:border-zinc-700 bg-white dark:bg-[#141414] text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent focus:ring-offset-1 dark:focus:ring-offset-[#1c1c1c] transition-shadow")}
                                         type="text"
                                         value={nombres}
                                         onChange={e => setNombres(e.target.value)}
                                     />
                                 </div>
                                 <div>
-                                    <label {...cascade(7, "block text-sm font-medium text-zinc-700 mb-1 flex items-center gap-1")}>
+                                    <label {...cascade(7, "block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1 flex items-center gap-1")}>
                                         <UserIcon className="w-4 h-4" /> Apellidos
                                     </label>
                                     <input
-                                        {...cascade(8, "w-full px-4 py-2 rounded-lg border-zinc-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent focus:ring-offset-1 transition-shadow")}
+                                        {...cascade(8, "w-full px-4 py-2 rounded-lg border-zinc-300 dark:border-zinc-700 bg-white dark:bg-[#141414] text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent focus:ring-offset-1 dark:focus:ring-offset-[#1c1c1c] transition-shadow")}
                                         type="text"
                                         value={apellidos}
                                         onChange={e => setApellidos(e.target.value)}
@@ -242,57 +242,57 @@ export default function Profile() {
                             {/* DNI & PHONE */}
                             <div className="grid sm:grid-cols-2 gap-4">
                                 <div>
-                                    <label {...cascade(9, "block text-sm font-medium text-zinc-700 mb-1 flex items-center gap-1")}>
+                                    <label {...cascade(9, "block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1 flex items-center gap-1")}>
                                         <CreditCardIcon className="w-4 h-4" /> DNI (8 dígitos)
                                     </label>
                                     <input
-                                        {...cascade(10, `w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent focus:ring-offset-1 transition-shadow ${isMissing('DNI') ? 'border-red-500 ring-1 ring-red-500 bg-red-50' : 'border-zinc-300'}`)}
+                                        {...cascade(10, `w-full px-4 py-2 rounded-lg border bg-white dark:bg-[#141414] text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent focus:ring-offset-1 dark:focus:ring-offset-[#1c1c1c] transition-shadow ${isMissing('DNI') ? 'border-red-500 ring-1 ring-red-500 bg-red-50 dark:bg-red-900/20' : 'border-zinc-300 dark:border-zinc-700'}`)}
                                         type="text"
                                         maxLength={8}
                                         value={documento}
                                         onChange={e => setDocumento(e.target.value.replace(/\D/g, ''))}
                                     />
-                                    {isMissing('DNI') && <span className="text-xs text-red-500">Requerido para compras</span>}
+                                    {isMissing('DNI') && <span className="text-xs text-red-500 dark:text-red-400">Requerido para compras</span>}
                                 </div>
                                 <div>
-                                    <label {...cascade(11, "block text-sm font-medium text-zinc-700 mb-1 flex items-center gap-1")}>
+                                    <label {...cascade(11, "block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1 flex items-center gap-1")}>
                                         <PhoneIcon className="w-4 h-4" /> Teléfono
                                     </label>
                                     <input
-                                        {...cascade(12, `w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent focus:ring-offset-1 transition-shadow ${isMissing('Teléfono') ? 'border-red-500 ring-1 ring-red-500 bg-red-50' : 'border-zinc-300'}`)}
+                                        {...cascade(12, `w-full px-4 py-2 rounded-lg border bg-white dark:bg-[#141414] text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent focus:ring-offset-1 dark:focus:ring-offset-[#1c1c1c] transition-shadow ${isMissing('Teléfono') ? 'border-red-500 ring-1 ring-red-500 bg-red-50 dark:bg-red-900/20' : 'border-zinc-300 dark:border-zinc-700'}`)}
                                         type="tel"
                                         placeholder="9xx xxx xxx"
                                         value={phone}
                                         onChange={e => setPhone(e.target.value)}
                                     />
-                                    {isMissing('Teléfono') && <span className="text-xs text-red-500">Requerido para compras</span>}
+                                    {isMissing('Teléfono') && <span className="text-xs text-red-500 dark:text-red-400">Requerido para compras</span>}
                                 </div>
                             </div>
 
                             {/* EMAIL */}
                             <div {...cascade(6)}>
-                                <label className="block text-sm font-medium text-zinc-700 mb-1">Email</label>
+                                <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">Email</label>
                                 <input
                                     type="email"
                                     disabled
-                                    className="w-full px-4 py-2 rounded-lg border-zinc-200 bg-zinc-50 text-zinc-500 cursor-not-allowed"
+                                    className="w-full px-4 py-2 rounded-lg border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/50 text-zinc-500 dark:text-zinc-400 cursor-not-allowed"
                                     value={email}
                                 />
                             </div>
 
                             {/* ADDRESS (Full Width, Textarea) */}
                             <div {...cascade(7)}>
-                                <label className="block text-sm font-medium text-zinc-700 mb-1 flex items-center gap-1">
+                                <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1 flex items-center gap-1">
                                     <MapPinIcon className="w-4 h-4" /> Dirección
                                 </label>
                                 <textarea
-                                    className={`w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent focus:ring-offset-1 transition-shadow resize-y ${isMissing('Dirección') ? 'border-red-500 ring-1 ring-red-500 bg-red-50' : 'border-zinc-300'}`}
+                                    className={`w-full px-4 py-2 rounded-lg border bg-white dark:bg-[#141414] text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent focus:ring-offset-1 dark:focus:ring-offset-[#1c1c1c] transition-shadow resize-y ${isMissing('Dirección') ? 'border-red-500 ring-1 ring-red-500 bg-red-50 dark:bg-red-900/20' : 'border-zinc-300 dark:border-zinc-700'}`}
                                     rows={3}
                                     placeholder="Av. Principal 123, Distrito, Provincia..."
                                     value={address}
                                     onChange={e => setAddress(e.target.value)}
                                 />
-                                {isMissing('Dirección') && <span className="text-xs text-red-500">Requerido para compras</span>}
+                                {isMissing('Dirección') && <span className="text-xs text-red-500 dark:text-red-400">Requerido para compras</span>}
                             </div>
 
                             <div {...cascade(8)} className="pt-2 flex justify-end">
@@ -309,36 +309,36 @@ export default function Profile() {
 
                     {/* CHANGE PASSWORD (ONLY LOCAL USERS) */}
                     {isLocalUser && (
-                        <section {...cascade(4)} className="bg-white rounded-xl border border-zinc-200 shadow-sm p-6">
-                            <h2 className="text-xl font-semibold text-zinc-800 mb-6 flex items-center gap-2">
+                        <section {...cascade(4)} className="bg-white dark:bg-[#1c1c1c] rounded-xl border border-zinc-200 dark:border-zinc-800 shadow-sm p-6">
+                            <h2 className="text-xl font-semibold text-zinc-800 dark:text-white mb-6 flex items-center gap-2">
                                 <LockClosedIcon className="w-5 h-5 text-amber-500" />
                                 Seguridad
                             </h2>
                             <form onSubmit={handleChangePassword} className="space-y-4">
                                 <div {...cascade(5)}>
-                                    <label className="block text-sm font-medium text-zinc-700 mb-1">Contraseña Actual</label>
+                                    <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">Contraseña Actual</label>
                                     <input
                                         type="password"
-                                        className="w-full px-4 py-2 rounded-lg border border-zinc-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent focus:ring-offset-1 transition-shadow"
+                                        className="w-full px-4 py-2 rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-[#141414] text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent focus:ring-offset-1 dark:focus:ring-offset-[#1c1c1c] transition-shadow"
                                         value={currPass}
                                         onChange={e => setCurrPass(e.target.value)}
                                     />
                                 </div>
                                 <div {...cascade(6)} className="grid sm:grid-cols-2 gap-4">
                                     <div>
-                                        <label className="block text-sm font-medium text-zinc-700 mb-1">Nueva Contraseña (min 8)</label>
+                                        <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">Nueva Contraseña (min 8)</label>
                                         <input
                                             type="password"
-                                            className="w-full px-4 py-2 rounded-lg border border-zinc-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent focus:ring-offset-1 transition-shadow"
+                                            className="w-full px-4 py-2 rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-[#141414] text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent focus:ring-offset-1 dark:focus:ring-offset-[#1c1c1c] transition-shadow"
                                             value={newPass}
                                             onChange={e => setNewPass(e.target.value)}
                                         />
                                     </div>
                                     <div>
-                                        <label className="block text-sm font-medium text-zinc-700 mb-1">Confirmar</label>
+                                        <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">Confirmar</label>
                                         <input
                                             type="password"
-                                            className="w-full px-4 py-2 rounded-lg border border-zinc-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent focus:ring-offset-1 transition-shadow"
+                                            className="w-full px-4 py-2 rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-[#141414] text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent focus:ring-offset-1 dark:focus:ring-offset-[#1c1c1c] transition-shadow"
                                             value={confirmPass}
                                             onChange={e => setConfirmPass(e.target.value)}
                                         />

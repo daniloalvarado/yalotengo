@@ -158,10 +158,10 @@ export default function Models3D() {
             {/* Header */}
             <div className="mb-8">
                 <div className="flex items-center gap-3 mb-2">
-                    <CubeIcon className="w-8 h-8 text-emerald-600" />
-                    <h1 className="text-3xl font-bold text-gray-900">Modelos 3D</h1>
+                    <CubeIcon className="w-8 h-8 text-emerald-600 dark:text-emerald-500" />
+                    <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Modelos 3D</h1>
                 </div>
-                <p className="text-gray-600">
+                <p className="text-gray-600 dark:text-gray-400">
                     {activeTab === 'DIGITALIZADO'
                         ? 'Explora nuestra colección de modelos 3D digitalizados. Descarga en formato GLB para usar en tus proyectos.'
                         : activeTab === 'IMPRESO' 
@@ -175,14 +175,14 @@ export default function Models3D() {
                 <div className="flex gap-2 overflow-x-auto w-full pb-2 custom-scrollbar">
                     <button
                         onClick={() => setActiveTab('DIGITALIZADO')}
-                        className={`premium-tab px-4 py-2 rounded-lg font-medium flex items-center shrink-0 gap-2 border ${activeTab === 'DIGITALIZADO' ? 'premium-tab-active border-emerald-600' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 border-transparent'}`}
+                        className={`premium-tab px-4 py-2 rounded-lg font-medium flex items-center shrink-0 gap-2 border ${activeTab === 'DIGITALIZADO' ? 'premium-tab-active border-emerald-600' : 'bg-gray-100 dark:bg-zinc-900 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-zinc-800 border-transparent dark:border-zinc-800'}`}
                     >
                         <SparklesIcon className="w-4 h-4 z-10" />
                         <span className="z-10">Digitalizados</span>
                     </button>
                     <button
                         onClick={() => setActiveTab('IMPRESO')}
-                        className={`premium-tab px-4 py-2 rounded-lg font-medium flex items-center shrink-0 gap-2 border ${activeTab === 'IMPRESO' ? 'premium-tab-active border-emerald-600' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 border-transparent'}`}
+                        className={`premium-tab px-4 py-2 rounded-lg font-medium flex items-center shrink-0 gap-2 border ${activeTab === 'IMPRESO' ? 'premium-tab-active border-emerald-600' : 'bg-gray-100 dark:bg-zinc-900 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-zinc-800 border-transparent dark:border-zinc-800'}`}
                     >
                         <CubeIcon className="w-4 h-4 z-10" />
                         <span className="z-10">Impresos</span>
@@ -224,20 +224,20 @@ export default function Models3D() {
             {activeTab === 'MIS_COTIZACIONES' ? (
                 <UserQuotes3D ref={userQuotesRef} />
             ) : filteredModels.length === 0 ? (
-                <div className="text-center py-16 bg-gray-50 rounded-2xl">
-                    <CubeIcon className="w-16 h-16 mx-auto text-gray-300 mb-4" />
-                    <h3 className="text-lg font-medium text-gray-700">No hay modelos {activeTab === 'IMPRESO' ? 'impresos' : 'digitales'} disponibles</h3>
-                    <p className="text-gray-500">Pronto agregaremos más modelos a la tienda.</p>
+                <div className="text-center py-16 bg-gray-50 dark:bg-[#1c1c1c] rounded-2xl border border-gray-100 dark:border-zinc-800">
+                    <CubeIcon className="w-16 h-16 mx-auto text-gray-300 dark:text-zinc-600 mb-4" />
+                    <h3 className="text-lg font-medium text-gray-700 dark:text-gray-300">No hay modelos {activeTab === 'IMPRESO' ? 'impresos' : 'digitales'} disponibles</h3>
+                    <p className="text-gray-500 dark:text-zinc-500">Pronto agregaremos más modelos a la tienda.</p>
                 </div>
             ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                     {filteredModels.map((model, index) => (
                         <div
                             key={model.mod_int_id}
-                            {...(activeTab === 'IMPRESO' ? cascade(index, "bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-lg transition-all group relative z-0 hover:z-10 w-full max-w-[320px] mx-auto sm:max-w-none") : { className: "bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-lg transition-all group relative z-0 hover:z-10 w-full max-w-[320px] mx-auto sm:max-w-none" })}
+                            {...(activeTab === 'IMPRESO' ? cascade(index, "bg-white dark:bg-[#1c1c1c] rounded-2xl border border-gray-100 dark:border-zinc-800 shadow-sm hover:shadow-lg dark:shadow-none transition-all group relative z-0 hover:z-10 w-full max-w-[320px] mx-auto sm:max-w-none") : { className: "bg-white dark:bg-[#1c1c1c] rounded-2xl border border-gray-100 dark:border-zinc-800 shadow-sm hover:shadow-lg dark:shadow-none transition-all group relative z-0 hover:z-10 w-full max-w-[320px] mx-auto sm:max-w-none" })}
                         >
                             {/* Visor / Imagen */}
-                            <div className={`relative rounded-t-2xl overflow-hidden bg-gray-100 ${activeTab === 'IMPRESO' ? 'aspect-square' : 'aspect-[4/3]'}`}>
+                            <div className={`relative rounded-t-2xl overflow-hidden bg-gray-100 dark:bg-black ${activeTab === 'IMPRESO' ? 'aspect-square' : 'aspect-[4/3]'}`}>
                                 {activeTab === 'DIGITALIZADO' ? (
                                     <>
                                         <Model3DViewer
@@ -262,18 +262,18 @@ export default function Models3D() {
 
                             {/* Info */}
                             <div className="p-4">
-                                <h3 className="text-lg font-semibold text-gray-900 mb-1">
+                                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">
                                     {model.mod_txt_name}
                                 </h3>
                                 {model.mod_txt_desc && (
-                                    <p className="text-sm text-gray-500 line-clamp-2 mb-3">
+                                    <p className="text-sm text-gray-500 dark:text-gray-400 line-clamp-2 mb-3">
                                         {model.mod_txt_desc}
                                     </p>
                                 )}
 
-                                <div className="flex items-center justify-between pt-2 border-t border-gray-100">
+                                <div className="flex items-center justify-between pt-2 border-t border-gray-100 dark:border-zinc-800">
                                     <div>
-                                        <span className="text-2xl font-bold text-gray-900">
+                                        <span className="text-2xl font-bold text-gray-900 dark:text-white">
                                             {PEN.format(model.mod_dec_price)}
                                         </span>
                                     </div>
@@ -294,7 +294,7 @@ export default function Models3D() {
                                                     <button
                                                         onClick={() => handleAddToCart(model)}
                                                         disabled={addingToCart[model.mod_int_id]}
-                                                        className="p-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl transition-colors disabled:opacity-50"
+                                                        className="p-2 bg-gray-100 dark:bg-zinc-800 hover:bg-gray-200 dark:hover:bg-zinc-700 text-gray-700 dark:text-gray-300 rounded-xl transition-colors disabled:opacity-50"
                                                     >
                                                         <ShoppingCartIcon className="w-5 h-5" />
                                                     </button>

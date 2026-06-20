@@ -110,8 +110,8 @@ export default function Purchases() {
   return (
     <div className="max-w-5xl mx-auto flex flex-col gap-4 p-4 sm:p-6">
       <div className="flex items-center gap-3 mb-1">
-        <ShoppingBagIcon className="w-10 h-10 text-emerald-600" />
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
+        <ShoppingBagIcon className="w-10 h-10 text-emerald-600 dark:text-emerald-500" />
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
           Mis compras
         </h1>
       </div>
@@ -126,7 +126,7 @@ export default function Purchases() {
         ].map(({ id, label }) => (
           <button
             key={id}
-            className={`premium-tab px-3 py-1.5 rounded-lg text-sm border flex items-center justify-center ${tab === id ? 'premium-tab-active border-emerald-600' : 'border-zinc-300 hover:bg-zinc-50 text-gray-700'}`}
+            className={`premium-tab px-3 py-1.5 rounded-lg text-sm border flex items-center justify-center ${tab === id ? 'premium-tab-active border-emerald-600 dark:border-emerald-500' : 'border-zinc-300 dark:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-800 text-gray-700 dark:text-gray-300'}`}
             onClick={() => setTab(id)}
           >
             <span className="z-10">{label}</span>
@@ -160,21 +160,21 @@ export default function Purchases() {
       {/* Modal QR */}
       {selectedReservation && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+          className="fixed inset-0 bg-black/50 dark:bg-black/80 flex items-center justify-center z-50 p-4"
           onClick={() => setSelectedReservation(null)}
         >
           <div
-            className="bg-white rounded-2xl max-w-md w-full p-6 relative"
+            className="bg-white dark:bg-[#1c1c1c] rounded-2xl max-w-md w-full p-6 relative"
             onClick={e => e.stopPropagation()}
           >
             <button
-              className="absolute top-4 right-4 text-2xl text-zinc-400 hover:text-zinc-600"
+              className="absolute top-4 right-4 text-2xl text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200"
               onClick={() => setSelectedReservation(null)}
             >
               ×
             </button>
 
-            <h2 className="text-xl font-bold mb-4 text-center" style={{ color: THEME.primary }}>
+            <h2 className="text-xl font-bold mb-4 text-center text-emerald-600 dark:text-emerald-500">
               Detalles de Reserva
             </h2>
 
@@ -183,17 +183,16 @@ export default function Purchases() {
                 <img
                   src={qrImage}
                   alt="Código QR"
-                  className="w-48 h-48 rounded-lg border-4"
-                  style={{ borderColor: THEME.primary }}
+                  className="w-48 h-48 rounded-lg border-4 border-emerald-600 dark:border-emerald-500 bg-white"
                 />
               </div>
             )}
 
             {loadingQr && (
-              <div className="text-center text-sm opacity-60 mb-4">Cargando QR...</div>
+              <div className="text-center text-sm opacity-60 dark:text-gray-400 mb-4">Cargando QR...</div>
             )}
 
-            <div className="rounded-xl p-4 space-y-2" style={{ backgroundColor: THEME.primaryLight }}>
+            <div className="rounded-xl p-4 space-y-2 bg-emerald-50 dark:bg-emerald-900/10 text-gray-800 dark:text-gray-200">
               <div className="flex justify-between">
                 <span className="opacity-70">Reserva #:</span>
                 <strong>{selectedReservation.id}</strong>
@@ -220,13 +219,13 @@ export default function Purchases() {
                   {STATUS_LABELS[selectedReservation.status] || selectedReservation.status}
                 </Tag>
               </div>
-              <div className="flex justify-between border-t pt-2" style={{ borderColor: THEME.primary + '30' }}>
+              <div className="flex justify-between border-t border-emerald-600/30 dark:border-emerald-500/30 pt-2">
                 <span className="opacity-70">Total Pagado:</span>
-                <strong style={{ color: THEME.primary }}>{fmtReservation(selectedReservation.price, selectedReservation.currency)}</strong>
+                <strong className="text-emerald-600 dark:text-emerald-400">{fmtReservation(selectedReservation.price, selectedReservation.currency)}</strong>
               </div>
             </div>
 
-            <p className="text-center text-sm text-zinc-500 mt-4">
+            <p className="text-center text-sm text-zinc-500 dark:text-zinc-400 mt-4">
               Presenta este código QR en la entrada del museo
             </p>
           </div>
