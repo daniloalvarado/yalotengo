@@ -33,6 +33,35 @@
   html.dark .swal2-html-container {
     color: #f3f4f6 !important;
   }
+  /* react-multi-date-picker green theme override */
+  .rmdp-day.rmdp-selected span:not(.highlight),
+  .rmdp-day.rmdp-today span {
+    background-color: #0d9467 !important;
+    box-shadow: 0 0 3px #0a7551 !important;
+  }
+  .rmdp-day:not(.rmdp-disabled):not(.rmdp-day-hidden) span:hover {
+    background-color: #0a7551 !important;
+    color: white !important;
+  }
+
+  /* DatePicker Input Dark Mode Overrides */
+  .rmdp-input {
+    width: 100% !important;
+    padding: 0.75rem !important;
+    font-size: 1rem !important;
+    border-radius: 8px !important;
+    outline: none !important;
+    cursor: pointer !important;
+    border: 1px solid #e5e7eb;
+    background-color: #ffffff;
+    color: #111827;
+  }
+  
+  html.dark .rmdp-input {
+    background-color: #141414 !important;
+    border-color: #27272a !important;
+    color: #f3f4f6 !important;
+  }
 }
 
 @layer components {

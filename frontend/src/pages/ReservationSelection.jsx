@@ -88,7 +88,6 @@ export default function ReservationSelection({
     const priceBadgeStyle = {
         background: 'rgba(16, 185, 129, 0.1)', // bg-emerald-500/10
         border: '1px solid rgba(16, 185, 129, 0.4)', // border-emerald-500/40
-        color: '#1f2937', // text-gray-800 (negro/oscuro)
         padding: '0.6rem 1.2rem',
         borderRadius: '50px',
         fontSize: '0.95rem',
@@ -217,9 +216,9 @@ export default function ReservationSelection({
                             </div>
 
                             {/* PRECIOS */}
-                            <div style={{ marginTop: '1.5rem', fontSize: '1rem', color: theme.textDark }}>
+                            <div className="text-gray-900 dark:text-gray-200" style={{ marginTop: '1.5rem', fontSize: '1rem' }}>
                                 <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
-                                    <div style={priceBadgeStyle}>
+                                    <div style={priceBadgeStyle} className="text-emerald-900 dark:text-emerald-400">
                                         <CreditCardIcon style={{ width: '20px', height: '20px', flexShrink: 0 }} />
                                         <span>Total a pagar: <strong>S/ {(guests * prices.pen).toFixed(2)}</strong></span>
                                     </div>
