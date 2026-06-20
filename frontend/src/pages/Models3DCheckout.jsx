@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { initMercadoPago, CardPayment } from '@mercadopago/sdk-react'
+import { initMercadoPago } from '@mercadopago/sdk-react'
 import api from '../api/client'
 import Model3DViewer from '../components/Model3DViewer'
 import toast from 'react-hot-toast'
-import { ArrowLeftIcon, CreditCardIcon, CheckCircleIcon, ArrowDownTrayIcon, DevicePhoneMobileIcon, CubeIcon } from '@heroicons/react/24/outline'
+import { ArrowLeftIcon, CheckCircleIcon, ArrowDownTrayIcon, CreditCardIcon, DevicePhoneMobileIcon, CubeIcon } from '@heroicons/react/24/outline'
+import MercadoPagoForm from '../components/MercadoPagoForm'
 
 // Inicializar MercadoPago
 const MP_PUBLIC_KEY = import.meta.env.VITE_MP_PUBLIC_KEY
@@ -20,19 +21,6 @@ export default function Models3DCheckout() {
 
     const [step, setStep] = useState('payment') // 'payment' | 'success'
     const [processing, setProcessing] = useState(false)
-    const [isDarkTheme, setIsDarkTheme] = useState(() => document.documentElement.classList.contains('dark'))
-
-    useEffect(() => {
-        const observer = new MutationObserver((mutations) => {
-            mutations.forEach((mutation) => {
-                if (mutation.attributeName === 'class') {
-                    setIsDarkTheme(document.documentElement.classList.contains('dark'))
-                }
-            })
-        })
-        observer.observe(document.documentElement, { attributes: true })
-        return () => observer.disconnect()
-    }, [])
     const [purchaseResult, setPurchaseResult] = useState(null)
     const [paymentMethod, setPaymentMethod] = useState('card') // 'card' | 'yape'
     const [paymentError, setPaymentError] = useState(null)
@@ -311,31 +299,10 @@ export default function Models3DCheckout() {
                             <p className="text-gray-600 dark:text-gray-400">Procesando pago...</p>
                         </div>
                     ) : paymentMethod === 'card' ? (
-                        <div className="dark:bg-[#141414] dark:p-2 dark:rounded-lg">
-                            <CardPayment
-                                initialization={{ amount: price }}
-                                customization={{
-                                    paymentMethods: { maxInstallments: 1 },
-                                    visual: {
-                                        style: {
-                                            theme: isDarkTheme ? 'dark' : 'default',
-                                            customVariables: {
-                                                formBackgroundColor: 'transparent',
-                                                baseColor: '#059669'
-                                            }
-                                        }
-                                    }
-                                }}
-                                onSubmit={handleCardSubmit}
-                                onReady={() => console.log('CardPayment ready')}
-                                onError={(error) => {
-                                    console.error('MP CardPayment Error:', error)
-                                    console.error('MP CardPayment Error JSON:', JSON.stringify(error, null, 2))
-                                    if (error?.message) console.error('MP Error message:', error.message)
-                                    if (error?.cause) console.error('MP Error cause:', error.cause)
-                                }}
-                            />
-                        </div>
+                        <MercadoPagoForm 
+                            price={price}
+                            onSubmit={handleCardSubmit}
+                        />
                     ) : (
                         <div className="space-y-4">
                             <div className="bg-[#f0fdfa] dark:bg-[#00D1AE]/10 border border-[#99f6e4] dark:border-[#00D1AE]/30 rounded-lg p-4 text-sm text-[#0f766e] dark:text-[#5eead4]">

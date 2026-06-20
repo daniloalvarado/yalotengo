@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react'
-import { initMercadoPago, CardPayment } from '@mercadopago/sdk-react'
+import { initMercadoPago } from '@mercadopago/sdk-react'
 import api from '../api/client'
 import toast from 'react-hot-toast'
-import { CreditCardIcon, DevicePhoneMobileIcon, CheckCircleIcon, ShieldCheckIcon, LockClosedIcon } from '@heroicons/react/24/outline'
+import { ArrowLeftIcon, CreditCardIcon, CheckCircleIcon, ArrowDownTrayIcon, DevicePhoneMobileIcon, TrashIcon, ShieldCheckIcon, LockClosedIcon } from '@heroicons/react/24/outline'
+import MercadoPagoForm from './MercadoPagoForm'
 
 // Inicializar MercadoPago
 const MP_PUBLIC_KEY = import.meta.env.VITE_MP_PUBLIC_KEY
@@ -18,19 +19,7 @@ export default function DigitalCartCheckout({ items, onPaymentSuccess }) {
     // Estado para Yape
     const [yapePhone, setYapePhone] = useState('')
     const [yapeOtp, setYapeOtp] = useState('')
-    const [isDarkTheme, setIsDarkTheme] = useState(() => document.documentElement.classList.contains('dark'))
-
-    useEffect(() => {
-        const observer = new MutationObserver((mutations) => {
-            mutations.forEach((mutation) => {
-                if (mutation.attributeName === 'class') {
-                    setIsDarkTheme(document.documentElement.classList.contains('dark'))
-                }
-            })
-        })
-        observer.observe(document.documentElement, { attributes: true })
-        return () => observer.disconnect()
-    }, [])
+    const [step, setStep] = useState('payment') // payment, success
 
     // Calcular total
     const totalAmount = items.reduce((acc, item) => {
@@ -199,27 +188,10 @@ export default function DigitalCartCheckout({ items, onPaymentSuccess }) {
                     <p className="text-sm text-gray-600">Procesando pago...</p>
                 </div>
             ) : paymentMethod === 'card' ? (
-                <div className="dark:bg-[#141414] dark:p-2 dark:rounded-lg">
-                    <CardPayment
-                        initialization={{ amount: totalAmount }}
-                        customization={{
-                            paymentMethods: { maxInstallments: 1 },
-                            visual: {
-                                style: {
-                                    theme: isDarkTheme ? 'dark' : 'default',
-                                    customVariables: {
-                                        formBackgroundColor: 'transparent',
-                                        baseColor: '#059669'
-                                    }
-                                },
-                                hidePaymentButton: false
-                            }
-                        }}
-                        onSubmit={handleCardSubmit}
-                        onReady={() => console.log('CardPayment Ready')}
-                        onError={(error) => console.error('MP CardPayment Error:', error)}
-                    />
-                </div>
+                <MercadoPagoForm 
+                    price={totalAmount}
+                    onSubmit={handleCardSubmit}
+                />
             ) : (
                 <div className="space-y-4 animate-fadeIn">
                     <div className="bg-[#f0fdfa] border border-[#99f6e4] rounded-lg p-3 text-xs text-[#0f766e]">

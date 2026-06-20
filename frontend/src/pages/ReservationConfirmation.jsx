@@ -1,5 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { initMercadoPago, CardPayment } from '@mercadopago/sdk-react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { initMercadoPago } from '@mercadopago/sdk-react';
+import MercadoPagoForm from '../components/MercadoPagoForm';
 import {
   CalendarDaysIcon,
   ClockIcon,
@@ -20,20 +22,6 @@ export default function ReservationConfirmation({
 }) {
   const [paymentMethod, setPaymentMethod] = useState('card'); // 'card' or 'yape'
   const [processingPayment, setProcessingPayment] = useState(false);
-  const [isDarkTheme, setIsDarkTheme] = useState(() => document.documentElement.classList.contains('dark'));
-
-  useEffect(() => {
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        if (mutation.attributeName === 'class') {
-          setIsDarkTheme(document.documentElement.classList.contains('dark'));
-        }
-      });
-    });
-    observer.observe(document.documentElement, { attributes: true });
-    return () => observer.disconnect();
-  }, []);
-
   const [paymentError, setPaymentError] = useState(null);
 
   // Estado para Yape
@@ -52,7 +40,7 @@ export default function ReservationConfirmation({
   const totalPrice = currentPricing.amount * reservation.guests;
 
   // Callback cuando el pago con tarjeta es enviado desde el Brick
-  const onCardSubmit = useCallback(async (formData) => {
+  const handleCardSubmit = useCallback(async (formData) => {
     setProcessingPayment(true);
     setPaymentError(null);
 
@@ -136,17 +124,6 @@ export default function ReservationConfirmation({
     }
   };
 
-  // Callback para errores del Brick
-  const onError = useCallback((error) => {
-    console.error('Brick error:', error);
-    setPaymentError('Error en el formulario de pago. Por favor intente de nuevo.');
-  }, []);
-
-  // Callback para cuando el Brick está listo
-  const onReady = useCallback(() => {
-    console.log('Payment Brick ready');
-  }, []);
-
   // Reset error cuando cambia método de pago
   useEffect(() => {
     setPaymentError(null);
@@ -175,7 +152,6 @@ export default function ReservationConfirmation({
           align-items: start; /* Alinear al tope */
         }
 
-        /* Ajustar la tarjeta de resumen para que no tenga margen abajo en desktop */
         .summary-card {
           margin-bottom: 0 !important;
           height: fit-content; /* Que se ajuste a su contenido */
@@ -183,7 +159,6 @@ export default function ReservationConfirmation({
           top: 20px; /* Opcional: para que baje contigo si haces scroll */
         }
 
-        /* Hacer que el botón cancelar ocupe todo el ancho abajo */
         .cancel-btn {
             grid-column: 1 / -1;
             max-width: 300px;
@@ -200,7 +175,6 @@ export default function ReservationConfirmation({
         padding: 1.5rem;
         box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
         border: 1px solid #e5e7eb;
-        /* margin-bottom quitado de aquí para manejarlo con gap del flex/grid */
       }
 
       .header {
@@ -278,7 +252,6 @@ export default function ReservationConfirmation({
         border-radius: 1rem;
         border: 1px solid #e5e7eb;
         padding: 1.5rem;
-        /* margin-bottom quitado para manejarlo con gap */
       }
 
       .payment-title {
@@ -297,7 +270,6 @@ export default function ReservationConfirmation({
         color: ${theme.primary};
       }
 
-      /* Tabs de método de pago */
       .payment-tabs {
         display: flex;
         gap: 0.5rem;
@@ -349,7 +321,6 @@ export default function ReservationConfirmation({
         font-weight: 500;
       }
 
-      /* Yape form */
       .yape-form {
         display: flex;
         flex-direction: column;
@@ -359,10 +330,6 @@ export default function ReservationConfirmation({
       .yape-logo {
         text-align: center;
         margin-bottom: 0.5rem;
-      }
-
-      .yape-logo img {
-        height: 40px;
       }
 
       .yape-logo-text {
@@ -435,21 +402,6 @@ export default function ReservationConfirmation({
         color: #0f766e;
       }
 
-      html.dark .yape-instructions {
-        background: rgba(0, 209, 174, 0.1);
-        border-color: rgba(0, 209, 174, 0.3);
-        color: #5eead4;
-      }
-
-      .yape-instructions ol {
-        margin: 0.5rem 0 0 1.25rem;
-        padding: 0;
-      }
-
-      .yape-instructions li {
-        margin-bottom: 0.25rem;
-      }
-
       .error-message {
         background: #fef2f2;
         border: 1px solid #fecaca;
@@ -470,7 +422,6 @@ export default function ReservationConfirmation({
         width: 100%;
         padding: 0.75rem;
         transition: opacity 0.2s;
-        /* margin-top movido al media query/container para mejor control */
       }
       
       .cancel-btn:hover {
@@ -645,35 +596,13 @@ export default function ReservationConfirmation({
           )}
 
           {/* Formulario de tarjeta */}
-          {paymentMethod === 'card' && (
-            <div className="dark:bg-[#141414] dark:p-2 dark:rounded-lg">
-              <CardPayment
-                initialization={{
-                  amount: totalPrice
-                }}
-                customization={{
-                  visual: {
-                    style: {
-                      theme: isDarkTheme ? 'dark' : 'default',
-                      customVariables: {
-                        formBackgroundColor: 'transparent',
-                        baseColor: theme.primary
-                      }
-                    }
-                  },
-                  paymentMethods: {
-                    maxInstallments: 1
-                  }
-                }}
-                onSubmit={onCardSubmit}
-                onReady={onReady}
-                onError={onError}
-              />
-            </div>
-          )}
-
-          {/* Formulario de Yape */}
-          {paymentMethod === 'yape' && (
+          {paymentMethod === 'card' ? (
+            <MercadoPagoForm 
+              price={totalPrice}
+              onSubmit={handleCardSubmit}
+            />
+          ) : (
+            /* Formulario de Yape */
             <div className="yape-form">
               <div className="yape-logo">
                 <span className="yape-logo-text">Yape</span>
