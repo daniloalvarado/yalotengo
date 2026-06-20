@@ -44,13 +44,13 @@ export default function ReservationSuccess({
         justify-content: center;
         overflow: hidden;
         transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.1);
         cursor: pointer;
+        box-shadow: none;
       }
 
       .card:hover {
         transform: translateY(-5px);
-        box-shadow: 0 20px 40px -5px rgba(13, 148, 103, 0.3);
+        box-shadow: none;
       }
 
       /* PARTE 1: EL QR */
