@@ -448,6 +448,56 @@ export default function ReservationConfirmation({
 
       .processing-card {
         background: white;
+      }
+      
+      html.dark .summary-card {
+        background-color: #141414;
+        border-color: #27272a;
+      }
+      html.dark .payment-section {
+        background-color: #141414;
+        border-color: #27272a;
+      }
+      html.dark .price {
+        color: #ffffff;
+      }
+      html.dark .payment-title {
+        color: #ffffff;
+      }
+      html.dark .title {
+        color: #a1a1aa;
+      }
+      html.dark .detail-item {
+        color: #e5e7eb;
+      }
+      html.dark .form-group label {
+        color: #e5e7eb;
+      }
+      html.dark .payment-tab {
+        background: #1c1c1c;
+        border-color: #27272a;
+      }
+      html.dark .payment-tab.active {
+        border-color: ${theme.primary};
+        background: rgba(13, 148, 103, 0.2);
+      }
+      html.dark .payment-tab span {
+        color: #e5e7eb;
+      }
+      html.dark .payment-tab .price-label {
+        color: #a1a1aa;
+      }
+      html.dark .yape-instructions {
+        background: rgba(0, 209, 174, 0.1);
+        border-color: rgba(0, 209, 174, 0.3);
+        color: #5eead4;
+      }
+      html.dark .processing-card {
+        background: #141414;
+      }
+      html.dark .processing-card p {
+        color: #ffffff;
+      }
         padding: 2rem;
         border-radius: 1rem;
         text-align: center;

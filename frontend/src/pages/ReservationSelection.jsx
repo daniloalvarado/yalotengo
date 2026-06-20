@@ -1,8 +1,10 @@
 import React from 'react';
 import { PlusIcon, MinusIcon, CalendarDaysIcon, CreditCardIcon, DevicePhoneMobileIcon } from "@heroicons/react/24/outline";
 import DatePicker from "react-multi-date-picker";
+import "react-multi-date-picker/styles/backgrounds/bg-dark.css";
 import { cascade } from "../utils/animations";
 import PayButton from "../components/PayButton";
+import { useState, useEffect } from 'react';
 
 // Estilos específicos para este paso, replicando el AdminSales
 const selectionStyles = `
@@ -55,6 +57,20 @@ export default function ReservationSelection({
     date, setDate, today, loading, slots, selectedSlot, setSelectedSlot,
     guests, setGuests, onNext, theme, styles, formatTime, closedMessage, prices = { pen: 5 }
 }) {
+
+    const [isDarkTheme, setIsDarkTheme] = useState(() => document.documentElement.classList.contains('dark'));
+
+    useEffect(() => {
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.attributeName === 'class') {
+                    setIsDarkTheme(document.documentElement.classList.contains('dark'));
+                }
+            });
+        });
+        observer.observe(document.documentElement, { attributes: true });
+        return () => observer.disconnect();
+    }, []);
 
     // Lógica visual local
     const isTimePast = (slotTime) => {
@@ -130,7 +146,7 @@ export default function ReservationSelection({
                             placeholder="Seleccionar fecha"
                             containerStyle={{ width: '100%' }}
                             style={{ ...styles.input }}
-                            className="bg-white dark:bg-[#141414] dark:text-white dark:border-zinc-700"
+                            className={`bg-white dark:bg-[#141414] dark:text-white dark:border-zinc-700 ${isDarkTheme ? 'bg-dark' : ''}`}
                         />
                     </div>
                 </div>
