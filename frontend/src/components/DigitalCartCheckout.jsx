@@ -138,17 +138,17 @@ export default function DigitalCartCheckout({ items, onPaymentSuccess }) {
     }
 
     return (
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sticky top-24">
-            <h3 className="text-xl font-bold text-gray-900 mb-6">Resumen del Pedido</h3>
+        <div className="bg-white dark:bg-[#1c1c1c] rounded-2xl shadow-sm border border-gray-100 dark:border-zinc-800 p-6 sticky top-24">
+            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6">Resumen del Pedido</h3>
 
-            <div className="flex justify-between items-center mb-6 pb-6 border-b border-gray-100">
-                <span className="text-gray-600">Total ({items.length} {items.length === 1 ? 'producto' : 'productos'})</span>
-                <span className="text-2xl font-bold text-emerald-600">{PEN.format(totalAmount)}</span>
+            <div className="flex justify-between items-center mb-6 pb-6 border-b border-gray-100 dark:border-zinc-800">
+                <span className="text-gray-600 dark:text-gray-400">Total ({items.length} {items.length === 1 ? 'producto' : 'productos'})</span>
+                <span className="text-2xl font-bold text-emerald-600 dark:text-emerald-500">{PEN.format(totalAmount)}</span>
             </div>
 
             <div className="flex items-center gap-2 mb-4">
-                <ShieldCheckIcon className="w-5 h-5 text-emerald-600" />
-                <span className="text-sm font-medium text-gray-700">Pago Seguro con MercadoPago</span>
+                <ShieldCheckIcon className="w-5 h-5 text-emerald-600 dark:text-emerald-500" />
+                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Pago Seguro con MercadoPago</span>
             </div>
 
             {/* Selector de Método de Pago */}
@@ -156,8 +156,8 @@ export default function DigitalCartCheckout({ items, onPaymentSuccess }) {
                 <button
                     onClick={() => setPaymentMethod('card')}
                     className={`flex-1 flex flex-col items-center gap-1 p-3 rounded-xl border-2 transition-all ${paymentMethod === 'card'
-                        ? 'border-emerald-600 bg-emerald-50 text-emerald-700'
-                        : 'border-gray-200 hover:border-gray-300 text-gray-600'
+                        ? 'border-emerald-600 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400'
+                        : 'border-gray-200 dark:border-zinc-700 hover:border-gray-300 dark:hover:border-zinc-600 text-gray-600 dark:text-gray-400'
                         }`}
                 >
                     <CreditCardIcon className="w-6 h-6" />
@@ -166,8 +166,8 @@ export default function DigitalCartCheckout({ items, onPaymentSuccess }) {
                 <button
                     onClick={() => setPaymentMethod('yape')}
                     className={`flex-1 flex flex-col items-center gap-1 p-3 rounded-xl border-2 transition-all ${paymentMethod === 'yape'
-                        ? 'border-[#00D1AE] bg-[#f0fdfa] text-[#00D1AE]'
-                        : 'border-gray-200 hover:border-gray-300 text-gray-600'
+                        ? 'border-[#00D1AE] bg-[#f0fdfa] dark:bg-[#00D1AE]/10 text-[#00D1AE]'
+                        : 'border-gray-200 dark:border-zinc-700 hover:border-gray-300 dark:hover:border-zinc-600 text-gray-600 dark:text-gray-400'
                         }`}
                 >
                     <DevicePhoneMobileIcon className="w-6 h-6" />
@@ -176,16 +176,16 @@ export default function DigitalCartCheckout({ items, onPaymentSuccess }) {
             </div>
 
             {paymentError && (
-                <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+                <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg text-red-700 dark:text-red-400 text-sm">
                     {paymentError}
                 </div>
             )}
 
             {/* Formularios de Pago */}
             {processing ? (
-                <div className="py-8 text-center bg-gray-50 rounded-lg">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-600 mx-auto mb-3"></div>
-                    <p className="text-sm text-gray-600">Procesando pago...</p>
+                <div className="py-8 text-center bg-gray-50 dark:bg-[#141414] rounded-lg">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-600 dark:border-emerald-500 mx-auto mb-3"></div>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">Procesando pago...</p>
                 </div>
             ) : paymentMethod === 'card' ? (
                 <MercadoPagoForm 
@@ -194,7 +194,7 @@ export default function DigitalCartCheckout({ items, onPaymentSuccess }) {
                 />
             ) : (
                 <div className="space-y-4 animate-fadeIn">
-                    <div className="bg-[#f0fdfa] border border-[#99f6e4] rounded-lg p-3 text-xs text-[#0f766e]">
+                    <div className="bg-[#f0fdfa] dark:bg-[#00D1AE]/10 border border-[#99f6e4] dark:border-[#00D1AE]/30 rounded-lg p-3 text-xs text-[#0f766e] dark:text-[#00D1AE]">
                         Ingresa tu número y el código de aprobación (OTP) desde la app de Yape.
                     </div>
 
@@ -205,7 +205,7 @@ export default function DigitalCartCheckout({ items, onPaymentSuccess }) {
                             value={yapePhone}
                             onChange={(e) => setYapePhone(e.target.value.replace(/\D/g, '').slice(0, 9))}
                             maxLength={9}
-                            className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#00D1AE] outline-none text-sm"
+                            className="w-full px-4 py-2.5 bg-white dark:bg-[#141414] border border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-[#00D1AE] outline-none text-sm"
                         />
                     </div>
 
@@ -216,14 +216,14 @@ export default function DigitalCartCheckout({ items, onPaymentSuccess }) {
                             value={yapeOtp}
                             onChange={(e) => setYapeOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
                             maxLength={6}
-                            className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#00D1AE] outline-none text-sm"
+                            className="w-full px-4 py-2.5 bg-white dark:bg-[#141414] border border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-[#00D1AE] outline-none text-sm"
                         />
                     </div>
 
                     <button
                         onClick={handleYapePayment}
                         disabled={!yapePhone || yapePhone.length < 9 || !yapeOtp || yapeOtp.length !== 6}
-                        className="w-full py-3 bg-[#00D1AE] hover:bg-[#00b89d] disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-colors flex items-center justify-center gap-2 shadow-sm shadow-emerald-100"
+                        className="w-full py-3 bg-[#00D1AE] hover:bg-[#00b89d] disabled:bg-gray-300 dark:disabled:bg-zinc-700 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-colors flex items-center justify-center gap-2 shadow-sm shadow-emerald-100 dark:shadow-none"
                     >
                         <LockClosedIcon className="w-4 h-4" />
                         Pagar {PEN.format(totalAmount)}
