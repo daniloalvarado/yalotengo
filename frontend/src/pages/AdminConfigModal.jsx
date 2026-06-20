@@ -117,14 +117,14 @@ export default function AdminConfigModal({ isOpen, onClose, onSaveSuccess, theme
                 {/* Fila 1: Horas */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="flex flex-col gap-2">
-                        <label className="text-sm font-semibold text-gray-700">Hora de Apertura</label>
-                        <input type="time" className="p-3 text-base border border-gray-300 rounded-lg outline-none focus:border-green-500 transition-colors"
+                        <label className="text-sm font-semibold text-gray-700 dark:text-gray-200">Hora de Apertura</label>
+                        <input type="time" className="p-3 text-base border border-gray-300 dark:border-zinc-700 rounded-lg bg-white dark:bg-[#141414] text-gray-900 dark:text-white outline-none focus:border-green-500 transition-colors"
                             value={config.RESERVATION_OPEN_TIME}
                             onChange={e => handleChange('RESERVATION_OPEN_TIME', e.target.value)} />
                     </div>
                     <div className="flex flex-col gap-2">
-                        <label className="text-sm font-semibold text-gray-700">Hora de Cierre</label>
-                        <input type="time" className="p-3 text-base border border-gray-300 rounded-lg outline-none focus:border-green-500 transition-colors"
+                        <label className="text-sm font-semibold text-gray-700 dark:text-gray-200">Hora de Cierre</label>
+                        <input type="time" className="p-3 text-base border border-gray-300 dark:border-zinc-700 rounded-lg bg-white dark:bg-[#141414] text-gray-900 dark:text-white outline-none focus:border-green-500 transition-colors"
                             value={config.RESERVATION_CLOSE_TIME}
                             onChange={e => handleChange('RESERVATION_CLOSE_TIME', e.target.value)} />
                     </div>
@@ -133,14 +133,14 @@ export default function AdminConfigModal({ isOpen, onClose, onSaveSuccess, theme
                 {/* Fila 2: Capacidad y Tiempo */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="flex flex-col gap-2">
-                        <label className="text-sm font-semibold text-gray-700">Aforo Máximo (Personas/turno)</label>
-                        <input type="number" className="p-3 text-base border border-gray-300 rounded-lg outline-none focus:border-green-500 transition-colors" min="1"
+                        <label className="text-sm font-semibold text-gray-700 dark:text-gray-200">Aforo Máximo (Personas/turno)</label>
+                        <input type="number" className="p-3 text-base border border-gray-300 dark:border-zinc-700 rounded-lg bg-white dark:bg-[#141414] text-gray-900 dark:text-white outline-none focus:border-green-500 transition-colors" min="1"
                             value={config.RESERVATION_MAX_CAPACITY}
                             onChange={e => handleChange('RESERVATION_MAX_CAPACITY', e.target.value)} />
                     </div>
                     <div className="flex flex-col gap-2">
-                        <label className="text-sm font-semibold text-gray-700">Duración del Turno (Minutos)</label>
-                        <input type="number" className="p-3 text-base border border-gray-300 rounded-lg outline-none focus:border-green-500 transition-colors" min="5" step="5"
+                        <label className="text-sm font-semibold text-gray-700 dark:text-gray-200">Duración del Turno (Minutos)</label>
+                        <input type="number" className="p-3 text-base border border-gray-300 dark:border-zinc-700 rounded-lg bg-white dark:bg-[#141414] text-gray-900 dark:text-white outline-none focus:border-green-500 transition-colors" min="5" step="5"
                             value={config.RESERVATION_SLOT_DURATION}
                             onChange={e => handleChange('RESERVATION_SLOT_DURATION', e.target.value)} />
                     </div>
@@ -149,10 +149,10 @@ export default function AdminConfigModal({ isOpen, onClose, onSaveSuccess, theme
                 {/* Fila 3: Precios */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="flex flex-col gap-2">
-                        <label className="text-sm font-semibold text-gray-700">Precio por Reserva (Soles)</label>
+                        <label className="text-sm font-semibold text-gray-700 dark:text-gray-200">Precio por Reserva (Soles)</label>
                         <div className="relative">
-                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 font-bold">S/</span>
-                            <input type="number" className="p-3 pl-8 text-base border border-gray-300 rounded-lg outline-none focus:border-green-500 transition-colors w-full" min="0" step="0.50"
+                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400 font-bold">S/</span>
+                            <input type="number" className="p-3 pl-8 text-base border border-gray-300 dark:border-zinc-700 rounded-lg bg-white dark:bg-[#141414] text-gray-900 dark:text-white outline-none focus:border-green-500 transition-colors w-full" min="0" step="0.50"
                                 value={config.RESERVATION_PRICE_PEN}
                                 onChange={e => handleChange('RESERVATION_PRICE_PEN', e.target.value)} />
                         </div>
@@ -162,8 +162,8 @@ export default function AdminConfigModal({ isOpen, onClose, onSaveSuccess, theme
                 <hr className="border-gray-200" />
 
                 <div className="flex flex-col gap-2">
-                    <label className="text-sm font-semibold text-gray-700">Días Recurrentes Cerrados (Para siempre)</label>
-                    <p className="text-sm text-gray-500 m-0 mb-2">
+                    <label className="text-sm font-semibold text-gray-700 dark:text-gray-200">Días Recurrentes Cerrados (Para siempre)</label>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 m-0 mb-2">
                         Selecciona qué días de la semana el museo NUNCA atiende.
                     </p>
                     <div className="flex flex-wrap gap-2">
@@ -171,7 +171,7 @@ export default function AdminConfigModal({ isOpen, onClose, onSaveSuccess, theme
                             const isChecked = closedWeekdaysArr.includes(day.num.toString());
                             return (
                                 <label key={day.num} className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border cursor-pointer text-sm font-medium transition-all ${
-                                    isChecked ? 'bg-red-100 text-red-800 border-red-300' : 'bg-gray-100 text-gray-700 border-gray-200'
+                                    isChecked ? 'bg-red-100 dark:bg-red-900/40 text-red-800 dark:text-red-400 border-red-300 dark:border-red-900/50' : 'bg-gray-100 dark:bg-zinc-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-zinc-700'
                                 }`}>
                                     <input type="checkbox" checked={isChecked} 
                                         onChange={() => handleWeekdayToggle(day.num)} 
@@ -184,8 +184,8 @@ export default function AdminConfigModal({ isOpen, onClose, onSaveSuccess, theme
                 </div>
 
                 <div className="flex flex-col gap-2">
-                    <label className="text-sm font-semibold text-gray-700">Fechas Específicas Cerradas (Mantenimiento / Feriados)</label>
-                    <p className="text-sm text-gray-500 m-0 mb-2">
+                    <label className="text-sm font-semibold text-gray-700 dark:text-gray-200">Fechas Específicas Cerradas (Mantenimiento / Feriados)</label>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 m-0 mb-2">
                         Haz clic para abrir el calendario y selecciona todas las fechas que quieras (puedes elegir varias de golpe).
                     </p>
                     <div className="flex flex-col gap-4">
@@ -244,7 +244,7 @@ export default function AdminConfigModal({ isOpen, onClose, onSaveSuccess, theme
             </div>
 
             <div className="flex justify-end gap-3 mt-8 pt-4 border-t border-gray-100">
-                <button className="px-6 py-2.5 border border-gray-300 rounded-lg bg-white text-gray-700 font-semibold hover:bg-gray-50 transition-colors disabled:opacity-50" 
+                <button className="px-6 py-2.5 border border-gray-300 dark:border-zinc-700 rounded-lg bg-transparent dark:text-white font-semibold hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors disabled:opacity-50" 
                     onClick={onClose} disabled={loading}>
                     Cancelar
                 </button>

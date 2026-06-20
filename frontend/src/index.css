@@ -52,6 +52,10 @@
   .bg-dark.rmdp-wrapper {
     border: none !important;
   }
+  
+  .rmdp-wrapper {
+    z-index: 100 !important;
+  }
 
   /* DatePicker Input Dark Mode Overrides */
   .rmdp-input {

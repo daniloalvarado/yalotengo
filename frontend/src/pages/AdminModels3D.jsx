@@ -464,13 +464,13 @@ export default function AdminModels3D() {
             {mainTab === 'purchases' && (
                 <div key={searchTerm} {...cascade(7, "overflow-x-auto rounded-lg border border-gray-200 dark:border-zinc-800/40")}>
                     <table className="w-full text-sm">
-                        <thead className="bg-gray-50 dark:bg-[#141414] text-gray-600 dark:text-gray-300">
+                        <thead className="bg-gray-50 dark:bg-[#141414] text-gray-600 dark:text-gray-100 font-semibold">
                             <tr {...cascade(8)}>
-                                <th className="px-4 py-3 text-left font-medium text-gray-600">Cliente</th>
-                                <th className="px-4 py-3 text-left font-medium text-gray-600">Modelo</th>
-                                <th className="px-4 py-3 text-left font-medium text-gray-600">Monto</th>
-                                <th className="px-4 py-3 text-left font-medium text-gray-600">Estado</th>
-                                <th className="px-4 py-3 text-left font-medium text-gray-600">Fecha</th>
+                                <th className="px-4 py-3 text-left font-medium text-gray-600 dark:text-gray-100">Cliente</th>
+                                <th className="px-4 py-3 text-left font-medium text-gray-600 dark:text-gray-100">Modelo</th>
+                                <th className="px-4 py-3 text-left font-medium text-gray-600 dark:text-gray-100">Monto</th>
+                                <th className="px-4 py-3 text-left font-medium text-gray-600 dark:text-gray-100">Estado</th>
+                                <th className="px-4 py-3 text-left font-medium text-gray-600 dark:text-gray-100">Fecha</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-100 dark:divide-zinc-800">
@@ -486,15 +486,15 @@ export default function AdminModels3D() {
                                         {p.modelCategory === 'IMPRESO' ? (
                                             <div className="flex flex-col items-start gap-1">
                                                 <span className={`text-xs font-bold px-2 py-0.5 rounded
-                                                    ${p.deliveryStatus === 'DELIVERED' ? 'bg-emerald-100 text-emerald-800' :
-                                                        p.deliveryStatus === 'IN_PROGRESS' || p.deliveryStatus === 'PREPARING' ? 'bg-blue-100 text-blue-800' :
-                                                            'bg-gray-100 dark:bg-zinc-800 text-gray-800'}`}>
+                                                    ${p.deliveryStatus === 'DELIVERED' ? 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-800 dark:text-emerald-400' :
+                                                        p.deliveryStatus === 'IN_PROGRESS' || p.deliveryStatus === 'PREPARING' ? 'bg-blue-100 dark:bg-blue-900/40 text-blue-800 dark:text-blue-400' :
+                                                            'bg-gray-100 dark:bg-zinc-800 text-gray-800 dark:text-gray-300'}`}>
                                                     {p.deliveryStatus === 'DELIVERED' ? 'Entregado' :
                                                         p.deliveryStatus === 'IN_PROGRESS' || p.deliveryStatus === 'PREPARING' ? 'En curso' : 'Aceptado'}
                                                 </span>
                                                 <button
                                                     onClick={(e) => { e.stopPropagation(); openStatusModal(p); }}
-                                                    className="text-[10px] text-emerald-600 hover:text-emerald-800 font-medium underline"
+                                                    className="text-[10px] text-emerald-600 dark:text-emerald-400 hover:text-emerald-800 dark:hover:text-emerald-300 font-medium underline"
                                                 >
                                                     Gestionar
                                                 </button>

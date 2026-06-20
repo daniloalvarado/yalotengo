@@ -309,11 +309,11 @@ export default function AdminCourses() {
                     <table className="w-full text-sm">
                         <thead className="bg-gray-50 dark:bg-[#141414] text-gray-600 dark:text-gray-300">
                             <tr {...cascade(5)}>
-                                <th className="px-4 py-3 text-left font-medium text-gray-600">Cliente</th>
-                                <th className="px-4 py-3 text-left font-medium text-gray-600">Curso</th>
-                                <th className="px-4 py-3 text-left font-medium text-gray-600">Monto</th>
-                                <th className="px-4 py-3 text-left font-medium text-gray-600">Estado</th>
-                                <th className="px-4 py-3 text-left font-medium text-gray-600">Fecha</th>
+                                <th className="px-4 py-3 text-left font-medium text-gray-600 dark:text-gray-100">Cliente</th>
+                                <th className="px-4 py-3 text-left font-medium text-gray-600 dark:text-gray-100">Curso</th>
+                                <th className="px-4 py-3 text-left font-medium text-gray-600 dark:text-gray-100">Monto</th>
+                                <th className="px-4 py-3 text-left font-medium text-gray-600 dark:text-gray-100">Estado</th>
+                                <th className="px-4 py-3 text-left font-medium text-gray-600 dark:text-gray-100">Fecha</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-100 dark:divide-zinc-800">
