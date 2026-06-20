@@ -249,7 +249,7 @@ export default function AdminBooks() {
         <div className="max-w-6xl mx-auto p-4 sm:p-6 space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                    <h1 {...cascade(1, "text-2xl font-bold text-gray-900")}>Gestión Libros</h1>
+                    <h1 {...cascade(1, "text-2xl font-bold text-gray-900 dark:text-white")}>Gestión Libros</h1>
                     <p {...cascade(2, "text-gray-500 text-sm")}>Productos y ventas de libros digitales</p>
                 </div>
                 {subTab === 'products' && (
@@ -264,7 +264,7 @@ export default function AdminBooks() {
                 )}
             </div>
 
-            <div className="flex gap-2 border-b border-gray-200">
+            <div className="flex gap-2 border-b border-gray-200 dark:border-zinc-800">
                 <button
                     {...cascade(4, `px-4 py-2 text-sm font-medium border-b-2 transition-all ${subTab === 'products' ? 'border-emerald-500 text-emerald-600' : 'border-transparent text-gray-500 hover:text-gray-700'}`)}
                     onClick={() => { setSubTab('products'); setSearchTerm(''); }}
@@ -287,7 +287,7 @@ export default function AdminBooks() {
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         placeholder="Buscar por cliente o libro..."
-                        className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
+                        className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-zinc-700 bg-transparent dark:text-white rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
                     />
                 </div>
             )}
@@ -297,7 +297,7 @@ export default function AdminBooks() {
             {subTab === 'products' && (
                 <div {...cascade(4)} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {books.map((b, i) => (
-                        <div key={b.boo_int_id} {...cascade(5 + i, `bg-white rounded-xl border p-4 shadow-sm transition-all ${!b.boo_bool_active ? 'opacity-60' : ''}`)}>
+                        <div key={b.boo_int_id} {...cascade(5 + i, `bg-white dark:bg-[#1c1c1c] rounded-xl border p-4 shadow-sm transition-all ${!b.boo_bool_active ? 'opacity-60' : ''}`)}>
                             {b.boo_txt_cover_image && (
                                 <img
                                     src={`${api.defaults.baseURL?.replace(/\/api\/?$/, '')}/uploads/books/${b.boo_txt_cover_image}`}
@@ -311,16 +311,16 @@ export default function AdminBooks() {
                             )}
                             <div className="flex items-start justify-between gap-2 mb-2">
                                 <div className="flex-1 min-w-0">
-                                    <h3 className="font-semibold text-gray-900 truncate">{b.boo_txt_title}</h3>
+                                    <h3 className="font-semibold text-gray-900 dark:text-white truncate">{b.boo_txt_title}</h3>
                                     <p className="text-sm text-gray-500 truncate">{b.boo_txt_author}</p>
                                 </div>
-                                <span className={`shrink-0 px-2 py-1 text-xs font-medium rounded-full ${b.boo_bool_active ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-100 text-gray-500'}`}>
+                                <span className={`shrink-0 px-2 py-1 text-xs font-medium rounded-full ${b.boo_bool_active ? 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400' : 'bg-gray-100 dark:bg-zinc-800 text-gray-500'}`}>
                                     {b.boo_bool_active ? 'Activo' : 'Inactivo'}
                                 </span>
                             </div>
                             <div className="text-lg font-bold text-emerald-600 mb-3">{PEN.format(Number(b.boo_dec_price || 0))}</div>
                             <div className="flex flex-wrap gap-2">
-                                <button onClick={() => openModal(b)} className="flex-1 flex items-center justify-center gap-1 px-3 py-2 text-sm bg-gray-100 hover:bg-gray-200 rounded-lg">
+                                <button onClick={() => openModal(b)} className="flex-1 flex items-center justify-center gap-1 px-3 py-2 text-sm bg-gray-100 dark:bg-zinc-800 hover:bg-gray-200 rounded-lg">
                                     <PencilIcon className="w-4 h-4" /> Editar
                                 </button>
                                 <button onClick={() => handleToggle(b.boo_int_id)} className="flex items-center justify-center gap-1 px-3 py-2 text-sm bg-amber-100 hover:bg-amber-200 text-amber-700 rounded-lg">
@@ -336,9 +336,9 @@ export default function AdminBooks() {
             )}
 
             {subTab === 'purchases' && (
-                <div {...cascade(4)} className="overflow-x-auto rounded-lg border border-gray-200">
+                <div {...cascade(4)} className="overflow-x-auto rounded-lg border border-gray-200 dark:border-zinc-800">
                     <table className="w-full text-sm">
-                        <thead className="bg-gray-50">
+                        <thead className="bg-gray-50 dark:bg-[#141414] text-gray-600 dark:text-gray-400">
                             <tr {...cascade(5)}>
                                 <th className="px-4 py-3 text-left font-medium text-gray-600">Cliente</th>
                                 <th className="px-4 py-3 text-left font-medium text-gray-600">Libro</th>
@@ -347,11 +347,11 @@ export default function AdminBooks() {
                                 <th className="px-4 py-3 text-left font-medium text-gray-600">Fecha</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-gray-100">
+                        <tbody className="divide-y divide-gray-100 dark:divide-zinc-800">
                             {filteredPurchases.map((p, i) => (
-                                <tr key={i} onClick={() => setDetailItem(p)} {...cascade(6 + i, "hover:bg-emerald-50 cursor-pointer transition-colors group", 0, 30)}>
+                                <tr key={i} onClick={() => setDetailItem(p)} {...cascade(6 + i, "hover:bg-emerald-50 dark:hover:bg-emerald-900/20 cursor-pointer transition-colors group", 0, 30)}>
                                     <td className="px-4 py-3">
-                                        <div className="font-medium text-gray-900">{p.userName}</div>
+                                        <div className="font-medium text-gray-900 dark:text-white">{p.userName}</div>
                                         <div className="text-xs text-gray-500">{p.userEmail}</div>
                                     </td>
                                     <td className="px-4 py-3 text-gray-700">{p.bookTitle}</td>
@@ -394,7 +394,7 @@ export default function AdminBooks() {
                             value={formData.title || ''}
                             onChange={e => setFormData(p => ({ ...p, title: e.target.value }))}
                             required
-                            className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none ${attemptedSubmit && !formData.title ? 'border-red-300 ring-1 ring-red-100 placeholder-red-300' : 'border-gray-300'}`}
+                            className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none ${attemptedSubmit && !formData.title ? 'border-red-300 ring-1 ring-red-100 placeholder-red-300' : 'border-gray-300 dark:border-zinc-700 bg-transparent dark:text-white'}`}
                         />
                     </label>
                     <label className="block">
@@ -403,7 +403,7 @@ export default function AdminBooks() {
                             value={formData.author || ''}
                             onChange={e => setFormData(p => ({ ...p, author: e.target.value }))}
                             required
-                            className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none ${attemptedSubmit && !formData.author ? 'border-red-300 ring-1 ring-red-100 placeholder-red-300' : 'border-gray-300'}`}
+                            className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none ${attemptedSubmit && !formData.author ? 'border-red-300 ring-1 ring-red-100 placeholder-red-300' : 'border-gray-300 dark:border-zinc-700 bg-transparent dark:text-white'}`}
                         />
                     </label>
                     <label className="block">
@@ -413,7 +413,7 @@ export default function AdminBooks() {
                             onChange={e => setFormData(p => ({ ...p, desc: e.target.value }))}
                             rows={3}
                             required
-                            className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none ${attemptedSubmit && !formData.desc ? 'border-red-300 ring-1 ring-red-100 placeholder-red-300' : 'border-gray-300'}`}
+                            className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none ${attemptedSubmit && !formData.desc ? 'border-red-300 ring-1 ring-red-100 placeholder-red-300' : 'border-gray-300 dark:border-zinc-700 bg-transparent dark:text-white'}`}
                         />
                     </label>
 
@@ -432,7 +432,7 @@ export default function AdminBooks() {
                                 type="button"
                                 onClick={() => pdfInputRef.current?.click()}
                                 disabled={uploadingPdf}
-                                className={`flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm disabled:opacity-50 transition-colors ${attemptedSubmit && !formData.pdfFilename ? 'border border-red-300 text-red-600 bg-red-50 hover:bg-red-100' : ''}`}
+                                className={`flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-zinc-800 hover:bg-gray-200 rounded-lg text-sm disabled:opacity-50 transition-colors ${attemptedSubmit && !formData.pdfFilename ? 'border border-red-300 text-red-600 bg-red-50 hover:bg-red-100' : ''}`}
                             >
                                 <DocumentIcon className="w-4 h-4" />
                                 {uploadingPdf ? 'Subiendo...' : 'Subir PDF'}
@@ -461,7 +461,7 @@ export default function AdminBooks() {
                                 type="button"
                                 onClick={() => coverInputRef.current?.click()}
                                 disabled={uploadingCover}
-                                className={`flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm disabled:opacity-50 transition-colors ${attemptedSubmit && !formData.coverImage ? 'border border-red-300 text-red-600 bg-red-50 hover:bg-red-100' : ''}`}
+                                className={`flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-zinc-800 hover:bg-gray-200 rounded-lg text-sm disabled:opacity-50 transition-colors ${attemptedSubmit && !formData.coverImage ? 'border border-red-300 text-red-600 bg-red-50 hover:bg-red-100' : ''}`}
                             >
                                 <PhotoIcon className="w-4 h-4" />
                                 {uploadingCover ? 'Subiendo...' : 'Subir imagen'}
@@ -485,11 +485,11 @@ export default function AdminBooks() {
 
                     <label className="block">
                         <span className="text-sm font-medium text-gray-700 mb-1 block">Precio (S/)</span>
-                        <input type="number" step="0.01" value={formData.price || ''} onChange={e => setFormData(p => ({ ...p, price: parseFloat(e.target.value) }))} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none" />
+                        <input type="number" step="0.01" value={formData.price || ''} onChange={e => setFormData(p => ({ ...p, price: parseFloat(e.target.value) }))} className="w-full px-3 py-2 border border-gray-300 dark:border-zinc-700 bg-transparent dark:text-white rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none" />
                     </label>
 
                     <div className="flex gap-3 pt-4">
-                        <button type="button" onClick={() => setShowModal(false)} className="flex-1 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">Cancelar</button>
+                        <button type="button" onClick={() => setShowModal(false)} className="flex-1 px-4 py-2 border border-gray-300 dark:border-zinc-700 bg-transparent dark:text-white rounded-lg hover:bg-gray-50 dark:bg-[#141414] text-gray-600 dark:text-gray-400">Cancelar</button>
                         <button
                             type="submit"
                             disabled={uploadingPdf || uploadingCover || isSaving}

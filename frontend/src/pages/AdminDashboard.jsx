@@ -84,12 +84,12 @@ export default function AdminDashboard() {
         : 0;
 
     return (
-        <div className="max-w-7xl mx-auto p-4 sm:p-6 space-y-6 bg-gray-50/50 min-h-screen">
+        <div className="max-w-7xl mx-auto p-4 sm:p-6 space-y-6 bg-gray-50/50 dark:bg-transparent min-h-screen">
 
             {/* 1. Header & Fecha */}
             <div className="flex justify-between items-end">
                 <div {...cascade(0)}>
-                    <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
+                    <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Dashboard</h1>
                     <p className="text-gray-500">Resumen estratégico del negocio</p>
                 </div>
                 <div {...cascade(1, "hidden md:block text-right")}>
@@ -101,12 +101,12 @@ export default function AdminDashboard() {
 
             {/* 2. KPIs ESTRATÉGICOS */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div {...cascade(2, "bg-white p-6 rounded-2xl shadow-sm border border-gray-100 relative overflow-hidden group")}>
+                <div {...cascade(2, "bg-white dark:bg-[#1c1c1c] p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-zinc-800 relative overflow-hidden group")}>
                     <div className="absolute right-0 top-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
                         <CurrencyDollarIcon className="w-24 h-24 text-emerald-600" />
                     </div>
                     <p className="text-gray-500 text-sm font-medium">Ingresos Totales</p>
-                    <h2 className="text-4xl font-bold text-gray-900 mt-1">{PEN.format(stats.total.revenue)}</h2>
+                    <h2 className="text-4xl font-bold text-gray-900 dark:text-white mt-1">{PEN.format(stats.total.revenue)}</h2>
                     <div className="mt-3 flex items-center gap-2 text-xs text-emerald-700 font-medium">
                         <span className="bg-emerald-100 px-2 py-0.5 rounded flex items-center gap-1">
                             <ArrowTrendingUpIcon className="w-3 h-3" /> +{stats.total.transactions} ventas
@@ -114,11 +114,11 @@ export default function AdminDashboard() {
                     </div>
                 </div>
 
-                <div {...cascade(3, "bg-white p-6 rounded-2xl shadow-sm border border-gray-100")}>
+                <div {...cascade(3, "bg-white dark:bg-[#1c1c1c] p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-zinc-800")}>
                     <div className="flex justify-between items-start">
                         <div>
                             <p className="text-gray-500 text-sm font-medium">Ticket Promedio</p>
-                            <h2 className="text-3xl font-bold text-gray-900 mt-1">{PEN.format(ticketPromedio)}</h2>
+                            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mt-1">{PEN.format(ticketPromedio)}</h2>
                         </div>
                         <div className="p-2 bg-blue-50 text-blue-600 rounded-lg">
                             <ChartBarIcon className="w-6 h-6" />
@@ -127,11 +127,11 @@ export default function AdminDashboard() {
                     <p className="text-xs text-gray-400 mt-3">Gasto promedio por cliente.</p>
                 </div>
 
-                <div {...cascade(4, "bg-white p-6 rounded-2xl shadow-sm border border-gray-100")}>
+                <div {...cascade(4, "bg-white dark:bg-[#1c1c1c] p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-zinc-800")}>
                     <div className="flex justify-between items-start">
                         <div>
                             <p className="text-gray-500 text-sm font-medium">Tasa de Compra Cruzada</p>
-                            <h2 className="text-3xl font-bold text-gray-900 mt-1">{crossSellRate}%</h2>
+                            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mt-1">{crossSellRate}%</h2>
                         </div>
                         <div className="p-2 bg-purple-50 text-purple-600 rounded-lg">
                             <UserGroupIcon className="w-6 h-6" />
@@ -145,8 +145,8 @@ export default function AdminDashboard() {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
                 {/* A. Historial de Ventas (Area Chart) */}
-                <div {...cascade(5, "bg-white p-6 rounded-2xl shadow-sm border border-gray-100 lg:col-span-2")}>
-                    <h3 className="font-bold text-gray-800 mb-6">Tendencia de Ingresos (7 Días)</h3>
+                <div {...cascade(5, "bg-white dark:bg-[#1c1c1c] p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-zinc-800 lg:col-span-2")}>
+                    <h3 className="font-bold text-gray-800 dark:text-gray-100 mb-6">Tendencia de Ingresos (7 Días)</h3>
                     <div className="h-[300px] w-full">
                         <ResponsiveContainer width="100%" height="100%">
                             <AreaChart data={history}>
@@ -167,8 +167,8 @@ export default function AdminDashboard() {
                 </div>
 
                 {/* B. Distribución de Ingresos (DONUT CHART - NUEVO) */}
-                <div {...cascade(6, "bg-white p-6 rounded-2xl shadow-sm border border-gray-100")}>
-                    <h3 className="font-bold text-gray-800 mb-2 flex items-center gap-2">
+                <div {...cascade(6, "bg-white dark:bg-[#1c1c1c] p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-zinc-800")}>
+                    <h3 className="font-bold text-gray-800 dark:text-gray-100 mb-2 flex items-center gap-2">
                         <ChartPieIcon className="w-5 h-5 text-gray-400" /> Fuentes de Ingreso
                     </h3>
                     <div className="h-[300px] w-full relative">
@@ -202,8 +202,8 @@ export default function AdminDashboard() {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
                 {/* C. Días Más Rentables (Bar Chart Vertical) */}
-                <div {...cascade(7, "bg-white p-6 rounded-2xl shadow-sm border border-gray-100")}>
-                    <h3 className="font-bold text-gray-800 mb-6 flex items-center gap-2">
+                <div {...cascade(7, "bg-white dark:bg-[#1c1c1c] p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-zinc-800")}>
+                    <h3 className="font-bold text-gray-800 dark:text-gray-100 mb-6 flex items-center gap-2">
                         <CalendarDaysIcon className="w-5 h-5 text-gray-400" /> Días Rentables
                     </h3>
                     <div className="h-[250px] w-full">
@@ -219,8 +219,8 @@ export default function AdminDashboard() {
                 </div>
 
                 {/* D. Volumen de Ventas (Bar Chart Simple - NUEVO) */}
-                <div {...cascade(8, "bg-white p-6 rounded-2xl shadow-sm border border-gray-100")}>
-                    <h3 className="font-bold text-gray-800 mb-6 flex items-center gap-2">
+                <div {...cascade(8, "bg-white dark:bg-[#1c1c1c] p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-zinc-800")}>
+                    <h3 className="font-bold text-gray-800 dark:text-gray-100 mb-6 flex items-center gap-2">
                         <CubeIcon className="w-5 h-5 text-gray-400" /> Unidades Vendidas
                     </h3>
                     <div className="h-[250px] w-full">
@@ -236,8 +236,8 @@ export default function AdminDashboard() {
                 </div>
 
                 {/* E. Top Productos (Lista) */}
-                <div {...cascade(9, "bg-white p-6 rounded-2xl shadow-sm border border-gray-100")}>
-                    <h3 className="font-bold text-gray-800 mb-4 flex items-center gap-2">
+                <div {...cascade(9, "bg-white dark:bg-[#1c1c1c] p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-zinc-800")}>
+                    <h3 className="font-bold text-gray-800 dark:text-gray-100 mb-4 flex items-center gap-2">
                         <TrophyIcon className="w-5 h-5 text-amber-500" /> Podio de Ventas
                     </h3>
                     <div className="space-y-4">
@@ -252,7 +252,7 @@ export default function AdminDashboard() {
                                 </div>
                                 <div className="flex-1 min-w-0">
                                     <p className="text-xs text-gray-400 font-medium uppercase">{item.label} #1</p>
-                                    <p className="font-semibold text-gray-900 truncate">{item.data?.name || 'Sin ventas'}</p>
+                                    <p className="font-semibold text-gray-900 dark:text-white truncate">{item.data?.name || 'Sin ventas'}</p>
                                 </div>
                                 <div className="text-sm font-bold text-gray-600">
                                     {item.data?.sales || 0}
@@ -266,10 +266,10 @@ export default function AdminDashboard() {
             {/* 5. DATOS ADICIONALES (Fila Inferior) */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Hora Pico */}
-                <div {...cascade(13, "bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between")}>
+                <div {...cascade(13, "bg-white dark:bg-[#1c1c1c] p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-zinc-800 flex items-center justify-between")}>
                     <div>
                         <p className="text-gray-500 font-medium mb-1">Hora Pico del Museo</p>
-                        <h3 className="text-3xl font-black text-gray-900">
+                        <h3 className="text-3xl font-black text-gray-900 dark:text-white">
                             {analytics.peakHour ? analytics.peakHour.time : '--:--'}
                         </h3>
                         <p className="text-xs text-indigo-600 bg-indigo-50 px-2 py-1 rounded mt-2 w-fit">
@@ -282,8 +282,8 @@ export default function AdminDashboard() {
                 </div>
 
                 {/* Clientes VIP */}
-                <div {...cascade(14, "bg-white p-6 rounded-2xl shadow-sm border border-gray-100")}>
-                    <h3 className="font-bold text-gray-800 mb-4">👑 Clientes VIP</h3>
+                <div {...cascade(14, "bg-white dark:bg-[#1c1c1c] p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-zinc-800")}>
+                    <h3 className="font-bold text-gray-800 dark:text-gray-100 mb-4">👑 Clientes VIP</h3>
                     <div className="space-y-3">
                         {analytics.vipClients.map((client, idx) => (
                             <div key={idx} {...cascade(15 + idx, "flex items-center justify-between border-b border-gray-50 last:border-0 pb-2 last:pb-0")}>
@@ -292,7 +292,7 @@ export default function AdminDashboard() {
                                         {client.use_txt_nombres[0]}{client.use_txt_apellidos[0]}
                                     </div>
                                     <div>
-                                        <p className="text-sm font-semibold text-gray-900">{client.use_txt_nombres}</p>
+                                        <p className="text-sm font-semibold text-gray-900 dark:text-white">{client.use_txt_nombres}</p>
                                         <p className="text-xs text-gray-400">{client.use_txt_email}</p>
                                     </div>
                                 </div>

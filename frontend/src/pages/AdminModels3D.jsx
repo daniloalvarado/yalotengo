@@ -318,7 +318,7 @@ export default function AdminModels3D() {
         <div className="max-w-6xl mx-auto p-4 sm:p-6 space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div {...cascade(0)}>
-                    <h1 className="text-2xl font-bold text-gray-900">Gestión Modelos 3D</h1>
+                    <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Gestión Modelos 3D</h1>
                     <p className="text-gray-500 text-sm">Productos y ventas de modelos 3D</p>
                 </div>
                 {mainTab === 'products' && (
@@ -334,7 +334,7 @@ export default function AdminModels3D() {
                 )}
             </div>
 
-            <div {...cascade(2, "flex gap-2 border-b border-gray-200 overflow-x-auto whitespace-nowrap custom-scrollbar pb-1")}>
+            <div {...cascade(2, "flex gap-2 border-b border-gray-200 dark:border-zinc-800 overflow-x-auto whitespace-nowrap custom-scrollbar pb-1")}>
                 <button
                     onClick={() => { setMainTab('products'); setSearchTerm(''); }}
                     {...cascade(3, `px-4 py-2 shrink-0 text-sm font-medium border-b-2 transition-all ${mainTab === 'products' ? 'border-emerald-500 text-emerald-600' : 'border-transparent text-gray-500 hover:text-gray-700'}`)}
@@ -362,13 +362,13 @@ export default function AdminModels3D() {
                     <div className="flex gap-2 overflow-x-auto whitespace-nowrap custom-scrollbar">
                         <button
                             onClick={() => { setModelCategory('DIGITALIZADO'); setModelSubcategory('Todas'); }}
-                            {...cascade(7, `px-3 py-1 shrink-0 text-sm rounded-full transition-colors ${modelCategory === 'DIGITALIZADO' ? 'bg-emerald-100 text-emerald-700 font-medium' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`)}
+                            {...cascade(7, `px-3 py-1 shrink-0 text-sm rounded-full transition-colors ${modelCategory === 'DIGITALIZADO' ? 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400 font-medium' : 'bg-gray-100 dark:bg-zinc-800 text-gray-600 hover:bg-gray-200'}`)}
                         >
                             Digitales (GLB)
                         </button>
                         <button
                             onClick={() => setModelCategory('IMPRESO')}
-                            {...cascade(8, `px-3 py-1 shrink-0 text-sm rounded-full transition-colors ${modelCategory === 'IMPRESO' ? 'bg-emerald-100 text-emerald-700 font-medium' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`)}
+                            {...cascade(8, `px-3 py-1 shrink-0 text-sm rounded-full transition-colors ${modelCategory === 'IMPRESO' ? 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400 font-medium' : 'bg-gray-100 dark:bg-zinc-800 text-gray-600 hover:bg-gray-200'}`)}
                         >
                             Impresos (Físicos)
                         </button>
@@ -395,7 +395,7 @@ export default function AdminModels3D() {
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         placeholder="Buscar por cliente o modelo..."
-                        className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
+                        className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-zinc-700 bg-transparent dark:text-white rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
                     />
                 </div>
             )}
@@ -405,9 +405,9 @@ export default function AdminModels3D() {
             {mainTab === 'products' && (
                 <div key={`${modelCategory}-${modelSubcategory}`} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {filteredModels.map((m, idx) => (
-                        <div key={m.mod_int_id} {...cascade(10 + idx, `bg-white rounded-xl border p-4 shadow-sm transition-all ${!m.mod_bool_active ? 'opacity-60' : ''}`)}>
+                        <div key={m.mod_int_id} {...cascade(10 + idx, `bg-white dark:bg-[#1c1c1c] rounded-xl border p-4 shadow-sm transition-all ${!m.mod_bool_active ? 'opacity-60' : ''}`)}>
                             {m.mod_txt_category === 'IMPRESO' ? (
-                                <div className="aspect-square bg-gray-100 rounded-lg mb-3 overflow-hidden grid place-items-center">
+                                <div className="aspect-square bg-gray-100 dark:bg-zinc-800 rounded-lg mb-3 overflow-hidden grid place-items-center">
                                     {m.mod_txt_glb_filename ? (
                                         <img
                                             src={`${api.defaults.baseURL?.replace(/\/api\/?$/, '')}/uploads/impresos/${m.mod_txt_glb_filename}`}
@@ -428,16 +428,16 @@ export default function AdminModels3D() {
 
                             <div className="flex items-start justify-between gap-2 mb-2">
                                 <div className="flex-1 min-w-0">
-                                    <h3 className="font-semibold text-gray-900 truncate">{m.mod_txt_name}</h3>
+                                    <h3 className="font-semibold text-gray-900 dark:text-white truncate">{m.mod_txt_name}</h3>
                                     <p className="text-xs text-gray-400 line-clamp-2">{m.mod_txt_desc}</p>
                                 </div>
-                                <span className={`shrink-0 px-2 py-1 text-xs font-medium rounded-full ${m.mod_bool_active ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-100 text-gray-500'}`}>
+                                <span className={`shrink-0 px-2 py-1 text-xs font-medium rounded-full ${m.mod_bool_active ? 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400' : 'bg-gray-100 dark:bg-zinc-800 text-gray-500'}`}>
                                     {m.mod_bool_active ? 'Activo' : 'Inactivo'}
                                 </span>
                             </div>
                             <div className="text-lg font-bold text-emerald-600 mb-3">{PEN.format(Number(m.mod_dec_price || 0))}</div>
                             <div className="flex flex-wrap gap-2">
-                                <button onClick={() => openModal(m)} className="flex-1 flex items-center justify-center gap-1 px-3 py-2 text-sm bg-gray-100 hover:bg-gray-200 rounded-lg">
+                                <button onClick={() => openModal(m)} className="flex-1 flex items-center justify-center gap-1 px-3 py-2 text-sm bg-gray-100 dark:bg-zinc-800 hover:bg-gray-200 rounded-lg">
                                     <PencilIcon className="w-4 h-4" /> Editar
                                 </button>
                                 <button onClick={() => handleToggle(m.mod_int_id)} className="flex items-center justify-center gap-1 px-3 py-2 text-sm bg-amber-100 hover:bg-amber-200 text-amber-700 rounded-lg">
@@ -450,7 +450,7 @@ export default function AdminModels3D() {
                         </div>
                     ))}
                     {filteredModels.length === 0 && (
-                        <div {...cascade(10, "col-span-full py-12 text-center text-gray-400 border-2 border-dashed border-gray-200 rounded-xl")}>
+                        <div {...cascade(10, "col-span-full py-12 text-center text-gray-400 border-2 border-dashed border-gray-200 dark:border-zinc-800 rounded-xl")}>
                             <p>No hay modelos {modelCategory === 'IMPRESO' ? 'impresos' : 'digitales'} registrados.</p>
                         </div>
                     )}
@@ -462,9 +462,9 @@ export default function AdminModels3D() {
             )}
 
             {mainTab === 'purchases' && (
-                <div key={searchTerm} {...cascade(7, "overflow-x-auto rounded-lg border border-gray-200")}>
+                <div key={searchTerm} {...cascade(7, "overflow-x-auto rounded-lg border border-gray-200 dark:border-zinc-800")}>
                     <table className="w-full text-sm">
-                        <thead className="bg-gray-50">
+                        <thead className="bg-gray-50 dark:bg-[#141414] text-gray-600 dark:text-gray-400">
                             <tr {...cascade(8)}>
                                 <th className="px-4 py-3 text-left font-medium text-gray-600">Cliente</th>
                                 <th className="px-4 py-3 text-left font-medium text-gray-600">Modelo</th>
@@ -473,11 +473,11 @@ export default function AdminModels3D() {
                                 <th className="px-4 py-3 text-left font-medium text-gray-600">Fecha</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-gray-100">
+                        <tbody className="divide-y divide-gray-100 dark:divide-zinc-800">
                             {filteredPurchases.map((p, i) => (
-                                <tr key={i} onClick={() => setDetailItem(p)} {...cascade(9 + i, "hover:bg-emerald-50 cursor-pointer transition-colors group")}>
+                                <tr key={i} onClick={() => setDetailItem(p)} {...cascade(9 + i, "hover:bg-emerald-50 dark:hover:bg-emerald-900/20 cursor-pointer transition-colors group")}>
                                     <td className="px-4 py-3">
-                                        <div className="font-medium text-gray-900">{p.userName}</div>
+                                        <div className="font-medium text-gray-900 dark:text-white">{p.userName}</div>
                                         <div className="text-xs text-gray-500">{p.userEmail}</div>
                                     </td>
                                     <td className="px-4 py-3 text-gray-700">{p.modelName}</td>
@@ -488,7 +488,7 @@ export default function AdminModels3D() {
                                                 <span className={`text-xs font-bold px-2 py-0.5 rounded
                                                     ${p.deliveryStatus === 'DELIVERED' ? 'bg-emerald-100 text-emerald-800' :
                                                         p.deliveryStatus === 'IN_PROGRESS' || p.deliveryStatus === 'PREPARING' ? 'bg-blue-100 text-blue-800' :
-                                                            'bg-gray-100 text-gray-800'}`}>
+                                                            'bg-gray-100 dark:bg-zinc-800 text-gray-800'}`}>
                                                     {p.deliveryStatus === 'DELIVERED' ? 'Entregado' :
                                                         p.deliveryStatus === 'IN_PROGRESS' || p.deliveryStatus === 'PREPARING' ? 'En curso' : 'Aceptado'}
                                                 </span>
@@ -534,7 +534,7 @@ export default function AdminModels3D() {
                             value={formData.name || ''}
                             onChange={e => setFormData(p => ({ ...p, name: e.target.value }))}
                             required
-                            className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none ${attemptedSubmit && !formData.name ? 'border-red-300 ring-1 ring-red-100 placeholder-red-300' : 'border-gray-300'}`}
+                            className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none ${attemptedSubmit && !formData.name ? 'border-red-300 ring-1 ring-red-100 placeholder-red-300' : 'border-gray-300 dark:border-zinc-700 bg-transparent dark:text-white'}`}
                         />
                     </label>
                     <label className="block">
@@ -544,7 +544,7 @@ export default function AdminModels3D() {
                             onChange={e => setFormData(p => ({ ...p, desc: e.target.value }))}
                             rows={3}
                             required
-                            className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none ${attemptedSubmit && !formData.desc ? 'border-red-300 ring-1 ring-red-100 placeholder-red-300' : 'border-gray-300'}`}
+                            className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none ${attemptedSubmit && !formData.desc ? 'border-red-300 ring-1 ring-red-100 placeholder-red-300' : 'border-gray-300 dark:border-zinc-700 bg-transparent dark:text-white'}`}
                         />
                     </label>
 
@@ -563,7 +563,7 @@ export default function AdminModels3D() {
                                     type="button"
                                     onClick={() => fileInputRef.current?.click()}
                                     disabled={uploading}
-                                    className={`flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm disabled:opacity-50 transition-colors ${attemptedSubmit && !formData.glbFilename ? 'border border-red-300 text-red-600 bg-red-50 hover:bg-red-100' : ''}`}
+                                    className={`flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-zinc-800 hover:bg-gray-200 rounded-lg text-sm disabled:opacity-50 transition-colors ${attemptedSubmit && !formData.glbFilename ? 'border border-red-300 text-red-600 bg-red-50 hover:bg-red-100' : ''}`}
                                 >
                                     <ArrowUpTrayIcon className="w-4 h-4" />
                                     {uploading ? 'Subiendo...' : 'Subir archivo .glb'}
@@ -592,7 +592,7 @@ export default function AdminModels3D() {
                                     type="button"
                                     onClick={() => imageInputRef.current?.click()}
                                     disabled={uploading}
-                                    className={`flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm disabled:opacity-50 transition-colors ${attemptedSubmit && !formData.glbFilename ? 'border border-red-300 text-red-600 bg-red-50 hover:bg-red-100' : ''}`}
+                                    className={`flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-zinc-800 hover:bg-gray-200 rounded-lg text-sm disabled:opacity-50 transition-colors ${attemptedSubmit && !formData.glbFilename ? 'border border-red-300 text-red-600 bg-red-50 hover:bg-red-100' : ''}`}
                                 >
                                     <PhotoIcon className="w-4 h-4" />
                                     {uploading ? 'Subiendo...' : 'Subir Imagen'}
@@ -606,7 +606,7 @@ export default function AdminModels3D() {
                             </div>
                             <p className="text-xs text-gray-400 mt-1">Foto real del objeto impreso para mostrar en el catálogo.</p>
                             {formData.glbFilename && (
-                                <div className="mt-2 w-20 h-20 rounded-lg overflow-hidden bg-gray-100 border p-1">
+                                <div className="mt-2 w-20 h-20 rounded-lg overflow-hidden bg-gray-100 dark:bg-zinc-800 border p-1">
                                     <img
                                         src={`${api.defaults.baseURL?.replace(/\/api\/?$/, '')}/uploads/impresos/${formData.glbFilename}`}
                                         className="w-full h-full object-cover rounded"
@@ -623,7 +623,7 @@ export default function AdminModels3D() {
                                 value={formData.subcategory || ''}
                                 onChange={e => setFormData(p => ({ ...p, subcategory: e.target.value }))}
                                 placeholder="Ej: Insectos, Anatomía, Células..."
-                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none"
+                                className="w-full px-3 py-2 border border-gray-300 dark:border-zinc-700 bg-transparent dark:text-white rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none"
                             />
                             <p className="text-xs text-gray-400 mt-1">Sirve para agrupar los modelos (Ej: Insectos). Si lo dejas vacío dirá 'Sin Categoría'.</p>
                         </label>
@@ -631,11 +631,11 @@ export default function AdminModels3D() {
 
                     <label className="block">
                         <span className="text-sm font-medium text-gray-700 mb-1 block">Precio (S/)</span>
-                        <input type="number" step="0.01" value={formData.price || ''} onChange={e => setFormData(p => ({ ...p, price: parseFloat(e.target.value) }))} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none" />
+                        <input type="number" step="0.01" value={formData.price || ''} onChange={e => setFormData(p => ({ ...p, price: parseFloat(e.target.value) }))} className="w-full px-3 py-2 border border-gray-300 dark:border-zinc-700 bg-transparent dark:text-white rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none" />
                     </label>
 
                     <div className="flex gap-3 pt-4">
-                        <button type="button" onClick={() => setShowModal(false)} className="flex-1 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">Cancelar</button>
+                        <button type="button" onClick={() => setShowModal(false)} className="flex-1 px-4 py-2 border border-gray-300 dark:border-zinc-700 bg-transparent dark:text-white rounded-lg hover:bg-gray-50 dark:bg-[#141414] text-gray-600 dark:text-gray-400">Cancelar</button>
                         <button
                             type="submit"
                             disabled={uploading || isSaving}
