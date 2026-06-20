@@ -22,7 +22,7 @@ export default function CustomStatusSelect({ options, value, onChange }) {
     <div className="relative w-full text-left z-20" ref={dropdownRef}>
       <button
         type="button"
-        className="flex items-center justify-between w-full bg-white dark:bg-[#141414] px-3 py-2 rounded-lg border border-gray-300 dark:border-zinc-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200"
+        className="flex items-center justify-between w-full h-[42px] bg-white dark:bg-[#141414] px-3 rounded-lg border border-gray-300 dark:border-zinc-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200"
         onClick={() => setIsOpen(!isOpen)}
       >
         <span className="text-sm text-gray-800 dark:text-white">{selectedOption.label}</span>

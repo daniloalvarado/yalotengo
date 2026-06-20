@@ -120,7 +120,7 @@ export default function AdminSales({
                         weekDays={["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"]}
                         placeholder="Seleccionar fecha"
                         containerStyle={{ width: '100%' }}
-                        style={styles.input}
+                        style={{ ...styles.input, cursor: 'pointer' }}
                         className={`bg-white dark:bg-[#141414] dark:text-white dark:border-zinc-700 ${isDarkTheme ? 'bg-dark' : ''}`}
                     />
                 </div>

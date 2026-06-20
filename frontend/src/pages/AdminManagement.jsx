@@ -28,6 +28,8 @@ export default function AdminManagement({
             gap: 1rem;
             margin-bottom: 1.5rem;
             align-items: center;
+            position: relative;
+            z-index: 50; /* Fija el problema de z-index con la tabla */
         }
 
         /* PC: Fecha y Estado automáticos, Buscador ocupa todo el resto */
@@ -40,7 +42,8 @@ export default function AdminManagement({
         /* 2. INPUTS AL 100% DEL ANCHO DE SU CELDA */
         .management-input {
             width: 100%;
-            padding: 0.75rem;
+            height: 42px;
+            padding: 0 0.75rem 0 2.5rem;
             font-size: 0.95rem;
             border: 1px solid #d1d5db;
             border-radius: 8px;
@@ -55,6 +58,8 @@ export default function AdminManagement({
             overflow: hidden; /* Para redondear bordes */
             display: flex;
             flex-direction: column;
+            position: relative;
+            z-index: 1;
         }
 
         .scroll-wrapper {
@@ -102,7 +107,7 @@ export default function AdminManagement({
                             weekDays={["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"]}
                             placeholder="Seleccionar fecha"
                             containerStyle={{ width: '100%' }}
-                            style={{ width: '100%', padding: '0.75rem', fontSize: '0.95rem', borderRadius: '8px', border: '1px solid #d1d5db', outline: 'none' }}
+                            style={{ width: '100%', height: '42px', padding: '0 0.75rem', fontSize: '0.95rem', borderRadius: '8px', border: '1px solid #d1d5db', outline: 'none', cursor: 'pointer' }}
                             className={`bg-white dark:bg-[#141414] dark:text-white dark:border-zinc-700 bg-dark`}
                         />
                     </div>
@@ -132,7 +137,6 @@ export default function AdminManagement({
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             className="management-input bg-white dark:bg-[#141414] text-gray-900 dark:text-white border-gray-300 dark:border-zinc-700"
-                            style={{ paddingLeft: '2.5rem' }} 
                         />
                     </div>
                 </div>
