@@ -505,8 +505,7 @@ export default function AdminModels3D() {
                                     </td>
                                     <td className="px-4 py-3 text-gray-500 dark:text-gray-300">{formatDateTime(p.createdAt)}</td>
                                 </tr>
-                                );
-                            })}
+                            ))}
                         </tbody>
                     </table>
                     {filteredPurchases.length === 0 && (
