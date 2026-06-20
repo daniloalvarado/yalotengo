@@ -35,11 +35,14 @@
   }
   /* react-multi-date-picker green theme override */
   .rmdp-day.rmdp-selected span:not(.highlight),
-  .rmdp-day.rmdp-today span {
+  .rmdp-day.rmdp-today span,
+  .bg-dark .rmdp-day.rmdp-selected span:not(.highlight),
+  .bg-dark .rmdp-day.rmdp-today span {
     background-color: #0d9467 !important;
     box-shadow: 0 0 3px #0a7551 !important;
   }
-  .rmdp-day:not(.rmdp-disabled):not(.rmdp-day-hidden) span:hover {
+  .rmdp-day:not(.rmdp-disabled):not(.rmdp-day-hidden) span:hover,
+  .bg-dark .rmdp-day:not(.rmdp-disabled):not(.rmdp-day-hidden) span:hover {
     background-color: #0a7551 !important;
     color: white !important;
   }

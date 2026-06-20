@@ -720,14 +720,10 @@ export default function ReservationConfirmation({
       {/* Overlay de procesamiento */}
       {processingPayment && (
         <div className="processing-overlay">
-          <div className="processing-card">
+          <div className="processing-card dark:bg-[#141414] dark:border dark:border-zinc-800">
             <div className="spinner"></div>
-            <p style={{ color: theme.textDark, fontWeight: 600 }}>
-              Procesando tu pago...
-            </p>
-            <p style={{ color: '#6b7280', fontSize: '0.875rem' }}>
-              Por favor no cierres esta ventana
-            </p>
+            <p className="text-gray-900 dark:text-white mt-4 font-bold">Procesando tu pago...</p>
+            <p className="text-gray-600 dark:text-gray-400 text-sm">Por favor, no cierres esta ventana.</p>
           </div>
         </div>
       )}
