@@ -20,6 +20,19 @@ export default function Models3DCheckout() {
 
     const [step, setStep] = useState('payment') // 'payment' | 'success'
     const [processing, setProcessing] = useState(false)
+    const [isDarkTheme, setIsDarkTheme] = useState(() => document.documentElement.classList.contains('dark'))
+
+    useEffect(() => {
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.attributeName === 'class') {
+                    setIsDarkTheme(document.documentElement.classList.contains('dark'))
+                }
+            })
+        })
+        observer.observe(document.documentElement, { attributes: true })
+        return () => observer.disconnect()
+    }, [])
     const [purchaseResult, setPurchaseResult] = useState(null)
     const [paymentMethod, setPaymentMethod] = useState('card') // 'card' | 'yape'
     const [paymentError, setPaymentError] = useState(null)
@@ -305,7 +318,7 @@ export default function Models3DCheckout() {
                                     paymentMethods: { maxInstallments: 1 },
                                     visual: {
                                         style: {
-                                            theme: 'default',
+                                            theme: isDarkTheme ? 'dark' : 'default',
                                             customVariables: {
                                                 formBackgroundColor: 'transparent',
                                                 baseColor: '#059669'

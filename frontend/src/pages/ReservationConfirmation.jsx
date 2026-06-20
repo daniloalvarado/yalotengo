@@ -20,6 +20,20 @@ export default function ReservationConfirmation({
 }) {
   const [paymentMethod, setPaymentMethod] = useState('card'); // 'card' or 'yape'
   const [processingPayment, setProcessingPayment] = useState(false);
+  const [isDarkTheme, setIsDarkTheme] = useState(() => document.documentElement.classList.contains('dark'));
+
+  useEffect(() => {
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.attributeName === 'class') {
+          setIsDarkTheme(document.documentElement.classList.contains('dark'));
+        }
+      });
+    });
+    observer.observe(document.documentElement, { attributes: true });
+    return () => observer.disconnect();
+  }, []);
+
   const [paymentError, setPaymentError] = useState(null);
 
   // Estado para Yape
@@ -640,7 +654,7 @@ export default function ReservationConfirmation({
                 customization={{
                   visual: {
                     style: {
-                      theme: 'default',
+                      theme: isDarkTheme ? 'dark' : 'default',
                       customVariables: {
                         formBackgroundColor: 'transparent',
                         baseColor: theme.primary

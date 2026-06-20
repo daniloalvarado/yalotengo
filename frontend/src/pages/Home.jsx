@@ -24,11 +24,18 @@ export default function Home() {
 
       {/* --- IMAGEN DE PORTADA --- */}
       <div className="absolute inset-0 z-0">
-        <img
-          src="/portada.webp"
-          alt="Portada"
-          className="w-full h-full object-cover"
-        />
+        <picture>
+          <source srcSet="/portada.webp" type="image/webp" />
+          <img
+            src="/portada.jpg"
+            alt="Portada"
+            className="w-full h-full object-cover"
+            onError={(e) => {
+              // Si falla la carga de la imagen principal, no rompas el layout
+              e.target.style.display = 'none';
+            }}
+          />
+        </picture>
         <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/65 to-black/80"></div>
       </div>
 

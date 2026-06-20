@@ -18,6 +18,19 @@ export default function DigitalCartCheckout({ items, onPaymentSuccess }) {
     // Estado para Yape
     const [yapePhone, setYapePhone] = useState('')
     const [yapeOtp, setYapeOtp] = useState('')
+    const [isDarkTheme, setIsDarkTheme] = useState(() => document.documentElement.classList.contains('dark'))
+
+    useEffect(() => {
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.attributeName === 'class') {
+                    setIsDarkTheme(document.documentElement.classList.contains('dark'))
+                }
+            })
+        })
+        observer.observe(document.documentElement, { attributes: true })
+        return () => observer.disconnect()
+    }, [])
 
     // Calcular total
     const totalAmount = items.reduce((acc, item) => {
@@ -186,16 +199,16 @@ export default function DigitalCartCheckout({ items, onPaymentSuccess }) {
                     <p className="text-sm text-gray-600">Procesando pago...</p>
                 </div>
             ) : paymentMethod === 'card' ? (
-                <div className="custom-mp-brick">
+                <div className="dark:bg-[#141414] dark:p-2 dark:rounded-lg">
                     <CardPayment
                         initialization={{ amount: totalAmount }}
                         customization={{
                             paymentMethods: { maxInstallments: 1 },
                             visual: {
                                 style: {
-                                    theme: 'default',
+                                    theme: isDarkTheme ? 'dark' : 'default',
                                     customVariables: {
-                                        formBackgroundColor: '#ffffff',
+                                        formBackgroundColor: 'transparent',
                                         baseColor: '#059669'
                                     }
                                 },
@@ -204,7 +217,7 @@ export default function DigitalCartCheckout({ items, onPaymentSuccess }) {
                         }}
                         onSubmit={handleCardSubmit}
                         onReady={() => console.log('CardPayment Ready')}
-                        onError={(e) => console.error('MP Error', e)}
+                        onError={(error) => console.error('MP CardPayment Error:', error)}
                     />
                 </div>
             ) : (
