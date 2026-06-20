@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { cascade } from '../utils/animations';
 import CustomStatusSelect from '../components/CustomStatusSelect';
+import DatePicker from "react-multi-date-picker";
 
 export default function AdminManagement({ 
     stats, realVisitors, reservations, filterDate, setFilterDate, 
@@ -90,16 +91,24 @@ export default function AdminManagement({
                 {/* 👇 FILTROS Y BUSCADOR (GRID RESPONSIVE) */}
                 <div className={`management-filters ${cascade(9).className}`} style={cascade(9).style}>
                     
-                    {/* FECHA */}
-                    <input 
-                        type="date" 
-                        value={filterDate} 
-                        onChange={e => setFilterDate(e.target.value)} 
-                        className="management-input bg-white dark:bg-[#141414] text-gray-900 dark:text-white border-gray-300 dark:border-zinc-700 [color-scheme:light] dark:[color-scheme:dark]"
-                    />
+                    <div style={{ minWidth: '180px', position: 'relative', zIndex: 60 }}>
+                        <DatePicker
+                            value={filterDate ? new Date(filterDate + 'T12:00:00') : null}
+                            onChange={(dateObj) => {
+                                setFilterDate(dateObj ? dateObj.format("YYYY-MM-DD") : '');
+                            }}
+                            format="DD/MM/YYYY"
+                            months={["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]}
+                            weekDays={["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"]}
+                            placeholder="Seleccionar fecha"
+                            containerStyle={{ width: '100%' }}
+                            style={{ width: '100%', padding: '0.75rem', fontSize: '0.95rem', borderRadius: '8px', border: '1px solid #d1d5db', outline: 'none' }}
+                            className={`bg-white dark:bg-[#141414] dark:text-white dark:border-zinc-700 bg-dark`}
+                        />
+                    </div>
                     
                     {/* ESTADO */}
-                    <div style={{ minWidth: '180px' }}>
+                    <div style={{ minWidth: '180px', position: 'relative', zIndex: 50 }}>
                         <CustomStatusSelect
                             value={filterStatus}
                             onChange={(val) => setFilterStatus(val)}

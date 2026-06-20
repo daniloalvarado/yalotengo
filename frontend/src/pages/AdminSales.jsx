@@ -105,8 +105,8 @@ export default function AdminSales({
                 </p>
             </div>
 
-            <div style={{ ...styles.row, ...cascade(6).style }} className={cascade(6).className}>
-                <label style={{ fontWeight: 'bold' }}>Fecha de venta:</label>
+            <div style={{ ...styles.row, ...cascade(6).style, position: 'relative', zIndex: 50 }} className={cascade(6).className}>
+                <label style={{ fontWeight: 'bold', color: theme.textDark }}>Fecha de venta:</label>
                 <div style={{ minWidth: '200px' }}>
                     <DatePicker
                         value={date ? new Date(date + 'T12:00:00') : null}
