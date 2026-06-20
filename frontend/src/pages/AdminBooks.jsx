@@ -250,7 +250,7 @@ export default function AdminBooks() {
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
                     <h1 {...cascade(1, "text-2xl font-bold text-gray-900 dark:text-white")}>Gestión Libros</h1>
-                    <p {...cascade(2, "text-gray-500 dark:text-gray-400 text-sm")}>Productos y ventas de libros digitales</p>
+                    <p {...cascade(2, "text-gray-500 dark:text-gray-300 text-sm")}>Productos y ventas de libros digitales</p>
                 </div>
                 {subTab === 'products' && (
                     <button
@@ -266,13 +266,13 @@ export default function AdminBooks() {
 
             <div className="flex gap-2 border-b border-gray-200 dark:border-zinc-800/40">
                 <button
-                    {...cascade(4, `px-4 py-2 text-sm font-medium border-b-2 transition-all ${subTab === 'products' ? 'border-emerald-500 text-emerald-600' : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:text-gray-300'}`)}
+                    {...cascade(4, `px-4 py-2 text-sm font-medium border-b-2 transition-all ${subTab === 'products' ? 'border-emerald-500 text-emerald-600' : 'border-transparent text-gray-500 dark:text-gray-300 hover:text-gray-700 dark:text-gray-300'}`)}
                     onClick={() => { setSubTab('products'); setSearchTerm(''); }}
                 >
                     Productos ({books.length})
                 </button>
                 <button
-                    {...cascade(5, `px-4 py-2 text-sm font-medium border-b-2 transition-all ${subTab === 'purchases' ? 'border-emerald-500 text-emerald-600' : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:text-gray-300'}`)}
+                    {...cascade(5, `px-4 py-2 text-sm font-medium border-b-2 transition-all ${subTab === 'purchases' ? 'border-emerald-500 text-emerald-600' : 'border-transparent text-gray-500 dark:text-gray-300 hover:text-gray-700 dark:text-gray-300'}`)}
                     onClick={() => setSubTab('purchases')}
                 >
                     Compras ({purchases.length})
@@ -292,12 +292,12 @@ export default function AdminBooks() {
                 </div>
             )}
 
-            {loading && <div className="text-gray-500 dark:text-gray-400">Cargando...</div>}
+            {loading && <div className="text-gray-500 dark:text-gray-300">Cargando...</div>}
 
             {subTab === 'products' && (
                 <div {...cascade(4)} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {books.map((b, i) => (
-                        <div key={b.boo_int_id} {...cascade(5 + i, `bg-white dark:bg-[#1c1c1c] rounded-xl border p-4 shadow-sm transition-all ${!b.boo_bool_active ? 'opacity-60' : ''}`)}>
+                        <div key={b.boo_int_id} {...cascade(5 + i, `bg-white dark:bg-[#1c1c1c] rounded-xl border border-gray-200 dark:border-zinc-800/50 p-4 shadow-sm transition-all ${!b.boo_bool_active ? 'opacity-60' : ''}`)}>
                             {b.boo_txt_cover_image && (
                                 <img
                                     src={`${api.defaults.baseURL?.replace(/\/api\/?$/, '')}/uploads/books/${b.boo_txt_cover_image}`}
@@ -312,9 +312,9 @@ export default function AdminBooks() {
                             <div className="flex items-start justify-between gap-2 mb-2">
                                 <div className="flex-1 min-w-0">
                                     <h3 className="font-semibold text-gray-900 dark:text-white truncate">{b.boo_txt_title}</h3>
-                                    <p className="text-sm text-gray-500 dark:text-gray-400 truncate">{b.boo_txt_author}</p>
+                                    <p className="text-sm text-gray-500 dark:text-gray-300 truncate">{b.boo_txt_author}</p>
                                 </div>
-                                <span className={`shrink-0 px-2 py-1 text-xs font-medium rounded-full ${b.boo_bool_active ? 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400' : 'bg-gray-100 dark:bg-zinc-800 text-gray-500 dark:text-gray-400'}`}>
+                                <span className={`shrink-0 px-2 py-1 text-xs font-medium rounded-full ${b.boo_bool_active ? 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400' : 'bg-gray-100 dark:bg-zinc-800 text-gray-500 dark:text-gray-300'}`}>
                                     {b.boo_bool_active ? 'Activo' : 'Inactivo'}
                                 </span>
                             </div>
@@ -338,7 +338,7 @@ export default function AdminBooks() {
             {subTab === 'purchases' && (
                 <div {...cascade(4)} className="overflow-x-auto rounded-lg border border-gray-200 dark:border-zinc-800/40">
                     <table className="w-full text-sm">
-                        <thead className="bg-gray-50 dark:bg-[#141414] text-gray-600 dark:text-gray-400">
+                        <thead className="bg-gray-50 dark:bg-[#141414] text-gray-600 dark:text-gray-300">
                             <tr {...cascade(5)}>
                                 <th className="px-4 py-3 text-left font-medium text-gray-600">Cliente</th>
                                 <th className="px-4 py-3 text-left font-medium text-gray-600">Libro</th>
@@ -352,18 +352,18 @@ export default function AdminBooks() {
                                 <tr key={i} onClick={() => setDetailItem(p)} {...cascade(6 + i, "hover:bg-emerald-50 dark:hover:bg-emerald-900/20 cursor-pointer transition-colors group", 0, 30)}>
                                     <td className="px-4 py-3">
                                         <div className="font-medium text-gray-900 dark:text-white">{p.userName}</div>
-                                        <div className="text-xs text-gray-500 dark:text-gray-400">{p.userEmail}</div>
+                                        <div className="text-xs text-gray-500 dark:text-gray-300">{p.userEmail}</div>
                                     </td>
                                     <td className="px-4 py-3 text-gray-700 dark:text-gray-300">{p.bookTitle}</td>
                                     <td className="px-4 py-3 font-medium text-emerald-600">{PEN.format(Number(p.amount || 0))}</td>
                                     <td className="px-4 py-3"><StatusTag status={p.status} /></td>
-                                    <td className="px-4 py-3 text-gray-500 dark:text-gray-400">{formatDateTime(p.createdAt)}</td>
+                                    <td className="px-4 py-3 text-gray-500 dark:text-gray-300">{formatDateTime(p.createdAt)}</td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
                     {filteredPurchases.length === 0 && (
-                        <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+                        <div className="text-center py-8 text-gray-500 dark:text-gray-300">
                             {searchTerm ? 'No se encontraron resultados' : 'No hay compras aún'}
                         </div>
                     )}
@@ -371,7 +371,7 @@ export default function AdminBooks() {
             )}
 
             {subTab === 'products' && !loading && books.length === 0 && (
-                <div className="text-center py-12 text-gray-500 dark:text-gray-400">No hay libros. Haz clic en "Agregar" para crear uno.</div>
+                <div className="text-center py-12 text-gray-500 dark:text-gray-300">No hay libros. Haz clic en "Agregar" para crear uno.</div>
             )}
 
             {/* DETAIL MODAL */}
@@ -489,7 +489,7 @@ export default function AdminBooks() {
                     </label>
 
                     <div className="flex gap-3 pt-4">
-                        <button type="button" onClick={() => setShowModal(false)} className="flex-1 px-4 py-2 border border-gray-300 dark:border-zinc-700 bg-transparent dark:text-white rounded-lg hover:bg-gray-50 dark:bg-[#141414] text-gray-600 dark:text-gray-400">Cancelar</button>
+                        <button type="button" onClick={() => setShowModal(false)} className="flex-1 px-4 py-2 border border-gray-300 dark:border-zinc-700 bg-transparent dark:text-white rounded-lg hover:bg-gray-50 dark:bg-[#141414] text-gray-600 dark:text-gray-300">Cancelar</button>
                         <button
                             type="submit"
                             disabled={uploadingPdf || uploadingCover || isSaving}

@@ -1,14 +1,28 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 // 👇 Importamos BanknotesIcon para el botón de cobrar
 import { TicketIcon, BanknotesIcon } from "@heroicons/react/24/outline";
 import { cascade } from '../utils/animations';
 import DatePicker from "react-multi-date-picker";
+import "react-multi-date-picker/styles/backgrounds/bg-dark.css";
 
 export default function AdminSales({
     date, setDate, slots, selectedSlot, setSelectedSlot,
     guests, setGuests, FIXED_PRICE, loading, handleWalkIn,
     isTimePast, formatTime, theme, styles
 }) {
+    const [isDarkTheme, setIsDarkTheme] = useState(() => document.documentElement.classList.contains('dark'));
+
+    useEffect(() => {
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.attributeName === 'class') {
+                    setIsDarkTheme(document.documentElement.classList.contains('dark'));
+                }
+            });
+        });
+        observer.observe(document.documentElement, { attributes: true });
+        return () => observer.disconnect();
+    }, []);
     const responsiveCss = `
         /* GRID DE HORARIOS */
         .slots-grid-responsive {
@@ -101,6 +115,7 @@ export default function AdminSales({
                         placeholder="Seleccionar fecha"
                         containerStyle={{ width: '100%' }}
                         style={styles.input}
+                        className={`bg-white dark:bg-[#141414] dark:text-white dark:border-zinc-700 ${isDarkTheme ? 'bg-dark' : ''}`}
                     />
                 </div>
             </div>

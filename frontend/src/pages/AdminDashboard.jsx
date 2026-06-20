@@ -246,7 +246,7 @@ export default function AdminDashboard() {
                             /* { icon: AcademicCapIcon, data: analytics.topProducts.course, color: 'text-pink-600 bg-pink-50', label: 'Curso' }, */
                             { icon: CubeIcon, data: analytics.topProducts.model, color: 'text-blue-600 bg-blue-50', label: '3D' },
                         ].map((item, idx) => (
-                            <div key={idx} {...cascade(10 + idx, "flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 transition-colors")}>
+                            <div key={idx} {...cascade(10 + idx, "flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors")}>
                                 <div className={`p-2 rounded-lg ${item.color}`}>
                                     <item.icon className="w-5 h-5" />
                                 </div>
