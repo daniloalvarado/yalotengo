@@ -319,7 +319,7 @@ export default function AdminModels3D() {
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div {...cascade(0)}>
                     <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Gestión Modelos 3D</h1>
-                    <p className="text-gray-500 text-sm">Productos y ventas de modelos 3D</p>
+                    <p className="text-gray-500 dark:text-gray-400 text-sm">Productos y ventas de modelos 3D</p>
                 </div>
                 {mainTab === 'products' && (
                     <button
@@ -334,23 +334,23 @@ export default function AdminModels3D() {
                 )}
             </div>
 
-            <div {...cascade(2, "flex gap-2 border-b border-gray-200 dark:border-zinc-800 overflow-x-auto whitespace-nowrap custom-scrollbar pb-1")}>
+            <div {...cascade(2, "flex gap-2 border-b border-gray-200 dark:border-zinc-800/40 overflow-x-auto whitespace-nowrap custom-scrollbar pb-1")}>
                 <button
                     onClick={() => { setMainTab('products'); setSearchTerm(''); }}
-                    {...cascade(3, `px-4 py-2 shrink-0 text-sm font-medium border-b-2 transition-all ${mainTab === 'products' ? 'border-emerald-500 text-emerald-600' : 'border-transparent text-gray-500 hover:text-gray-700'}`)}
+                    {...cascade(3, `px-4 py-2 shrink-0 text-sm font-medium border-b-2 transition-all ${mainTab === 'products' ? 'border-emerald-500 text-emerald-600' : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:text-gray-300'}`)}
                 >
                     Productos ({models.length})
                 </button>
                 <button
                     onClick={() => setMainTab('purchases')}
-                    {...cascade(4, `px-4 py-2 shrink-0 text-sm font-medium border-b-2 transition-all ${mainTab === 'purchases' ? 'border-emerald-500 text-emerald-600' : 'border-transparent text-gray-500 hover:text-gray-700'}`)}
+                    {...cascade(4, `px-4 py-2 shrink-0 text-sm font-medium border-b-2 transition-all ${mainTab === 'purchases' ? 'border-emerald-500 text-emerald-600' : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:text-gray-300'}`)}
                 >
                     Compras ({purchases.length})
                 </button>
                 {/* Cotizaciones 3D (Comentado temporalmente)
                 <button
                     onClick={() => { setMainTab('quotes'); setSearchTerm(''); }}
-                    {...cascade(5, `px-4 py-2 shrink-0 text-sm font-medium border-b-2 transition-all ${mainTab === 'quotes' ? 'border-emerald-500 text-emerald-600' : 'border-transparent text-gray-500 hover:text-gray-700'}`)}
+                    {...cascade(5, `px-4 py-2 shrink-0 text-sm font-medium border-b-2 transition-all ${mainTab === 'quotes' ? 'border-emerald-500 text-emerald-600' : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:text-gray-300'}`)}
                 >
                     Cotizaciones 3D
                 </button>
@@ -362,13 +362,13 @@ export default function AdminModels3D() {
                     <div className="flex gap-2 overflow-x-auto whitespace-nowrap custom-scrollbar">
                         <button
                             onClick={() => { setModelCategory('DIGITALIZADO'); setModelSubcategory('Todas'); }}
-                            {...cascade(7, `px-3 py-1 shrink-0 text-sm rounded-full transition-colors ${modelCategory === 'DIGITALIZADO' ? 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400 font-medium' : 'bg-gray-100 dark:bg-zinc-800 text-gray-600 hover:bg-gray-200'}`)}
+                            {...cascade(7, `px-3 py-1 shrink-0 text-sm rounded-full transition-colors ${modelCategory === 'DIGITALIZADO' ? 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400 font-medium' : 'bg-gray-100 dark:bg-zinc-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-zinc-700'}`)}
                         >
                             Digitales (GLB)
                         </button>
                         <button
                             onClick={() => setModelCategory('IMPRESO')}
-                            {...cascade(8, `px-3 py-1 shrink-0 text-sm rounded-full transition-colors ${modelCategory === 'IMPRESO' ? 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400 font-medium' : 'bg-gray-100 dark:bg-zinc-800 text-gray-600 hover:bg-gray-200'}`)}
+                            {...cascade(8, `px-3 py-1 shrink-0 text-sm rounded-full transition-colors ${modelCategory === 'IMPRESO' ? 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400 font-medium' : 'bg-gray-100 dark:bg-zinc-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-zinc-700'}`)}
                         >
                             Impresos (Físicos)
                         </button>
@@ -400,7 +400,7 @@ export default function AdminModels3D() {
                 </div>
             )}
 
-            {loading && <div className="text-gray-500">Cargando...</div>}
+            {loading && <div className="text-gray-500 dark:text-gray-400">Cargando...</div>}
 
             {mainTab === 'products' && (
                 <div key={`${modelCategory}-${modelSubcategory}`} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -431,7 +431,7 @@ export default function AdminModels3D() {
                                     <h3 className="font-semibold text-gray-900 dark:text-white truncate">{m.mod_txt_name}</h3>
                                     <p className="text-xs text-gray-400 line-clamp-2">{m.mod_txt_desc}</p>
                                 </div>
-                                <span className={`shrink-0 px-2 py-1 text-xs font-medium rounded-full ${m.mod_bool_active ? 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400' : 'bg-gray-100 dark:bg-zinc-800 text-gray-500'}`}>
+                                <span className={`shrink-0 px-2 py-1 text-xs font-medium rounded-full ${m.mod_bool_active ? 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400' : 'bg-gray-100 dark:bg-zinc-800 text-gray-500 dark:text-gray-400'}`}>
                                     {m.mod_bool_active ? 'Activo' : 'Inactivo'}
                                 </span>
                             </div>
@@ -450,7 +450,7 @@ export default function AdminModels3D() {
                         </div>
                     ))}
                     {filteredModels.length === 0 && (
-                        <div {...cascade(10, "col-span-full py-12 text-center text-gray-400 border-2 border-dashed border-gray-200 dark:border-zinc-800 rounded-xl")}>
+                        <div {...cascade(10, "col-span-full py-12 text-center text-gray-400 border-2 border-dashed border-gray-200 dark:border-zinc-800/40 rounded-xl")}>
                             <p>No hay modelos {modelCategory === 'IMPRESO' ? 'impresos' : 'digitales'} registrados.</p>
                         </div>
                     )}
@@ -462,7 +462,7 @@ export default function AdminModels3D() {
             )}
 
             {mainTab === 'purchases' && (
-                <div key={searchTerm} {...cascade(7, "overflow-x-auto rounded-lg border border-gray-200 dark:border-zinc-800")}>
+                <div key={searchTerm} {...cascade(7, "overflow-x-auto rounded-lg border border-gray-200 dark:border-zinc-800/40")}>
                     <table className="w-full text-sm">
                         <thead className="bg-gray-50 dark:bg-[#141414] text-gray-600 dark:text-gray-400">
                             <tr {...cascade(8)}>
@@ -478,9 +478,9 @@ export default function AdminModels3D() {
                                 <tr key={i} onClick={() => setDetailItem(p)} {...cascade(9 + i, "hover:bg-emerald-50 dark:hover:bg-emerald-900/20 cursor-pointer transition-colors group")}>
                                     <td className="px-4 py-3">
                                         <div className="font-medium text-gray-900 dark:text-white">{p.userName}</div>
-                                        <div className="text-xs text-gray-500">{p.userEmail}</div>
+                                        <div className="text-xs text-gray-500 dark:text-gray-400">{p.userEmail}</div>
                                     </td>
-                                    <td className="px-4 py-3 text-gray-700">{p.modelName}</td>
+                                    <td className="px-4 py-3 text-gray-700 dark:text-gray-300">{p.modelName}</td>
                                     <td className="px-4 py-3 font-medium text-emerald-600">{PEN.format(Number(p.amount || 0))}</td>
                                     <td className="px-4 py-3">
                                         {p.modelCategory === 'IMPRESO' ? (
@@ -503,13 +503,13 @@ export default function AdminModels3D() {
                                             <StatusTag status={p.status} />
                                         )}
                                     </td>
-                                    <td className="px-4 py-3 text-gray-500">{formatDateTime(p.createdAt)}</td>
+                                    <td className="px-4 py-3 text-gray-500 dark:text-gray-400">{formatDateTime(p.createdAt)}</td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
                     {filteredPurchases.length === 0 && (
-                        <div {...cascade(9, "text-center py-8 text-gray-500")}>
+                        <div {...cascade(9, "text-center py-8 text-gray-500 dark:text-gray-400")}>
                             {searchTerm ? 'No se encontraron resultados' : 'No hay compras aún'}
                         </div>
                     )}
@@ -529,7 +529,7 @@ export default function AdminModels3D() {
             >
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <label className="block">
-                        <span className="text-sm font-medium text-gray-700 mb-1 block">Nombre *</span>
+                        <span className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 block">Nombre *</span>
                         <input
                             value={formData.name || ''}
                             onChange={e => setFormData(p => ({ ...p, name: e.target.value }))}
@@ -538,7 +538,7 @@ export default function AdminModels3D() {
                         />
                     </label>
                     <label className="block">
-                        <span className="text-sm font-medium text-gray-700 mb-1 block">Descripción *</span>
+                        <span className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 block">Descripción *</span>
                         <textarea
                             value={formData.desc || ''}
                             onChange={e => setFormData(p => ({ ...p, desc: e.target.value }))}
@@ -550,7 +550,7 @@ export default function AdminModels3D() {
 
                     {(formData.category || modelCategory) === 'DIGITALIZADO' ? (
                         <div className="block">
-                            <span className="text-sm font-medium text-gray-700 mb-2 block">Archivo GLB *</span>
+                            <span className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">Archivo GLB *</span>
                             <input
                                 type="file"
                                 ref={fileInputRef}
@@ -579,7 +579,7 @@ export default function AdminModels3D() {
                         </div>
                     ) : (
                         <div className="block">
-                            <span className="text-sm font-medium text-gray-700 mb-2 block">Imagen del Modelo *</span>
+                            <span className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">Imagen del Modelo *</span>
                             <input
                                 type="file"
                                 ref={imageInputRef}
@@ -618,7 +618,7 @@ export default function AdminModels3D() {
 
                     {(formData.category || modelCategory) === 'DIGITALIZADO' && (
                         <label className="block">
-                            <span className="text-sm font-medium text-gray-700 mb-1 block">Subcategoría</span>
+                            <span className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 block">Subcategoría</span>
                             <input
                                 value={formData.subcategory || ''}
                                 onChange={e => setFormData(p => ({ ...p, subcategory: e.target.value }))}
@@ -630,7 +630,7 @@ export default function AdminModels3D() {
                     )}
 
                     <label className="block">
-                        <span className="text-sm font-medium text-gray-700 mb-1 block">Precio (S/)</span>
+                        <span className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 block">Precio (S/)</span>
                         <input type="number" step="0.01" value={formData.price || ''} onChange={e => setFormData(p => ({ ...p, price: parseFloat(e.target.value) }))} className="w-full px-3 py-2 border border-gray-300 dark:border-zinc-700 bg-transparent dark:text-white rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none" />
                     </label>
 
@@ -657,7 +657,7 @@ export default function AdminModels3D() {
             >
                 <form onSubmit={handleStatusSubmit} className="space-y-4">
                     <label className="block">
-                        <span className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 block">Estado de Entrega</span>
+                        <span className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2 block">Estado de Entrega</span>
                         <CustomStatusSelect
                             value={statusForm.status}
                             onChange={(val) => setStatusForm(prev => ({ ...prev, status: val }))}
@@ -670,7 +670,7 @@ export default function AdminModels3D() {
                     </label>
 
                     <label className="block">
-                        <span className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 block">Estimación de Tiempo</span>
+                        <span className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2 block">Estimación de Tiempo</span>
                         <input
                             type="text"
                             value={statusForm.estimate}

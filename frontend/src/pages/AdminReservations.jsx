@@ -245,29 +245,36 @@ export default function AdminReservations() {
     }
 
     return (
-        <div style={styles.container}>
+        <div style={styles.container} className="admin-res-container">
             <style>{`
                 /* DARK MODE PATCHES PARA RESERVAS (Overrides de inline styles) */
-                html.dark .admin-res-container [style*="color: #1a1a2e"],
-                html.dark .admin-res-container [style*="color: rgb(26, 26, 46)"] {
+                html.dark .admin-res-container [style*="color: rgb(26, 26, 46)"],
+                html.dark .admin-res-container [style*="color: #1a1a2e"] {
                     color: #ffffff !important;
                 }
-                html.dark .admin-res-container [style*="backgroundColor: #fff"],
-                html.dark .admin-res-container [style*="backgroundColor: rgb(255, 255, 255)"] {
+                html.dark .admin-res-container [style*="background-color: rgb(255, 255, 255)"],
+                html.dark .admin-res-container [style*="background-color: #fff"],
+                html.dark .admin-res-container [style*="background: rgb(255, 255, 255)"],
+                html.dark .admin-res-container [style*="background: #fff"] {
                     background-color: #1c1c1c !important;
                     border-color: #27272a !important;
                     color: #d1d5db !important;
                 }
-                html.dark .admin-res-container [style*="backgroundColor: #f9fafb"],
-                html.dark .admin-res-container [style*="backgroundColor: rgb(249, 250, 251)"] {
+                html.dark .admin-res-container [style*="background-color: rgb(249, 250, 251)"],
+                html.dark .admin-res-container [style*="background-color: #f9fafb"],
+                html.dark .admin-res-container [style*="background: rgb(249, 250, 251)"],
+                html.dark .admin-res-container [style*="background: #f9fafb"] {
                     background-color: #141414 !important;
                     color: #9ca3af !important;
                     border-color: #27272a !important;
                 }
-                html.dark .admin-res-container [style*="borderBottom: 1px solid #e5e7eb"],
+                html.dark .admin-res-container [style*="border-bottom: 1px solid rgb(229, 231, 235)"],
+                html.dark .admin-res-container [style*="border-bottom: 1px solid #e5e7eb"],
+                html.dark .admin-res-container [style*="border: 1px solid rgb(229, 231, 235)"],
                 html.dark .admin-res-container [style*="border: 1px solid #e5e7eb"] {
                     border-color: #27272a !important;
                 }
+                html.dark .admin-res-container [style*="color: rgb(55, 65, 81)"],
                 html.dark .admin-res-container [style*="color: #374151"] {
                     color: #d1d5db !important;
                 }
@@ -284,7 +291,6 @@ export default function AdminReservations() {
                     background-color: rgba(5, 150, 105, 0.1) !important;
                 }
             `}</style>
-            <div className="admin-res-container">
             <div style={styles.header}>
                 <h1 style={{...styles.title, ...cascade(1).style}} className={cascade(1).className}>Panel de Reservas</h1>
             </div>
@@ -351,7 +357,6 @@ export default function AdminReservations() {
                 onSaveSuccess={() => setRefreshTrigger(prev => prev + 1)}
                 theme={THEME} 
             />
-            </div>
         </div>
     )
 }

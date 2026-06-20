@@ -217,7 +217,7 @@ export default function AdminCourses() {
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
                     <h1 {...cascade(1, "text-2xl font-bold text-gray-900 dark:text-white")}>Gestión Cursos</h1>
-                    <p {...cascade(2, "text-gray-500 text-sm")}>Productos y ventas de cursos</p>
+                    <p {...cascade(2, "text-gray-500 dark:text-gray-400 text-sm")}>Productos y ventas de cursos</p>
                 </div>
                 {subTab === 'products' && (
                     <button
@@ -231,15 +231,15 @@ export default function AdminCourses() {
                 )}
             </div>
 
-            <div className="flex gap-2 border-b border-gray-200 dark:border-zinc-800">
+            <div className="flex gap-2 border-b border-gray-200 dark:border-zinc-800/40">
                 <button
-                    {...cascade(4, `px-4 py-2 text-sm font-medium border-b-2 transition-all ${subTab === 'products' ? 'border-emerald-500 text-emerald-600' : 'border-transparent text-gray-500 hover:text-gray-700'}`)}
+                    {...cascade(4, `px-4 py-2 text-sm font-medium border-b-2 transition-all ${subTab === 'products' ? 'border-emerald-500 text-emerald-600' : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:text-gray-300'}`)}
                     onClick={() => { setSubTab('products'); setSearchTerm(''); }}
                 >
                     Productos ({courses.length})
                 </button>
                 <button
-                    {...cascade(5, `px-4 py-2 text-sm font-medium border-b-2 transition-all ${subTab === 'purchases' ? 'border-emerald-500 text-emerald-600' : 'border-transparent text-gray-500 hover:text-gray-700'}`)}
+                    {...cascade(5, `px-4 py-2 text-sm font-medium border-b-2 transition-all ${subTab === 'purchases' ? 'border-emerald-500 text-emerald-600' : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:text-gray-300'}`)}
                     onClick={() => setSubTab('purchases')}
                 >
                     Compras ({purchases.length})
@@ -259,7 +259,7 @@ export default function AdminCourses() {
                 </div>
             )}
 
-            {loading && <div className="text-gray-500">Cargando...</div>}
+            {loading && <div className="text-gray-500 dark:text-gray-400">Cargando...</div>}
 
             {subTab === 'products' && (
                 <div {...cascade(4)} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -276,14 +276,14 @@ export default function AdminCourses() {
                             <div className="flex items-start justify-between gap-2 mb-2">
                                 <div className="flex-1 min-w-0">
                                     <h3 className="font-semibold text-gray-900 dark:text-white truncate">{c.cou_txt_title}</h3>
-                                    <p className="text-sm text-gray-500 truncate">{c.cou_txt_duration}</p>
+                                    <p className="text-sm text-gray-500 dark:text-gray-400 truncate">{c.cou_txt_duration}</p>
                                     <p className="text-xs text-gray-400 mt-1">
                                         Cupos: <span className="font-medium text-gray-600">{c.cou_int_seats}</span>
                                         <span className="mx-1">•</span>
                                         Vendidos: <span className="font-medium text-gray-600">{c.cou_int_sold || 0}</span>
                                     </p>
                                 </div>
-                                <span className={`shrink-0 px-2 py-1 text-xs font-medium rounded-full ${c.cou_bool_active ? 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400' : 'bg-gray-100 dark:bg-zinc-800 text-gray-500'}`}>
+                                <span className={`shrink-0 px-2 py-1 text-xs font-medium rounded-full ${c.cou_bool_active ? 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400' : 'bg-gray-100 dark:bg-zinc-800 text-gray-500 dark:text-gray-400'}`}>
                                     {c.cou_bool_active ? 'Activo' : 'Inactivo'}
                                 </span>
                             </div>
@@ -305,7 +305,7 @@ export default function AdminCourses() {
             )}
 
             {subTab === 'purchases' && (
-                <div {...cascade(4)} className="overflow-x-auto rounded-lg border border-gray-200 dark:border-zinc-800">
+                <div {...cascade(4)} className="overflow-x-auto rounded-lg border border-gray-200 dark:border-zinc-800/40">
                     <table className="w-full text-sm">
                         <thead className="bg-gray-50 dark:bg-[#141414] text-gray-600 dark:text-gray-400">
                             <tr {...cascade(5)}>
@@ -321,18 +321,18 @@ export default function AdminCourses() {
                                 <tr key={i} onClick={() => setDetailItem(p)} {...cascade(6 + i, "hover:bg-emerald-50 dark:hover:bg-emerald-900/20 cursor-pointer transition-colors group", 0, 30)}>
                                     <td className="px-4 py-3">
                                         <div className="font-medium text-gray-900 dark:text-white">{p.userName}</div>
-                                        <div className="text-xs text-gray-500">{p.userEmail}</div>
+                                        <div className="text-xs text-gray-500 dark:text-gray-400">{p.userEmail}</div>
                                     </td>
-                                    <td className="px-4 py-3 text-gray-700">{p.courseTitle}</td>
+                                    <td className="px-4 py-3 text-gray-700 dark:text-gray-300">{p.courseTitle}</td>
                                     <td className="px-4 py-3 font-medium text-emerald-600">{PEN.format(Number(p.amount || 0))}</td>
                                     <td className="px-4 py-3"><StatusTag status={p.status} /></td>
-                                    <td className="px-4 py-3 text-gray-500">{formatDateTime(p.createdAt)}</td>
+                                    <td className="px-4 py-3 text-gray-500 dark:text-gray-400">{formatDateTime(p.createdAt)}</td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
                     {filteredPurchases.length === 0 && (
-                        <div className="text-center py-8 text-gray-500">
+                        <div className="text-center py-8 text-gray-500 dark:text-gray-400">
                             {searchTerm ? 'No se encontraron resultados' : 'No hay compras aún'}
                         </div>
                     )}
@@ -340,7 +340,7 @@ export default function AdminCourses() {
             )}
 
             {subTab === 'products' && !loading && courses.length === 0 && (
-                <div className="text-center py-12 text-gray-500">No hay cursos. Haz clic en "Agregar" para crear uno.</div>
+                <div className="text-center py-12 text-gray-500 dark:text-gray-400">No hay cursos. Haz clic en "Agregar" para crear uno.</div>
             )}
 
             {/* DETAIL MODAL */}
@@ -363,7 +363,7 @@ export default function AdminCourses() {
             >
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <label className="block">
-                        <span className="text-sm font-medium text-gray-700 mb-1 block">Título *</span>
+                        <span className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 block">Título *</span>
                         <input
                             value={formData.title || ''}
                             onChange={e => setFormData(p => ({ ...p, title: e.target.value }))}
@@ -372,7 +372,7 @@ export default function AdminCourses() {
                         />
                     </label>
                     <label className="block">
-                        <span className="text-sm font-medium text-gray-700 mb-1 block">Descripción *</span>
+                        <span className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 block">Descripción *</span>
                         <textarea
                             value={formData.desc || ''}
                             onChange={e => setFormData(p => ({ ...p, desc: e.target.value }))}
@@ -382,7 +382,7 @@ export default function AdminCourses() {
                         />
                     </label>
                     <label className="block">
-                        <span className="text-sm font-medium text-gray-700 mb-1 block">Duración (ej: 4 semanas) *</span>
+                        <span className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 block">Duración (ej: 4 semanas) *</span>
                         <input
                             value={formData.duration || ''}
                             onChange={e => setFormData(p => ({ ...p, duration: e.target.value }))}
@@ -393,7 +393,7 @@ export default function AdminCourses() {
                     </label>
 
                     <label className="block">
-                        <span className="text-sm font-medium text-gray-700 mb-1 block">Cupos Totales *</span>
+                        <span className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 block">Cupos Totales *</span>
                         <input
                             type="number"
                             min="1"
@@ -406,7 +406,7 @@ export default function AdminCourses() {
 
                     {/* Image Upload */}
                     <div className="block">
-                        <span className="text-sm font-medium text-gray-700 mb-2 block">Imagen del curso</span>
+                        <span className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">Imagen del curso</span>
                         <input
                             type="file"
                             ref={imageInputRef}
@@ -442,7 +442,7 @@ export default function AdminCourses() {
                     </div>
 
                     <label className="block">
-                        <span className="text-sm font-medium text-gray-700 mb-1 block">Precio (S/)</span>
+                        <span className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 block">Precio (S/)</span>
                         <input type="number" step="0.01" value={formData.price || ''} onChange={e => setFormData(p => ({ ...p, price: parseFloat(e.target.value) }))} className="w-full px-3 py-2 border border-gray-300 dark:border-zinc-700 bg-transparent dark:text-white rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none" />
                     </label>
 

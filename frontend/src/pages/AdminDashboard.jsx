@@ -102,7 +102,7 @@ export default function AdminDashboard() {
             {/* 2. KPIs ESTRATÉGICOS */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div {...cascade(2, "bg-white dark:bg-[#1c1c1c] p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-zinc-800 relative overflow-hidden group")}>
-                    <div className="absolute right-0 top-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                    <div className="absolute right-0 top-0 p-4 opacity-15 group-hover:opacity-25 transition-opacity">
                         <CurrencyDollarIcon className="w-24 h-24 text-emerald-600" />
                     </div>
                     <p className="text-gray-500 text-sm font-medium">Ingresos Totales</p>

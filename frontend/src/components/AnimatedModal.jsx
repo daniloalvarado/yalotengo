@@ -26,18 +26,18 @@ export default function AnimatedModal({ isOpen, onClose, title, subtitle, childr
             onClick={closeOnOutsideClick ? onClose : undefined}
         >
             <div
-                className={`bg-white rounded-2xl w-full ${maxWidth} max-h-[90vh] flex flex-col shadow-2xl ${isVisible ? 'animate-slide-down' : 'animate-slide-up'}`}
+                className={`bg-white dark:bg-[#1c1c1c] dark:border dark:border-zinc-800 rounded-2xl w-full ${maxWidth} max-h-[90vh] flex flex-col shadow-2xl ${isVisible ? 'animate-slide-down' : 'animate-slide-up'}`}
                 onClick={e => e.stopPropagation()}
             >
                 {/* Header */}
-                <div className="flex items-center justify-between p-6 border-b border-gray-100">
+                <div className="flex items-center justify-between p-6 border-b border-gray-100 dark:border-zinc-800">
                     <div>
-                        <h2 className="text-xl font-bold text-gray-900">{title}</h2>
-                        {subtitle && <p className="text-sm text-gray-500 mt-1">{subtitle}</p>}
+                        <h2 className="text-xl font-bold text-gray-900 dark:text-white">{title}</h2>
+                        {subtitle && <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{subtitle}</p>}
                     </div>
                     <button
                         onClick={onClose}
-                        className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-500 hover:text-gray-700"
+                        className="p-2 hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full transition-colors text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
                     >
                         <XMarkIcon className="w-6 h-6" />
                     </button>
