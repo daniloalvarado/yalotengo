@@ -462,7 +462,7 @@ export default function AdminModels3D() {
             )}
 
             {mainTab === 'purchases' && (
-                <div key={searchTerm} {...cascade(7, "overflow-x-auto rounded-lg border border-gray-200 dark:border-zinc-800/40")}>
+                <div {...cascade(7, "overflow-x-auto rounded-lg border border-gray-200 dark:border-zinc-800/40")}>
                     <table className="w-full text-sm">
                         <thead className="bg-gray-50 dark:bg-[#141414] text-gray-600 dark:text-gray-100 font-semibold">
                             <tr {...cascade(8)}>
@@ -474,12 +474,8 @@ export default function AdminModels3D() {
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-100 dark:divide-zinc-800">
-                            {filteredPurchases.map((p, i) => {
-                                const isSearching = searchTerm.trim() !== '';
-                                const baseClasses = "hover:bg-emerald-50 dark:hover:bg-emerald-900/20 cursor-pointer transition-colors group";
-                                const animProps = isSearching ? { className: baseClasses } : cascade(9 + i, baseClasses);
-                                return (
-                                <tr key={i} onClick={() => setDetailItem(p)} {...animProps}>
+                            {filteredPurchases.map((p, i) => (
+                                <tr key={i} onClick={() => setDetailItem(p)} className="hover:bg-emerald-50 dark:hover:bg-emerald-900/20 cursor-pointer transition-colors group">
                                     <td className="px-4 py-3">
                                         <div className="font-medium text-gray-900 dark:text-white">{p.userName}</div>
                                         <div className="text-xs text-gray-500 dark:text-gray-300">{p.userEmail}</div>

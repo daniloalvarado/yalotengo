@@ -156,11 +156,8 @@ export default function AdminManagement({
                                         {reservations.length === 0 ? 'No hay reservas en esta fecha' : 'No se encontraron resultados'}
                                     </td></tr>
                                 ) : (
-                                    filteredReservations.map((r, i) => {
-                                        const isSearching = searchTerm.trim() !== '';
-                                        const animProps = isSearching ? {} : cascade(11 + i);
-                                        return (
-                                        <tr key={r.id} style={animProps.style} className={animProps.className}>
+                                    filteredReservations.map((r, i) => (
+                                        <tr key={r.id} className={cascade(11 + i).className.replace('opacity-0 animate-fade-in-up', '')} style={{}}>
                                             <td style={styles.td}>#{r.id}</td>
                                             <td style={styles.td}>{formatTime(r.timeslot)}</td>
                                             <td style={styles.td}>{r.guests}</td>
@@ -176,8 +173,7 @@ export default function AdminManagement({
                                                 {['PENDING', 'PAID'].includes(r.status) && <button style={styles.actionBtn('danger')} onClick={() => handleCancel(r.id)}>✕ Cancelar</button>}
                                             </td>
                                         </tr>
-                                        );
-                                    })
+                                    ))
                                 )}
                             </tbody>
                         </table>
