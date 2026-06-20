@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { cascade } from '../utils/animations';
+import CustomStatusSelect from '../components/CustomStatusSelect';
 
 export default function AdminManagement({ 
     stats, realVisitors, reservations, filterDate, setFilterDate, 
@@ -94,22 +95,24 @@ export default function AdminManagement({
                         type="date" 
                         value={filterDate} 
                         onChange={e => setFilterDate(e.target.value)} 
-                        className="management-input"
+                        className="management-input bg-white dark:bg-[#141414] text-gray-900 dark:text-white border-gray-300 dark:border-zinc-700 [color-scheme:light] dark:[color-scheme:dark]"
                     />
                     
                     {/* ESTADO */}
-                    <select 
-                        value={filterStatus} 
-                        onChange={e => setFilterStatus(e.target.value)} 
-                        className="management-input"
-                    >
-                        <option value="">Estado: Todos</option>
-                        <option value="PENDING">Pendiente</option>
-                        <option value="PAID">Pagado</option>
-                        <option value="USED">Usado</option>
-                        <option value="EXPIRED">Expirado</option>
-                        <option value="CANCELLED">Cancelado</option>
-                    </select>
+                    <div style={{ minWidth: '180px' }}>
+                        <CustomStatusSelect
+                            value={filterStatus}
+                            onChange={(val) => setFilterStatus(val)}
+                            options={[
+                                { value: "", label: "Estado: Todos" },
+                                { value: "PENDING", label: "Pendiente" },
+                                { value: "PAID", label: "Pagado" },
+                                { value: "USED", label: "Usado" },
+                                { value: "EXPIRED", label: "Expirado" },
+                                { value: "CANCELLED", label: "Cancelado" }
+                            ]}
+                        />
+                    </div>
 
                     {/* BUSCADOR (Se estira para llenar el espacio) */}
                     <div style={{ position: 'relative', width: '100%' }}>
@@ -119,7 +122,7 @@ export default function AdminManagement({
                             placeholder="Buscar por cliente o correo..." 
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="management-input"
+                            className="management-input bg-white dark:bg-[#141414] text-gray-900 dark:text-white border-gray-300 dark:border-zinc-700"
                             style={{ paddingLeft: '2.5rem' }} 
                         />
                     </div>

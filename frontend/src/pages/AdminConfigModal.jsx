@@ -118,13 +118,13 @@ export default function AdminConfigModal({ isOpen, onClose, onSaveSuccess, theme
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="flex flex-col gap-2">
                         <label className="text-sm font-semibold text-gray-700 dark:text-gray-200">Hora de Apertura</label>
-                        <input type="time" className="p-3 text-base border border-gray-300 dark:border-zinc-700 rounded-lg bg-white dark:bg-[#141414] text-gray-900 dark:text-white outline-none focus:border-green-500 transition-colors"
+                        <input type="time" className="p-3 text-base border border-gray-300 dark:border-zinc-700 rounded-lg bg-white dark:bg-[#141414] text-gray-900 dark:text-white outline-none focus:border-green-500 transition-colors [color-scheme:light] dark:[color-scheme:dark]"
                             value={config.RESERVATION_OPEN_TIME}
                             onChange={e => handleChange('RESERVATION_OPEN_TIME', e.target.value)} />
                     </div>
                     <div className="flex flex-col gap-2">
                         <label className="text-sm font-semibold text-gray-700 dark:text-gray-200">Hora de Cierre</label>
-                        <input type="time" className="p-3 text-base border border-gray-300 dark:border-zinc-700 rounded-lg bg-white dark:bg-[#141414] text-gray-900 dark:text-white outline-none focus:border-green-500 transition-colors"
+                        <input type="time" className="p-3 text-base border border-gray-300 dark:border-zinc-700 rounded-lg bg-white dark:bg-[#141414] text-gray-900 dark:text-white outline-none focus:border-green-500 transition-colors [color-scheme:light] dark:[color-scheme:dark]"
                             value={config.RESERVATION_CLOSE_TIME}
                             onChange={e => handleChange('RESERVATION_CLOSE_TIME', e.target.value)} />
                     </div>

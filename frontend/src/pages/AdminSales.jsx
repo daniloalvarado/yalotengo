@@ -66,17 +66,23 @@ export default function AdminSales({
     `;
 
     const localStyles = {
-        squareBtn: (slot, isSelected, isPast) => ({
-            ...styles.slotBtn(slot, isSelected, isPast),
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            minHeight: '75px',
-            width: '100%',
-            padding: '0.2rem',
-            textAlign: 'center'
-        }),
+        squareBtn: (slot, isSelected, isPast) => {
+            const base = styles.slotBtn(slot, isSelected, isPast);
+            return {
+                ...base,
+                backgroundColor: (slot.isFull || isPast) ? (isDarkTheme ? '#27272a' : '#f3f4f6') : isSelected ? theme.primary : (isDarkTheme ? '#1c1c1c' : '#fff'),
+                color: (slot.isFull || isPast) ? '#9ca3af' : isSelected ? '#fff' : (isDarkTheme ? '#f3f4f6' : '#374151'),
+                border: isSelected ? 'none' : `1px solid ${isDarkTheme ? '#27272a' : '#e5e7eb'}`,
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+                minHeight: '75px',
+                width: '100%',
+                padding: '0.2rem',
+                textAlign: 'center'
+            }
+        },
         payPanel: {
             backgroundColor: '#fff',
             padding: '1.2rem',

@@ -676,7 +676,7 @@ export default function AdminModels3D() {
                             value={statusForm.estimate}
                             onChange={(e) => setStatusForm(prev => ({ ...prev, estimate: e.target.value }))}
                             placeholder="Ej: 2 días, 5 horas..."
-                            className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none"
+                            className="w-full px-3 py-2 border border-gray-300 dark:border-zinc-700 rounded-lg bg-white dark:bg-[#141414] text-gray-900 dark:text-white focus:ring-2 focus:ring-emerald-500 outline-none"
                         />
                         <p className="text-[10px] text-gray-400 mt-1">Este texto lo verá el cliente en su línea de tiempo.</p>
                     </label>
