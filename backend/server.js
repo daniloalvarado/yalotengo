@@ -122,6 +122,7 @@ app.get('/uploads/*', async (req, res) => {
   }
 })
 
+app.get('/', (_req, res) => res.status(200).send('API de Yalotengo funcionando correctamente'))
 app.get('/health', (_req, res) => res.json({ ok: true }))
 app.use('/', routes)
 
