@@ -144,7 +144,7 @@ export default function Header() {
       <div className="mx-auto max-w-7xl px-6 h-16 grid grid-cols-2 md:grid-cols-[1fr_auto_1fr] items-center gap-4">
         {/* Brand */}
         <div className="flex items-center gap-3">
-          <Link to="/" className="flex items-center gap-2">
+          <Link to="/" className="flex items-center gap-2" aria-label="Inicio Yalotengo">
             <div className="h-9 w-9 rounded-xl bg-emerald-500 grid place-items-center text-zinc-900 font-black">T</div>
             <span className="hidden sm:block text-base font-semibold transition-colors text-white">Yalotengo</span>
           </Link>
@@ -227,6 +227,7 @@ export default function Header() {
                 to={isAuthed ? "/purchases" : "/auth"}
                 className={`relative inline-flex items-center gap-2 rounded-xl border px-3 h-10 transition-all border-zinc-800 bg-zinc-900/60 text-zinc-100 hover:bg-zinc-900 ${isPurchases ? 'ring-1 ring-emerald-500' : ''}`}
                 onClick={(e) => handleSamePageClick(e, isAuthed ? '/purchases' : '/auth')}
+                aria-label="Mis compras"
               >
                 <ShoppingBagIcon className="h-5 w-5" />
                 <span className="hidden sm:inline">Mis compras</span>
