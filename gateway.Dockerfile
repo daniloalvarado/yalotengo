@@ -7,8 +7,11 @@ COPY ./frontend .
 # Inyecta rutas relativas para un solo puerto (sin CORS)
 ARG VITE_API_BASE=/api
 ARG VITE_WS_BASE=/ws
+ARG VITE_MP_PUBLIC_KEY
+
 ENV VITE_API_BASE=$VITE_API_BASE
 ENV VITE_WS_BASE=$VITE_WS_BASE
+ENV VITE_MP_PUBLIC_KEY=$VITE_MP_PUBLIC_KEY
 RUN npm run build
 
 # ====== nginx final ======

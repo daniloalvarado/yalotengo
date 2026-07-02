@@ -72,6 +72,8 @@ services:
     build:
       context: ..
       dockerfile: gateway.Dockerfile
+      args:
+        - VITE_MP_PUBLIC_KEY=${VITE_MP_PUBLIC_KEY}
     ports:
       - "8070:80"
     depends_on:
