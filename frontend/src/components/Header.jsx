@@ -169,7 +169,6 @@ export default function Header() {
             Modelos 3D
           </NavLink>
 
-          {/* Gestión Micromuseo (Comentado temporalmente)
           {user?.use_txt_role === 'admin' && (
             <NavLink
               to="/admin-microscopicos"
@@ -178,7 +177,6 @@ export default function Header() {
               Gestión Micromuseo
             </NavLink>
           )}
-          */}
 
           {/* Libros */}
           <NavLink
@@ -188,14 +186,12 @@ export default function Header() {
             Libros
           </NavLink>
 
-          {/* Cursos (Comentado temporalmente)
           <NavLink
             to={user?.use_txt_role === 'admin' ? "/admin-courses" : "/courses"}
             className={({ isActive }) => `${linkBase} ${isActive ? linkActive : linkIdle}`}
           >
             Cursos
           </NavLink>
-          */}
 
           {/* Reservas */}
           <Link
@@ -268,7 +264,6 @@ export default function Header() {
             Modelos 3D
           </NavLink>
 
-          {/* Gestión Micromuseo Móvil (Comentado temporalmente)
           {user?.use_txt_role === 'admin' && (
             <NavLink
               to="/admin-microscopicos"
@@ -277,7 +272,6 @@ export default function Header() {
               Gestión Micromuseo
             </NavLink>
           )}
-          */}
 
           <NavLink
             to={user?.use_txt_role === 'admin' ? "/admin-books" : "/books"}
@@ -286,14 +280,12 @@ export default function Header() {
             Libros
           </NavLink>
 
-          {/* Cursos (Comentado temporalmente)
           <NavLink
             to={user?.use_txt_role === 'admin' ? "/admin-courses" : "/courses"}
             className={({ isActive }) => `${isActive ? "text-emerald-400 font-medium" : "text-zinc-300 hover:text-white"}`}
           >
             Cursos
           </NavLink>
-          */}
 
           <NavLink
             to={reservationsLink}

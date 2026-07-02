@@ -8,8 +8,18 @@ import { uploadAvatar } from '../../utils/upload.js'
 import { uploadFile, deleteFile } from '../../services/storage.js'
 import fs from 'fs'
 import path from 'path'
+import rateLimit from 'express-rate-limit'
 
 const r = Router()
+
+// Limitador de intentos para registro y login (prevención de spam/fuerza bruta)
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutos
+  max: 5, // Límite de 5 peticiones por IP cada 15 minutos
+  message: { error: 'Demasiadas peticiones desde esta IP, por favor intenta más tarde.' },
+  standardHeaders: true,
+  legacyHeaders: false,
+})
 
 // ... importaciones ...
 
@@ -57,7 +67,7 @@ passport.use(new GoogleStrategy({
 
 
 // --- RUTAS NORMALES ---
-r.post('/register', async (req, res) => {
+r.post('/register', authLimiter, async (req, res) => {
   const { nombres, apellidos, documento, email, password } = req.body
   if (!email || !password) return res.status(400).json({ error: 'Faltan campos' })
   const exists = await User.findOne({ where: { use_txt_email: email.toLowerCase() } })
@@ -71,7 +81,7 @@ r.post('/register', async (req, res) => {
   res.json({ token: sign({ use_int_id: u.use_int_id, email: u.use_txt_email, role: u.use_txt_role }), user: u })
 })
 
-r.post('/login', async (req, res) => {
+r.post('/login', authLimiter, async (req, res) => {
   const { email, password } = req.body
   const u = await User.findOne({ where: { use_txt_email: (email || '').toLowerCase() } })
   if (!u || !u.use_txt_passwordhash) return res.status(401).json({ error: 'Credenciales inválidas' })

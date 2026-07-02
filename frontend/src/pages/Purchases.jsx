@@ -12,7 +12,6 @@ import FisicoTab from './purchases/FisicoTab' // Renombrar o mantener para items
 import { ShoppingBagIcon } from '@heroicons/react/24/outline'
 
 export default function Purchases() {
-  const [items, setItems] = useState([])
   const [reservations, setReservations] = useState([])
   const [allModels, setAllModels] = useState([]) // Raw data
   const [books, setBooks] = useState([])
@@ -26,15 +25,6 @@ export default function Purchases() {
   const [loadingQr, setLoadingQr] = useState(false)
 
   // Fetch functions
-  const fetchMyItems = useCallback(async () => {
-    try {
-      const { data } = await api.get('/orders/my-items')
-      setItems(Array.isArray(data) ? data : [])
-    } catch (e) {
-      console.error('Error cargando items:', e)
-    }
-  }, [])
-
   const fetchMyReservations = useCallback(async () => {
     try {
       const { data } = await api.get('/reservations/my')
@@ -74,11 +64,9 @@ export default function Purchases() {
   }, [])
 
   useEffect(() => {
-    Promise.all([fetchMyItems(), fetchMyReservations(), fetchMyModels3d(), fetchMyBooks(), fetchMyCourses()])
+    Promise.all([fetchMyReservations(), fetchMyModels3d(), fetchMyBooks(), fetchMyCourses()])
       .finally(() => setLoading(false))
-  }, [fetchMyItems, fetchMyReservations, fetchMyModels3d, fetchMyBooks, fetchMyCourses])
-
-  const physical = useMemo(() => items.filter(i => !i.ori_bol_virtual), [items])
+  }, [fetchMyReservations, fetchMyModels3d, fetchMyBooks, fetchMyCourses])
 
   // Split models
   const digitalModels = useMemo(() => allModels.filter(p => !p.model?.mod_txt_category || p.model?.mod_txt_category === 'DIGITALIZADO'), [allModels])
@@ -122,6 +110,7 @@ export default function Purchases() {
           { id: 'DIGITAL', label: 'Modelos 3D' },
           { id: 'PRINTED', label: 'Impresiones 3D' },
           { id: 'LIBROS', label: 'Libros' },
+          { id: 'CURSOS', label: 'Cursos' },
           { id: 'RESERVAS', label: 'Reservas' }
         ].map(({ id, label }) => (
           <button
@@ -147,11 +136,9 @@ export default function Purchases() {
         <LibrosTab books={books} loading={loading} />
       )}
 
-      {/* 
       {tab === 'CURSOS' && (
         <CursosTab courses={courses} loading={loading} />
       )}
-      */}
 
       {tab === 'RESERVAS' && (
         <ReservasTab reservations={reservations} loading={loading} onViewQr={handleViewQr} />
