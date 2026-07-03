@@ -6,6 +6,7 @@ services:
   # ─────────────────────────────────────────
   mysql:
     image: mysql:8
+    command: --skip-name-resolve
     environment:
       MYSQL_ROOT_PASSWORD: Root_Yal0t3ng0#2024
       MYSQL_DATABASE: yalotengo
