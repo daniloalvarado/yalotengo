@@ -223,14 +223,14 @@ export default function AdminUnityModels() {
         setCurrentPage(1)
     }, [searchTerm, selectedPanel])
 
-    if (!isAdmin) return <div className="p-8 text-center text-gray-500">Verificando permisos...</div>
+    if (!isAdmin) return <div className="p-8 text-center text-gray-500 dark:text-gray-400">Verificando permisos...</div>
 
     return (
         <div className="max-w-6xl mx-auto p-4 sm:p-6 space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div {...cascade(0)}>
-                    <h1 className="text-2xl font-bold text-gray-900">Gestión de App AR</h1>
-                    <p className="text-gray-500 text-sm">Panel de control de Realidad Aumentada</p>
+                    <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Gestión de App AR</h1>
+                    <p className="text-gray-500 dark:text-gray-400 text-sm">Panel de control de Realidad Aumentada</p>
                 </div>
                 {activeTab === 'gestion' && (
                     <button
@@ -245,17 +245,17 @@ export default function AdminUnityModels() {
             </div>
 
             {/* Pestañas de Navegación */}
-            <div {...cascade(2, "flex space-x-1 bg-gray-100/50 p-1.5 rounded-xl border border-gray-200")}>
+            <div {...cascade(2, "flex space-x-1 bg-gray-100/50 dark:bg-zinc-800/50 p-1.5 rounded-xl border border-gray-200 dark:border-zinc-800")}>
                 <button
                     onClick={() => setActiveTab('gestion')}
-                    {...cascade(3, `flex items-center gap-2 flex-1 justify-center py-2.5 text-sm font-medium rounded-lg transition-all ${activeTab === 'gestion' ? 'bg-white text-emerald-700 shadow-sm' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'}`)}
+                    {...cascade(3, `flex items-center gap-2 flex-1 justify-center py-2.5 text-sm font-medium rounded-lg transition-all ${activeTab === 'gestion' ? 'bg-white dark:bg-[#1c1c1c] text-emerald-700 dark:text-emerald-400 shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-zinc-700 dark:bg-zinc-800'}`)}
                 >
                     <CircleStackIcon className="w-5 h-5" />
                     Modelos 3D
                 </button>
                 <button
                     onClick={() => setActiveTab('dashboard')}
-                    {...cascade(4, `flex items-center gap-2 flex-1 justify-center py-2.5 text-sm font-medium rounded-lg transition-all ${activeTab === 'dashboard' ? 'bg-white text-emerald-700 shadow-sm' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'}`)}
+                    {...cascade(4, `flex items-center gap-2 flex-1 justify-center py-2.5 text-sm font-medium rounded-lg transition-all ${activeTab === 'dashboard' ? 'bg-white dark:bg-[#1c1c1c] text-emerald-700 dark:text-emerald-400 shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-zinc-700 dark:bg-zinc-800'}`)}
                 >
                     <ChartBarSquareIcon className="w-5 h-5" />
                     Dashboard AR
@@ -274,7 +274,7 @@ export default function AdminUnityModels() {
                                     placeholder="Buscar por nombre científico o común..."
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
-                                    className="w-full h-[42px] px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none text-sm transition-all shadow-sm hover:border-emerald-300"
+                                    className="w-full h-[42px] px-4 border border-gray-300 dark:border-zinc-700 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none dark:text-white dark:bg-zinc-900 text-sm transition-all shadow-sm hover:border-emerald-300"
                                 />
                             </div>
                             <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
@@ -282,7 +282,7 @@ export default function AdminUnityModels() {
                                 <select
                                     value={selectedPanel}
                                     onChange={(e) => setSelectedPanel(e.target.value)}
-                                    className="w-full h-[42px] px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none text-sm transition-all shadow-sm hover:border-emerald-300 bg-white cursor-pointer"
+                                    className="w-full h-[42px] px-4 border border-gray-300 dark:border-zinc-700 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none dark:text-white dark:bg-zinc-900 text-sm transition-all shadow-sm hover:border-emerald-300 bg-white dark:bg-[#1c1c1c] cursor-pointer"
                                 >
                                     <option value="">Todas las Temáticas</option>
                                     {uniquePanels.map((tematica, idx) => (
@@ -292,7 +292,7 @@ export default function AdminUnityModels() {
                             </div>
                             <button
                                 onClick={() => navigate('/admin-idiomas')}
-                                {...cascade(7, "w-full sm:w-auto h-[42px] px-4 bg-emerald-100 text-emerald-700 font-bold rounded-lg hover:bg-emerald-200 transition-all shadow-sm flex items-center justify-center gap-2")}
+                                {...cascade(7, "w-full sm:w-auto h-[42px] px-4 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 font-bold rounded-lg hover:bg-emerald-200 transition-all shadow-sm flex items-center justify-center gap-2")}
                             >
                                 <LanguageIcon className="w-5 h-5" /> APP AR
                             </button>
@@ -300,44 +300,44 @@ export default function AdminUnityModels() {
                         </div>
                     </div>
 
-                    {loading ? <div className="text-gray-500">Cargando datos...</div> : (
-                        <div key={searchTerm + selectedPanel} {...cascade(8, "overflow-x-auto rounded-lg border border-gray-200 bg-white")}>
+                    {loading ? <div className="text-gray-500 dark:text-gray-400">Cargando datos...</div> : (
+                        <div key={searchTerm + selectedPanel} {...cascade(8, "overflow-x-auto rounded-lg border border-gray-200 dark:border-zinc-800 bg-white dark:bg-[#1c1c1c]")}>
                             <table className="w-full text-sm">
-                                <thead className="bg-gray-50">
+                                <thead className="bg-gray-50 dark:bg-zinc-800/50">
                                     <tr {...cascade(9)}>
-                                        <th className="px-4 py-3 text-left font-medium text-gray-600 w-12 text-center">N°</th>
-                                        <th className="px-4 py-3 text-left font-medium text-gray-600">Especie</th>
-                                        <th className="px-4 py-3 text-left font-medium text-gray-600">Temática</th>
-                                        <th className="px-4 py-3 text-left font-medium text-gray-600">Taxonomía</th>
-                                        <th className="px-4 py-3 text-left font-medium text-gray-600">Idiomas</th>
-                                        <th className="px-4 py-3 text-left font-medium text-gray-600">Marcador AR</th>
-                                        <th className="px-4 py-3 text-left font-medium text-gray-600">Estado</th>
-                                        <th className="px-4 py-3 text-right font-medium text-gray-600">Acciones</th>
+                                        <th className="px-4 py-3 text-left font-medium text-gray-600 dark:text-gray-400 w-12 text-center">N°</th>
+                                        <th className="px-4 py-3 text-left font-medium text-gray-600 dark:text-gray-400">Especie</th>
+                                        <th className="px-4 py-3 text-left font-medium text-gray-600 dark:text-gray-400">Temática</th>
+                                        <th className="px-4 py-3 text-left font-medium text-gray-600 dark:text-gray-400">Taxonomía</th>
+                                        <th className="px-4 py-3 text-left font-medium text-gray-600 dark:text-gray-400">Idiomas</th>
+                                        <th className="px-4 py-3 text-left font-medium text-gray-600 dark:text-gray-400">Marcador AR</th>
+                                        <th className="px-4 py-3 text-left font-medium text-gray-600 dark:text-gray-400">Estado</th>
+                                        <th className="px-4 py-3 text-right font-medium text-gray-600 dark:text-gray-400">Acciones</th>
                                     </tr>
                                 </thead>
-                                <tbody className="divide-y divide-gray-100 table-row-group">
+                                <tbody className="divide-y divide-gray-100 dark:divide-zinc-800 table-row-group">
                                     {paginatedModels.map((m, idx) => (
-                                        <tr key={m.id} {...cascade(10 + idx, "hover:bg-gray-50 transition-colors")}>
-                                            <td className="px-4 py-3 text-center text-gray-400 font-mono text-xs">
+                                        <tr key={m.id} {...cascade(10 + idx, "hover:bg-gray-50 dark:hover:bg-zinc-800/80 dark:bg-zinc-800/50 transition-colors")}>
+                                            <td className="px-4 py-3 text-center text-gray-400 dark:text-gray-500 font-mono text-xs">
                                                 {(currentPage - 1) * itemsPerPage + idx + 1}
                                             </td>
                                             <td className="px-4 py-3">
-                                                <div className="font-bold text-gray-900 italic">{m.scientificName}</div>
-                                                <div className="text-xs text-gray-500">{m.vernacularName || 'Sin nombre común'} (ID: {m.id})</div>
+                                                <div className="font-bold text-gray-900 dark:text-white italic">{m.scientificName}</div>
+                                                <div className="text-xs text-gray-500 dark:text-gray-400">{m.vernacularName || 'Sin nombre común'} (ID: {m.id})</div>
                                             </td>
                                             <td className="px-4 py-3">
-                                                <div className="text-sm text-gray-700">{m.tematica || <span className="text-gray-300 italic">No asignada</span>}</div>
+                                                <div className="text-sm text-gray-700 dark:text-gray-300">{m.tematica || <span className="text-gray-300 italic">No asignada</span>}</div>
                                             </td>
                                             <td className="px-4 py-3">
-                                                <div className="text-xs text-gray-600">
+                                                <div className="text-xs text-gray-600 dark:text-gray-400">
                                                     {m.class || '?'} &gt; {m.order || '?'} &gt; {m.family || '?'}
                                                 </div>
                                             </td>
                                             <td className="px-4 py-3 text-center">
                                                 <div className="flex gap-1 flex-wrap justify-center">
-                                                    <span className="text-[10px] bg-sky-50 text-sky-700 px-1.5 py-0.5 rounded border border-sky-100 font-bold">es</span>
+                                                    <span className="text-[10px] bg-sky-50 dark:bg-sky-900/20 text-sky-700 dark:text-sky-400 px-1.5 py-0.5 rounded border border-sky-100 dark:border-sky-800 font-bold">es</span>
                                                     {m.translations?.filter(t => t.name || t.descripcion).map(t => (
-                                                        <span key={t.id} className="text-[10px] bg-sky-50 text-sky-700 px-1.5 py-0.5 rounded border border-sky-100 font-bold">
+                                                        <span key={t.id} className="text-[10px] bg-sky-50 dark:bg-sky-900/20 text-sky-700 dark:text-sky-400 px-1.5 py-0.5 rounded border border-sky-100 dark:border-sky-800 font-bold">
                                                             {t.language_code}
                                                         </span>
                                                     ))}
@@ -346,11 +346,11 @@ export default function AdminUnityModels() {
                                             <td className="px-4 py-3 text-center">
                                                 <div className="flex gap-2 justify-center">
                                                     {!m.qr_image_url && !m.qr_image_url2 ? (
-                                                        <span className="text-gray-400 text-[10px] italic">Sin marcadores</span>
+                                                        <span className="text-gray-400 dark:text-gray-500 text-[10px] italic">Sin marcadores</span>
                                                     ) : (
                                                         <>
                                                             {m.qr_image_url && (
-                                                                <div className="w-10 h-10 rounded-lg border border-gray-200 shadow-sm overflow-hidden bg-gray-50 flex items-center justify-center">
+                                                                <div className="w-10 h-10 rounded-lg border border-gray-200 dark:border-zinc-800 shadow-sm overflow-hidden bg-gray-50 dark:bg-zinc-800/50 flex items-center justify-center">
                                                                     <img
                                                                         src={`${API_BASE_URL}/uploads/microscopicos/${m.qr_image_url}`}
                                                                         alt="Marcador"
@@ -359,7 +359,7 @@ export default function AdminUnityModels() {
                                                                 </div>
                                                             )}
                                                             {m.qr_image_url2 && (
-                                                                <div className="w-10 h-10 rounded-lg border border-gray-200 shadow-sm overflow-hidden bg-gray-50 flex items-center justify-center">
+                                                                <div className="w-10 h-10 rounded-lg border border-gray-200 dark:border-zinc-800 shadow-sm overflow-hidden bg-gray-50 dark:bg-zinc-800/50 flex items-center justify-center">
                                                                     <img
                                                                         src={`${API_BASE_URL}/uploads/microscopicos/${m.qr_image_url2}`}
                                                                         alt="Marcador 2"
@@ -372,19 +372,19 @@ export default function AdminUnityModels() {
                                                 </div>
                                             </td>
                                             <td className="px-4 py-3">
-                                                <span className={`text-xs px-2 py-1 rounded-full font-medium ${m.estado === 'activo' ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'}`}>
+                                                <span className={`text-xs px-2 py-1 rounded-full font-medium ${m.estado === 'activo' ? 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-400' : 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-400'}`}>
                                                     {m.estado}
                                                 </span>
                                             </td>
                                             <td className="px-4 py-3">
                                                 <div className="flex flex-wrap gap-2 justify-end">
-                                                    <button onClick={() => openModal(m)} className="p-1.5 text-gray-500 hover:text-emerald-600 hover:bg-emerald-50 rounded">
+                                                    <button onClick={() => openModal(m)} className="p-1.5 text-gray-500 dark:text-gray-400 hover:text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:bg-emerald-900/20 rounded">
                                                         <PencilIcon className="w-5 h-5" />
                                                     </button>
-                                                    <button onClick={() => handleToggle(m)} className="p-1.5 text-gray-500 hover:text-amber-600 hover:bg-amber-50 rounded">
+                                                    <button onClick={() => handleToggle(m)} className="p-1.5 text-gray-500 dark:text-gray-400 hover:text-amber-600 dark:text-amber-400 hover:bg-amber-50 dark:bg-amber-900/20 rounded">
                                                         {m.estado === 'activo' ? <EyeSlashIcon className="w-5 h-5" /> : <EyeIcon className="w-5 h-5" />}
                                                     </button>
-                                                    <button onClick={() => handleDelete(m.id)} className="p-1.5 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded">
+                                                    <button onClick={() => handleDelete(m.id)} className="p-1.5 text-gray-500 dark:text-gray-400 hover:text-red-600 dark:text-red-400 hover:bg-red-50 dark:bg-red-900/20 rounded">
                                                         <TrashIcon className="w-5 h-5" />
                                                     </button>
                                                 </div>
@@ -393,7 +393,7 @@ export default function AdminUnityModels() {
                                     ))}
                                     {filteredModels.length === 0 && (
                                         <tr {...cascade(10)}>
-                                            <td colSpan="8" className="px-4 py-8 text-center text-gray-500">
+                                            <td colSpan="8" className="px-4 py-8 text-center text-gray-500 dark:text-gray-400">
                                                 No se encontraron especies microscópicas.
                                             </td>
                                         </tr>
@@ -405,26 +405,26 @@ export default function AdminUnityModels() {
 
                     {/* Controles de Paginación */}
                     {!loading && totalPages > 1 && (
-                        <div {...cascade(10 + Math.min(itemsPerPage, filteredModels.length) + 1, "flex items-center justify-between bg-white px-4 py-3 rounded-lg border border-gray-200 mt-4 shadow-sm")}>
+                        <div {...cascade(10 + Math.min(itemsPerPage, filteredModels.length) + 1, "flex items-center justify-between bg-white dark:bg-[#1c1c1c] px-4 py-3 rounded-lg border border-gray-200 dark:border-zinc-800 mt-4 shadow-sm")}>
                             <div className="flex flex-1 justify-between sm:hidden">
                                 <button
                                     onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                                     disabled={currentPage === 1}
-                                    className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+                                    className="relative inline-flex items-center rounded-md border border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#1c1c1c] px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-zinc-800/80 dark:bg-zinc-800/50 disabled:opacity-50"
                                 >
                                     Anterior
                                 </button>
                                 <button
                                     onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                                     disabled={currentPage === totalPages}
-                                    className="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+                                    className="relative ml-3 inline-flex items-center rounded-md border border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#1c1c1c] px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-zinc-800/80 dark:bg-zinc-800/50 disabled:opacity-50"
                                 >
                                     Siguiente
                                 </button>
                             </div>
                             <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
                                 <div>
-                                    <p className="text-sm text-gray-700">
+                                    <p className="text-sm text-gray-700 dark:text-gray-300">
                                         Mostrando <span className="font-medium">{(currentPage - 1) * itemsPerPage + 1}</span> a <span className="font-medium">{Math.min(currentPage * itemsPerPage, filteredModels.length)}</span> de <span className="font-medium">{filteredModels.length}</span> modelos
                                     </p>
                                 </div>
@@ -435,7 +435,7 @@ export default function AdminUnityModels() {
                                             window.scrollTo({ top: 0, behavior: 'smooth' });
                                         }}
                                         disabled={currentPage === 1}
-                                        className="px-3 py-1 border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50 text-sm"
+                                        className="px-3 py-1 border border-gray-300 dark:border-zinc-700 rounded hover:bg-gray-50 dark:hover:bg-zinc-800/80 dark:bg-zinc-800/50 disabled:opacity-50 text-sm"
                                     >
                                         Anterior
                                     </button>
@@ -446,7 +446,7 @@ export default function AdminUnityModels() {
                                                 setCurrentPage(i + 1);
                                                 window.scrollTo({ top: 0, behavior: 'smooth' });
                                             }}
-                                            className={`px-3 py-1 border rounded text-sm transition-colors ${currentPage === i + 1 ? 'bg-emerald-600 text-white border-emerald-600' : 'border-gray-300 hover:bg-gray-50'}`}
+                                            className={`px-3 py-1 border rounded text-sm transition-colors ${currentPage === i + 1 ? 'bg-emerald-600 text-white border-emerald-600' : 'border-gray-300 dark:border-zinc-700 hover:bg-gray-50 dark:hover:bg-zinc-800/80 dark:bg-zinc-800/50'}`}
                                         >
                                             {i + 1}
                                         </button>
@@ -457,7 +457,7 @@ export default function AdminUnityModels() {
                                             window.scrollTo({ top: 0, behavior: 'smooth' });
                                         }}
                                         disabled={currentPage === totalPages}
-                                        className="px-3 py-1 border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50 text-sm"
+                                        className="px-3 py-1 border border-gray-300 dark:border-zinc-700 rounded hover:bg-gray-50 dark:hover:bg-zinc-800/80 dark:bg-zinc-800/50 disabled:opacity-50 text-sm"
                                     >
                                         Siguiente
                                     </button>
@@ -472,65 +472,65 @@ export default function AdminUnityModels() {
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <label className="block col-span-1 md:col-span-2">
-                            <span className="text-sm font-medium text-gray-700 block mb-1">Nombre Común</span>
+                            <span className="text-sm font-medium text-gray-700 dark:text-gray-300 block mb-1">Nombre Común</span>
                             <input
                                 value={formData.vernacularName || ''}
                                 onChange={e => setFormData(p => ({ ...p, vernacularName: e.target.value }))}
-                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all"
+                                className="w-full px-3 py-2 border border-gray-300 dark:border-zinc-700 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none dark:text-white dark:bg-zinc-900 transition-all"
                                 placeholder="Ej: Abeja Melipona"
                             />
                         </label>
 
                         <label className="block col-span-1 md:col-span-2">
-                            <span className="text-sm font-medium text-gray-700 block mb-1">Nombre Científico</span>
+                            <span className="text-sm font-medium text-gray-700 dark:text-gray-300 block mb-1">Nombre Científico</span>
                             <input
                                 value={formData.scientificName || ''}
                                 onChange={e => setFormData(p => ({ ...p, scientificName: e.target.value }))}
-                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all"
+                                className="w-full px-3 py-2 border border-gray-300 dark:border-zinc-700 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none dark:text-white dark:bg-zinc-900 transition-all"
                                 placeholder="Ej: Melipona beecheii"
                             />
                         </label>
 
                         <label className="block col-span-1 md:col-span-2">
-                            <span className="text-sm font-medium text-gray-700 block mb-1">Temática (Para Filtros en Galería)</span>
+                            <span className="text-sm font-medium text-gray-700 dark:text-gray-300 block mb-1">Temática (Para Filtros en Galería)</span>
                             <input
                                 value={formData.tematica || ''}
                                 onChange={e => setFormData(p => ({ ...p, tematica: e.target.value }))}
-                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all bg-emerald-50/10"
+                                className="w-full px-3 py-2 border border-gray-300 dark:border-zinc-700 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none dark:text-white dark:bg-zinc-900 transition-all bg-emerald-50/10 dark:bg-emerald-500/10"
                                 placeholder="Ej: Insectos, Cultura, Microscopio"
                             />
                         </label>
 
-                        <div className="col-span-1 md:col-span-2 p-3 bg-gray-50 rounded-lg border text-sm grid grid-cols-2 sm:grid-cols-4 gap-3">
-                            <p className="col-span-full font-semibold text-gray-600 mb-1 text-xs uppercase tracking-wider">Taxonomía</p>
-                            <label className="block"><span className="text-xs text-gray-500 block mb-1">Reino</span><input value={formData.kingdom || ''} onChange={e => setFormData(p => ({ ...p, kingdom: e.target.value }))} className="w-full px-2 py-1 border border-gray-300 rounded text-xs focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all" /></label>
-                            <label className="block"><span className="text-xs text-gray-500 block mb-1">Filo</span><input value={formData.phylum || ''} onChange={e => setFormData(p => ({ ...p, phylum: e.target.value }))} className="w-full px-2 py-1 border border-gray-300 rounded text-xs focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all" /></label>
-                            <label className="block"><span className="text-xs text-gray-500 block mb-1">Subfilo</span><input value={formData.subphylum || ''} onChange={e => setFormData(p => ({ ...p, subphylum: e.target.value }))} className="w-full px-2 py-1 border border-gray-300 rounded text-xs focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all" /></label>
-                            <label className="block"><span className="text-xs text-gray-500 block mb-1">Clase</span><input value={formData.class || ''} onChange={e => setFormData(p => ({ ...p, class: e.target.value }))} className="w-full px-2 py-1 border border-gray-300 rounded text-xs focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all" /></label>
-                            <label className="block"><span className="text-xs text-gray-500 block mb-1">Subclase</span><input value={formData.subclass || ''} onChange={e => setFormData(p => ({ ...p, subclass: e.target.value }))} className="w-full px-2 py-1 border border-gray-300 rounded text-xs focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all" /></label>
-                            <label className="block"><span className="text-xs text-gray-500 block mb-1">Orden</span><input value={formData.order || ''} onChange={e => setFormData(p => ({ ...p, order: e.target.value }))} className="w-full px-2 py-1 border border-gray-300 rounded text-xs focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all" /></label>
-                            <label className="block"><span className="text-xs text-gray-500 block mb-1">Familia</span><input value={formData.family || ''} onChange={e => setFormData(p => ({ ...p, family: e.target.value }))} className="w-full px-2 py-1 border border-gray-300 rounded text-xs focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all" /></label>
-                            <label className="block"><span className="text-xs text-gray-500 block mb-1">Género</span><input value={formData.genus || ''} onChange={e => setFormData(p => ({ ...p, genus: e.target.value }))} className="w-full px-2 py-1 border border-gray-300 rounded text-xs focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all" /></label>
-                            <label className="block"><span className="text-xs text-gray-500 block mb-1">Epíteto (Especie)</span><input value={formData.specificEpithet || ''} onChange={e => setFormData(p => ({ ...p, specificEpithet: e.target.value }))} className="w-full px-2 py-1 border border-gray-300 rounded text-xs focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all" /></label>
+                        <div className="col-span-1 md:col-span-2 p-3 bg-gray-50 dark:bg-zinc-800/50 rounded-lg border text-sm grid grid-cols-2 sm:grid-cols-4 gap-3">
+                            <p className="col-span-full font-semibold text-gray-600 dark:text-gray-400 mb-1 text-xs uppercase tracking-wider">Taxonomía</p>
+                            <label className="block"><span className="text-xs text-gray-500 dark:text-gray-400 block mb-1">Reino</span><input value={formData.kingdom || ''} onChange={e => setFormData(p => ({ ...p, kingdom: e.target.value }))} className="w-full px-2 py-1 border border-gray-300 dark:border-zinc-700 rounded text-xs focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none dark:text-white dark:bg-zinc-900 transition-all" /></label>
+                            <label className="block"><span className="text-xs text-gray-500 dark:text-gray-400 block mb-1">Filo</span><input value={formData.phylum || ''} onChange={e => setFormData(p => ({ ...p, phylum: e.target.value }))} className="w-full px-2 py-1 border border-gray-300 dark:border-zinc-700 rounded text-xs focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none dark:text-white dark:bg-zinc-900 transition-all" /></label>
+                            <label className="block"><span className="text-xs text-gray-500 dark:text-gray-400 block mb-1">Subfilo</span><input value={formData.subphylum || ''} onChange={e => setFormData(p => ({ ...p, subphylum: e.target.value }))} className="w-full px-2 py-1 border border-gray-300 dark:border-zinc-700 rounded text-xs focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none dark:text-white dark:bg-zinc-900 transition-all" /></label>
+                            <label className="block"><span className="text-xs text-gray-500 dark:text-gray-400 block mb-1">Clase</span><input value={formData.class || ''} onChange={e => setFormData(p => ({ ...p, class: e.target.value }))} className="w-full px-2 py-1 border border-gray-300 dark:border-zinc-700 rounded text-xs focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none dark:text-white dark:bg-zinc-900 transition-all" /></label>
+                            <label className="block"><span className="text-xs text-gray-500 dark:text-gray-400 block mb-1">Subclase</span><input value={formData.subclass || ''} onChange={e => setFormData(p => ({ ...p, subclass: e.target.value }))} className="w-full px-2 py-1 border border-gray-300 dark:border-zinc-700 rounded text-xs focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none dark:text-white dark:bg-zinc-900 transition-all" /></label>
+                            <label className="block"><span className="text-xs text-gray-500 dark:text-gray-400 block mb-1">Orden</span><input value={formData.order || ''} onChange={e => setFormData(p => ({ ...p, order: e.target.value }))} className="w-full px-2 py-1 border border-gray-300 dark:border-zinc-700 rounded text-xs focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none dark:text-white dark:bg-zinc-900 transition-all" /></label>
+                            <label className="block"><span className="text-xs text-gray-500 dark:text-gray-400 block mb-1">Familia</span><input value={formData.family || ''} onChange={e => setFormData(p => ({ ...p, family: e.target.value }))} className="w-full px-2 py-1 border border-gray-300 dark:border-zinc-700 rounded text-xs focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none dark:text-white dark:bg-zinc-900 transition-all" /></label>
+                            <label className="block"><span className="text-xs text-gray-500 dark:text-gray-400 block mb-1">Género</span><input value={formData.genus || ''} onChange={e => setFormData(p => ({ ...p, genus: e.target.value }))} className="w-full px-2 py-1 border border-gray-300 dark:border-zinc-700 rounded text-xs focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none dark:text-white dark:bg-zinc-900 transition-all" /></label>
+                            <label className="block"><span className="text-xs text-gray-500 dark:text-gray-400 block mb-1">Epíteto (Especie)</span><input value={formData.specificEpithet || ''} onChange={e => setFormData(p => ({ ...p, specificEpithet: e.target.value }))} className="w-full px-2 py-1 border border-gray-300 dark:border-zinc-700 rounded text-xs focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none dark:text-white dark:bg-zinc-900 transition-all" /></label>
                         </div>
 
                         <label className="block col-span-1 md:col-span-2">
-                            <span className="text-sm font-medium text-gray-700 block mb-1">Descripción / Notas</span>
+                            <span className="text-sm font-medium text-gray-700 dark:text-gray-300 block mb-1">Descripción / Notas</span>
                             <textarea
                                 value={formData.taxonRemarks || ''}
                                 onChange={e => setFormData(p => ({ ...p, taxonRemarks: e.target.value }))}
                                 rows={4}
-                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none resize-none transition-all"
+                                className="w-full px-3 py-2 border border-gray-300 dark:border-zinc-700 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none dark:text-white dark:bg-zinc-900 resize-none transition-all"
                                 placeholder="Descripción general de la especie..."
                             />
                         </label>
 
 
                         {/* TRADUCCIONES DINÁMICAS (TABS) */}
-                        <div className="col-span-1 md:col-span-2 p-4 bg-gray-50 rounded-xl border border-gray-200">
+                        <div className="col-span-1 md:col-span-2 p-4 bg-gray-50 dark:bg-zinc-800/50 rounded-xl border border-gray-200 dark:border-zinc-800">
                             <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-2">
-                                <h3 className="font-bold text-gray-700 text-sm uppercase tracking-wider flex items-center gap-2">
-                                    <CircleStackIcon className="w-4 h-4 text-emerald-600" />
+                                <h3 className="font-bold text-gray-700 dark:text-gray-300 text-sm uppercase tracking-wider flex items-center gap-2">
+                                    <CircleStackIcon className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                                     Traducciones e Idiomas
                                 </h3>
                                 <button type="button" onClick={async () => {
@@ -655,7 +655,7 @@ export default function AdminUnityModels() {
                                             setTabIdiomaActivo(lang);
                                         }
                                     }
-                                }} className="text-xs bg-white border border-emerald-200 text-emerald-600 px-3 py-1.5 rounded-lg hover:bg-emerald-50 transition-colors font-semibold flex items-center gap-1 shadow-sm">
+                                }} className="text-xs bg-white dark:bg-[#1c1c1c] border border-emerald-200 text-emerald-600 dark:text-emerald-400 px-3 py-1.5 rounded-lg hover:bg-emerald-50 dark:bg-emerald-900/20 transition-colors font-semibold flex items-center gap-1 shadow-sm">
                                     <PlusIcon className="w-4 h-4" /> Añadir Idioma
                                 </button>
                             </div>
@@ -663,7 +663,7 @@ export default function AdminUnityModels() {
                             {/* CABECERA DE TABS */}
                             <div className="flex gap-2 overflow-x-auto pb-2 mb-4 no-scrollbar">
                                 {(formData.translations || []).length === 0 ? (
-                                    <p className="text-xs text-gray-400 italic py-2">No hay traducciones adicionales agregadas.</p>
+                                    <p className="text-xs text-gray-400 dark:text-gray-500 italic py-2">No hay traducciones adicionales agregadas.</p>
                                 ) : (
                                     formData.translations.map((t) => {
                                         const nombres = {}; availableLanguages.forEach(l => { nombres[l.code] = l.name });
@@ -673,7 +673,7 @@ export default function AdminUnityModels() {
                                                 key={t.language_code}
                                                 type="button"
                                                 onClick={() => setTabIdiomaActivo(t.language_code)}
-                                                className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap border transition-all ${isActive ? 'bg-emerald-600 text-white border-emerald-600 shadow-md translate-y-[-1px]' : 'bg-white text-gray-500 border-gray-200 hover:border-emerald-300'}`}
+                                                className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap border transition-all ${isActive ? 'bg-emerald-600 text-white border-emerald-600 shadow-md translate-y-[-1px]' : 'bg-white dark:bg-[#1c1c1c] text-gray-500 dark:text-gray-400 border-gray-200 dark:border-zinc-800 hover:border-emerald-300'}`}
                                             >
                                                 {nombres[t.language_code] || t.language_code}
                                             </button>
@@ -685,32 +685,32 @@ export default function AdminUnityModels() {
                             {/* CONTENIDO DEL TAB ACTIVO */}
                             {formData.translations?.map((t, idx) => (
                                 tabIdiomaActivo === t.language_code && (
-                                    <div key={idx} className="bg-white rounded-xl p-4 border border-emerald-100 shadow-inner space-y-4 animate-fadeIn">
-                                        <div className="flex justify-between items-center pb-2 border-b border-gray-100">
-                                            <span className="text-xs font-black text-emerald-700 uppercase">Editando: {availableLanguages.find(l => l.code === t.language_code)?.name || t.language_code}</span>
+                                    <div key={idx} className="bg-white dark:bg-[#1c1c1c] rounded-xl p-4 border border-emerald-100 shadow-inner space-y-4 animate-fadeIn">
+                                        <div className="flex justify-between items-center pb-2 border-b border-gray-100 dark:border-zinc-800">
+                                            <span className="text-xs font-black text-emerald-700 dark:text-emerald-400 uppercase">Editando: {availableLanguages.find(l => l.code === t.language_code)?.name || t.language_code}</span>
                                             <button type="button" onClick={() => {
                                                 const newTrans = formData.translations.filter((_, i) => i !== idx);
                                                 setFormData({ ...formData, translations: newTrans });
                                                 if (newTrans.length > 0) setTabIdiomaActivo(newTrans[0].language_code);
-                                            }} className="p-1 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors">
+                                            }} className="p-1 text-red-400 hover:text-red-600 dark:text-red-400 hover:bg-red-50 dark:bg-red-900/20 rounded-md transition-colors">
                                                 <TrashIcon className="w-4 h-4" />
                                             </button>
                                         </div>
                                         <label className="block">
-                                            <span className="text-[11px] font-bold text-gray-500 block mb-1">Nombre ({t.language_code})</span>
+                                            <span className="text-[11px] font-bold text-gray-500 dark:text-gray-400 block mb-1">Nombre ({t.language_code})</span>
                                             <input value={t.name || ''} onChange={(e) => {
                                                 const newTrans = [...formData.translations];
                                                 newTrans[idx].name = e.target.value;
                                                 setFormData({ ...formData, translations: newTrans });
-                                            }} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all" />
+                                            }} className="w-full px-3 py-2 border border-gray-200 dark:border-zinc-800 rounded-lg text-sm bg-gray-50 dark:bg-zinc-800/50 focus:bg-white dark:bg-[#1c1c1c] focus:ring-2 focus:ring-emerald-500/20 outline-none dark:text-white dark:bg-zinc-900 transition-all" />
                                         </label>
                                         <label className="block">
-                                            <span className="text-[11px] font-bold text-gray-500 block mb-1">Descripción ({t.language_code})</span>
+                                            <span className="text-[11px] font-bold text-gray-500 dark:text-gray-400 block mb-1">Descripción ({t.language_code})</span>
                                             <textarea value={t.descripcion || ''} onChange={(e) => {
                                                 const newTrans = [...formData.translations];
                                                 newTrans[idx].descripcion = e.target.value;
                                                 setFormData({ ...formData, translations: newTrans });
-                                            }} rows={3} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-emerald-500/20 outline-none resize-none transition-all" />
+                                            }} rows={3} className="w-full px-3 py-2 border border-gray-200 dark:border-zinc-800 rounded-lg text-sm bg-gray-50 dark:bg-zinc-800/50 focus:bg-white dark:bg-[#1c1c1c] focus:ring-2 focus:ring-emerald-500/20 outline-none dark:text-white dark:bg-zinc-900 resize-none transition-all" />
                                         </label>
                                     </div>
                                 )
@@ -718,16 +718,16 @@ export default function AdminUnityModels() {
                         </div>
 
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 col-span-1 md:col-span-2">
-                            <div className="border rounded-lg p-3 bg-white">
-                                <span className="text-sm font-medium text-gray-700 mb-2 block">Archivo 3D (.molde / .glb)</span>
+                            <div className="border rounded-lg p-3 bg-white dark:bg-[#1c1c1c]">
+                                <span className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">Archivo 3D (.molde / .glb)</span>
                                 <input type="file" ref={fileInputRef} onChange={(e) => handleFileUpload(e, 'asset')} accept=".molde,.glb" className="hidden" />
                                 <div className="flex flex-col gap-2">
-                                    <button type="button" onClick={() => fileInputRef.current?.click()} disabled={uploadingAsset} className={`flex items-center justify-center gap-2 w-full py-2 rounded-lg text-sm transition-colors ${uploadingAsset ? 'upload-loading' : 'bg-gray-100 hover:bg-gray-200'}`}>
+                                    <button type="button" onClick={() => fileInputRef.current?.click()} disabled={uploadingAsset} className={`flex items-center justify-center gap-2 w-full py-2 rounded-lg text-sm transition-colors ${uploadingAsset ? 'upload-loading' : 'bg-gray-100 dark:bg-zinc-800 hover:bg-gray-200'}`}>
                                         <ArrowUpTrayIcon className="w-4 h-4" />
                                         {uploadingAsset ? 'Subiendo...' : 'Subir Modelo 3D'}
                                     </button>
                                     {formData.assetBundleFileName && (
-                                        <div className="flex items-center justify-center gap-1 text-[11px] text-emerald-600 bg-emerald-50 px-2 py-1 rounded">
+                                        <div className="flex items-center justify-center gap-1 text-[11px] text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 px-2 py-1 rounded">
                                             <CheckCircleIcon className="w-3 h-3 shrink-0" />
                                             <span className="truncate max-w-[150px] font-mono">{formData.assetBundleFileName}</span>
                                         </div>
@@ -735,8 +735,8 @@ export default function AdminUnityModels() {
                                 </div>
                             </div>
 
-                            <div className="border rounded-lg p-3 bg-white">
-                                <span className="text-sm font-medium text-gray-700 mb-2 block">Marcador AR(JPG/PNG)</span>
+                            <div className="border rounded-lg p-3 bg-white dark:bg-[#1c1c1c]">
+                                <span className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">Marcador AR(JPG/PNG)</span>
                                 <input type="file" ref={qrInputRef} onChange={(e) => handleFileUpload(e, 'qr')} accept="image/png, image/jpeg" className="hidden" />
                                 <div className="flex flex-col gap-2">
                                     <button type="button" onClick={() => qrInputRef.current?.click()} disabled={uploadingQr} className={`flex items-center justify-center gap-2 w-full py-2 rounded-lg text-sm transition-colors ${uploadingQr ? 'upload-loading' : 'bg-indigo-50 hover:bg-indigo-100 text-indigo-700'}`}>
@@ -748,7 +748,7 @@ export default function AdminUnityModels() {
                                             <img
                                                 src={`${API_BASE_URL}/uploads/microscopicos/${formData.qr_image_url}`}
                                                 alt="QR Preview"
-                                                className="w-24 h-24 object-cover rounded-md border border-gray-200 shadow-sm"
+                                                className="w-24 h-24 object-cover rounded-md border border-gray-200 dark:border-zinc-800 shadow-sm"
                                             />
                                             <div className="flex items-center justify-center gap-1 text-[11px] text-indigo-600 bg-indigo-50 px-2 py-1 rounded w-full">
                                                 <CheckCircleIcon className="w-3 h-3 shrink-0" />
@@ -761,8 +761,8 @@ export default function AdminUnityModels() {
                                 </div>
                             </div>
 
-                            <div className="border rounded-lg p-3 bg-white">
-                                <span className="text-sm font-medium text-gray-700 mb-2 block">Marcador AR(JPG/PNG)</span>
+                            <div className="border rounded-lg p-3 bg-white dark:bg-[#1c1c1c]">
+                                <span className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">Marcador AR(JPG/PNG)</span>
                                 <input type="file" ref={qrInput2Ref} onChange={(e) => handleFileUpload(e, 'qr2')} accept="image/png, image/jpeg" className="hidden" />
                                 <div className="flex flex-col gap-2">
                                     <button type="button" onClick={() => qrInput2Ref.current?.click()} disabled={uploadingQr2} className={`flex items-center justify-center gap-2 w-full py-2 rounded-lg text-sm transition-colors ${uploadingQr2 ? 'upload-loading' : 'bg-blue-50 hover:bg-blue-100 text-blue-700'}`}>
@@ -774,7 +774,7 @@ export default function AdminUnityModels() {
                                             <img
                                                 src={`${API_BASE_URL}/uploads/microscopicos/${formData.qr_image_url2}`}
                                                 alt="QR Preview"
-                                                className="w-24 h-24 object-cover rounded-md border border-gray-200 shadow-sm"
+                                                className="w-24 h-24 object-cover rounded-md border border-gray-200 dark:border-zinc-800 shadow-sm"
                                             />
                                             <div className="flex items-center justify-center gap-1 text-[11px] text-blue-600 bg-blue-50 px-2 py-1 rounded w-full">
                                                 <CheckCircleIcon className="w-3 h-3 shrink-0" />
@@ -789,19 +789,19 @@ export default function AdminUnityModels() {
                         </div>
 
                         <label className="block col-span-1 md:col-span-2">
-                            <span className="text-sm font-medium text-gray-700 block mb-1">Fuente de Información</span>
+                            <span className="text-sm font-medium text-gray-700 dark:text-gray-300 block mb-1">Fuente de Información</span>
                             <textarea
                                 value={formData.fuente || ''}
                                 onChange={e => setFormData(p => ({ ...p, fuente: e.target.value }))}
                                 rows={2}
-                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all shadow-sm resize-y min-h-[60px]"
+                                className="w-full px-3 py-2 border border-gray-300 dark:border-zinc-700 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none dark:text-white dark:bg-zinc-900 transition-all shadow-sm resize-y min-h-[60px]"
                                 placeholder="Ej: Wikipedia, Universidad de X, etc."
                             />
                         </label>
                     </div>
 
                     <div className="flex justify-end gap-3 pt-4 border-t">
-                        <button type="button" onClick={() => setShowModal(false)} className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 text-sm font-medium text-gray-700">Cancelar</button>
+                        <button type="button" onClick={() => setShowModal(false)} className="px-4 py-2 border border-gray-300 dark:border-zinc-700 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800/80 dark:bg-zinc-800/50 text-sm font-medium text-gray-700 dark:text-gray-300">Cancelar</button>
                         <button type="submit" disabled={uploadingAsset || uploadingQr || uploadingQr2 || isSaving} className="px-5 py-2 text-white rounded-lg hover:opacity-90 disabled:opacity-50 text-sm font-medium" style={{ backgroundColor: THEME.primary }}>
                             {isSaving ? 'Guardando...' : (editItem ? 'Guardar Cambios' : 'Registrar Especie')}
                         </button>
