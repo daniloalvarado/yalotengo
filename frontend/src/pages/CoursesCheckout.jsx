@@ -125,18 +125,18 @@ export default function CoursesCheckout() {
     if (step === 'success') {
         return (
             <div className="max-w-2xl mx-auto px-4 py-12">
-                <div className="bg-white rounded-2xl shadow-lg p-8 text-center">
-                    <div className="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <div className="bg-white dark:bg-[#1c1c1c] rounded-2xl shadow-lg p-8 text-center">
+                    <div className="w-20 h-20 bg-emerald-100 dark:bg-emerald-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
                         <CheckCircleIcon className="w-12 h-12 text-emerald-600" />
                     </div>
 
-                    <h1 className="text-2xl font-bold text-gray-900 mb-2">¡Inscripción Exitosa!</h1>
-                    <p className="text-gray-600 mb-6">
+                    <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">¡Inscripción Exitosa!</h1>
+                    <p className="text-gray-600 dark:text-gray-400 mb-6">
                         Te has inscrito al curso: <strong>{course.cou_txt_title}</strong>
                     </p>
 
-                    <div className="bg-emerald-50 rounded-xl p-6 mb-6">
-                        <p className="text-emerald-800">
+                    <div className="bg-emerald-50 dark:bg-emerald-900/20 rounded-xl p-6 mb-6">
+                        <p className="text-emerald-800 dark:text-emerald-400">
                             📧 Te enviaremos un email con los detalles de acceso al curso y las instrucciones para comenzar.
                         </p>
                     </div>
@@ -144,7 +144,7 @@ export default function CoursesCheckout() {
                     <div className="flex gap-4 justify-center">
                         <button
                             onClick={() => navigate('/courses')}
-                            className="px-6 py-3 border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors"
+                            className="px-6 py-3 border border-gray-300 dark:border-zinc-600 rounded-xl hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors"
                         >
                             Ver más cursos
                         </button>
@@ -166,7 +166,7 @@ export default function CoursesCheckout() {
             {/* Back button */}
             <button
                 onClick={() => navigate('/courses')}
-                className="flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6"
+                className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:text-white mb-6"
             >
                 <ArrowLeftIcon className="w-4 h-4" />
                 Volver a cursos
@@ -174,8 +174,8 @@ export default function CoursesCheckout() {
 
             <div className="grid md:grid-cols-2 gap-8 items-start">
                 {/* Course preview */}
-                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden self-start">
-                    <div className="aspect-video bg-gradient-to-br from-emerald-100 to-emerald-200 relative overflow-hidden">
+                <div className="bg-white dark:bg-[#1c1c1c] rounded-2xl shadow-sm border border-gray-100 dark:border-zinc-800 overflow-hidden self-start">
+                    <div className="aspect-video bg-gradient-to-br from-emerald-100 to-emerald-200 dark:from-emerald-900/40 dark:to-emerald-800/40 relative overflow-hidden">
                         {course.cou_txt_image ? (
                             <img
                                 src={
@@ -193,15 +193,15 @@ export default function CoursesCheckout() {
                         )}
                     </div>
                     <div className="p-5">
-                        <h2 className="text-xl font-bold text-gray-900">{course.cou_txt_title}</h2>
+                        <h2 className="text-xl font-bold text-gray-900 dark:text-white">{course.cou_txt_title}</h2>
                         {course.cou_txt_desc && (
-                            <p className="text-gray-600 mt-2 text-sm">{course.cou_txt_desc}</p>
+                            <p className="text-gray-600 dark:text-gray-400 mt-2 text-sm">{course.cou_txt_desc}</p>
                         )}
                         {course.cou_txt_duration && (
                             <p className="text-emerald-600 text-sm mt-2">⏱ {course.cou_txt_duration}</p>
                         )}
-                        <div className="mt-4 pt-4 border-t border-gray-100 flex items-center justify-between">
-                            <span className="text-gray-500">Total a pagar:</span>
+                        <div className="mt-4 pt-4 border-t border-gray-100 dark:border-zinc-800 flex items-center justify-between">
+                            <span className="text-gray-500 dark:text-gray-400">Total a pagar:</span>
                             <span className="text-2xl font-bold text-emerald-600">
                                 {PEN.format(price)}
                             </span>
@@ -210,10 +210,10 @@ export default function CoursesCheckout() {
                 </div>
 
                 {/* Formulario de pago */}
-                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                <div className="bg-white dark:bg-[#1c1c1c] rounded-2xl shadow-sm border border-gray-100 dark:border-zinc-800 p-6">
                     <div className="flex items-center gap-2 mb-4">
-                        <CreditCardIcon className="w-6 h-6 text-gray-400" />
-                        <h3 className="text-lg font-semibold text-gray-900">Método de Pago</h3>
+                        <CreditCardIcon className="w-6 h-6 text-gray-400 dark:text-gray-500" />
+                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Método de Pago</h3>
                     </div>
 
                     {/* Tabs de método de pago */}
@@ -221,24 +221,24 @@ export default function CoursesCheckout() {
                         <button
                             onClick={() => setPaymentMethod('card')}
                             className={`flex-1 flex flex-col items-center gap-1 p-3 rounded-xl border-2 transition-all ${paymentMethod === 'card'
-                                ? 'border-emerald-600 bg-emerald-50'
-                                : 'border-gray-200 hover:border-gray-300'
+                                ? 'border-emerald-600 bg-emerald-50 dark:bg-emerald-900/20'
+                                : 'border-gray-200 dark:border-zinc-700 hover:border-gray-300 dark:border-zinc-600 dark:hover:border-zinc-600'
                                 }`}
                         >
                             <CreditCardIcon className="w-6 h-6" />
                             <span className="font-medium">Tarjeta</span>
-                            <span className="text-xs text-gray-500">{PEN.format(price)}</span>
+                            <span className="text-xs text-gray-500 dark:text-gray-400">{PEN.format(price)}</span>
                         </button>
                         <button
                             onClick={() => setPaymentMethod('yape')}
                             className={`flex-1 flex flex-col items-center gap-1 p-3 rounded-xl border-2 transition-all ${paymentMethod === 'yape'
-                                ? 'border-[#00D1AE] bg-[#f0fdfa]'
-                                : 'border-gray-200 hover:border-gray-300'
+                                ? 'border-[#00D1AE] bg-[#f0fdfa] dark:bg-teal-900/20'
+                                : 'border-gray-200 dark:border-zinc-700 hover:border-gray-300 dark:border-zinc-600 dark:hover:border-zinc-600'
                                 }`}
                         >
                             <DevicePhoneMobileIcon className="w-6 h-6" />
                             <span className="font-medium">Yape</span>
-                            <span className="text-xs text-gray-500">{PEN.format(price)}</span>
+                            <span className="text-xs text-gray-500 dark:text-gray-400">{PEN.format(price)}</span>
                         </button>
                     </div>
 
@@ -251,7 +251,7 @@ export default function CoursesCheckout() {
                     {processing ? (
                         <div className="py-12 text-center">
                             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600 mx-auto mb-4"></div>
-                            <p className="text-gray-600">Procesando pago...</p>
+                            <p className="text-gray-600 dark:text-gray-400">Procesando pago...</p>
                         </div>
                     ) : paymentMethod === 'card' ? (
                         <MercadoPagoForm 
@@ -260,7 +260,7 @@ export default function CoursesCheckout() {
                         />
                     ) : (
                         <div className="space-y-4">
-                            <div className="bg-[#f0fdfa] border border-[#99f6e4] rounded-lg p-4 text-sm text-[#0f766e]">
+                            <div className="bg-[#f0fdfa] dark:bg-teal-900/20 border border-[#99f6e4] dark:border-teal-800 rounded-lg p-4 text-sm text-[#0f766e] dark:text-teal-400">
                                 <strong>¿Cómo pagar con Yape?</strong>
                                 <ol className="mt-2 ml-4 list-decimal space-y-1">
                                     <li>Ingresa tu número de teléfono registrado en Yape</li>
@@ -271,7 +271,7 @@ export default function CoursesCheckout() {
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                                     Número de teléfono
                                 </label>
                                 <input
@@ -280,13 +280,13 @@ export default function CoursesCheckout() {
                                     value={yapePhone}
                                     onChange={(e) => setYapePhone(e.target.value.replace(/\D/g, '').slice(0, 9))}
                                     maxLength={9}
-                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#00D1AE] focus:border-[#00D1AE] outline-none"
+                                    className="w-full px-4 py-3 border border-gray-300 dark:border-zinc-600 rounded-lg focus:ring-2 focus:ring-[#00D1AE] focus:border-[#00D1AE] outline-none"
                                 />
-                                <span className="text-xs text-gray-500">Tu número registrado en Yape</span>
+                                <span className="text-xs text-gray-500 dark:text-gray-400">Tu número registrado en Yape</span>
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                                     Código de aprobación (OTP)
                                 </label>
                                 <input
@@ -295,15 +295,15 @@ export default function CoursesCheckout() {
                                     value={yapeOtp}
                                     onChange={(e) => setYapeOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
                                     maxLength={6}
-                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#00D1AE] focus:border-[#00D1AE] outline-none"
+                                    className="w-full px-4 py-3 border border-gray-300 dark:border-zinc-600 rounded-lg focus:ring-2 focus:ring-[#00D1AE] focus:border-[#00D1AE] outline-none"
                                 />
-                                <span className="text-xs text-gray-500">Código de 6 dígitos de tu app Yape</span>
+                                <span className="text-xs text-gray-500 dark:text-gray-400">Código de 6 dígitos de tu app Yape</span>
                             </div>
 
                             <button
                                 onClick={handleYapePayment}
                                 disabled={!yapePhone || yapePhone.length < 9 || !yapeOtp || yapeOtp.length !== 6}
-                                className="w-full py-3 bg-[#00D1AE] hover:bg-[#00b89d] disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-colors flex items-center justify-center gap-2"
+                                className="w-full py-3 bg-[#00D1AE] hover:bg-[#00b89d] disabled:bg-gray-300 dark:bg-zinc-700 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-colors flex items-center justify-center gap-2"
                             >
                                 <DevicePhoneMobileIcon className="w-5 h-5" />
                                 Pagar {PEN.format(price)} con Yape

@@ -81,24 +81,24 @@ export default function Courses() {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
+            <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-black dark:to-zinc-900 flex items-center justify-center">
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600"></div>
             </div>
         )
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-8 px-4">
+        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-black dark:to-zinc-900 py-8 px-4">
             <div className="max-w-6xl mx-auto">
                 {/* Header */}
                 <div className="mb-10">
                     <div className="flex items-center gap-3 mb-2">
                         <AcademicCapIcon className="w-8 h-8 text-emerald-600" />
-                        <h1 className="text-3xl md:text-4xl font-bold text-gray-900">
+                        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">
                             Cursos Online
                         </h1>
                     </div>
-                    <p className="text-gray-600">
+                    <p className="text-gray-600 dark:text-gray-400">
                         Aprende robótica, drones e impresión 3D con nuestros expertos
                     </p>
                 </div>
@@ -108,7 +108,7 @@ export default function Courses() {
                 )}
 
                 {courses.length === 0 && !loading && (
-                    <div className="text-center text-gray-500 py-12">
+                    <div className="text-center text-gray-500 dark:text-gray-500 py-12">
                         No hay cursos disponibles en este momento.
                     </div>
                 )}
@@ -118,10 +118,10 @@ export default function Courses() {
                     {courses.map((course) => (
                         <div
                             key={course.cou_int_id}
-                            className="bg-white rounded-2xl shadow-sm border border-gray-100 hover:shadow-lg transition-all hover:-translate-y-1 relative z-0 hover:z-10 group"
+                            className="bg-white dark:bg-[#1c1c1c] rounded-2xl shadow-sm border border-gray-100 dark:border-zinc-800 hover:shadow-lg transition-all hover:-translate-y-1 relative z-0 hover:z-10 group"
                         >
                             {/* Course Image - SIN EL HOVER DE PLAY */}
-                            <div className="aspect-video bg-gradient-to-br from-emerald-100 to-emerald-200 relative overflow-hidden rounded-t-2xl">
+                            <div className="aspect-video bg-gradient-to-br from-emerald-100 to-emerald-200 dark:from-emerald-900/40 dark:to-emerald-800/40 relative overflow-hidden rounded-t-2xl">
                                 {course.cou_txt_image ? (
                                     <img
                                         src={
@@ -148,12 +148,12 @@ export default function Courses() {
 
                             {/* Course Info */}
                             <div className="p-5">
-                                <h3 className="font-bold text-lg text-gray-900 line-clamp-2 mb-2">
+                                <h3 className="font-bold text-lg text-gray-900 dark:text-white line-clamp-2 mb-2">
                                     {course.cou_txt_title}
                                 </h3>
 
                                 {course.cou_txt_desc && (
-                                    <p className="text-sm text-gray-600 line-clamp-2 mb-3">
+                                    <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2 mb-3">
                                         {course.cou_txt_desc}
                                     </p>
                                 )}
@@ -164,7 +164,7 @@ export default function Courses() {
                                     </div>
                                 )}
 
-                                <div className="flex items-center justify-between pt-3 border-t border-gray-100">
+                                <div className="flex items-center justify-between pt-3 border-t border-gray-100 dark:border-zinc-800">
                                     {/* PRECIO: Ajustado para ser más pequeño en móvil (text-lg) y grande en PC (md:text-2xl) */}
                                     <span className="text-lg md:text-2xl font-bold text-emerald-600">
                                         {PEN.format(course.cou_dec_price)}
@@ -175,8 +175,8 @@ export default function Courses() {
                                                 onClick={() => handleAddToCart(course)}
                                                 disabled={addingToCart[course.cou_int_id] || (course.cou_int_sold >= course.cou_int_seats)}
                                                 className={`p-2 rounded-xl transition-colors ${(course.cou_int_sold >= course.cou_int_seats)
-                                                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                                                    : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+                                                    ? 'bg-gray-100 dark:bg-zinc-800 text-gray-400 cursor-not-allowed'
+                                                    : 'bg-gray-100 dark:bg-zinc-800 hover:bg-gray-200 dark:bg-zinc-700 text-gray-700 dark:text-gray-300'
                                                     }`}
                                             >
                                                 <ShoppingCartIcon className="w-5 h-5" />
@@ -187,7 +187,7 @@ export default function Courses() {
                                                 onClick={() => handleBuy(course)}
                                                 disabled={course.cou_int_sold >= course.cou_int_seats}
                                                 className={`p-2 rounded-xl transition-colors ${(course.cou_int_sold >= course.cou_int_seats)
-                                                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                                    ? 'bg-gray-300 dark:bg-zinc-800 text-gray-500 dark:text-gray-500 cursor-not-allowed'
                                                     : 'bg-emerald-600 hover:bg-emerald-700 text-white'
                                                     }`}
                                             >

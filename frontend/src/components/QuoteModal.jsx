@@ -100,7 +100,7 @@ export default function QuoteModal({ isOpen, onClose, onSuccess }) {
             <form onSubmit={handleSubmit} className="space-y-4">
                         {/* Descripción */}
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                                 Descripción de tu idea <span className="text-red-500">*</span>
                             </label>
                             <textarea
@@ -108,22 +108,22 @@ export default function QuoteModal({ isOpen, onClose, onSuccess }) {
                                 onChange={e => setDescription(e.target.value)}
                                 placeholder="Describe qué deseas imprimir (medidas, colores, detalles específicos, material...)"
                                 rows="4"
-                                className="w-full px-4 py-2 rounded-xl border border-gray-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none transition-colors"
+                                className="w-full px-4 py-2 rounded-xl border border-gray-200 dark:border-zinc-700 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none transition-colors"
                             />
                         </div>
 
                         {/* Imágenes */}
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                                 Fotos de referencia (Max 5)
                             </label>
                             <div 
                                 onDragOver={e => e.preventDefault()}
                                 onDrop={handleImageDrop}
-                                className="border-2 border-dashed border-gray-200 rounded-xl p-6 flex flex-col items-center justify-center text-center hover:bg-gray-50 transition-colors"
+                                className="border-2 border-dashed border-gray-200 dark:border-zinc-700 rounded-xl p-6 flex flex-col items-center justify-center text-center hover:bg-gray-50 dark:hover:bg-zinc-700 dark:bg-zinc-800 transition-colors"
                             >
-                                <PhotoIcon className="w-8 h-8 text-gray-400 mb-2" />
-                                <p className="text-sm text-gray-500 mb-2">Arrastra y suelta tus imágenes aquí</p>
+                                <PhotoIcon className="w-8 h-8 text-gray-400 dark:text-gray-500 mb-2" />
+                                <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">Arrastra y suelta tus imágenes aquí</p>
                                 <label className="text-sm text-emerald-600 font-medium hover:text-emerald-700 cursor-pointer">
                                     O selecciona desde tu dispositivo
                                     <input 
@@ -140,7 +140,7 @@ export default function QuoteModal({ isOpen, onClose, onSuccess }) {
                             {images.length > 0 && (
                                 <div className="mt-4 grid grid-cols-5 gap-2">
                                     {images.map((img, i) => (
-                                        <div key={i} className="relative group aspect-square rounded-lg overflow-hidden border border-gray-200">
+                                        <div key={i} className="relative group aspect-square rounded-lg overflow-hidden border border-gray-200 dark:border-zinc-700">
                                             <img src={URL.createObjectURL(img)} alt={`preview ${i}`} className="w-full h-full object-cover" />
                                             <button 
                                                 type="button"
@@ -156,21 +156,21 @@ export default function QuoteModal({ isOpen, onClose, onSuccess }) {
                         </div>
 
                         {/* Datos de contacto */}
-                        <div className="bg-gray-50 p-4 rounded-xl border border-gray-100">
-                            <h3 className="font-medium text-gray-900 mb-2">Datos de Contacto</h3>
+                        <div className="bg-gray-50 dark:bg-zinc-800 p-4 rounded-xl border border-gray-100 dark:border-zinc-700">
+                            <h3 className="font-medium text-gray-900 dark:text-white mb-2">Datos de Contacto</h3>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block text-xs text-gray-500">Correo Electrónico</label>
-                                    <input type="text" disabled value={email} className="w-full bg-transparent border-b border-gray-200 py-1 text-sm text-gray-700" />
+                                    <label className="block text-xs text-gray-500 dark:text-gray-400">Correo Electrónico</label>
+                                    <input type="text" disabled value={email} className="w-full bg-transparent dark:text-white border-b border-gray-200 dark:border-zinc-700 py-1 text-sm text-gray-700 dark:text-gray-300" />
                                 </div>
                                 <div>
-                                    <label className="block text-xs text-gray-500">Teléfono</label>
-                                    <input type="text" disabled value={phone || 'No registrado'} className="w-full bg-transparent border-b border-gray-200 py-1 text-sm text-gray-700" />
+                                    <label className="block text-xs text-gray-500 dark:text-gray-400">Teléfono</label>
+                                    <input type="text" disabled value={phone || 'No registrado'} className="w-full bg-transparent dark:text-white border-b border-gray-200 dark:border-zinc-700 py-1 text-sm text-gray-700 dark:text-gray-300" />
                                 </div>
                             </div>
                             
                             <div className="mt-3 text-sm flex justify-between items-center">
-                                <span className="text-gray-500 text-xs">Se usarán estos datos para contactarte.</span>
+                                <span className="text-gray-500 dark:text-gray-400 text-xs">Se usarán estos datos para contactarte.</span>
                                 <a href="/profile" className="text-emerald-600 hover:text-emerald-700 font-medium text-xs">
                                     ¿Tus datos son incorrectos? Actualizar datos
                                 </a>
@@ -179,34 +179,34 @@ export default function QuoteModal({ isOpen, onClose, onSuccess }) {
 
                         {/* Preferencias de Notificación */}
                         <div>
-                            <h3 className="text-sm font-medium text-gray-700 mb-2">Preferencias de respuesta</h3>
+                            <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Preferencias de respuesta</h3>
                             <div className="flex flex-col gap-2">
                                 <label className="flex items-center gap-2 cursor-pointer">
                                     <input 
                                         type="checkbox" 
                                         checked={notifyWhatsapp}
                                         onChange={e => setNotifyWhatsapp(e.target.checked)}
-                                        className="rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
+                                        className="rounded border-gray-300 dark:border-zinc-600 text-emerald-600 focus:ring-emerald-500"
                                     />
-                                    <span className="text-sm text-gray-600">Deseo recibir una copia de mi cotización por WhatsApp (Si registraste teléfono)</span>
+                                    <span className="text-sm text-gray-600 dark:text-gray-400">Deseo recibir una copia de mi cotización por WhatsApp (Si registraste teléfono)</span>
                                 </label>
                                 <label className="flex items-center gap-2 cursor-pointer">
                                     <input 
                                         type="checkbox" 
                                         checked={notifyEmail}
                                         onChange={e => setNotifyEmail(e.target.checked)}
-                                        className="rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
+                                        className="rounded border-gray-300 dark:border-zinc-600 text-emerald-600 focus:ring-emerald-500"
                                     />
-                                    <span className="text-sm text-gray-600">Deseo recibir una copia por Correo Electrónico</span>
+                                    <span className="text-sm text-gray-600 dark:text-gray-400">Deseo recibir una copia por Correo Electrónico</span>
                                 </label>
                             </div>
                         </div>
 
-                    <div className="mt-8 flex justify-end gap-3 pt-4 border-t border-gray-100">
+                    <div className="mt-8 flex justify-end gap-3 pt-4 border-t border-gray-100 dark:border-zinc-700">
                         <button
                             type="button"
                             onClick={onClose}
-                            className="px-4 py-2 text-gray-600 font-medium hover:bg-gray-100 rounded-xl transition-colors"
+                            className="px-4 py-2 text-gray-600 dark:text-gray-400 font-medium hover:bg-gray-100 dark:hover:bg-zinc-700 rounded-xl transition-colors"
                         >
                             Cancelar
                         </button>

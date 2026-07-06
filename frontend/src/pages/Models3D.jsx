@@ -187,23 +187,23 @@ export default function Models3D() {
                         <CubeIcon className="w-4 h-4 z-10" />
                         <span className="z-10">Impresos</span>
                     </button>
-                    <button
+                    {/* <button
                         onClick={() => setActiveTab('MIS_COTIZACIONES')}
                         className={`px-4 py-2 rounded-lg font-medium flex items-center shrink-0 gap-2 transition-colors ${activeTab === 'MIS_COTIZACIONES' ? 'bg-emerald-600 text-white' : 'bg-gray-100 dark:bg-zinc-900 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-zinc-800'}`}
                     >
                         <DocumentTextIcon className="w-4 h-4" />
                         Mis Cotizaciones 3D
-                    </button>
+                    </button> */}
                 </div>
 
-                {activeTab === 'MIS_COTIZACIONES' && (
+                {/* {activeTab === 'MIS_COTIZACIONES' && (
                     <button 
                         onClick={() => setIsQuoteModalOpen(true)}
                         className="px-4 py-2 bg-emerald-100 text-emerald-700 font-bold rounded-xl hover:bg-emerald-200 transition-colors shadow-sm shrink-0"
                     >
                         Cotización Personalizada
                     </button>
-                )}
+                )} */}
 
                 {activeTab === 'DIGITALIZADO' && availableSubcategories.length > 1 && (
                     <CustomSelect 

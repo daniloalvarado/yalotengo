@@ -347,12 +347,12 @@ export default function AdminModels3D() {
                 >
                     Compras ({purchases.length})
                 </button>
-                <button
+                {/* <button
                     onClick={() => { setMainTab('quotes'); setSearchTerm(''); }}
                     {...cascade(5, `px-4 py-2 shrink-0 text-sm font-medium border-b-2 transition-all ${mainTab === 'quotes' ? 'border-emerald-500 text-emerald-600' : 'border-transparent text-gray-500 dark:text-gray-300 hover:text-gray-700 dark:text-gray-300'}`)}
                 >
                     Cotizaciones 3D
-                </button>
+                </button> */}
             </div>
 
             {mainTab === 'products' && (
@@ -455,9 +455,9 @@ export default function AdminModels3D() {
                 </div>
             )}
 
-            {mainTab === 'quotes' && (
+            {/* {mainTab === 'quotes' && (
                 <AdminQuotes3D />
-            )}
+            )} */}
 
             {mainTab === 'purchases' && (
                 <div {...cascade(7, "overflow-x-auto rounded-lg border border-gray-200 dark:border-zinc-800/40")}>
