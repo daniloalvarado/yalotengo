@@ -121,7 +121,7 @@ export default function AdminQuotes3D() {
     return (
         <div className="space-y-4">
             {quotes.map((quote, idx) => (
-                <div key={quote.cot_int_id} {...cascade(idx, `bg-white rounded-xl border ${quote.cot_txt_status === 'Pendiente' ? 'border-yellow-300 shadow-md' : 'border-gray-200'} p-5 relative`)}>
+                <div {...cascade(idx, `bg-white rounded-xl border ${quote.cot_txt_status === 'Pendiente' ? 'border-yellow-300 shadow-md' : 'border-gray-200'} p-5 relative`)} key={quote.cot_int_id}>
                     
                     <div className="flex flex-col md:flex-row gap-6">
                         {/* Info Cliente */}

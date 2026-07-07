@@ -608,6 +608,7 @@ export default function AdminModels3D() {
                                     <img
                                         src={`${api.defaults.baseURL?.replace(/\/api\/?$/, '')}/uploads/impresos/${formData.glbFilename}`}
                                         className="w-full h-full object-cover rounded"
+                                        alt="Modelo 3D impreso"
                                     />
                                 </div>
                             )}
