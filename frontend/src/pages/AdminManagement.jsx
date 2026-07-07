@@ -83,10 +83,10 @@ export default function AdminManagement({
             {/* ESTADÍSTICAS */}
             {stats && (
                 <div style={styles.statsGrid}>
-                    <div style={{...styles.statCard, ...cascade(4).style}} className={cascade(4).className}><div style={styles.statValue}>{stats.total}</div><div style={styles.statLabel}>Total Reservas</div></div>
-                    <div style={{...styles.statCard, ...cascade(5).style}} className={cascade(5).className}><div style={styles.statValue}>{realVisitors}</div><div style={styles.statLabel}>Visitantes (Entraron)</div></div>
-                    <div style={{...styles.statCard, ...cascade(6).style}} className={cascade(6).className}><div style={styles.statValue}>{stats.totalGuests}</div><div style={styles.statLabel}>Aforo Esperado</div></div>
-                    <div style={{...styles.statCard, ...cascade(7).style}} className={cascade(7).className}><div style={{ ...styles.statValue, color: theme.primary }}>S/ {stats.revenue?.toFixed(2) || '0.00'}</div><div style={styles.statLabel}>Ingresos</div></div>
+                    <div style={{...styles.statCard, ...cascade(4).style}} className={cascade(4).className}><div style={styles.statValue}>{stats.total}</div><div style={styles.statLabel}>Total Reservas (Hoy)</div></div>
+                    <div style={{...styles.statCard, ...cascade(5).style}} className={cascade(5).className}><div style={styles.statValue}>{realVisitors}</div><div style={styles.statLabel}>Visitantes (Hoy)</div></div>
+                    <div style={{...styles.statCard, ...cascade(6).style}} className={cascade(6).className}><div style={styles.statValue}>{stats.totalGuests}</div><div style={styles.statLabel}>Aforo Esperado (Hoy)</div></div>
+                    <div style={{...styles.statCard, ...cascade(7).style}} className={cascade(7).className}><div style={{ ...styles.statValue, color: theme.primary }}>S/ {stats.revenue?.toFixed(2) || '0.00'}</div><div style={styles.statLabel}>Ingresos (Hoy)</div></div>
                 </div>
             )}
 
