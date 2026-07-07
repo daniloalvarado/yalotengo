@@ -356,7 +356,7 @@ export default function AdminModels3D() {
             </div>
 
             {mainTab === 'products' && (
-                <div {...cascade(6, "flex flex-row flex-wrap items-center justify-between gap-4 w-full pb-2 mt-1")}>
+                <div {...cascade(6, "flex flex-row flex-wrap items-center justify-between gap-4 w-full pb-2 mt-1 relative z-50")}>
                     <div className="flex gap-2 overflow-x-auto whitespace-nowrap custom-scrollbar">
                         <button
                             onClick={() => { setModelCategory('DIGITALIZADO'); setModelSubcategory('Todas'); }}

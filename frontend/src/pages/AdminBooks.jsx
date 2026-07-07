@@ -297,7 +297,7 @@ export default function AdminBooks() {
             {subTab === 'products' && (
                 <div {...cascade(4)} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {books.map((b, i) => (
-                        <div key={b.boo_int_id} {...cascade(5 + i, `bg-white dark:bg-[#1c1c1c] rounded-xl border border-gray-200 dark:border-zinc-800/50 p-4 shadow-sm transition-all ${!b.boo_bool_active ? 'opacity-60' : ''}`)}>
+                        <div {...cascade(5 + i, `bg-white dark:bg-[#1c1c1c] rounded-xl border border-gray-200 dark:border-zinc-800/50 p-4 shadow-sm transition-all ${!b.boo_bool_active ? 'opacity-60' : ''}`)} key={b.boo_int_id}>
                             {b.boo_txt_cover_image && (
                                 <img
                                     src={`${api.defaults.baseURL?.replace(/\/api\/?$/, '')}/uploads/books/${b.boo_txt_cover_image}`}
