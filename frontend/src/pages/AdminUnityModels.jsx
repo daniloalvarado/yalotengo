@@ -3,11 +3,12 @@ import { useNavigate } from 'react-router-dom'
 import api from '../api/client'
 import toast from 'react-hot-toast'
 import Swal from 'sweetalert2'
-import { PlusIcon, PencilIcon, TrashIcon, EyeIcon, EyeSlashIcon, ArrowUpTrayIcon, CheckCircleIcon, ChartBarSquareIcon, CircleStackIcon , LanguageIcon } from '@heroicons/react/24/outline'
+import { PlusIcon, PencilIcon, TrashIcon, EyeIcon, EyeSlashIcon, ArrowUpTrayIcon, CheckCircleIcon, ChartBarSquareIcon, CircleStackIcon , LanguageIcon, ArrowDownTrayIcon } from '@heroicons/react/24/outline'
 import AnimatedModal from '../components/AnimatedModal'
 import AdminUnityDashboard from './AdminUnityDashboard'
 import FadeInStagger from '../components/ui/FadeInStagger'
 import { cascade } from '../utils/animations'
+import Tooltip from '../components/Tooltip'
 
 const THEME = { primary: '#059669' }
 const API_BASE_URL = (import.meta.env.VITE_API_BASE || 'http://localhost:3000').replace(/\/api$/, '');
@@ -80,7 +81,7 @@ export default function AdminUnityModels() {
         try {
             const newStatus = item.estado === 'activo' ? 'desactivo' : 'activo'
             await api.put(`/microscopicos/admin/${item.id}`, { estado: newStatus })
-            fetchModels()
+            setModels(prev => prev.map(m => m.id === item.id ? { ...m, estado: newStatus } : m))
             toast.success('Estado actualizado')
         } catch (e) {
             toast.error('Error al cambiar estado')
@@ -350,22 +351,44 @@ export default function AdminUnityModels() {
                                                     ) : (
                                                         <>
                                                             {m.qr_image_url && (
-                                                                <div className="w-10 h-10 rounded-lg border border-gray-200 dark:border-zinc-800 shadow-sm overflow-hidden bg-gray-50 dark:bg-zinc-800/50 flex items-center justify-center">
-                                                                    <img
-                                                                        src={`${API_BASE_URL}/uploads/microscopicos/${m.qr_image_url}`}
-                                                                        alt="Marcador"
-                                                                        className="w-full h-full object-cover"
-                                                                    />
-                                                                </div>
+                                                                <Tooltip text="Descargar Marcador" position="top">
+                                                                    <a
+                                                                        href={`${API_BASE_URL}/uploads/microscopicos/${m.qr_image_url}`}
+                                                                        download={m.qr_image_url}
+                                                                        target="_blank"
+                                                                        rel="noopener noreferrer"
+                                                                        className="w-10 h-10 rounded-lg border border-gray-200 dark:border-zinc-800 shadow-sm overflow-hidden bg-gray-50 dark:bg-zinc-800/50 flex items-center justify-center relative group"
+                                                                    >
+                                                                        <img
+                                                                            src={`${API_BASE_URL}/uploads/microscopicos/${m.qr_image_url}`}
+                                                                            alt="Marcador"
+                                                                            className="w-full h-full object-cover group-hover:opacity-30 transition-opacity"
+                                                                        />
+                                                                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                                                                            <ArrowDownTrayIcon className="w-5 h-5 text-gray-700 dark:text-gray-300" />
+                                                                        </div>
+                                                                    </a>
+                                                                </Tooltip>
                                                             )}
                                                             {m.qr_image_url2 && (
-                                                                <div className="w-10 h-10 rounded-lg border border-gray-200 dark:border-zinc-800 shadow-sm overflow-hidden bg-gray-50 dark:bg-zinc-800/50 flex items-center justify-center">
-                                                                    <img
-                                                                        src={`${API_BASE_URL}/uploads/microscopicos/${m.qr_image_url2}`}
-                                                                        alt="Marcador 2"
-                                                                        className="w-full h-full object-cover"
-                                                                    />
-                                                                </div>
+                                                                <Tooltip text="Descargar Marcador 2" position="top">
+                                                                    <a
+                                                                        href={`${API_BASE_URL}/uploads/microscopicos/${m.qr_image_url2}`}
+                                                                        download={m.qr_image_url2}
+                                                                        target="_blank"
+                                                                        rel="noopener noreferrer"
+                                                                        className="w-10 h-10 rounded-lg border border-gray-200 dark:border-zinc-800 shadow-sm overflow-hidden bg-gray-50 dark:bg-zinc-800/50 flex items-center justify-center relative group"
+                                                                    >
+                                                                        <img
+                                                                            src={`${API_BASE_URL}/uploads/microscopicos/${m.qr_image_url2}`}
+                                                                            alt="Marcador 2"
+                                                                            className="w-full h-full object-cover group-hover:opacity-30 transition-opacity"
+                                                                        />
+                                                                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                                                                            <ArrowDownTrayIcon className="w-5 h-5 text-gray-700 dark:text-gray-300" />
+                                                                        </div>
+                                                                    </a>
+                                                                </Tooltip>
                                                             )}
                                                         </>
                                                     )}
@@ -378,15 +401,21 @@ export default function AdminUnityModels() {
                                             </td>
                                             <td className="px-4 py-3">
                                                 <div className="flex flex-wrap gap-2 justify-end">
-                                                    <button onClick={() => openModal(m)} className="p-1.5 text-gray-500 dark:text-gray-400 hover:text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:bg-emerald-900/20 rounded">
-                                                        <PencilIcon className="w-5 h-5" />
-                                                    </button>
-                                                    <button onClick={() => handleToggle(m)} className="p-1.5 text-gray-500 dark:text-gray-400 hover:text-amber-600 dark:text-amber-400 hover:bg-amber-50 dark:bg-amber-900/20 rounded">
-                                                        {m.estado === 'activo' ? <EyeSlashIcon className="w-5 h-5" /> : <EyeIcon className="w-5 h-5" />}
-                                                    </button>
-                                                    <button onClick={() => handleDelete(m.id)} className="p-1.5 text-gray-500 dark:text-gray-400 hover:text-red-600 dark:text-red-400 hover:bg-red-50 dark:bg-red-900/20 rounded">
-                                                        <TrashIcon className="w-5 h-5" />
-                                                    </button>
+                                                    <Tooltip text="Editar" position="top">
+                                                        <button onClick={() => openModal(m)} className="p-1.5 text-gray-500 dark:text-gray-400 hover:text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:bg-emerald-900/20 rounded">
+                                                            <PencilIcon className="w-5 h-5" />
+                                                        </button>
+                                                    </Tooltip>
+                                                    <Tooltip text={m.estado === 'activo' ? "Inhabilitar" : "Habilitar"} position="top">
+                                                        <button onClick={() => handleToggle(m)} className="p-1.5 text-gray-500 dark:text-gray-400 hover:text-amber-600 dark:text-amber-400 hover:bg-amber-50 dark:bg-amber-900/20 rounded">
+                                                            {m.estado === 'activo' ? <EyeSlashIcon className="w-5 h-5" /> : <EyeIcon className="w-5 h-5" />}
+                                                        </button>
+                                                    </Tooltip>
+                                                    <Tooltip text="Eliminar" position="top">
+                                                        <button onClick={() => handleDelete(m.id)} className="p-1.5 text-gray-500 dark:text-gray-400 hover:text-red-600 dark:text-red-400 hover:bg-red-50 dark:bg-red-900/20 rounded">
+                                                            <TrashIcon className="w-5 h-5" />
+                                                        </button>
+                                                    </Tooltip>
                                                 </div>
                                             </td>
                                         </tr>
