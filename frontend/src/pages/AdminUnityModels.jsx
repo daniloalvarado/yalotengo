@@ -65,6 +65,26 @@ export default function AdminUnityModels() {
         checkAdmin()
     }, [navigate])
 
+    const handleDownloadMarker = async (e, url, filename) => {
+        e.preventDefault();
+        try {
+            const response = await fetch(url);
+            if (!response.ok) throw new Error('Error al descargar');
+            const blob = await response.blob();
+            const downloadUrl = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = downloadUrl;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(downloadUrl);
+        } catch (error) {
+            console.error('Error downloading:', error);
+            toast.error('Error al descargar el marcador');
+        }
+    };
+
     const fetchModels = async () => {
         try {
             setLoading(true)
@@ -354,9 +374,7 @@ export default function AdminUnityModels() {
                                                                 <Tooltip text="Descargar Marcador" position="top">
                                                                     <a
                                                                         href={`${API_BASE_URL}/uploads/microscopicos/${m.qr_image_url}`}
-                                                                        download={m.qr_image_url}
-                                                                        target="_blank"
-                                                                        rel="noopener noreferrer"
+                                                                        onClick={(e) => handleDownloadMarker(e, `${API_BASE_URL}/uploads/microscopicos/${m.qr_image_url}`, m.qr_image_url)}
                                                                         className="w-10 h-10 rounded-lg border border-gray-200 dark:border-zinc-800 shadow-sm overflow-hidden bg-gray-50 dark:bg-zinc-800/50 flex items-center justify-center relative group"
                                                                     >
                                                                         <img
@@ -374,9 +392,7 @@ export default function AdminUnityModels() {
                                                                 <Tooltip text="Descargar Marcador 2" position="top">
                                                                     <a
                                                                         href={`${API_BASE_URL}/uploads/microscopicos/${m.qr_image_url2}`}
-                                                                        download={m.qr_image_url2}
-                                                                        target="_blank"
-                                                                        rel="noopener noreferrer"
+                                                                        onClick={(e) => handleDownloadMarker(e, `${API_BASE_URL}/uploads/microscopicos/${m.qr_image_url2}`, m.qr_image_url2)}
                                                                         className="w-10 h-10 rounded-lg border border-gray-200 dark:border-zinc-800 shadow-sm overflow-hidden bg-gray-50 dark:bg-zinc-800/50 flex items-center justify-center relative group"
                                                                     >
                                                                         <img
