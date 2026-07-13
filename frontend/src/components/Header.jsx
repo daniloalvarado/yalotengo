@@ -169,14 +169,14 @@ export default function Header() {
             Modelos 3D
           </NavLink>
 
-          {/* {user?.use_txt_role === 'admin' && (
+          {user?.use_txt_role === 'admin' && (
             <NavLink
               to="/admin-microscopicos"
               className={({ isActive }) => `${linkBase} ${isActive ? linkActive : linkIdle}`}
             >
               Gestión Micromuseo
             </NavLink>
-          )} */}
+          )}
 
           {/* Libros */}
           <NavLink
@@ -186,12 +186,12 @@ export default function Header() {
             Libros
           </NavLink>
 
-          {/* <NavLink
+          <NavLink
             to={user?.use_txt_role === 'admin' ? "/admin-courses" : "/courses"}
             className={({ isActive }) => `${linkBase} ${isActive ? linkActive : linkIdle}`}
           >
             Cursos
-          </NavLink> */}
+          </NavLink>
 
           {/* Reservas */}
           <Link
@@ -265,14 +265,14 @@ export default function Header() {
             Modelos 3D
           </NavLink>
 
-          {/* {user?.use_txt_role === 'admin' && (
+          {user?.use_txt_role === 'admin' && (
             <NavLink
               to="/admin-microscopicos"
               className={({ isActive }) => `${isActive ? "text-emerald-400 font-medium" : "text-zinc-300 hover:text-white"}`}
             >
               Gestión Micromuseo
             </NavLink>
-          )} */}
+          )}
 
           <NavLink
             to={user?.use_txt_role === 'admin' ? "/admin-books" : "/books"}
@@ -281,12 +281,12 @@ export default function Header() {
             Libros
           </NavLink>
 
-          {/* <NavLink
+          <NavLink
             to={user?.use_txt_role === 'admin' ? "/admin-courses" : "/courses"}
             className={({ isActive }) => `${isActive ? "text-emerald-400 font-medium" : "text-zinc-300 hover:text-white"}`}
           >
             Cursos
-          </NavLink> */}
+          </NavLink>
 
           <NavLink
             to={reservationsLink}
