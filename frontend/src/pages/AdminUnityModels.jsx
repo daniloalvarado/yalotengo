@@ -10,6 +10,7 @@ import FadeInStagger from '../components/ui/FadeInStagger'
 import { cascade } from '../utils/animations'
 import Tooltip from '../components/Tooltip'
 import CustomSelect from '../components/CustomSelect'
+import CustomStatusSelect from '../components/CustomStatusSelect'
 
 const THEME = { primary: '#059669' }
 const API_BASE_URL = (import.meta.env.VITE_API_BASE || 'http://localhost:3000').replace(/\/api$/, '');
