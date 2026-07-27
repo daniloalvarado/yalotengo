@@ -9,6 +9,7 @@ import AdminUnityDashboard from './AdminUnityDashboard'
 import FadeInStagger from '../components/ui/FadeInStagger'
 import { cascade } from '../utils/animations'
 import Tooltip from '../components/Tooltip'
+import CustomSelect from '../components/CustomSelect'
 
 const THEME = { primary: '#059669' }
 const API_BASE_URL = (import.meta.env.VITE_API_BASE || 'http://localhost:3000').replace(/\/api$/, '');
@@ -299,17 +300,13 @@ export default function AdminUnityModels() {
                                 />
                             </div>
                             <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-                              <div {...cascade(6, "w-full sm:w-auto min-w-[200px]")}>
-                                <select
-                                    value={selectedPanel}
-                                    onChange={(e) => setSelectedPanel(e.target.value)}
-                                    className="w-full h-[42px] px-4 border border-gray-300 dark:border-zinc-700 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none dark:text-white dark:bg-zinc-900 text-sm transition-all shadow-sm hover:border-emerald-300 bg-white dark:bg-[#1c1c1c] cursor-pointer"
-                                >
-                                    <option value="">Todas las Temáticas</option>
-                                    {uniquePanels.map((tematica, idx) => (
-                                        <option key={idx} value={tematica}>{tematica}</option>
-                                    ))}
-                                </select>
+                              <div {...cascade(6, "w-full sm:w-auto min-w-[200px] flex items-center")}>
+                                <CustomSelect
+                                    options={['Todas las Temáticas', ...uniquePanels]}
+                                    value={selectedPanel === '' ? 'Todas las Temáticas' : selectedPanel}
+                                    onChange={(val) => setSelectedPanel(val === 'Todas las Temáticas' ? '' : val)}
+                                    label="Filtrar:"
+                                />
                             </div>
                             <button
                                 onClick={() => navigate('/admin-idiomas')}
@@ -784,7 +781,7 @@ export default function AdminUnityModels() {
                                 <span className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">Marcador AR(JPG/PNG)</span>
                                 <input type="file" ref={qrInputRef} onChange={(e) => handleFileUpload(e, 'qr')} accept="image/png, image/jpeg" className="hidden" />
                                 <div className="flex flex-col gap-2">
-                                    <button type="button" onClick={() => qrInputRef.current?.click()} disabled={uploadingQr} className={`flex items-center justify-center gap-2 w-full py-2 rounded-lg text-sm transition-colors ${uploadingQr ? 'upload-loading' : 'bg-indigo-50 hover:bg-indigo-100 text-indigo-700'}`}>
+                                    <button type="button" onClick={() => qrInputRef.current?.click()} disabled={uploadingQr} className={`flex items-center justify-center gap-2 w-full py-2 rounded-lg text-sm transition-colors ${uploadingQr ? 'upload-loading' : 'bg-indigo-50 dark:bg-indigo-900/30 hover:bg-indigo-100 dark:hover:bg-indigo-800/40 text-indigo-700 dark:text-indigo-400'}`}>
                                         <ArrowUpTrayIcon className="w-4 h-4" />
                                         {uploadingQr ? 'Subiendo...' : 'Subir Foto'}
                                     </button>
@@ -810,7 +807,7 @@ export default function AdminUnityModels() {
                                 <span className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">Marcador AR(JPG/PNG)</span>
                                 <input type="file" ref={qrInput2Ref} onChange={(e) => handleFileUpload(e, 'qr2')} accept="image/png, image/jpeg" className="hidden" />
                                 <div className="flex flex-col gap-2">
-                                    <button type="button" onClick={() => qrInput2Ref.current?.click()} disabled={uploadingQr2} className={`flex items-center justify-center gap-2 w-full py-2 rounded-lg text-sm transition-colors ${uploadingQr2 ? 'upload-loading' : 'bg-blue-50 hover:bg-blue-100 text-blue-700'}`}>
+                                    <button type="button" onClick={() => qrInput2Ref.current?.click()} disabled={uploadingQr2} className={`flex items-center justify-center gap-2 w-full py-2 rounded-lg text-sm transition-colors ${uploadingQr2 ? 'upload-loading' : 'bg-blue-50 dark:bg-blue-900/30 hover:bg-blue-100 dark:hover:bg-blue-800/40 text-blue-700 dark:text-blue-400'}`}>
                                         <ArrowUpTrayIcon className="w-4 h-4" />
                                         {uploadingQr2 ? 'Subiendo...' : 'Subir Foto'}
                                     </button>
