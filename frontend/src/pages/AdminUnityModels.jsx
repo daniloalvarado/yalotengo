@@ -774,6 +774,138 @@ export default function AdminUnityModels() {
                     />
                 </div>
             )}
+
+            {/* ADD LANGUAGE MODAL */}
+            {showLangModal && (
+                <div className="fixed inset-0 z-[200] bg-black/60 flex items-center justify-center p-4 backdrop-blur-sm animate-fadeIn">
+                    <div className="bg-white dark:bg-[#1c1c1c] rounded-2xl w-full max-w-md p-6 shadow-2xl relative border border-emerald-100 dark:border-zinc-800">
+                        <button onClick={() => setShowLangModal(false)} className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors">
+                            <XMarkIcon className="w-6 h-6" />
+                        </button>
+                        <h2 className="text-xl font-bold text-gray-800 dark:text-white mb-6">Añadir Idioma</h2>
+
+                        {selectedLangOption !== 'NEW_LANG' ? (
+                            <div className="space-y-4">
+                                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300">Selecciona uno...</label>
+                                <CustomStatusSelect 
+                                    value={selectedLangOption}
+                                    onChange={val => setSelectedLangOption(val)}
+                                    options={[
+                                        { value: '', label: 'Selecciona uno...' },
+                                        ...availableLanguages.map(l => ({ value: l.code, label: l.name })),
+                                        { value: 'NEW_LANG', label: 'Añadir nuevo idioma' }
+                                    ]}
+                                />
+                                <div className="pt-4 flex justify-end gap-3">
+                                    <button onClick={() => setShowLangModal(false)} className="px-4 py-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-lg">Cancelar</button>
+                                    <button 
+                                        onClick={async () => {
+                                            if(!selectedLangOption) return;
+                                            setShowLangModal(false);
+                                            toast.loading('Auto-traduciendo...', { id: 'trans' });
+                                            let transDesc = '';
+                                            if (formData.taxonRemarks) {
+                                                try {
+                                                    const transRes = await api.post('/languages/autotranslate', { text: formData.taxonRemarks, target_lang: selectedLangOption });
+                                                    transDesc = transRes.data.translatedText;
+                                                } catch (e) { console.error(e) }
+                                            }
+                                            toast.success('¡Traducción completada!', { id: 'trans' });
+                                            const newTrans = [...(formData.translations || []), { language_code: selectedLangOption, name: formData.vernacularName, descripcion: transDesc }];
+                                            setFormData(p => ({ ...p, translations: newTrans }));
+                                            setTabIdiomaActivo(selectedLangOption);
+                                        }}
+                                        disabled={!selectedLangOption}
+                                        className="px-5 py-2 text-sm bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-lg disabled:opacity-50"
+                                    >Aceptar</button>
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="space-y-4">
+                                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300">Idioma Oficial</label>
+                                <CustomStatusSelect 
+                                    value={isLangCustom ? 'otro' : newLangCode}
+                                    onChange={val => {
+                                        if (val === 'otro') {
+                                            setIsLangCustom(true);
+                                            setNewLangCode('');
+                                            setNewLangName('');
+                                        } else {
+                                            setIsLangCustom(false);
+                                            setNewLangCode(val);
+                                            if(val) {
+                                                const opts = [
+                                                    { value: "en", label: "Inglés" }, { value: "pt", label: "Portugués" }, { value: "fr", label: "Francés" },
+                                                    { value: "de", label: "Alemán" }, { value: "it", label: "Italiano" }, { value: "zh", label: "Chino" },
+                                                    { value: "ja", label: "Japonés" }, { value: "qu", label: "Quechua" }, { value: "ay", label: "Aymara" },
+                                                    { value: "ru", label: "Ruso" }, { value: "ar", label: "Árabe" }, { value: "ko", label: "Coreano" },
+                                                    { value: "hi", label: "Hindi" }
+                                                ];
+                                                const f = opts.find(o => o.value === val);
+                                                setNewLangName(f ? f.label : '');
+                                            }
+                                        }
+                                    }}
+                                    options={[
+                                        { value: "", label: "-- Selecciona el idioma --" },
+                                        { value: "en", label: "Inglés" }, { value: "pt", label: "Portugués" }, { value: "fr", label: "Francés" },
+                                        { value: "de", label: "Alemán" }, { value: "it", label: "Italiano" }, { value: "zh", label: "Chino" },
+                                        { value: "ja", label: "Japonés" }, { value: "qu", label: "Quechua" }, { value: "ay", label: "Aymara" },
+                                        { value: "ru", label: "Ruso" }, { value: "ar", label: "Árabe" }, { value: "ko", label: "Coreano" },
+                                        { value: "hi", label: "Hindi" }, { value: "otro", label: "Otro (Lengua Amazónica o Personalizada)" }
+                                    ]}
+                                />
+                                <div className="mt-4">
+                                    <input 
+                                        type="text" 
+                                        placeholder="Nombre (Editable) Ej. Ruso" 
+                                        value={newLangName}
+                                        onChange={e => setNewLangName(e.target.value)}
+                                        className="w-full p-2.5 border border-gray-300 dark:border-zinc-700 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none bg-white dark:bg-[#141414] dark:text-white"
+                                    />
+                                    {isLangCustom && (
+                                        <p className="mt-2 text-[11px] text-gray-500">*Si el idioma no es reconocido por la IA, se creará vacío para que lo traduzcas manualmente.</p>
+                                    )}
+                                </div>
+                                <div className="pt-4 flex justify-between gap-3">
+                                    <button onClick={() => { setSelectedLangOption(''); }} className="px-4 py-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-lg">Atrás</button>
+                                    <button 
+                                        onClick={async () => {
+                                            const finalCode = isLangCustom ? newLangName.trim().substring(0, 3).toLowerCase().padEnd(3, 'a') : newLangCode;
+                                            if (!finalCode || !newLangName) return toast.error('Debes seleccionar y revisar su nombre');
+                                            
+                                            setShowLangModal(false);
+                                            try {
+                                                toast.loading('Creando idioma global...', { id: 'lang' });
+                                                const res = await api.post('/languages', { code: finalCode, name: newLangName });
+                                                toast.success('Idioma creado globalmente', { id: 'lang' });
+                                                const newAvailable = [...availableLanguages, res.data.idioma];
+                                                setAvailableLanguages(newAvailable);
+
+                                                toast.loading('Auto-traduciendo...', { id: 'trans' });
+                                                let transDesc = '';
+                                                if (formData.taxonRemarks) {
+                                                    const transRes = await api.post('/languages/autotranslate', { text: formData.taxonRemarks, target_lang: finalCode });
+                                                    transDesc = transRes.data.translatedText;
+                                                }
+                                                toast.success('¡Traducción completada!', { id: 'trans' });
+
+                                                const newTrans = [...(formData.translations || []), { language_code: finalCode, name: formData.vernacularName, descripcion: transDesc }];
+                                                setFormData(p => ({ ...p, translations: newTrans }));
+                                                setTabIdiomaActivo(finalCode);
+                                            } catch (e) {
+                                                toast.error('Error al crear idioma', { id: 'lang' });
+                                            }
+                                        }}
+                                        disabled={!newLangName || (!isLangCustom && !newLangCode)}
+                                        className="px-5 py-2 text-sm bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-lg disabled:opacity-50"
+                                    >Guardar Idioma</button>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            )}
         </div>
     )
 }
