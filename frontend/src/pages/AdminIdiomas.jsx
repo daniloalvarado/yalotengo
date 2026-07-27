@@ -150,21 +150,21 @@ export default function AdminIdiomas() {
     <div className="relative max-w-6xl mx-auto p-4 sm:p-6 lg:p-8 space-y-8 min-h-screen pb-20">
       <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-2">
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-3 w-full lg:w-auto">
-          <button onClick={() => window.history.back()} className="p-2 text-gray-500 hover:text-emerald-600 hover:bg-emerald-50 rounded-full transition-colors self-start" title="Volver">
+          <button onClick={() => window.history.back()} className="p-2 text-gray-500 dark:text-gray-400 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 rounded-full transition-colors self-start" title="Volver">
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
           </button>
           <div className="mt-1 sm:mt-0">
-            <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-              <LanguageIcon className="w-6 h-6 text-emerald-600" />
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+              <LanguageIcon className="w-6 h-6 text-emerald-600 dark:text-emerald-500" />
               Gestión de Idiomas
             </h1>
-            <p className="text-gray-500 text-sm">Agrega idiomas globales para el Micromuseo AR</p>
+            <p className="text-gray-500 dark:text-gray-400 text-sm">Agrega idiomas globales para el Micromuseo AR</p>
           </div>
         </div>
         <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
           <button
             onClick={handleSyncUI}
-            className="flex items-center justify-center gap-2 px-4 py-2 text-emerald-700 bg-emerald-50 rounded-lg shadow-sm border border-emerald-200 hover:bg-emerald-100 transition-colors w-full sm:w-auto font-medium"
+            className="flex items-center justify-center gap-2 px-4 py-2 text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/30 rounded-lg shadow-sm border border-emerald-200 dark:border-emerald-800 hover:bg-emerald-100 dark:hover:bg-emerald-900/50 transition-colors w-full sm:w-auto font-medium"
             title="Añadir nuevas claves y limpiar las obsoletas en todos los idiomas"
           >
             <ArrowPathIcon className="w-5 h-5" /> Sincronizar Claves
@@ -179,9 +179,9 @@ export default function AdminIdiomas() {
       </div>
 
       {isAdding && (
-        <form onSubmit={handleAddIdioma} className="bg-white p-6 rounded-2xl shadow-sm border border-emerald-100 flex flex-col sm:flex-row gap-4 items-end animate-fadeIn">
+        <form onSubmit={handleAddIdioma} className="bg-white dark:bg-[#1c1c1c] p-6 rounded-2xl shadow-sm border border-emerald-100 dark:border-zinc-800 flex flex-col sm:flex-row gap-4 items-end animate-fadeIn">
           <div className="w-full sm:w-1/3">
-            <label className="block text-sm font-semibold text-gray-700 mb-1">Idioma Oficial</label>
+            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Idioma Oficial</label>
             <select 
               value={isOtro ? 'otro' : newCode} 
               onChange={e => {
@@ -195,7 +195,7 @@ export default function AdminIdiomas() {
                       if(e.target.value) setNewName(e.target.options[e.target.selectedIndex].text);
                   }
               }}
-              className="w-full p-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none bg-white" 
+              className="w-full p-2.5 border border-gray-300 dark:border-zinc-700 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none bg-white dark:bg-zinc-900 dark:text-white" 
             >
               <option value="">-- Selecciona un idioma --</option>
               <option value="en">Inglés</option>
@@ -216,17 +216,17 @@ export default function AdminIdiomas() {
           </div>
           
           <div className="w-full sm:w-1/3">
-            <label className="block text-sm font-semibold text-gray-700 mb-1">Nombre (Editable)</label>
+            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Nombre (Editable)</label>
             <input 
               type="text" 
               value={newName} 
               onChange={e => setNewName(e.target.value)} 
-              className="w-full p-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none bg-gray-50" 
+              className="w-full p-2.5 border border-gray-300 dark:border-zinc-700 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none bg-gray-50 dark:bg-zinc-800/50 dark:text-white" 
               placeholder="Ej. Holandés" 
             />
           </div>
           <div className="flex gap-2 w-full sm:w-auto">
-            <button type="button" onClick={() => setIsAdding(false)} className="px-4 py-2.5 text-gray-500 font-semibold hover:bg-gray-100 rounded-xl transition">Cancelar</button>
+            <button type="button" onClick={() => setIsAdding(false)} className="px-4 py-2.5 text-gray-500 dark:text-gray-400 font-semibold hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-xl transition">Cancelar</button>
             <button type="submit" className="px-6 py-2.5 bg-emerald-600 text-white font-bold rounded-xl shadow-md hover:bg-emerald-700 transition">Crear</button>
           </div>
         </form>
@@ -234,42 +234,42 @@ export default function AdminIdiomas() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* LISTA DE IDIOMAS */}
-        <div className="lg:col-span-1 bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-          <h2 className="font-black text-gray-700 p-4 border-b bg-gray-50 uppercase text-sm tracking-widest">Idiomas Habilitados</h2>
-          {loading ? <div className="p-4 text-center text-gray-400">Cargando...</div> : (
-            <ul className="divide-y divide-gray-100">
+        <div className="lg:col-span-1 bg-white dark:bg-[#1c1c1c] rounded-2xl shadow-sm border border-gray-100 dark:border-zinc-800 overflow-hidden">
+          <h2 className="font-black text-gray-700 dark:text-gray-300 p-4 border-b dark:border-zinc-800 bg-gray-50 dark:bg-zinc-800/50 uppercase text-sm tracking-widest">Idiomas Habilitados</h2>
+          {loading ? <div className="p-4 text-center text-gray-400 dark:text-gray-500">Cargando...</div> : (
+            <ul className="divide-y divide-gray-100 dark:divide-zinc-800">
               {idiomas.map(idioma => (
-                <li key={idioma.code} className={`p-4 hover:bg-gray-50 cursor-pointer transition ${editingLang?.code === idioma.code ? 'bg-emerald-50 border-l-4 border-emerald-500' : ''}`} onClick={() => openTranslations(idioma)}>
+                <li key={idioma.code} className={`p-4 hover:bg-gray-50 dark:hover:bg-zinc-800/80 cursor-pointer transition ${editingLang?.code === idioma.code ? 'bg-emerald-50 dark:bg-emerald-900/20 border-l-4 border-emerald-500' : ''}`} onClick={() => openTranslations(idioma)}>
                   <div className="flex justify-between items-center">
                     <div>
-                      <p className="font-bold text-gray-800">{idioma.name}</p>
-                      <p className="text-xs text-gray-500 uppercase tracking-wide">Código: {idioma.code}</p>
+                      <p className="font-bold text-gray-800 dark:text-gray-200">{idioma.name}</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">Código: {idioma.code}</p>
                     </div>
                     <button 
                       onClick={(e) => { e.stopPropagation(); handleToggleStatus(idioma.code, idioma.is_active); }}
-                      className={`px-3 py-1 rounded-full text-xs font-bold ${idioma.is_active ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'}`}
+                      className={`px-3 py-1 rounded-full text-xs font-bold ${idioma.is_active ? 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400' : 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400'}`}
                     >
                       {idioma.is_active ? 'Activo' : 'Inactivo'}
                     </button>
                   </div>
                 </li>
               ))}
-              {idiomas.length === 0 && <p className="p-4 text-gray-500 text-center">No hay idiomas registrados.</p>}
+              {idiomas.length === 0 && <p className="p-4 text-gray-500 dark:text-gray-400 text-center">No hay idiomas registrados.</p>}
             </ul>
           )}
         </div>
 
         {/* EDITOR DE UI */}
-        <div className="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-gray-100 p-6 min-h-[400px]">
+        <div className="lg:col-span-2 bg-white dark:bg-[#1c1c1c] rounded-2xl shadow-sm border border-gray-100 dark:border-zinc-800 p-6 min-h-[400px]">
           {editingLang ? (
             <div>
               <div className="mb-6 flex items-center justify-between">
                 <div>
-                  <h2 className="text-xl font-black text-gray-800 flex items-center gap-2">
-                    <PencilIcon className="w-5 h-5 text-emerald-600" />
+                  <h2 className="text-xl font-black text-gray-800 dark:text-gray-200 flex items-center gap-2">
+                    <PencilIcon className="w-5 h-5 text-emerald-600 dark:text-emerald-500" />
                     Traducciones de la App: {editingLang.name}
                   </h2>
-                  <p className="text-sm text-gray-500 mt-1">Estos textos aparecerán en los botones de la App de AR.</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Estos textos aparecerán en los botones de la App de AR.</p>
                 </div>
               </div>
 
@@ -280,7 +280,7 @@ export default function AdminIdiomas() {
                   placeholder="Buscar por clave o texto..."
                   value={searchTerm}
                   onChange={e => setSearchTerm(e.target.value)}
-                  className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none bg-gray-50"
+                  className="w-full p-3 border border-gray-300 dark:border-zinc-700 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none bg-gray-50 dark:bg-zinc-800/50 dark:text-white"
                 />
                 {searchTerm && (
                   <p className="text-xs text-gray-400 mt-1">
@@ -290,12 +290,12 @@ export default function AdminIdiomas() {
               </div>
 
               {uiTranslations.length === 0 ? (
-                <div className="text-center py-10 bg-gray-50 rounded-xl">
-                  <p className="text-gray-500 font-medium">No hay textos generados para este idioma aún.</p>
+                <div className="text-center py-10 bg-gray-50 dark:bg-zinc-800/50 rounded-xl">
+                  <p className="text-gray-500 dark:text-gray-400 font-medium">No hay textos generados para este idioma aún.</p>
                 </div>
               ) : filteredTranslations.length === 0 ? (
-                <div className="text-center py-10 bg-gray-50 rounded-xl">
-                  <p className="text-gray-500 font-medium">No se encontraron resultados para "{searchTerm}"</p>
+                <div className="text-center py-10 bg-gray-50 dark:bg-zinc-800/50 rounded-xl">
+                  <p className="text-gray-500 dark:text-gray-400 font-medium">No se encontraron resultados para "{searchTerm}"</p>
                 </div>
               ) : (
                 <div className="space-y-4">
@@ -303,26 +303,26 @@ export default function AdminIdiomas() {
                     // Si hay término de búsqueda, expandimos todo automáticamente
                     const isExpanded = searchTerm ? true : expandedCats[catName];
                     return (
-                      <div key={catName} className="border border-gray-200 rounded-xl overflow-hidden bg-white">
+                      <div key={catName} className="border border-gray-200 dark:border-zinc-800 rounded-xl overflow-hidden bg-white dark:bg-[#1c1c1c]">
                         <button
                           onClick={() => toggleCategory(catName)}
-                          className="w-full flex items-center justify-between p-4 bg-gray-50 hover:bg-gray-100 transition-colors"
+                          className="w-full flex items-center justify-between p-4 bg-gray-50 dark:bg-zinc-800/50 hover:bg-gray-100 dark:hover:bg-zinc-800/80 transition-colors"
                         >
                           <div className="flex items-center gap-2">
-                            <span className="font-bold text-gray-700">{catName}</span>
-                            <span className="bg-emerald-100 text-emerald-800 text-xs font-bold px-2 py-0.5 rounded-full">
+                            <span className="font-bold text-gray-700 dark:text-gray-300">{catName}</span>
+                            <span className="bg-emerald-100 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-400 text-xs font-bold px-2 py-0.5 rounded-full">
                               {items.length}
                             </span>
                           </div>
                           {isExpanded ? (
-                            <ChevronUpIcon className="w-5 h-5 text-gray-500" />
+                            <ChevronUpIcon className="w-5 h-5 text-gray-500 dark:text-gray-400" />
                           ) : (
-                            <ChevronDownIcon className="w-5 h-5 text-gray-500" />
+                            <ChevronDownIcon className="w-5 h-5 text-gray-500 dark:text-gray-400" />
                           )}
                         </button>
                         
                         {isExpanded && (
-                          <div className="p-4 space-y-3 border-t border-gray-200">
+                          <div className="p-4 space-y-3 border-t border-gray-200 dark:border-zinc-800">
                             {items.map((trans) => (
                               <TranslationItem key={trans.id} trans={trans} onSave={handleSaveTranslation} />
                             ))}
@@ -337,8 +337,8 @@ export default function AdminIdiomas() {
           ) : (
             <div className="h-full flex flex-col items-center justify-center text-gray-400 py-20">
               <LanguageIcon className="w-16 h-16 opacity-20 mb-4" />
-              <p className="font-medium text-lg">Selecciona un idioma a la izquierda</p>
-              <p className="text-sm">para editar los botones de la app</p>
+              <p className="font-medium text-lg dark:text-gray-300">Selecciona un idioma a la izquierda</p>
+              <p className="text-sm dark:text-gray-400">para editar los botones de la app</p>
             </div>
           )}
         </div>
@@ -357,7 +357,7 @@ function TranslationItem({ trans, onSave }) {
   }
 
   return (
-    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-3 rounded-lg border border-gray-100 hover:border-emerald-200 hover:bg-emerald-50/50 transition-colors group gap-2">
+    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-3 rounded-lg border border-gray-100 dark:border-zinc-800 hover:border-emerald-200 dark:hover:border-emerald-800 hover:bg-emerald-50/50 dark:hover:bg-emerald-900/20 transition-colors group gap-2">
       <div className="w-full sm:w-1/3">
         <span className="text-xs font-bold text-gray-400 uppercase tracking-wider break-all">{trans.key}</span>
       </div>
@@ -367,20 +367,20 @@ function TranslationItem({ trans, onSave }) {
             type="text" 
             value={val} 
             onChange={e => setVal(e.target.value)}
-            className="flex-1 p-1.5 border border-emerald-400 rounded outline-none focus:ring-2 ring-emerald-200"
+            className="flex-1 p-1.5 border border-emerald-400 dark:border-emerald-600 rounded outline-none focus:ring-2 ring-emerald-200 dark:ring-emerald-900 bg-white dark:bg-zinc-900 dark:text-white"
             autoFocus
           />
         ) : (
-          <span className="flex-1 text-gray-700 font-medium">{val}</span>
+          <span className="flex-1 text-gray-700 dark:text-gray-300 font-medium">{val}</span>
         )}
         
         {isEditing ? (
           <div className="flex gap-1">
-            <button onClick={handleSave} className="p-1.5 bg-emerald-100 text-emerald-700 rounded hover:bg-emerald-200"><CheckIcon className="w-4 h-4" /></button>
-            <button onClick={() => { setVal(trans.value); setIsEditing(false) }} className="p-1.5 bg-red-100 text-red-700 rounded hover:bg-red-200"><XMarkIcon className="w-4 h-4" /></button>
+            <button onClick={handleSave} className="p-1.5 bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400 rounded hover:bg-emerald-200 dark:hover:bg-emerald-900/60"><CheckIcon className="w-4 h-4" /></button>
+            <button onClick={() => { setVal(trans.value); setIsEditing(false) }} className="p-1.5 bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-400 rounded hover:bg-red-200 dark:hover:bg-red-900/60"><XMarkIcon className="w-4 h-4" /></button>
           </div>
         ) : (
-          <button onClick={() => setIsEditing(true)} className="p-1.5 text-gray-400 opacity-0 group-hover:opacity-100 hover:text-emerald-600 transition-all"><PencilIcon className="w-4 h-4" /></button>
+          <button onClick={() => setIsEditing(true)} className="p-1.5 text-gray-400 opacity-0 group-hover:opacity-100 hover:text-emerald-600 dark:hover:text-emerald-400 transition-all"><PencilIcon className="w-4 h-4" /></button>
         )}
       </div>
     </div>
