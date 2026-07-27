@@ -35,7 +35,7 @@ export default function CustomStatusSelect({ options, value, onChange }) {
         className={`absolute left-0 right-0 mt-1 origin-top rounded-lg bg-white dark:bg-[#1c1c1c] shadow-lg border border-gray-100 dark:border-zinc-800 ring-1 ring-black ring-opacity-5 focus:outline-none transition-all duration-200 ease-out z-50
           ${isOpen ? 'opacity-100 scale-100 translate-y-0 visible pointer-events-auto' : 'opacity-0 scale-95 -translate-y-2 invisible pointer-events-none'}`}
       >
-        <div className="py-1">
+        <div className="py-1 max-h-60 overflow-y-auto custom-scrollbar">
           {options.map((option) => (
             <button
               key={option.value}
