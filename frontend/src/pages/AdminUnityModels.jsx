@@ -41,6 +41,13 @@ export default function AdminUnityModels() {
     // Nuevo estado para Pestañas
     const [activeTab, setActiveTab] = useState('gestion')
 
+    // Estado para el modal de añadir idioma
+    const [showLangModal, setShowLangModal] = useState(false)
+    const [selectedLangOption, setSelectedLangOption] = useState('')
+    const [newLangCode, setNewLangCode] = useState('')
+    const [newLangName, setNewLangName] = useState('')
+    const [isLangCustom, setIsLangCustom] = useState(false)
+
     useEffect(() => {
         const checkAdmin = async () => {
             try {
@@ -578,130 +585,15 @@ export default function AdminUnityModels() {
                                     <CircleStackIcon className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                                     Traducciones e Idiomas
                                 </h3>
-                                <button type="button" onClick={async () => {
-                                    const langOptions = {};
-                                    availableLanguages.forEach(l => { langOptions[l.code] = l.name; });
-                                    langOptions['NEW_LANG'] = 'Añadir nuevo idioma';
-
-                                    const { value: lang } = await Swal.fire({
-                                        title: 'Añadir Idioma',
-                                        input: 'select',
-                                        inputOptions: langOptions,
-                                        inputPlaceholder: 'Selecciona uno...',
-                                        showCancelButton: true,
-                                        confirmButtonColor: '#059669'
-                                    });
-                                    if (lang) {
-                                        if (lang === 'NEW_LANG') {
-                                            const { value: formValues } = await Swal.fire({
-                                                title: 'Crear Idioma Global',
-                                                html:
-                                                    '<select id="swal-input1" class="swal2-select" style="width: 80%; font-size: 16px; margin-bottom: 10px;">' +
-                                                    '<option value="">-- Selecciona el idioma --</option>' +
-                                                    '<option value="en">Inglés</option>' +
-                                                    '<option value="pt">Portugués</option>' +
-                                                    '<option value="fr">Francés</option>' +
-                                                    '<option value="de">Alemán</option>' +
-                                                    '<option value="it">Italiano</option>' +
-                                                    '<option value="zh">Chino</option>' +
-                                                    '<option value="ja">Japonés</option>' +
-                                                    '<option value="qu">Quechua</option>' +
-                                                    '<option value="ay">Aymara</option>' +
-                                                    '<option value="ru">Ruso</option>' +
-                                                    '<option value="ar">Árabe</option>' +
-                                                    '<option value="ko">Coreano</option>' +
-                                                    '<option value="hi">Hindi</option>' +
-                                                    '<option value="otro">Otro (Lengua Amazónica o Personalizada)</option>' +
-                                                    '</select>' +
-                                                    '<input id="swal-iso" class="swal2-input" placeholder="Cód. ISO (ej. awj)" style="display:none; width: 80%; margin-bottom: 5px;" maxlength="4">' +
-                                                    '<p id="swal-hint" style="display:none; font-size: 11px; color: #888; width: 80%; margin: 0 auto 10px auto; text-align: left;">*Si el idioma no es reconocido por la IA, se creará vacío para que lo traduzcas manualmente.</p>' +
-                                                    '<input id="swal-input2" class="swal2-input" placeholder="Nombre (Editable) Ej. Ruso" style="width: 80%;">',
-                                                focusConfirm: false,
-                                                showCancelButton: true,
-                                                confirmButtonColor: '#059669',
-                                                didOpen: () => {
-                                                    const select = document.getElementById('swal-input1');
-                                                    const inputIso = document.getElementById('swal-iso');
-                                                    const inputName = document.getElementById('swal-input2');
-                                                    select.addEventListener('change', (e) => {
-                                                        if (e.target.value === 'otro') {
-                                                            inputIso.style.display = 'none';
-                                                            document.getElementById('swal-hint').style.display = 'block';
-                                                            inputIso.value = '';
-                                                            inputName.value = '';
-                                                        } else {
-                                                            inputIso.style.display = 'none';
-                                                            document.getElementById('swal-hint').style.display = 'none';
-                                                            if (e.target.value) {
-                                                                inputIso.value = e.target.value;
-                                                                inputName.value = e.target.options[e.target.selectedIndex].text;
-                                                            } else {
-                                                                inputIso.value = '';
-                                                                inputName.value = '';
-                                                            }
-                                                        }
-                                                    });
-                                                },
-                                                preConfirm: () => {
-                                                    const selectVal = document.getElementById('swal-input1').value;
-                                                    const isoVal = document.getElementById('swal-iso').value.trim().toLowerCase();
-                                                    const name = document.getElementById('swal-input2').value.trim();
-
-                                                    const code = selectVal === 'otro' ? name.trim().substring(0, 3).toLowerCase().padEnd(3, 'a') : selectVal;
-
-                                                    if (!code || !name) {
-                                                        Swal.showValidationMessage('Debes seleccionar un idioma y revisar su nombre');
-                                                        return false;
-                                                    }
-
-                                                    return { code, name };
-                                                }
-                                            });
-
-                                            if (!formValues) return;
-                                            const newCode = formValues.code;
-                                            const newLangName = formValues.name;
-                                            try {
-                                                toast.loading('Creando idioma global...', { id: 'lang' });
-                                                const res = await api.post('/languages', { code: newCode, name: newLangName });
-                                                toast.success('Idioma creado globalmente', { id: 'lang' });
-                                                const newAvailable = [...availableLanguages, res.data.idioma];
-                                                setAvailableLanguages(newAvailable);
-
-                                                toast.loading('Auto-traduciendo...', { id: 'trans' });
-                                                let transDesc = '';
-                                                if (formData.taxonRemarks) {
-                                                    const transRes = await api.post('/languages/autotranslate', { text: formData.taxonRemarks, target_lang: newCode });
-                                                    transDesc = transRes.data.translatedText;
-                                                }
-                                                toast.success('¡Traducción completada!', { id: 'trans' });
-
-                                                const newTrans = [...(formData.translations || []), { language_code: newCode, name: formData.vernacularName, descripcion: transDesc }];
-                                                setFormData(p => ({ ...p, translations: newTrans }));
-                                                setTabIdiomaActivo(newCode);
-                                            } catch (e) {
-                                                toast.error('Error al crear el idioma', { id: 'lang' });
-                                            }
-                                        } else {
-                                            if (formData.translations?.find(t => t.language_code === lang)) return toast.error('Este idioma ya existe en el modelo');
-
-                                            toast.loading('Auto-traduciendo descripción...', { id: 'trans' });
-                                            let transDesc = '';
-                                            if (formData.taxonRemarks) {
-                                                try {
-                                                    const transRes = await api.post('/languages/autotranslate', { text: formData.taxonRemarks, target_lang: lang });
-                                                    transDesc = transRes.data.translatedText;
-                                                } catch (e) { console.error(e) }
-                                            }
-                                            toast.success('¡Traducción completada!', { id: 'trans' });
-
-                                            const newTrans = [...(formData.translations || []), { language_code: lang, name: formData.vernacularName, descripcion: transDesc }];
-                                            setFormData(p => ({ ...p, translations: newTrans }));
-                                            setTabIdiomaActivo(lang);
-                                        }
-                                    }
-                                }} className="text-xs bg-white dark:bg-[#1c1c1c] border border-emerald-200 text-emerald-600 dark:text-emerald-400 px-3 py-1.5 rounded-lg hover:bg-emerald-50 dark:bg-emerald-900/20 transition-colors font-semibold flex items-center gap-1 shadow-sm">
-                                    <PlusIcon className="w-4 h-4" /> Añadir Idioma
+                                <button type="button" onClick={() => {
+                                    setSelectedLangOption('');
+                                    setNewLangCode('');
+                                    setNewLangName('');
+                                    setIsLangCustom(false);
+                                    setShowLangModal(true);
+                                }} className="flex items-center gap-1 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 dark:bg-emerald-900/30 dark:hover:bg-emerald-900/50 dark:text-emerald-300 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors duration-200">
+                                    <PlusIcon className="w-4 h-4" />
+                                    Añadir Idioma
                                 </button>
                             </div>
 
