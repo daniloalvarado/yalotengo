@@ -2,6 +2,25 @@ import React, { useState, useEffect } from 'react'
 import api from '../api/client'
 import toast from 'react-hot-toast'
 import { PlusIcon, PencilIcon, CheckIcon, LanguageIcon, TrashIcon, ChevronDownIcon, ChevronUpIcon, XMarkIcon, ArrowPathIcon } from '@heroicons/react/24/outline'
+import CustomStatusSelect from '../components/CustomStatusSelect'
+
+const idiomasOptions = [
+  { value: "", label: "-- Selecciona un idioma --" },
+  { value: "en", label: "Inglés" },
+  { value: "pt", label: "Portugués" },
+  { value: "fr", label: "Francés" },
+  { value: "de", label: "Alemán" },
+  { value: "it", label: "Italiano" },
+  { value: "zh", label: "Chino" },
+  { value: "ja", label: "Japonés" },
+  { value: "qu", label: "Quechua" },
+  { value: "ay", label: "Aymara" },
+  { value: "ru", label: "Ruso" },
+  { value: "ar", label: "Árabe" },
+  { value: "ko", label: "Coreano" },
+  { value: "hi", label: "Hindi" },
+  { value: "otro", label: "Otro (Lengua Amazónica / Personalizada)" }
+];
 
 export default function AdminIdiomas() {
   const [idiomas, setIdiomas] = useState([])
@@ -182,37 +201,24 @@ export default function AdminIdiomas() {
         <form onSubmit={handleAddIdioma} className="bg-white dark:bg-[#1c1c1c] p-6 rounded-2xl shadow-sm border border-emerald-100 dark:border-zinc-800 flex flex-col sm:flex-row gap-4 items-end animate-fadeIn">
           <div className="w-full sm:w-1/3">
             <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Idioma Oficial</label>
-            <select 
+            <CustomStatusSelect 
               value={isOtro ? 'otro' : newCode} 
-              onChange={e => {
-                  if (e.target.value === 'otro') {
+              onChange={val => {
+                  if (val === 'otro') {
                       setIsOtro(true);
                       setNewCode('');
                       setNewName('');
                   } else {
                       setIsOtro(false);
-                      setNewCode(e.target.value);
-                      if(e.target.value) setNewName(e.target.options[e.target.selectedIndex].text);
+                      setNewCode(val);
+                      if(val) {
+                          const selectedOpt = idiomasOptions.find(o => o.value === val);
+                          setNewName(selectedOpt ? selectedOpt.label : '');
+                      }
                   }
               }}
-              className="w-full p-2.5 border border-gray-300 dark:border-zinc-700 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none bg-white dark:bg-zinc-900 dark:text-white" 
-            >
-              <option value="">-- Selecciona un idioma --</option>
-              <option value="en">Inglés</option>
-              <option value="pt">Portugués</option>
-              <option value="fr">Francés</option>
-              <option value="de">Alemán</option>
-              <option value="it">Italiano</option>
-              <option value="zh">Chino</option>
-              <option value="ja">Japonés</option>
-              <option value="qu">Quechua</option>
-              <option value="ay">Aymara</option>
-              <option value="ru">Ruso</option>
-              <option value="ar">Árabe</option>
-              <option value="ko">Coreano</option>
-              <option value="hi">Hindi</option>
-              <option value="otro">Otro (Lengua Amazónica / Personalizada)</option>
-            </select>
+              options={idiomasOptions}
+            />
           </div>
           
           <div className="w-full sm:w-1/3">
