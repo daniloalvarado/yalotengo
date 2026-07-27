@@ -17,7 +17,7 @@ export default function CustomSelect({ options, value, onChange, label = 'Filtra
   }, []);
 
   return (
-    <div className="relative inline-block text-left z-50" ref={dropdownRef}>
+    <div className="relative inline-block text-left z-50 w-full sm:w-auto" ref={dropdownRef}>
       <button
         type="button"
         className="flex items-center gap-2 bg-white dark:bg-[#1c1c1c] px-4 py-2 rounded-xl border border-gray-100 dark:border-zinc-800 shadow-sm hover:shadow hover:border-gray-200 dark:hover:border-zinc-700 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 w-full sm:w-auto justify-between sm:justify-start"
@@ -34,7 +34,7 @@ export default function CustomSelect({ options, value, onChange, label = 'Filtra
 
       {/* Dropdown Menu con Animación de entrada y salida (usando Tailwind) */}
       <div 
-        className={`absolute right-0 sm:left-0 mt-2 w-48 origin-top-right sm:origin-top-left rounded-xl bg-white dark:bg-[#1c1c1c] shadow-lg ring-1 ring-black dark:ring-white/10 ring-opacity-5 focus:outline-none transition-all duration-200 ease-out z-50
+        className={`absolute right-0 sm:left-0 mt-2 w-full origin-top-right sm:origin-top-left rounded-xl bg-white dark:bg-[#1c1c1c] shadow-lg ring-1 ring-black dark:ring-white/10 ring-opacity-5 focus:outline-none transition-all duration-200 ease-out z-50
           ${isOpen ? 'opacity-100 scale-100 translate-y-0 visible pointer-events-auto' : 'opacity-0 scale-95 -translate-y-2 invisible pointer-events-none'}`}
       >
         <div className="py-1 max-h-60 overflow-auto custom-scrollbar">

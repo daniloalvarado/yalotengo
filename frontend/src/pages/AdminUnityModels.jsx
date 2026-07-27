@@ -19,6 +19,7 @@ export default function AdminUnityModels() {
     const [models, setModels] = useState([])
     const [searchTerm, setSearchTerm] = useState('')
     const [selectedPanel, setSelectedPanel] = useState('')
+    const [fullscreenImage, setFullscreenImage] = useState(null)
     const [loading, setLoading] = useState(true)
     const [isAdmin, setIsAdmin] = useState(false)
 
@@ -319,7 +320,7 @@ export default function AdminUnityModels() {
                     </div>
 
                     {loading ? <div className="text-gray-500 dark:text-gray-400">Cargando datos...</div> : (
-                        <div key={searchTerm + selectedPanel} {...cascade(8, "overflow-x-auto rounded-lg border border-gray-200 dark:border-zinc-800 bg-white dark:bg-[#1c1c1c]")}>
+                        <div {...cascade(8, "overflow-x-auto rounded-lg border border-gray-200 dark:border-zinc-800 bg-white dark:bg-[#1c1c1c]")}>
                             <table className="w-full text-sm">
                                 <thead className="bg-gray-50 dark:bg-zinc-800/50">
                                     <tr {...cascade(9)}>
@@ -377,7 +378,8 @@ export default function AdminUnityModels() {
                                                                         <img
                                                                             src={`${API_BASE_URL}/uploads/microscopicos/${m.qr_image_url}`}
                                                                             alt="Marcador"
-                                                                            className="w-full h-full object-cover group-hover:opacity-30 transition-opacity"
+                                                                            onClick={() => setFullscreenImage(`${API_BASE_URL}/uploads/microscopicos/${m.qr_image_url}`)}
+                                                                            className="w-full h-full object-cover group-hover:opacity-30 transition-opacity cursor-pointer"
                                                                         />
                                                                         <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
                                                                             <ArrowDownTrayIcon className="w-5 h-5 text-gray-700 dark:text-gray-300" />
@@ -395,7 +397,8 @@ export default function AdminUnityModels() {
                                                                         <img
                                                                             src={`${API_BASE_URL}/uploads/microscopicos/${m.qr_image_url2}`}
                                                                             alt="Marcador 2"
-                                                                            className="w-full h-full object-cover group-hover:opacity-30 transition-opacity"
+                                                                            onClick={() => setFullscreenImage(`${API_BASE_URL}/uploads/microscopicos/${m.qr_image_url2}`)}
+                                                                            className="w-full h-full object-cover group-hover:opacity-30 transition-opacity cursor-pointer"
                                                                         />
                                                                         <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
                                                                             <ArrowDownTrayIcon className="w-5 h-5 text-gray-700 dark:text-gray-300" />
@@ -790,7 +793,8 @@ export default function AdminUnityModels() {
                                             <img
                                                 src={`${API_BASE_URL}/uploads/microscopicos/${formData.qr_image_url}`}
                                                 alt="QR Preview"
-                                                className="w-24 h-24 object-cover rounded-md border border-gray-200 dark:border-zinc-800 shadow-sm"
+                                                onClick={() => setFullscreenImage(`${API_BASE_URL}/uploads/microscopicos/${formData.qr_image_url}`)}
+                                                className="w-24 h-24 object-cover rounded-md border border-gray-200 dark:border-zinc-800 shadow-sm cursor-pointer hover:opacity-80 transition-opacity"
                                             />
                                             <div className="flex items-center justify-center gap-1 text-[11px] text-indigo-600 bg-indigo-50 px-2 py-1 rounded w-full">
                                                 <CheckCircleIcon className="w-3 h-3 shrink-0" />
@@ -816,7 +820,8 @@ export default function AdminUnityModels() {
                                             <img
                                                 src={`${API_BASE_URL}/uploads/microscopicos/${formData.qr_image_url2}`}
                                                 alt="QR Preview"
-                                                className="w-24 h-24 object-cover rounded-md border border-gray-200 dark:border-zinc-800 shadow-sm"
+                                                onClick={() => setFullscreenImage(`${API_BASE_URL}/uploads/microscopicos/${formData.qr_image_url2}`)}
+                                                className="w-24 h-24 object-cover rounded-md border border-gray-200 dark:border-zinc-800 shadow-sm cursor-pointer hover:opacity-80 transition-opacity"
                                             />
                                             <div className="flex items-center justify-center gap-1 text-[11px] text-blue-600 bg-blue-50 px-2 py-1 rounded w-full">
                                                 <CheckCircleIcon className="w-3 h-3 shrink-0" />
@@ -864,6 +869,19 @@ export default function AdminUnityModels() {
                     cursor: not-allowed;
                 }
             `}</style>
+
+            {fullscreenImage && (
+                <div 
+                    className="fixed inset-0 z-[200] bg-black/80 flex items-center justify-center p-4 backdrop-blur-sm cursor-zoom-out animate-fadeIn"
+                    onClick={() => setFullscreenImage(null)}
+                >
+                    <img 
+                        src={fullscreenImage} 
+                        alt="Vista completa" 
+                        className="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl scale-100 transition-transform"
+                    />
+                </div>
+            )}
         </div>
     )
 }
