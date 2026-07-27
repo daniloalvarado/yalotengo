@@ -96,7 +96,7 @@ export default function AdminManagement({
                 {/* 👇 FILTROS Y BUSCADOR (GRID RESPONSIVE) */}
                 <div className={`management-filters ${cascade(9).className}`} style={cascade(9).style}>
                     
-                    <div style={{ minWidth: '180px', position: 'relative', zIndex: 60 }}>
+                    <div style={{ width: '140px', position: 'relative', zIndex: 60 }}>
                         <DatePicker
                             value={filterDate ? new Date(filterDate + 'T12:00:00') : null}
                             onChange={(dateObj) => {

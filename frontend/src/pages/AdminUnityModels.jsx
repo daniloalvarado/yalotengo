@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import api from '../api/client'
 import toast from 'react-hot-toast'
 import Swal from 'sweetalert2'
-import { PlusIcon, PencilIcon, TrashIcon, EyeIcon, EyeSlashIcon, ArrowUpTrayIcon, CheckCircleIcon, ChartBarSquareIcon, CircleStackIcon , LanguageIcon, ArrowDownTrayIcon } from '@heroicons/react/24/outline'
+import { PlusIcon, PencilIcon, TrashIcon, EyeIcon, EyeSlashIcon, ArrowUpTrayIcon, CheckCircleIcon, ChartBarSquareIcon, CircleStackIcon, LanguageIcon, ArrowDownTrayIcon } from '@heroicons/react/24/outline'
 import AnimatedModal from '../components/AnimatedModal'
 import AdminUnityDashboard from './AdminUnityDashboard'
 import FadeInStagger from '../components/ui/FadeInStagger'
@@ -301,21 +301,21 @@ export default function AdminUnityModels() {
                                 />
                             </div>
                             <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-                              <div {...cascade(6, "w-full sm:w-auto min-w-[200px] flex items-center")}>
-                                <CustomSelect
-                                    options={['Todas las Temáticas', ...uniquePanels]}
-                                    value={selectedPanel === '' ? 'Todas las Temáticas' : selectedPanel}
-                                    onChange={(val) => setSelectedPanel(val === 'Todas las Temáticas' ? '' : val)}
-                                    label="Filtrar:"
-                                />
+                                <div {...cascade(6, "w-full sm:w-auto min-w-[200px] flex items-center")}>
+                                    <CustomSelect
+                                        options={['Todas las Temáticas', ...uniquePanels]}
+                                        value={selectedPanel === '' ? 'Todas las Temáticas' : selectedPanel}
+                                        onChange={(val) => setSelectedPanel(val === 'Todas las Temáticas' ? '' : val)}
+                                        label="Filtrar:"
+                                    />
+                                </div>
+                                <button
+                                    onClick={() => navigate('/admin-idiomas')}
+                                    {...cascade(7, "w-full sm:w-auto h-[42px] px-4 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 font-bold rounded-lg hover:bg-emerald-200 transition-all shadow-sm flex items-center justify-center gap-2")}
+                                >
+                                    <LanguageIcon className="w-5 h-5" /> APP AR
+                                </button>
                             </div>
-                            <button
-                                onClick={() => navigate('/admin-idiomas')}
-                                {...cascade(7, "w-full sm:w-auto h-[42px] px-4 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 font-bold rounded-lg hover:bg-emerald-200 transition-all shadow-sm flex items-center justify-center gap-2")}
-                            >
-                                <LanguageIcon className="w-5 h-5" /> APP AR
-                            </button>
-                          </div>
                         </div>
                     </div>
 
@@ -614,7 +614,7 @@ export default function AdminUnityModels() {
                                                     '<option value="otro">Otro (Lengua Amazónica o Personalizada)</option>' +
                                                     '</select>' +
                                                     '<input id="swal-iso" class="swal2-input" placeholder="Cód. ISO (ej. awj)" style="display:none; width: 80%; margin-bottom: 5px;" maxlength="4">' +
-                     '<p id="swal-hint" style="display:none; font-size: 11px; color: #888; width: 80%; margin: 0 auto 10px auto; text-align: left;">*Si el idioma no es reconocido por la IA, se creará vacío para que lo traduzcas manualmente.</p>' +
+                                                    '<p id="swal-hint" style="display:none; font-size: 11px; color: #888; width: 80%; margin: 0 auto 10px auto; text-align: left;">*Si el idioma no es reconocido por la IA, se creará vacío para que lo traduzcas manualmente.</p>' +
                                                     '<input id="swal-input2" class="swal2-input" placeholder="Nombre (Editable) Ej. Ruso" style="width: 80%;">',
                                                 focusConfirm: false,
                                                 showCancelButton: true,
@@ -646,14 +646,14 @@ export default function AdminUnityModels() {
                                                     const selectVal = document.getElementById('swal-input1').value;
                                                     const isoVal = document.getElementById('swal-iso').value.trim().toLowerCase();
                                                     const name = document.getElementById('swal-input2').value.trim();
-                                                    
-                                                    const code = selectVal === 'otro' ? name.trim().substring(0,3).toLowerCase().padEnd(3, 'a') : selectVal;
+
+                                                    const code = selectVal === 'otro' ? name.trim().substring(0, 3).toLowerCase().padEnd(3, 'a') : selectVal;
 
                                                     if (!code || !name) {
                                                         Swal.showValidationMessage('Debes seleccionar un idioma y revisar su nombre');
                                                         return false;
                                                     }
-                                                    
+
                                                     return { code, name };
                                                 }
                                             });
@@ -871,13 +871,13 @@ export default function AdminUnityModels() {
             `}</style>
 
             {fullscreenImage && (
-                <div 
+                <div
                     className="fixed inset-0 z-[200] bg-black/80 flex items-center justify-center p-4 backdrop-blur-sm cursor-zoom-out animate-fadeIn"
                     onClick={() => setFullscreenImage(null)}
                 >
-                    <img 
-                        src={fullscreenImage} 
-                        alt="Vista completa" 
+                    <img
+                        src={fullscreenImage}
+                        alt="Vista completa"
                         className="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl scale-100 transition-transform"
                     />
                 </div>

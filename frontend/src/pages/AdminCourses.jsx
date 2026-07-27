@@ -278,9 +278,9 @@ export default function AdminCourses() {
                                     <h3 className="font-semibold text-gray-900 dark:text-white truncate">{c.cou_txt_title}</h3>
                                     <p className="text-sm text-gray-500 dark:text-gray-300 truncate">{c.cou_txt_duration}</p>
                                     <p className="text-xs text-gray-400 mt-1">
-                                        Cupos: <span className="font-medium text-gray-600">{c.cou_int_seats}</span>
+                                        Cupos: <span className="font-medium text-gray-600 dark:text-gray-300">{c.cou_int_seats}</span>
                                         <span className="mx-1">•</span>
-                                        Vendidos: <span className="font-medium text-gray-600">{c.cou_int_sold || 0}</span>
+                                        Vendidos: <span className="font-medium text-gray-600 dark:text-gray-300">{c.cou_int_sold || 0}</span>
                                     </p>
                                 </div>
                                 <span className={`shrink-0 px-2 py-1 text-xs font-medium rounded-full ${c.cou_bool_active ? 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400' : 'bg-gray-100 dark:bg-zinc-800 text-gray-500 dark:text-gray-300'}`}>

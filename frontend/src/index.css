@@ -62,6 +62,36 @@
     z-index: 9999 !important;
   }
 
+  /* DatePicker Arrow Uniformity & Color */
+  .rmdp-arrow-container {
+    width: 28px !important;
+    height: 28px !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background-color: #0d9467 !important;
+    padding: 0 !important;
+    margin: 0 4px !important;
+  }
+  .rmdp-arrow-container:hover {
+    background-color: #0a7551 !important;
+    box-shadow: none !important;
+  }
+  .rmdp-arrow {
+    border: solid white !important;
+    border-width: 0 2px 2px 0 !important;
+    display: inline-block !important;
+    padding: 3px !important;
+    margin: 0 !important;
+  }
+  .rmdp-left .rmdp-arrow {
+    transform: rotate(135deg) translate(-1px, -1px) !important;
+  }
+  .rmdp-right .rmdp-arrow {
+    transform: rotate(-45deg) translate(-1px, 1px) !important;
+  }
+
   /* DatePicker Input Dark Mode Overrides */
   .rmdp-input {
     width: 100% !important;

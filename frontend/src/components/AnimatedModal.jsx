@@ -22,11 +22,11 @@ export default function AnimatedModal({ isOpen, onClose, title, subtitle, childr
 
     return (
         <div
-            className={`fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 transition-opacity duration-500 ${isVisible ? 'opacity-100' : 'opacity-0'}`}
+            className={`fixed inset-0 bg-black/50 flex items-center justify-center z-[100] p-4 transition-opacity duration-500 ${isVisible ? 'opacity-100' : 'opacity-0'}`}
             onClick={closeOnOutsideClick ? onClose : undefined}
         >
             <div
-                className={`bg-white dark:bg-[#1c1c1c] dark:border dark:border-zinc-800 rounded-2xl w-full ${maxWidth} max-h-[90vh] flex flex-col shadow-2xl ${isVisible ? 'animate-slide-down' : 'animate-slide-up'}`}
+                className={`bg-white dark:bg-[#1c1c1c] dark:border dark:border-zinc-800 rounded-2xl w-full ${maxWidth} max-h-[85vh] my-8 flex flex-col shadow-2xl ${isVisible ? 'animate-slide-down' : 'animate-slide-up'}`}
                 onClick={e => e.stopPropagation()}
             >
                 {/* Header */}

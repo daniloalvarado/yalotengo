@@ -100,14 +100,14 @@ export default function AdminSales({
 
             <div style={{ marginBottom: '1.5rem', borderBottom: '1px solid #eee', paddingBottom: '1rem' }}>
                 <h2 style={{ margin: 0, color: theme.textDark, ...cascade(1).style }} className={cascade(1).className}>Venta en Taquilla</h2>
-                <p style={{ color: '#666', margin: '0.5rem 0 0 0', fontSize: '0.9rem', ...cascade(2).style }} className={cascade(2).className}>
+                <p style={{ margin: '0.5rem 0 0 0', fontSize: '0.9rem', ...cascade(2).style }} className={`text-gray-500 dark:text-gray-400 ${cascade(2).className}`}>
                     Registra visitantes presenciales (Pago en efectivo)
                 </p>
             </div>
 
             <div style={{ ...styles.row, ...cascade(6).style, position: 'relative', zIndex: 50 }} className={cascade(6).className}>
                 <label style={{ fontWeight: 'bold', color: theme.textDark }}>Fecha de venta:</label>
-                <div style={{ minWidth: '200px' }}>
+                <div style={{ width: '140px' }}>
                     <DatePicker
                         value={date ? new Date(date + 'T12:00:00') : null}
                         onChange={(dateObj) => {
@@ -120,7 +120,7 @@ export default function AdminSales({
                         weekDays={["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"]}
                         placeholder="Seleccionar fecha"
                         containerStyle={{ width: '100%' }}
-                        style={{ ...styles.input, cursor: 'pointer' }}
+                        style={{ width: '100%', height: '42px', padding: '0 0.75rem', fontSize: '0.95rem', borderRadius: '8px', border: '1px solid #d1d5db', outline: 'none', cursor: 'pointer' }}
                         className={`bg-white dark:bg-[#141414] dark:text-white dark:border-zinc-700 ${isDarkTheme ? 'bg-dark' : ''}`}
                     />
                 </div>
@@ -165,12 +165,12 @@ export default function AdminSales({
                         <h4 style={{ margin: '0 0 1rem 0', color: theme.textDark }}>2. Confirmar Venta:</h4>
 
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.8rem' }}>
-                            <span style={{ color: '#666', fontSize: '0.9rem' }}>Horario:</span>
+                            <span className="text-gray-500 dark:text-gray-400" style={{ fontSize: '0.9rem' }}>Horario:</span>
                             <strong style={{ fontSize: '1rem' }}>{formatTime(selectedSlot)}</strong>
                         </div>
 
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.2rem' }}>
-                            <span style={{ color: '#666', fontSize: '0.9rem' }}>Personas:</span>
+                            <span className="text-gray-500 dark:text-gray-400" style={{ fontSize: '0.9rem' }}>Personas:</span>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                                 <button onClick={() => setGuests(Math.max(1, guests - 1))} style={{ ...styles.actionBtn('normal'), backgroundColor: '#e5e7eb', color: '#333', fontSize: '1.1rem', width: '32px', height: '32px', padding: 0 }}>−</button>
                                 <span style={{ fontWeight: 'bold', minWidth: '25px', textAlign: 'center', fontSize: '1.1rem' }}>{guests}</span>

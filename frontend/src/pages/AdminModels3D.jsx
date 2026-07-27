@@ -374,7 +374,7 @@ export default function AdminModels3D() {
 
                     {modelCategory === 'DIGITALIZADO' && (
                         <div {...cascade(9, "flex items-center gap-2")}>
-                            <CustomSelect 
+                            <CustomSelect
                                 options={availableSubcategories}
                                 value={modelSubcategory}
                                 onChange={setModelSubcategory}
